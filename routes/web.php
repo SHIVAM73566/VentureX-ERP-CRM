@@ -467,7 +467,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin/imports')->name('
     Route::delete('/templates/{template}', [ImportController::class, 'templateDestroy'])->name('templates.destroy');
 });
 
-// Pricing & License Purchase Routes (Stripe)
+// Pricing & License Purchase Routes (Payoneer)
 Route::get('pricing', [\App\Http\Controllers\PricingController::class, 'index'])->name('pricing');
 Route::post('pricing/checkout', [\App\Http\Controllers\PricingController::class, 'checkout'])->name('pricing.checkout');
 Route::get('pricing/success', [\App\Http\Controllers\PricingController::class, 'success'])->name('pricing.success');

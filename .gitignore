@@ -25,6 +25,10 @@
 !/storage/app/private/.gitignore
 /storage/framework/cache/*
 !/storage/framework/cache/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
 /bootstrap/cache/*
 !.gitignore
 _ide_helper.php

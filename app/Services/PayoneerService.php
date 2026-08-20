@@ -20,11 +20,11 @@ class PayoneerService
 
     public function __construct()
     {
-        $this->clientId = config('stripe.client_id', '');
-        $this->clientSecret = config('stripe.client_secret', '');
-        $this->apiUrl = config('stripe.api_url', 'https://api.payoneer.com/v2');
-        $this->webhookSecret = config('stripe.webhook_secret', '');
-        $this->email = config('stripe.email', '');
+        $this->clientId = config('payoneer.client_id', '');
+        $this->clientSecret = config('payoneer.client_secret', '');
+        $this->apiUrl = config('payoneer.api_url', 'https://api.payoneer.com/v2');
+        $this->webhookSecret = config('payoneer.webhook_secret', '');
+        $this->email = config('payoneer.email', '');
     }
 
     /**
@@ -32,7 +32,7 @@ class PayoneerService
      */
     public function getLicense(string $tier): ?array
     {
-        return config("stripe.licenses.{$tier}");
+        return config("payoneer.licenses.{$tier}");
     }
 
     /**
@@ -40,7 +40,7 @@ class PayoneerService
      */
     public function getLicenses(): array
     {
-        return config('stripe.licenses', []);
+        return config('payoneer.licenses', []);
     }
 
     /**
