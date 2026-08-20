@@ -19,6 +19,7 @@ use App\Http\Controllers\Ai\AiDocumentReaderController;
 use App\Http\Controllers\Ai\AiInsightsController;
 use App\Http\Controllers\Ai\AiUsageController;
 use App\Http\Controllers\Ai\CopilotController;
+use App\Http\Controllers\Ai\SupportAssistantController;
 use App\Http\Controllers\Ai\DeepAnalysisController;
 use App\Http\Controllers\Ai\ExecutiveController;
 use App\Http\Controllers\Ai\ProcurementAiController;
@@ -361,6 +362,9 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::post('deep/procurement', [DeepAnalysisController::class, 'procurement'])->name('ai.deep.procurement');
     });
 
+    Route::get('ai/support-assistant', [SupportAssistantController::class, 'index'])->name('ai.support-assistant');
+    Route::post('ai/support-assistant/ask', [SupportAssistantController::class, 'ask'])->middleware('throttle:ai')->name('ai.support-assistant.ask');
+
     Route::post('ai/executive-review', [ExecutiveController::class, 'review'])->middleware('throttle:ai')->name('ai.executive.review');
     Route::post('ai/daily-priorities', [ExecutiveController::class, 'daily'])->middleware('throttle:ai')->name('ai.executive.daily');
 });
@@ -462,6 +466,13 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin/imports')->name('
     Route::post('/templates', [ImportController::class, 'templateStore'])->name('templates.store');
     Route::delete('/templates/{template}', [ImportController::class, 'templateDestroy'])->name('templates.destroy');
 });
+
+// Pricing & License Purchase Routes (Stripe)
+Route::get('pricing', [\App\Http\Controllers\PricingController::class, 'index'])->name('pricing');
+Route::post('pricing/checkout', [\App\Http\Controllers\PricingController::class, 'checkout'])->name('pricing.checkout');
+Route::get('pricing/success', [\App\Http\Controllers\PricingController::class, 'success'])->name('pricing.success');
+Route::get('pricing/cancel', [\App\Http\Controllers\PricingController::class, 'cancel'])->name('pricing.cancel');
+Route::post('pricing/webhook', [\App\Http\Controllers\PricingController::class, 'webhook'])->middleware('throttle:60,1')->name('pricing.webhook');
 
 // PayPal Payment Routes
 Route::middleware(['auth'])->prefix('payment')->name('payment.')->group(function () {
