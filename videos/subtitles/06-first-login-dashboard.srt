@@ -1,0 +1,715 @@
+1
+00:00:01,000 --> 00:00:04,000
+Welcome to video six.
+
+2
+00:00:04,000 --> 00:00:08,000
+VentureX is installed and running.
+
+3
+00:00:08,000 --> 00:00:12,000
+Today, we log in for the first time
+
+4
+00:00:12,000 --> 00:00:15,000
+and take a complete tour of the dashboard —
+
+5
+00:00:15,000 --> 00:00:19,000
+stat cards, charts, sidebar navigation, dark mode,
+
+6
+00:00:19,000 --> 00:00:22,000
+and every major section.
+
+7
+00:00:22,000 --> 00:00:25,000
+Let's dive in.
+
+8
+00:00:25,000 --> 00:00:29,000
+Navigate to localhost:8000.
+
+9
+00:00:29,000 --> 00:00:33,000
+If you're not already on the login page,
+
+10
+00:00:33,000 --> 00:00:37,000
+you'll be redirected here automatically —
+
+11
+00:00:37,000 --> 00:00:41,000
+VentureX protects every route behind authentication.
+
+12
+00:00:41,000 --> 00:00:45,000
+Enter the demo admin email:
+
+13
+00:00:45,000 --> 00:00:49,000
+demo_admin@example.com.
+
+14
+00:00:49,000 --> 00:00:53,000
+Now enter the password:
+
+15
+00:00:53,000 --> 00:00:57,000
+Demo_Admin_2026!
+
+16
+00:00:57,000 --> 00:01:01,000
+Click the Login button.
+
+17
+00:01:01,000 --> 00:01:05,000
+You'll notice the button shows a loading spinner
+
+18
+00:01:05,000 --> 00:01:09,000
+while the server authenticates your credentials
+
+19
+00:01:09,000 --> 00:01:13,000
+and creates a session.
+
+20
+00:01:13,000 --> 00:01:17,000
+Here's the VentureX dashboard.
+
+21
+00:01:17,000 --> 00:01:21,000
+At the top, you see four stat cards
+
+22
+00:01:21,000 --> 00:01:25,000
+giving you an at-a-glance summary of your business.
+
+23
+00:01:25,000 --> 00:01:29,000
+The first card shows Total Contacts —
+
+24
+00:01:29,000 --> 00:01:33,000
+the number of people in your CRM.
+
+25
+00:01:33,000 --> 00:01:37,000
+The second shows Active Deals —
+
+26
+00:01:37,000 --> 00:01:41,000
+deals currently in your pipeline.
+
+27
+00:01:41,000 --> 00:01:45,000
+The third displays Monthly Revenue —
+
+28
+00:01:45,000 --> 00:01:49,000
+your current month's closed revenue.
+
+29
+00:01:49,000 --> 00:01:53,000
+The fourth shows Pending Tasks —
+
+30
+00:01:53,000 --> 00:01:57,000
+items requiring attention.
+
+31
+00:01:57,000 --> 00:02:01,000
+Each card includes a percentage change indicator
+
+32
+00:02:01,000 --> 00:02:05,000
+comparing this period to the last,
+
+33
+00:02:05,000 --> 00:02:09,000
+color-coded green for growth and red for decline.
+
+34
+00:02:09,000 --> 00:02:13,000
+These cards update in real-time as data changes.
+
+35
+00:02:13,000 --> 00:02:17,000
+Scroll down to the charts section.
+
+36
+00:02:17,000 --> 00:02:21,000
+On the left, the Revenue Chart shows
+
+37
+00:02:21,000 --> 00:02:25,000
+your monthly revenue trend as an area chart.
+
+38
+00:02:25,000 --> 00:02:29,000
+The blue fill represents revenue,
+
+39
+00:02:29,000 --> 00:02:33,000
+and you can hover any point to see the exact amount and month.
+
+40
+00:02:33,000 --> 00:02:37,000
+On the right, the Deals Pipeline Chart displays
+
+41
+00:02:37,000 --> 00:02:41,000
+your deals broken down by stage —
+
+42
+00:02:41,000 --> 00:02:45,000
+qualification, proposal, negotiation,
+
+43
+00:02:45,000 --> 00:02:49,000
+and closed-won — as a horizontal bar chart.
+
+44
+00:02:49,000 --> 00:02:53,000
+Below these, the Activity Timeline shows
+
+45
+00:02:53,000 --> 00:02:57,000
+recent actions across the system —
+
+46
+00:02:57,000 --> 00:03:01,000
+new contacts added, deals updated,
+
+47
+00:03:01,000 --> 00:03:05,000
+tasks completed, and emails sent.
+
+48
+00:03:05,000 --> 00:03:09,000
+Each entry includes a timestamp
+
+49
+00:03:09,000 --> 00:03:13,000
+and the user who performed the action.
+
+50
+00:03:13,000 --> 00:03:17,000
+Let's walk through the sidebar.
+
+51
+00:03:17,000 --> 00:03:21,000
+At the top is the VentureX logo
+
+52
+00:03:21,000 --> 00:03:25,000
+and your workspace name.
+
+53
+00:03:25,000 --> 00:03:29,000
+Below that, the navigation is organized into logical groups.
+
+54
+00:03:29,000 --> 00:03:33,000
+Dashboard — this home view we're looking at now.
+
+55
+00:03:33,000 --> 00:03:37,000
+Contacts — your CRM contact database
+
+56
+00:03:37,000 --> 00:03:41,000
+with search, filters, and bulk actions.
+
+57
+00:03:41,000 --> 00:03:45,000
+Companies — organization profiles
+
+58
+00:03:45,000 --> 00:03:49,000
+linked to contacts and deals.
+
+59
+00:03:49,000 --> 00:03:53,000
+Deals — your sales pipeline with drag-and-drop
+
+60
+00:03:53,000 --> 00:03:57,000
+Kanban boards and list views.
+
+61
+00:03:57,000 --> 00:04:01,000
+Tasks — task management with assignments,
+
+62
+00:04:01,000 --> 00:04:05,000
+due dates, priorities, and project grouping.
+
+63
+00:04:05,000 --> 00:04:09,000
+Continuing down the sidebar.
+
+64
+00:04:09,000 --> 00:04:13,000
+Invoices — create, send, and track invoices
+
+65
+00:04:13,000 --> 00:04:17,000
+with line items, tax calculations,
+
+66
+00:04:17,000 --> 00:04:21,000
+and payment status.
+
+67
+00:04:21,000 --> 00:04:25,000
+Products — your product and service catalog
+
+68
+00:04:25,000 --> 00:04:29,000
+with pricing, categories, and inventory tracking.
+
+69
+00:04:29,000 --> 00:04:33,000
+Reports — analytics dashboards with exportable charts
+
+70
+00:04:33,000 --> 00:04:37,000
+and data tables for sales, revenue, and team performance.
+
+71
+00:04:37,000 --> 00:04:41,000
+Calendar — integrated event scheduling synced
+
+72
+00:04:41,000 --> 00:04:45,000
+with tasks and deal milestones.
+
+73
+00:04:45,000 --> 00:04:49,000
+Email — email integration for sending
+
+74
+00:04:49,000 --> 00:04:53,000
+and tracking communications directly from contacts and deals.
+
+75
+00:04:53,000 --> 00:04:57,000
+The bottom section of the sidebar.
+
+76
+00:04:57,000 --> 00:05:01,000
+AI Insights — VentureX's AI-powered analytics.
+
+77
+00:05:01,000 --> 00:05:05,000
+This module uses your configured AI provider
+
+78
+00:05:05,000 --> 00:05:09,000
+to generate deal predictions, contact scoring,
+
+79
+00:05:09,000 --> 00:05:13,000
+revenue forecasting, and smart recommendations.
+
+80
+00:05:13,000 --> 00:05:17,000
+We'll dedicate an entire video to this later.
+
+81
+00:05:17,000 --> 00:05:21,000
+Settings — system configuration including your profile,
+
+82
+00:05:21,000 --> 00:05:25,000
+company settings, team management,
+
+83
+00:05:25,000 --> 00:05:29,000
+notification preferences, and integrations.
+
+84
+00:05:29,000 --> 00:05:33,000
+Error Center — centralized error logging and monitoring,
+
+85
+00:05:33,000 --> 00:05:37,000
+tracking PHP exceptions, API failures,
+
+86
+00:05:37,000 --> 00:05:41,000
+and system health in real-time.
+
+87
+00:05:41,000 --> 00:05:45,000
+At the very bottom, your user avatar
+
+88
+00:05:45,000 --> 00:05:49,000
+with a dropdown for profile, settings, and logout.
+
+89
+00:05:49,000 --> 00:05:53,000
+VentureX includes a built-in dark mode.
+
+90
+00:05:53,000 --> 00:05:57,000
+Find the toggle in the top-right header —
+
+91
+00:05:57,000 --> 00:06:01,000
+it's the sun and moon icon.
+
+92
+00:06:01,000 --> 00:06:05,000
+Click it to switch themes.
+
+93
+00:06:05,000 --> 00:06:09,000
+The entire interface transitions smoothly —
+
+94
+00:06:09,000 --> 00:06:13,000
+charts, cards, tables, sidebars, everything.
+
+95
+00:06:13,000 --> 00:06:17,000
+Your preference is saved to your profile,
+
+96
+00:06:17,000 --> 00:06:21,000
+so it persists across sessions.
+
+97
+00:06:21,000 --> 00:06:25,000
+Dark mode reduces eye strain during long work sessions
+
+98
+00:06:25,000 --> 00:06:29,000
+and looks great on OLED displays.
+
+99
+00:06:29,000 --> 00:06:33,000
+Toggle it back to light mode for the rest of this tour.
+
+100
+00:06:33,000 --> 00:06:37,000
+The header has a few more features.
+
+101
+00:06:37,000 --> 00:06:41,000
+The bell icon shows your notification count —
+
+102
+00:06:41,000 --> 00:06:45,000
+click it to see unread notifications
+
+103
+00:06:45,000 --> 00:06:49,000
+for task assignments, deal updates,
+
+104
+00:06:49,000 --> 00:06:53,000
+invoice payments, and system alerts.
+
+105
+00:06:53,000 --> 00:06:57,000
+Each notification is actionable —
+
+106
+00:06:57,000 --> 00:07:01,000
+click to navigate directly to the relevant item.
+
+107
+00:07:01,000 --> 00:07:05,000
+Next to notifications, the profile dropdown
+
+108
+00:07:05,000 --> 00:07:09,000
+shows your name and avatar.
+
+109
+00:07:09,000 --> 00:07:13,000
+Click it for quick access to your profile page,
+
+110
+00:07:13,000 --> 00:07:17,000
+settings, and the logout option.
+
+111
+00:07:17,000 --> 00:07:21,000
+The header also displays your current workspace name
+
+112
+00:07:21,000 --> 00:07:25,000
+on the left, which is useful
+
+113
+00:07:25,000 --> 00:07:29,000
+if VentureX manages multiple organizations.
+
+114
+00:07:29,000 --> 00:07:33,000
+VentureX is fully responsive.
+
+115
+00:07:33,000 --> 00:07:37,000
+Watch as I resize the browser window.
+
+116
+00:07:37,000 --> 00:07:41,000
+At tablet width — around 768 pixels —
+
+117
+00:07:41,000 --> 00:07:45,000
+the sidebar collapses into a hamburger menu.
+
+118
+00:07:45,000 --> 00:07:49,000
+Tap it to slide the sidebar out as an overlay.
+
+119
+00:07:49,000 --> 00:07:53,000
+The stat cards rearrange into a two-column grid.
+
+120
+00:07:53,000 --> 00:07:57,000
+Charts stack vertically.
+
+121
+00:07:57,000 --> 00:08:01,000
+Tables switch to card-based layouts.
+
+122
+00:08:01,000 --> 00:08:05,000
+At mobile width — under 640 pixels —
+
+123
+00:08:05,000 --> 00:08:09,000
+everything stacks into a single column.
+
+124
+00:08:09,000 --> 00:08:13,000
+The header compresses, navigation becomes
+
+125
+00:08:13,000 --> 00:08:17,000
+a bottom tab bar or slide-out menu,
+
+126
+00:08:17,000 --> 00:08:21,000
+and all content remains fully functional.
+
+127
+00:08:21,000 --> 00:08:25,000
+Every module in VentureX —
+
+128
+00:08:25,000 --> 00:08:29,000
+contacts, deals, invoices, tasks —
+
+129
+00:08:29,000 --> 00:08:33,000
+is optimized for touch interaction on mobile devices.
+
+130
+00:08:33,000 --> 00:08:37,000
+Let's take a quick look at the Error Center.
+
+131
+00:08:37,000 --> 00:08:41,000
+Navigate to Error Center from the sidebar.
+
+132
+00:08:41,000 --> 00:08:45,000
+This module logs all system errors in one place —
+
+133
+00:08:45,000 --> 00:08:49,000
+PHP exceptions, failed API calls,
+
+134
+00:08:49,000 --> 00:08:53,000
+database query errors, and application-level failures.
+
+135
+00:08:53,000 --> 00:08:57,000
+Each entry shows the error type, message,
+
+136
+00:08:57,000 --> 00:09:01,000
+file and line number, stack trace,
+
+137
+00:09:01,000 --> 00:09:05,000
+frequency count, and first and last occurrence timestamps.
+
+138
+00:09:05,000 --> 00:09:09,000
+You can filter by severity level —
+
+139
+00:09:09,000 --> 00:09:13,000
+critical, warning, or info —
+
+140
+00:09:13,000 --> 00:09:17,000
+and search by error message.
+
+141
+00:09:17,000 --> 00:09:21,000
+This is invaluable during development and production monitoring.
+
+142
+00:09:21,000 --> 00:09:25,000
+Errors are automatically logged
+
+143
+00:09:25,000 --> 00:09:29,000
+by VentureX's exception handler,
+
+144
+00:09:29,000 --> 00:09:33,000
+so you don't need to add manual logging.
+
+145
+00:09:33,000 --> 00:09:37,000
+Finally, let's preview the AI Insights module.
+
+146
+00:09:37,000 --> 00:09:41,000
+Navigate to AI Insights from the sidebar.
+
+147
+00:09:41,000 --> 00:09:45,000
+This is where VentureX's AI provider
+
+148
+00:09:45,000 --> 00:09:49,000
+powers real business intelligence.
+
+149
+00:09:49,000 --> 00:09:53,000
+The dashboard shows a deal win probability score
+
+150
+00:09:53,000 --> 00:09:57,000
+for each active deal,
+
+151
+00:09:57,000 --> 00:10:01,000
+contact engagement predictions,
+
+152
+00:10:01,000 --> 00:10:05,000
+revenue forecasts for the next quarter,
+
+153
+00:10:05,000 --> 00:10:09,000
+and recommended next actions.
+
+154
+00:10:09,000 --> 00:10:13,000
+The AI analyzes your historical data —
+
+155
+00:10:13,000 --> 00:10:17,000
+past deals, communication patterns,
+
+156
+00:10:17,000 --> 00:10:21,000
+and activity logs — to generate these insights.
+
+157
+00:10:21,000 --> 00:10:25,000
+Each insight includes a confidence score
+
+158
+00:10:25,000 --> 00:10:29,000
+and the reasoning behind the recommendation.
+
+159
+00:10:29,000 --> 00:10:33,000
+We'll configure the AI provider in detail
+
+160
+00:10:33,000 --> 00:10:37,000
+in a dedicated video,
+
+161
+00:10:37,000 --> 00:10:41,000
+but this gives you a preview of what's possible.
+
+162
+00:10:41,000 --> 00:10:45,000
+That's the complete dashboard tour.
+
+163
+00:10:45,000 --> 00:10:49,000
+To recap: four stat cards for at-a-glance metrics,
+
+164
+00:10:49,000 --> 00:10:53,000
+charts for trend analysis,
+
+165
+00:10:53,000 --> 00:10:57,000
+a sidebar with twelve modules covering CRM,
+
+166
+00:10:57,000 --> 00:11:01,000
+ERP, AI, and system management,
+
+167
+00:11:01,000 --> 00:11:05,000
+dark mode for comfortable viewing,
+
+168
+00:11:05,000 --> 00:11:09,000
+full responsive design for mobile and tablet,
+
+169
+00:11:09,000 --> 00:11:13,000
+an error center for monitoring,
+
+170
+00:11:13,000 --> 00:11:17,000
+and AI insights for intelligent business decisions.
+
+171
+00:11:17,000 --> 00:11:21,000
+Every module follows the same design language —
+
+172
+00:11:21,000 --> 00:11:25,000
+consistent table layouts, form patterns,
+
+173
+00:11:25,000 --> 00:11:29,000
+and interaction models.
+
+174
+00:11:29,000 --> 00:11:33,000
+You've seen the full dashboard.
+
+175
+00:11:33,000 --> 00:11:37,000
+In the next video, we'll do a deep dive
+
+176
+00:11:37,000 --> 00:11:41,000
+into the Contacts module —
+
+177
+00:11:41,000 --> 00:11:45,000
+creating, importing, filtering,
+
+178
+00:11:45,000 --> 00:11:49,000
+and managing your CRM contacts.
+
+179
+00:11:49,000 --> 00:11:53,000
+See you there.

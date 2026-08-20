@@ -1,0 +1,539 @@
+1
+00:00:01,000 --> 00:00:04,000
+Welcome to video five.
+
+2
+00:00:04,000 --> 00:00:08,000
+Now that our environment is configured,
+
+3
+00:00:08,000 --> 00:00:12,000
+it's time to install all dependencies
+
+4
+00:00:12,000 --> 00:00:15,000
+and get VentureX running.
+
+5
+00:00:15,000 --> 00:00:19,000
+We'll walk through Composer, npm, Vite,
+
+6
+00:00:19,000 --> 00:00:22,000
+database migrations, and launching the dev server.
+
+7
+00:00:22,000 --> 00:00:25,000
+Let's go.
+
+8
+00:00:25,000 --> 00:00:29,000
+We start with Composer.
+
+9
+00:00:29,000 --> 00:00:33,000
+Run composer install.
+
+10
+00:00:33,000 --> 00:00:37,000
+This reads your composer.lock file and downloads
+
+11
+00:00:37,000 --> 00:00:41,000
+every PHP package the project depends on —
+
+12
+00:00:41,000 --> 00:00:45,000
+Laravel framework, Livewire components,
+
+13
+00:00:45,000 --> 00:00:49,000
+Tailwind CSS build tools, testing libraries, and more.
+
+14
+00:00:49,000 --> 00:00:53,000
+On a fresh install, this typically takes thirty to ninety seconds
+
+15
+00:00:53,000 --> 00:00:57,000
+depending on your internet connection.
+
+16
+00:00:57,000 --> 00:01:01,000
+You'll see a progress bar as packages download,
+
+17
+00:01:01,000 --> 00:01:05,000
+then an autoload generation step at the end.
+
+18
+00:01:05,000 --> 00:01:09,000
+If you see a memory limit error,
+
+19
+00:01:09,000 --> 00:01:13,000
+increase PHP's memory_limit in your php.ini file
+
+20
+00:01:13,000 --> 00:01:17,000
+to at least 512 megabytes.
+
+21
+00:01:17,000 --> 00:01:21,000
+Next, install frontend dependencies with npm install.
+
+22
+00:01:21,000 --> 00:01:25,000
+This downloads Node packages —
+
+23
+00:01:25,000 --> 00:01:29,000
+Tailwind CSS 4, Livewire, Alpine.js,
+
+24
+00:01:29,000 --> 00:01:33,000
+Vite build system, and related plugins
+
+25
+00:01:33,000 --> 00:01:37,000
+into the node_modules folder.
+
+26
+00:01:37,000 --> 00:01:41,000
+First-time installs take a bit longer
+
+27
+00:01:41,000 --> 00:01:45,000
+as npm resolves the dependency tree.
+
+28
+00:01:45,000 --> 00:01:49,000
+You'll see a summary of packages added
+
+29
+00:01:49,000 --> 00:01:53,000
+and any peer dependency warnings.
+
+30
+00:01:53,000 --> 00:01:57,000
+Warnings are typically safe to ignore
+
+31
+00:01:57,000 --> 00:02:01,000
+unless they indicate a breaking conflict.
+
+32
+00:02:01,000 --> 00:02:05,000
+Now compile the frontend assets.
+
+33
+00:02:05,000 --> 00:02:09,000
+Run npm run build.
+
+34
+00:02:09,000 --> 00:02:13,000
+This triggers Vite — our JavaScript build tool.
+
+35
+00:02:13,000 --> 00:02:17,000
+Vite reads vite.config.js, processes your Tailwind CSS files,
+
+36
+00:02:17,000 --> 00:02:21,000
+compiles JavaScript modules, and outputs optimized bundles
+
+37
+00:02:21,000 --> 00:02:25,000
+to the public/build directory.
+
+38
+00:02:25,000 --> 00:02:29,000
+For VentureX, expect roughly 95 kilobytes of CSS
+
+39
+00:02:29,000 --> 00:02:33,000
+and 47 kilobytes of JavaScript after minification.
+
+40
+00:02:33,000 --> 00:02:37,000
+The build takes about ten to twenty seconds.
+
+41
+00:02:37,000 --> 00:02:41,000
+Watch for the output summary — it shows each chunk,
+
+42
+00:02:41,000 --> 00:02:45,000
+its size, and any warnings about large bundles.
+
+43
+00:02:45,000 --> 00:02:49,000
+Verify the build by checking
+
+44
+00:02:49,000 --> 00:02:53,000
+public/build/manifest.json.
+
+45
+00:02:53,000 --> 00:02:57,000
+This file maps source files to their compiled versions.
+
+46
+00:02:57,000 --> 00:03:01,000
+You should see entries for the main CSS and JS bundles.
+
+47
+00:03:01,000 --> 00:03:05,000
+The public/build/assets folder contains
+
+48
+00:03:05,000 --> 00:03:09,000
+the actual compiled files with content-hashed filenames
+
+49
+00:03:09,000 --> 00:03:13,000
+for cache busting.
+
+50
+00:03:13,000 --> 00:03:17,000
+Now create the database tables and populate demo data.
+
+51
+00:03:17,000 --> 00:03:21,000
+Run php artisan migrate --seed.
+
+52
+00:03:21,000 --> 00:03:25,000
+This executes every migration file
+
+53
+00:03:25,000 --> 00:03:29,000
+in database/migrations in chronological order.
+
+54
+00:03:29,000 --> 00:03:33,000
+You'll see each table being created —
+
+55
+00:03:33,000 --> 00:03:37,000
+users, contacts, companies, deals,
+
+56
+00:03:37,000 --> 00:03:41,000
+tasks, invoices, products, ai_insights, error_logs,
+
+57
+00:03:41,000 --> 00:03:45,000
+and dozens more.
+
+58
+00:03:45,000 --> 00:03:49,000
+VentureX has over fifty migration files
+
+59
+00:03:49,000 --> 00:03:53,000
+covering the full ERP and CRM schema.
+
+60
+00:03:53,000 --> 00:03:57,000
+After all tables are created, the seeder runs.
+
+61
+00:03:57,000 --> 00:04:01,000
+It inserts demo companies, contacts, deals with various stages,
+
+62
+00:04:01,000 --> 00:04:05,000
+sample invoices, product catalogs,
+
+63
+00:04:05,000 --> 00:04:09,000
+AI-generated insights, and two admin user accounts.
+
+64
+00:04:09,000 --> 00:04:13,000
+Watch for the green check marks —
+
+65
+00:04:13,000 --> 00:04:17,000
+each confirms a migration ran successfully.
+
+66
+00:04:17,000 --> 00:04:21,000
+If you see a table already exists error,
+
+67
+00:04:21,000 --> 00:04:25,000
+your database may have old tables.
+
+68
+00:04:25,000 --> 00:04:29,000
+You can run php artisan migrate:fresh --seed
+
+69
+00:04:29,000 --> 00:04:33,000
+to drop everything and start over.
+
+70
+00:04:33,000 --> 00:04:37,000
+Let's verify the database.
+
+71
+00:04:37,000 --> 00:04:41,000
+Open your MySQL client and connect
+
+72
+00:04:41,000 --> 00:04:45,000
+to the VENTUREX_ERP database.
+
+73
+00:04:45,000 --> 00:04:49,000
+Run SHOW TABLES and you should see
+
+74
+00:04:49,000 --> 00:04:53,000
+all fifty-plus tables.
+
+75
+00:04:53,000 --> 00:04:57,000
+Check the users table —
+
+76
+00:04:57,000 --> 00:05:01,000
+you'll find the demo admin account
+
+77
+00:05:01,000 --> 00:05:05,000
+with email demo_admin@example.com.
+
+78
+00:05:05,000 --> 00:05:09,000
+The deals table has sample deals in various stages
+
+79
+00:05:09,000 --> 00:05:13,000
+from prospecting to closed-won.
+
+80
+00:05:13,000 --> 00:05:17,000
+This confirms both migrations and seeders ran correctly.
+
+81
+00:05:17,000 --> 00:05:21,000
+Start the development server.
+
+82
+00:05:21,000 --> 00:05:25,000
+Run php artisan serve.
+
+83
+00:05:25,000 --> 00:05:29,000
+Laravel's built-in server starts on port 8000 by default.
+
+84
+00:05:29,000 --> 00:05:33,000
+You'll see the message
+
+85
+00:05:33,000 --> 00:05:37,000
+Server running on http://127.0.0.1:8000.
+
+86
+00:05:37,000 --> 00:05:41,000
+Keep this terminal window open —
+
+87
+00:05:41,000 --> 00:05:45,000
+the server runs as long as this process is active.
+
+88
+00:05:45,000 --> 00:05:49,000
+To use a different port, add --port=8080.
+
+89
+00:05:49,000 --> 00:05:53,000
+To allow access from other devices on your network,
+
+90
+00:05:53,000 --> 00:05:57,000
+add --host=0.0.0.0.
+
+91
+00:05:57,000 --> 00:06:01,000
+Open your browser and navigate to localhost:8000.
+
+92
+00:06:01,000 --> 00:06:05,000
+You should see the VentureX login page loading.
+
+93
+00:06:05,000 --> 00:06:09,000
+The initial load takes a moment
+
+94
+00:06:09,000 --> 00:06:13,000
+as Vite development assets compile on first request —
+
+95
+00:06:13,000 --> 00:06:17,000
+this is normal.
+
+96
+00:06:17,000 --> 00:06:21,000
+Once loaded, you'll see the login form
+
+97
+00:06:21,000 --> 00:06:25,000
+with the VentureX branding, email and password fields,
+
+98
+00:06:25,000 --> 00:06:29,000
+and the login button.
+
+99
+00:06:29,000 --> 00:06:33,000
+The interface uses Tailwind CSS 4
+
+100
+00:06:33,000 --> 00:06:37,000
+with our custom design system.
+
+101
+00:06:37,000 --> 00:06:41,000
+You'll notice the skeleton loading states —
+
+102
+00:06:41,000 --> 00:06:45,000
+those shimmer placeholders that appear while content loads.
+
+103
+00:06:45,000 --> 00:06:49,000
+These provide instant visual feedback
+
+104
+00:06:49,000 --> 00:06:53,000
+and make the app feel faster.
+
+105
+00:06:53,000 --> 00:06:57,000
+Let's cover the most common installation errors.
+
+106
+00:06:57,000 --> 00:07:01,000
+First, composer install fails with a memory error —
+
+107
+00:07:01,000 --> 00:07:05,000
+fix this by setting memory_limit = 512M
+
+108
+00:07:05,000 --> 00:07:09,000
+in your php.ini file.
+
+109
+00:07:09,000 --> 00:07:13,000
+Second, npm install fails with a Node version error —
+
+110
+00:07:13,000 --> 00:07:17,000
+VentureX requires Node 18 or later.
+
+111
+00:07:17,000 --> 00:07:21,000
+Check your version with node -v
+
+112
+00:07:21,000 --> 00:07:25,000
+and update if needed using nvm.
+
+113
+00:07:25,000 --> 00:07:29,000
+Third, port 8000 is already in use —
+
+114
+00:07:29,000 --> 00:07:33,000
+either stop the other process
+
+115
+00:07:33,000 --> 00:07:37,000
+or use php artisan serve --port=8080.
+
+116
+00:07:37,000 --> 00:07:41,000
+Fourth, database connection refused —
+
+117
+00:07:41,000 --> 00:07:45,000
+make sure MySQL is running
+
+118
+00:07:45,000 --> 00:07:49,000
+and your .env credentials match your MySQL setup.
+
+119
+00:07:49,000 --> 00:07:53,000
+Fifth, migration fails with a table already exists error —
+
+120
+00:07:53,000 --> 00:07:57,000
+run php artisan migrate:fresh --seed to reset.
+
+121
+00:07:57,000 --> 00:08:01,000
+Before we end, let's appreciate the UI foundation.
+
+122
+00:08:01,000 --> 00:08:05,000
+VentureX uses a component-based interface
+
+123
+00:08:05,000 --> 00:08:09,000
+built with Livewire and Tailwind CSS 4.
+
+124
+00:08:09,000 --> 00:08:13,000
+The login page itself uses our card component,
+
+125
+00:08:13,000 --> 00:08:17,000
+form input components with validation states,
+
+126
+00:08:17,000 --> 00:08:21,000
+and a primary button component with loading animations.
+
+127
+00:08:21,000 --> 00:08:25,000
+Every module in the application follows
+
+128
+00:08:25,000 --> 00:08:29,000
+this same component library —
+
+129
+00:08:29,000 --> 00:08:33,000
+tables, modals, dropdowns, toast notifications, and stat cards.
+
+130
+00:08:33,000 --> 00:08:37,000
+In the next video, we'll log in for the first time
+
+131
+00:08:37,000 --> 00:08:41,000
+and take a full tour of the dashboard.
+
+132
+00:08:41,000 --> 00:08:45,000
+VentureX is installed and running.
+
+133
+00:08:45,000 --> 00:08:49,000
+In the next video, we'll log in with the demo credentials
+
+134
+00:08:49,000 --> 00:08:53,000
+and explore every corner of the dashboard.
+
+135
+00:08:53,000 --> 00:08:57,000
+I'll see you there.

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VentureX Tutorial 2 - System Requirements</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f172a;--surface:#1e293b;--teal:#14b8a6;--teal-dark:#0d9488;--green:#22c55e;--white:#f8fafc;--gray:#94a3b8;--red:#ef4444;--text-muted:#64748b;--surface-light:#334155}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--white);overflow:hidden;height:100vh;width:100vw}
+#progress-bar{position:fixed;top:0;left:0;height:4px;background:var(--teal);transition:width .5s ease;z-index:100}
+#record-badge{position:fixed;top:16px;right:16px;background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;z-index:200;animation:pulse-rec 2s infinite}
+#record-badge::before{content:'';width:8px;height:8px;background:var(--red);border-radius:50%;animation:blink-rec 1s infinite}
+@keyframes pulse-rec{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes blink-rec{0%,100%{opacity:1}50%{opacity:0}}
+#header{position:fixed;top:4px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;z-index:90;background:rgba(15,23,42,.9);backdrop-filter:blur(8px)}
+#step-counter{font-size:13px;color:var(--gray);font-weight:500}
+#step-title-bar{font-size:14px;color:var(--teal);font-weight:600}
+#controls{display:flex;gap:8px}
+#controls button{background:var(--surface);border:1px solid var(--surface-light);color:var(--white);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:all .2s}
+#controls button:hover{background:var(--teal);border-color:var(--teal)}
+#controls button:disabled{opacity:.3;cursor:default}
+#toc-toggle{background:var(--surface);border:1px solid var(--surface-light);color:var(--white);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:16px;transition:all .2s}
+#toc-toggle:hover{background:var(--teal);border-color:var(--teal)}
+#sidebar{position:fixed;left:0;top:50px;bottom:50px;width:260px;background:rgba(30,41,59,.95);backdrop-filter:blur(8px);border-right:1px solid var(--surface-light);padding:20px 0;transform:translateX(-100%);transition:transform .3s ease;z-index:80;overflow-y:auto}
+#sidebar.open{transform:translateX(0)}
+#sidebar h3{padding:0 20px 12px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gray)}
+#sidebar ul{list-style:none}
+#sidebar li{padding:10px 20px;cursor:pointer;font-size:13px;color:var(--gray);transition:all .2s;border-left:3px solid transparent}
+#sidebar li:hover{color:var(--white);background:rgba(20,184,166,.05)}
+#sidebar li.active{color:var(--teal);border-left-color:var(--teal);background:rgba(20,184,166,.08)}
+#content{position:absolute;top:50px;bottom:50px;left:0;right:0;display:flex;align-items:center;justify-content:center;padding:40px 60px}
+.step{display:none;flex-direction:column;align-items:center;gap:24px;width:100%;max-width:900px;animation:fadeSlideIn .6s ease}
+.step.active{display:flex}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.step-title{font-size:30px;font-weight:700;text-align:center;line-height:1.3}
+.step-subtitle{font-size:17px;color:var(--gray);text-align:center;max-width:700px;line-height:1.6}
+.req-list{width:100%;max-width:700px;display:flex;flex-direction:column;gap:8px}
+.req-item{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:14px 20px;transition:all .4s;opacity:0;transform:translateX(-20px)}
+.req-item.show{opacity:1;transform:translateX(0)}
+.req-item.met{border-color:rgba(34,197,94,.3)}
+.req-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all .3s}
+.req-icon.pending{background:rgba(100,116,139,.2);color:var(--gray)}
+.req-icon.check{background:rgba(34,197,94,.15);color:var(--green)}
+.req-name{font-size:15px;font-weight:600;flex:1}
+.req-detail{font-size:13px;color:var(--gray);text-align:right}
+.terminal{background:#0d1117;border-radius:10px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5);width:100%;max-width:700px;border:1px solid #30363d}
+.terminal-bar{background:#161b22;padding:10px 16px;display:flex;align-items:center;gap:8px}
+.terminal-bar .dots span{width:12px;height:12px;border-radius:50%;display:inline-block}
+.terminal-bar .dots span:nth-child(1){background:#ef4444}
+.terminal-bar .dots span:nth-child(2){background:#eab308}
+.terminal-bar .dots span:nth-child(3){background:#22c55e}
+.terminal-bar .title{color:#8b949e;font-size:12px;margin-left:8px}
+.terminal-body{padding:20px;font-family:'SF Mono','Fira Code',monospace;font-size:14px;line-height:1.8;min-height:100px}
+.terminal-body .cmd{color:var(--green)}
+.terminal-body .output{color:#c9d1d9}
+.terminal-body .comment{color:#6e7681}
+.version-badge{display:inline-block;background:rgba(20,184,166,.15);color:var(--teal);border:1px solid rgba(20,184,166,.3);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:600;margin-top:4px}
+.cta-button{background:var(--teal);color:var(--white);border:none;padding:14px 32px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s;animation:ctaPulse 2s infinite}
+.cta-button:hover{background:var(--teal-dark);transform:scale(1.05)}
+@keyframes ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(20,184,166,.4)}50%{box-shadow:0 0 0 12px rgba(20,184,166,0)}}
+.big-check{width:80px;height:80px;border-radius:50%;background:rgba(34,197,94,.15);border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:40px;animation:scaleIn .5s ease}
+@keyframes scaleIn{from{transform:scale(0)}to{transform:scale(1)}}
+.ext-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;width:100%;max-width:700px}
+.ext-item{background:var(--surface);border:1px solid var(--surface-light);border-radius:8px;padding:10px 16px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;display:flex;align-items:center;gap:8px;transition:all .3s;opacity:0;transform:scale(.9)}
+.ext-item.show{opacity:1;transform:scale(1)}
+.ext-item .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+#footer{position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:rgba(15,23,42,.9);backdrop-filter:blur(8px);z-index:90;border-top:1px solid var(--surface-light)}
+.step-dots{display:flex;gap:6px}
+.step-dot{width:10px;height:10px;border-radius:50%;background:var(--surface-light);transition:all .3s}
+.step-dot.active{background:var(--teal);transform:scale(1.2)}
+.step-dot.done{background:var(--teal);opacity:.5}
+#play-btn{background:var(--teal);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+#play-btn:hover{background:var(--teal-dark)}
+.key-hint{font-size:11px;color:var(--text-muted)}
+@media(max-width:768px){
+  #content{padding:20px 20px 60px}
+  .ext-grid{grid-template-columns:1fr}
+  .step-title{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div id="progress-bar" style="width:0%"></div>
+<div id="record-badge">REC</div>
+<div id="header">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button id="toc-toggle" title="Table of Contents">&#9776;</button>
+    <div>
+      <div id="step-title-bar">Video 2: System Requirements</div>
+      <div id="step-counter">Step 1 of 8</div>
+    </div>
+  </div>
+  <div id="controls">
+    <button id="prev-btn" disabled>&#9664; Prev</button>
+    <button id="next-btn">Next &#9654;</button>
+  </div>
+</div>
+<div id="sidebar">
+  <h3>Video 2 — Chapters</h3>
+  <ul id="toc-list">
+    <li class="active" data-step="0">1. Before You Begin</li>
+    <li data-step="1">2. PHP 8.3+</li>
+    <li data-step="2">3. Required Extensions</li>
+    <li data-step="3">4. MySQL / MariaDB</li>
+    <li data-step="4">5. Node.js 20+</li>
+    <li data-step="5">6. Composer</li>
+    <li data-step="6">7. Directory Permissions</li>
+    <li data-step="7">8. All Set!</li>
+  </ul>
+</div>
+<div id="content">
+
+  <!-- Step 0: Title -->
+  <div class="step active" data-step="0">
+    <div class="step-content" style="gap:20px">
+      <div class="step-title">Before You Begin<br><span style="color:var(--teal)">System Requirements</span></div>
+      <div class="step-subtitle">Let's make sure your server has everything needed to run VentureX CRM &amp; ERP.</div>
+      <div style="display:flex;gap:16px;margin-top:8px">
+        <div style="background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:16px 24px;text-align:center">
+          <div style="font-size:24px;font-weight:700;color:var(--teal)">8</div>
+          <div style="font-size:12px;color:var(--gray)">Requirements</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:16px 24px;text-align:center">
+          <div style="font-size:24px;font-weight:700;color:var(--teal)">~5 min</div>
+          <div style="font-size:12px;color:var(--gray)">To Verify</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: PHP -->
+  <div class="step" data-step="1">
+    <div class="step-content" style="gap:20px">
+      <div class="step-title">PHP <span style="color:var(--teal)">8.3+</span></div>
+      <div class="step-subtitle">VentureX requires PHP 8.3 or higher</div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="title">Terminal — Check PHP Version</div>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd">$ php --version</div>
+          <div class="output">PHP 8.3.12 (cli) (built: Aug 10 2026)</div>
+          <div class="output">Copyright (c) The PHP Group</div>
+          <div class="output" style="color:var(--green);margin-top:8px">&#10003; PHP 8.3 — Compatible!</div>
+        </div>
+      </div>
+      <div class="req-list">
+        <div class="req-item" id="php-req">
+          <div class="req-icon pending" id="php-icon">&#9679;</div>
+          <span class="req-name">PHP 8.3 or higher</span>
+          <span class="req-detail">Required</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Extensions -->
+  <div class="step" data-step="2">
+    <div class="step-content" style="gap:20px">
+      <div class="step-title">Required <span style="color:var(--teal)">PHP Extensions</span></div>
+      <div class="step-subtitle">These PHP extensions must be enabled</div>
+      <div class="ext-grid" id="ext-grid">
+        <div class="ext-item" style="transition-delay:.05s"><span class="dot"></span>pdo_mysql</div>
+        <div class="ext-item" style="transition-delay:.1s"><span class="dot"></span>mbstring</div>
+        <div class="ext-item" style="transition-delay:.15s"><span class="dot"></span>openssl</div>
+        <div class="ext-item" style="transition-delay:.2s"><span class="dot"></span>curl</div>
+        <div class="ext-item" style="transition-delay:.25s"><span class="dot"></span>gd</div>
+        <div class="ext-item" style="transition-delay:.3s"><span class="dot"></span>xml</div>
+        <div class="ext-item" style="transition-delay:.35s"><span class="dot"></span>zip</div>
+        <div class="ext-item" style="transition-delay:.4s"><span class="dot"></span>bcmath</div>
+        <div class="ext-item" style="transition-delay:.45s"><span class="dot"></span>fileinfo</div>
+        <div class="ext-item" style="transition-delay:.5s"><span class="dot"></span>intl</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: MySQL -->
+  <div class="step" data-step="3">
+    <div class="step-content" style="gap:20px">
+      <div class="step-title">MySQL <span style="color:var(--teal)">8.0+</span> or MariaDB <span style="color:var(--teal)">10.3+</span></div>
+      <div class="step-subtitle">You need a compatible database server</div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="title">MySQL Terminal</div>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd">mysql --version</div>
+          <div class="output">mysql  Ver 8.0.39 for Win64 on x86_64 (MySQL Community Server)</div>
+          <div class="output" style="color:var(--green);margin-top:8px">&#10003; MySQL 8.0 — Compatible!</div>
+          <div class="comment" style="margin-top:8px"># Alternative: MariaDB 10.3+ also works</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div style="background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:14px 24px;text-align:center">
+          <div style="font-size:20px;margin-bottom:4px">&#128218;</div>
+          <div style="font-size:13px;font-weight:600">MySQL 8.0+</div>
+          <div style="font-size:11px;color:var(--gray)">Recommended</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--surface-light);border-radius:10px;padding:14px 24px;text-align:center">
+          <div style="font-size:20px;margin-bottom:4px">&#128218;</div>
+          <div style="font-size:13px;font-weight:600">MariaDB 10.3+</div>
+          <div style="font-size:11px;color:var(--gray)">Also Supported</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Node.js -->
+  <div class="step" data-step="4">
+    <div class="step-content" style="gap:20px">
+      <div class="step-title">Node.js <span style="color:var(--teal)">20+</span></div>
+      <div class="step-subtitle">Required for building frontend assets (Vite + Laravel)</div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="title">Terminal — Check Node.js</div>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd">$ node --version</div>
+          <div class="output">v20.18.0</div>
+          <div class="cmd" style="margin-top:8px">$ npm --version</div>
+          <div class="output">10.8.2</div>
+          <div class="output" style="color:var(--green);margin-top:8px">&#10003; Node.js 20 — Compatible!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Composer -->
+  <div class="step" data-step="5">
+    <div class="step-content" style="gap:20px">
+      <div class="step-title"><span style="color:var(--teal)">Composer</span></div>
+      <div class="step-subtitle">The PHP package manager for installing dependencies</div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="title">Terminal — Check Composer</div>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd">$ composer --version</div>
+          <div class="output">Composer version 2.8.1 2026-07-15 14:28:33</div>
+          <div class="output" style="color:var(--green);margin-top:8px">&#10003; Composer installed!</div>
+          <div class="comment" style="margin-top:12px"># Install from: https://getcomposer.org</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6: Permissions -->
+  <div class="step" data-step="6">
+    <div class="step-content" style="gap:20px">
+      <div class="step-title">Directory <span style="color:var(--teal)">Permissions</span></div>
+      <div class="step-subtitle">These directories need write access</div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="title">Terminal — Set Permissions</div>
+        </div>
+        <div class="terminal-body">
+          <div class="comment"># Laravel requires write access to:</div>
+          <div class="cmd">$ chmod -R 775 storage/</div>
+          <div class="cmd">$ chmod -R 775 bootstrap/cache/</div>
+          <div class="comment" style="margin-top:8px"># On Windows, ensure your user has Full Control</div>
+          <div class="comment"># On Linux/Mac, the web server user needs access</div>
+          <div class="output" style="color:var(--green);margin-top:8px">&#10003; Permissions configured!</div>
+        </div>
+      </div>
+      <div class="req-list">
+        <div class="req-item show met">
+          <div class="req-icon check">&#10003;</div>
+          <span class="req-name">storage/</span>
+          <span class="req-detail">Writable</span>
+        </div>
+        <div class="req-item show met" style="transition-delay:.15s">
+          <div class="req-icon check">&#10003;</div>
+          <span class="req-name">bootstrap/cache/</span>
+          <span class="req-detail">Writable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 7: All set -->
+  <div class="step" data-step="7">
+    <div class="step-content" style="gap:24px">
+      <div class="big-check">&#10003;</div>
+      <div class="step-title">All Requirements <span style="color:var(--green)">Met!</span></div>
+      <div class="step-subtitle">Your system is ready. Time to set up the database.</div>
+      <div class="req-list">
+        <div class="req-item show met"><div class="req-icon check">&#10003;</div><span class="req-name">PHP 8.3+</span><span class="req-detail">Ready</span></div>
+        <div class="req-item show met" style="transition-delay:.08s"><div class="req-icon check">&#10003;</div><span class="req-name">PHP Extensions</span><span class="req-detail">All enabled</span></div>
+        <div class="req-item show met" style="transition-delay:.16s"><div class="req-icon check">&#10003;</div><span class="req-name">MySQL 8.0+</span><span class="req-detail">Running</span></div>
+        <div class="req-item show met" style="transition-delay:.24s"><div class="req-icon check">&#10003;</div><span class="req-name">Node.js 20+</span><span class="req-detail">Installed</span></div>
+        <div class="req-item show met" style="transition-delay:.32s"><div class="req-icon check">&#10003;</div><span class="req-name">Composer</span><span class="req-detail">Installed</span></div>
+        <div class="req-item show met" style="transition-delay:.4s"><div class="req-icon check">&#10003;</div><span class="req-name">Directory Permissions</span><span class="req-detail">Configured</span></div>
+      </div>
+      <button class="cta-button" onclick="window.location.href='03-database-setup.html'">Next: Database Setup &#8594;</button>
+    </div>
+  </div>
+
+</div>
+<div id="footer">
+  <div style="display:flex;align-items:center;gap:16px">
+    <button id="play-btn" title="Play/Pause auto-advance">&#9654;</button>
+    <span class="key-hint">Space / &#8594; Next &nbsp;|&nbsp; &#8592; Prev</span>
+  </div>
+  <div class="step-dots" id="step-dots"></div>
+  <span class="key-hint">VentureX Tutorial 2/5</span>
+</div>
+<script>
+(function(){
+  let current=0,total=8,autoPlay=false,autoTimer=null;
+  const steps=document.querySelectorAll('.step');
+  const dots=document.getElementById('step-dots');
+  const progress=document.getElementById('progress-bar');
+  const counter=document.getElementById('step-counter');
+  const prevBtn=document.getElementById('prev-btn');
+  const nextBtn=document.getElementById('next-btn');
+  const sidebar=document.getElementById('sidebar');
+  const tocItems=document.querySelectorAll('#toc-list li');
+  const playBtn=document.getElementById('play-btn');
+
+  for(let i=0;i<total;i++){const d=document.createElement('div');d.className='step-dot'+(i===0?' active':'');dots.appendChild(d)}
+
+  function animateStep(n){
+    if(n===1){
+      setTimeout(()=>{const el=document.getElementById('php-req');if(el)el.classList.add('show');const ic=document.getElementById('php-icon');if(ic){ic.classList.remove('pending');ic.classList.add('check');ic.innerHTML='&#10003;';}},600);
+    }
+    if(n===2){
+      setTimeout(()=>{document.querySelectorAll('#ext-grid .ext-item').forEach((e,i)=>{setTimeout(()=>e.classList.add('show'),i*120)})},300);
+    }
+  }
+
+  function update(){
+    steps.forEach((s,i)=>{s.classList.remove('active');if(i===current)s.classList.add('active')});
+    document.querySelectorAll('.step-dot').forEach((d,i)=>{d.className='step-dot';if(i<current)d.classList.add('done');if(i===current)d.classList.add('active')});
+    progress.style.width=((current+1)/total*100)+'%';
+    counter.textContent='Step '+(current+1)+' of '+total;
+    prevBtn.disabled=current===0;
+    nextBtn.textContent=current===total-1?'Finish &#9654;':'Next &#9654;';
+    tocItems.forEach((t,i)=>{t.classList.toggle('active',i===current)});
+    animateStep(current);
+  }
+  function goTo(n){if(n<0||n>=total)return;current=n;update()}
+  function next(){if(current<total-1){current++;update()}else{window.location.href='03-database-setup.html'}}
+  function prev(){if(current>0){current--;update()}}
+  prevBtn.onclick=prev;
+  nextBtn.onclick=next;
+  document.getElementById('toc-toggle').onclick=()=>sidebar.classList.toggle('open');
+  tocItems.forEach(t=>t.onclick=()=>{goTo(parseInt(t.dataset.step));sidebar.classList.remove('open')});
+  document.addEventListener('keydown',e=>{if(e.code==='Space'||e.code==='ArrowRight'){e.preventDefault();next()}if(e.code==='ArrowLeft'){e.preventDefault();prev()}if(e.code==='Escape')sidebar.classList.remove('open')});
+  playBtn.onclick=()=>{autoPlay=!autoPlay;playBtn.innerHTML=autoPlay?'&#9646;&#9646;':'&#9654;';if(autoPlay){autoTimer=setInterval(()=>next(),4000)}else{clearInterval(autoTimer)}};
+  update();
+})();
+</script>
+</body>
+</html>

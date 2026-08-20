@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="Segoe UI, Arial, sans-serif">
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a"/><stop offset="100%" style="stop-color:#1e293b"/></linearGradient></defs>
+  <rect width="800" height="500" fill="url(#bg)" rx="12"/>
+  <rect x="0" y="0" width="800" height="70" fill="#1e40af" rx="12"/><rect x="0" y="40" width="800" height="30" fill="#1e40af"/>
+  <text x="400" y="30" text-anchor="middle" fill="#93c5fd" font-size="13">VentureX ERP & CRM v1.0 — AI-Powered CRM &amp; ERP</text>
+  <text x="400" y="58" text-anchor="middle" fill="#fff" font-size="22" font-weight="700">Installation Overview — 8 Simple Steps</text>
+  <!-- Step boxes in 2 rows -->
+  <rect x="30" y="90" width="110" height="80" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="85" y="118" text-anchor="middle" fill="#3b82f6" font-size="24" font-weight="700">1</text>
+  <text x="85" y="138" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Extract</text>
+  <text x="85" y="155" text-anchor="middle" fill="#94a3b8" font-size="9">ZIP file</text>
+  <text x="150" y="130" fill="#3b82f6" font-size="20">→</text>
+  <rect x="170" y="90" width="110" height="80" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="225" y="118" text-anchor="middle" fill="#3b82f6" font-size="24" font-weight="700">2</text>
+  <text x="225" y="138" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Composer</text>
+  <text x="225" y="155" text-anchor="middle" fill="#94a3b8" font-size="9">PHP packages</text>
+  <text x="290" y="130" fill="#3b82f6" font-size="20">→</text>
+  <rect x="310" y="90" width="110" height="80" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="365" y="118" text-anchor="middle" fill="#3b82f6" font-size="24" font-weight="700">3</text>
+  <text x="365" y="138" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Configure</text>
+  <text x="365" y="155" text-anchor="middle" fill="#94a3b8" font-size="9">.env + DB</text>
+  <text x="430" y="130" fill="#3b82f6" font-size="20">→</text>
+  <rect x="450" y="90" width="110" height="80" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+  <text x="505" y="118" text-anchor="middle" fill="#22c55e" font-size="24" font-weight="700">4</text>
+  <text x="505" y="138" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Migrate</text>
+  <text x="505" y="155" text-anchor="middle" fill="#94a3b8" font-size="9">36 tables</text>
+  <text x="570" y="130" fill="#22c55e" font-size="20">→</text>
+  <rect x="590" y="90" width="110" height="80" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+  <text x="645" y="118" text-anchor="middle" fill="#22c55e" font-size="24" font-weight="700">5</text>
+  <text x="645" y="138" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Build</text>
+  <text x="645" y="155" text-anchor="middle" fill="#94a3b8" font-size="9">npm run build</text>
+  <!-- Row 2 -->
+  <rect x="130" y="195" width="110" height="80" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+  <text x="185" y="223" text-anchor="middle" fill="#22c55e" font-size="24" font-weight="700">6</text>
+  <text x="185" y="243" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Start</text>
+  <text x="185" y="260" text-anchor="middle" fill="#94a3b8" font-size="9">artisan serve</text>
+  <text x="250" y="235" fill="#22c55e" font-size="20">→</text>
+  <rect x="270" y="195" width="110" height="80" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+  <text x="325" y="223" text-anchor="middle" fill="#22c55e" font-size="24" font-weight="700">7</text>
+  <text x="325" y="243" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="600">Login</text>
+  <text x="325" y="260" text-anchor="middle" fill="#94a3b8" font-size="9">admin credentials</text>
+  <text x="390" y="235" fill="#22c55e" font-size="20">→</text>
+  <rect x="410" y="185" width="120" height="100" rx="8" fill="#052e16" stroke="#22c55e" stroke-width="3"/>
+  <text x="470" y="218" text-anchor="middle" fill="#4ade80" font-size="28">✓</text>
+  <text x="470" y="243" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="700">DONE!</text>
+  <text x="470" y="263" text-anchor="middle" fill="#86efac" font-size="10">ERP is live</text>
+  <!-- Commands -->
+  <rect x="30" y="300" width="740" height="180" rx="8" fill="#0d1117" stroke="#21262d"/>
+  <text x="50" y="325" fill="#7ee787" font-size="13" font-family="monospace">$ cd venturex-erp</text>
+  <text x="50" y="345" fill="#7ee787" font-size="13" font-family="monospace">$ composer install</text>
+  <text x="50" y="365" fill="#7ee787" font-size="13" font-family="monospace">$ cp .env.example .env &amp;&amp; php artisan key:generate</text>
+  <text x="50" y="385" fill="#7ee787" font-size="13" font-family="monospace">$ php artisan migrate --seed</text>
+  <text x="50" y="405" fill="#7ee787" font-size="13" font-family="monospace">$ npm install &amp;&amp; npm run build</text>
+  <text x="50" y="425" fill="#7ee787" font-size="13" font-family="monospace">$ php artisan serve</text>
+  <text x="50" y="455" fill="#79c0ff" font-size="13" font-family="monospace">→ http://localhost:8000  |  demo_admin@example.com  |  Demo_Admin_2026!</text>
+</svg>

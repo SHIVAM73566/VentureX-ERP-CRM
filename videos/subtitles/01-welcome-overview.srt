@@ -1,0 +1,116 @@
+﻿1
+00:00:01,000 --> 00:00:05,000
+Hey everyone, and welcome! I'm really excited to walk you through
+
+2
+00:00:05,000 --> 00:00:08,500
+VentureX ERP and CRM â€” this is genuinely one of the most
+
+3
+00:00:08,500 --> 00:00:11,500
+powerful business operating systems I've come across.
+
+4
+00:00:11,500 --> 00:00:13,000
+Let me show you what it can do.
+
+5
+00:00:14,000 --> 00:00:17,500
+So, what exactly is VentureX? It's an AI-powered CRM
+
+6
+00:00:17,500 --> 00:00:21,000
+and ERP business operating system. Think of it as your
+
+7
+00:00:21,000 --> 00:00:24,500
+company's entire back office â€” sales, inventory, finance,
+
+8
+00:00:24,500 --> 00:00:28,000
+HR, customer support â€” all in one place, with artificial
+
+9
+00:00:28,000 --> 00:00:32,000
+intelligence baked right in to give you real insights.
+
+10
+00:00:33,000 --> 00:00:37,000
+Under the hood, it's built on Laravel 13 with PHP 8.3,
+
+11
+00:00:37,000 --> 00:00:40,500
+MySQL 8, and Tailwind CSS 4. For the tech folks watching â€”
+
+12
+00:00:40,500 --> 00:00:44,000
+this is a modern, performant stack. And here's what really
+
+13
+00:00:44,000 --> 00:00:47,500
+sets it apart: the AI integration supports multiple providers â€”
+
+14
+00:00:47,500 --> 00:00:51,000
+Gemini, NVIDIA, and OpenAI. You're not locked into one AI vendor.
+
+15
+00:00:52,000 --> 00:00:55,500
+Let me give you the quick tour. You've got a full CRM with
+
+16
+00:00:55,500 --> 00:00:59,000
+customer management, a visual sales pipeline, inventory tracking,
+
+17
+00:00:59,000 --> 00:01:02,500
+procurement workflows, finance modules, logistics, human resources,
+
+18
+00:01:02,500 --> 00:01:06,500
+support tickets, an error center, and complete audit logs.
+
+19
+00:01:06,500 --> 00:01:10,000
+Everything your business needs, organized exactly how you'd want it.
+
+20
+00:01:11,000 --> 00:01:14,500
+Who is this for? If you're running a small to medium business,
+
+21
+00:01:14,500 --> 00:01:18,000
+managing an agency, or you're a developer looking for a solid
+
+22
+00:01:18,000 --> 00:01:21,500
+foundation to build on â€” this is for you. It's flexible enough
+
+23
+00:01:21,500 --> 00:01:25,000
+to customize, but powerful enough to use right out of the box.
+
+24
+00:01:26,000 --> 00:01:29,500
+In this tutorial series, I'm going to walk you through everything â€”
+
+25
+00:01:29,500 --> 00:01:33,000
+from system requirements and installation, all the way to
+
+26
+00:01:33,000 --> 00:01:36,500
+configuring every module. By the end, you'll have VentureX
+
+27
+00:01:36,500 --> 00:01:40,000
+running on your own machine. Oh, and you can find it on the
+
+28
+00:01:40,000 --> 00:01:43,500
+Codester marketplace â€” look for item number
+
+29
+00:01:43,500 --> 00:01:48,000
+VentureX-ERP-2026-01483863236. Let's get started!
+

@@ -1,0 +1,307 @@
+1
+00:00:01,000 --> 00:00:05,000
+Welcome back. In this video, we'll configure
+
+2
+00:00:05,000 --> 00:00:08,000
+VentureX's environment file.
+
+3
+00:00:08,000 --> 00:00:12,000
+This controls your database connections, AI provider,
+
+4
+00:00:12,000 --> 00:00:15,000
+mail settings, and third-party integrations.
+
+5
+00:00:15,000 --> 00:00:17,000
+Let's get started.
+
+6
+00:00:17,000 --> 00:00:20,000
+First, copy the example environment file.
+
+7
+00:00:20,000 --> 00:00:24,000
+VentureX ships with .env.example containing
+
+8
+00:00:24,000 --> 00:00:27,000
+every supported variable with sensible defaults.
+
+9
+00:00:27,000 --> 00:00:31,000
+Run copy .env.example .env on Windows,
+
+10
+00:00:31,000 --> 00:00:34,000
+or cp .env.example .env on macOS and Linux.
+
+11
+00:00:34,000 --> 00:00:38,000
+File explorer confirms .env file now exists
+
+12
+00:00:38,000 --> 00:00:42,000
+alongside .env.example.
+
+13
+00:00:42,000 --> 00:00:46,000
+Every Laravel application requires an encrypted
+
+14
+00:00:46,000 --> 00:00:49,000
+application key.
+
+15
+00:00:49,000 --> 00:00:53,000
+This key is used for hashing, encryption,
+
+16
+00:00:53,000 --> 00:00:56,000
+and secure cookie signing.
+
+17
+00:00:56,000 --> 00:01:00,000
+Generate it now with php artisan key:generate.
+
+18
+00:01:00,000 --> 00:01:04,000
+You should see a success message confirming
+
+19
+00:01:04,000 --> 00:01:08,000
+the key was set.
+
+20
+00:01:08,000 --> 00:01:12,000
+Let's walk through each section.
+
+21
+00:01:12,000 --> 00:01:15,000
+Under APP, APP_NAME is your display name —
+
+22
+00:01:15,000 --> 00:01:19,000
+set it to your company name.
+
+23
+00:01:19,000 --> 00:01:23,000
+APP_ENV should stay local during development
+
+24
+00:01:23,000 --> 00:01:26,000
+and switch to production on your live server.
+
+25
+00:01:26,000 --> 00:01:30,000
+APP_URL is your application base URL.
+
+26
+00:01:30,000 --> 00:01:34,000
+For local development, keep it at localhost:8000.
+
+27
+00:01:34,000 --> 00:01:38,000
+APP_DEBUG should be true locally for detailed error pages,
+
+28
+00:01:38,000 --> 00:01:42,000
+and false in production to hide stack traces from users.
+
+29
+00:01:42,000 --> 00:01:46,000
+Next, the database section.
+
+30
+00:01:46,000 --> 00:01:50,000
+VentureX defaults to MySQL 8.
+
+31
+00:01:50,000 --> 00:01:54,000
+Set your host to 127.0.0.1, port to 3306,
+
+32
+00:01:54,000 --> 00:01:58,000
+and the database name to VENTUREX_ERP — that's the default.
+
+33
+00:01:58,000 --> 00:02:02,000
+Enter your MySQL username and password.
+
+34
+00:02:02,000 --> 00:02:06,000
+If you're using the bundled XAMPP or Laragon setup,
+
+35
+00:02:06,000 --> 00:02:10,000
+your credentials are likely root with an empty password.
+
+36
+00:02:10,000 --> 00:02:14,000
+For production, use a dedicated database user
+
+37
+00:02:14,000 --> 00:02:17,000
+with restricted permissions.
+
+38
+00:02:17,000 --> 00:02:21,000
+Session settings control how user login state is managed.
+
+39
+00:02:21,000 --> 00:02:25,000
+SESSION_DRIVER=database stores sessions in your database
+
+40
+00:02:25,000 --> 00:02:28,000
+for reliability.
+
+41
+00:02:28,000 --> 00:02:32,000
+You can switch to redis for higher performance.
+
+42
+00:02:32,000 --> 00:02:36,000
+SESSION_LIFETIME is in minutes — 120 means
+
+43
+00:02:36,000 --> 00:02:40,000
+users stay logged in for two hours of inactivity.
+
+44
+00:02:40,000 --> 00:02:44,000
+For mail, VentureX uses smtp by default.
+
+45
+00:02:44,000 --> 00:02:48,000
+Configure your SMTP host, port, username,
+
+46
+00:02:48,000 --> 00:02:51,000
+and password for your email provider.
+
+47
+00:02:51,000 --> 00:02:55,000
+Set MAIL_ENCRYPTION to tls for most providers
+
+48
+00:02:55,000 --> 00:02:58,000
+like Gmail or SendGrid.
+
+49
+00:02:58,000 --> 00:03:02,000
+Now the AI Gateway — one of VentureX's standout features.
+
+50
+00:03:02,000 --> 00:03:06,000
+The AI_PROVIDER variable determines which AI backend
+
+51
+00:03:06,000 --> 00:03:10,000
+powers your insights, predictions, and chatbot.
+
+52
+00:03:10,000 --> 00:03:14,000
+You have four options: swift for SwiftChat AI,
+
+53
+00:03:14,000 --> 00:03:17,000
+gemini for Google Gemini,
+
+54
+00:03:17,000 --> 00:03:21,000
+deepseek for DeepSeek, and nvidia for NVIDIA's NIM platform.
+
+55
+00:03:21,000 --> 00:03:25,000
+NVIDIA offers a free tier at build.nvidia.com —
+
+56
+00:03:25,000 --> 00:03:29,000
+sign up, grab your API key, and paste it into NVIDIA_API_KEY.
+
+57
+00:03:29,000 --> 00:03:33,000
+For this tutorial, we'll use the NVIDIA provider
+
+58
+00:03:33,000 --> 00:03:37,000
+since the free tier is generous enough for development.
+
+59
+00:03:37,000 --> 00:03:41,000
+Finally, the optional integrations.
+
+60
+00:03:41,000 --> 00:03:45,000
+VentureX supports PayPal for payment processing —
+
+61
+00:03:45,000 --> 00:03:49,000
+just add your PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET.
+
+62
+00:03:49,000 --> 00:03:53,000
+Firebase handles push notifications and real-time features
+
+63
+00:03:53,000 --> 00:03:56,000
+with your FIREBASE_CREDENTIALS JSON.
+
+64
+00:03:56,000 --> 00:04:00,000
+Google OAuth and Microsoft OAuth enable social login —
+
+65
+00:04:00,000 --> 00:04:04,000
+register your app in each provider's console
+
+66
+00:04:04,000 --> 00:04:08,000
+and paste your client IDs and secrets here.
+
+67
+00:04:08,000 --> 00:04:12,000
+All of these are optional. You can run VentureX fully
+
+68
+00:04:12,000 --> 00:04:15,000
+without any of them configured.
+
+69
+00:04:15,000 --> 00:04:19,000
+If you need a deeper walkthrough on database creation
+
+70
+00:04:19,000 --> 00:04:23,000
+and user privileges, check the DATABASE-SETUP.md file
+
+71
+00:04:23,000 --> 00:04:27,000
+included in your project root.
+
+72
+00:04:27,000 --> 00:04:31,000
+It covers MySQL setup for both Windows and macOS
+
+73
+00:04:31,000 --> 00:04:35,000
+with step-by-step commands.
+
+74
+00:04:35,000 --> 00:04:39,000
+Your environment is configured.
+
+75
+00:04:39,000 --> 00:04:43,000
+In the next video, we'll install dependencies
+
+76
+00:04:43,000 --> 00:04:46,000
+and build the project.
+
+77
+00:04:46,000 --> 00:04:50,000
+See you there.

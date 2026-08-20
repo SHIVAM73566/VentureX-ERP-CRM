@@ -1,0 +1,155 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-navy-50: #f4f7fb;
+    --color-navy-100: #e8eef7;
+    --color-navy-200: #cbd9ec;
+    --color-navy-300: #9cb8dc;
+    --color-navy-400: #6791c5;
+    --color-navy-500: #4372ae;
+    --color-navy-600: #325a92;
+    --color-navy-700: #2a4976;
+    --color-navy-800: #263d62;
+    --color-navy-900: #0f1d38;
+    --color-navy-950: #0a1328;
+
+    --color-accent-50: #eefbf5;
+    --color-accent-100: #d6f5e7;
+    --color-accent-200: #b0ead2;
+    --color-accent-300: #7cd9b6;
+    --color-accent-400: #45c196;
+    --color-accent-500: #20a67d;
+    --color-accent-600: #148565;
+    --color-accent-700: #116a53;
+    --color-accent-800: #105543;
+    --color-accent-900: #0f4638;
+
+    --color-ink-50: #f8fafc;
+    --color-ink-100: #f1f5f9;
+    --color-ink-200: #e2e8f0;
+    --color-ink-300: #cbd5e1;
+    --color-ink-400: #94a3b8;
+    --color-ink-500: #64748b;
+    --color-ink-600: #475569;
+    --color-ink-700: #334155;
+    --color-ink-800: #1e293b;
+    --color-ink-900: #0f172a;
+    --color-ink-950: #020617;
+}
+
+@layer base {
+    body {
+        @apply bg-ink-100 text-ink-800 antialiased overflow-x-clip dark:bg-ink-950 dark:text-ink-100;
+    }
+
+    [x-cloak] {
+        display: none;
+    }
+}
+
+@utility card {
+    @apply bg-white rounded-xl border border-ink-200 shadow-sm dark:bg-ink-900 dark:border-ink-800 dark:shadow-none;
+}
+
+@utility btn {
+    @apply inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+@utility badge {
+    @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold;
+}
+
+@layer components {
+
+    .card-header {
+        @apply px-5 py-4 border-b border-ink-100 flex items-center justify-between gap-3 dark:border-ink-800;
+    }
+
+    .btn-primary {
+        @apply btn bg-navy-800 text-white hover:bg-navy-700 focus:ring-navy-500;
+    }
+
+    .btn-accent {
+        @apply btn bg-accent-600 text-white hover:bg-accent-500 focus:ring-accent-500;
+    }
+
+    .btn-secondary {
+        @apply btn bg-white text-ink-700 border border-ink-300 hover:bg-ink-50 focus:ring-ink-400 dark:bg-ink-800 dark:text-ink-200 dark:border-ink-700 dark:hover:bg-ink-700;
+    }
+
+    .btn-danger {
+        @apply btn bg-red-600 text-white hover:bg-red-500 focus:ring-red-500;
+    }
+
+    .input {
+        @apply w-full rounded-lg border border-ink-300 bg-white px-3 py-2 text-sm text-ink-800 placeholder-ink-400 focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20 disabled:bg-ink-50 disabled:text-ink-500 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-100 dark:placeholder-ink-500 dark:focus:border-navy-400 dark:focus:ring-navy-400/30 dark:disabled:bg-ink-900;
+    }
+
+    .label {
+        @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-500 dark:text-ink-400;
+    }
+
+    .table {
+        @apply min-w-full divide-y divide-ink-200 text-sm dark:divide-ink-800;
+    }
+
+    .table thead th {
+        @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-ink-500 bg-ink-50 dark:text-ink-400 dark:bg-ink-800/50;
+    }
+
+    .table tbody td {
+        @apply px-4 py-3 whitespace-nowrap;
+    }
+
+    .table tbody tr {
+        @apply hover:bg-ink-50/60 dark:text-ink-300 dark:hover:bg-ink-800/60;
+    }
+
+    .badge-green {
+        @apply badge bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/15 dark:text-emerald-400 dark:ring-emerald-500/30;
+    }
+
+    .badge-yellow {
+        @apply badge bg-amber-50 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-500/15 dark:text-amber-400 dark:ring-amber-500/30;
+    }
+
+    .badge-amber {
+        @apply badge bg-amber-50 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-500/15 dark:text-amber-400 dark:ring-amber-500/30;
+    }
+
+    .badge-red {
+        @apply badge bg-red-50 text-red-700 ring-1 ring-red-600/20 dark:bg-red-500/15 dark:text-red-400 dark:ring-red-500/30;
+    }
+
+    .badge-blue {
+        @apply badge bg-navy-50 text-navy-700 ring-1 ring-navy-600/20 dark:bg-navy-500/15 dark:text-navy-300 dark:ring-navy-500/30;
+    }
+
+    .badge-gray {
+        @apply badge bg-ink-100 text-ink-600 ring-1 ring-ink-300 dark:bg-ink-700 dark:text-ink-300 dark:ring-ink-600;
+    }
+
+    .badge-violet {
+        @apply badge bg-violet-50 text-violet-700 ring-1 ring-violet-600/20 dark:bg-violet-500/15 dark:text-violet-400 dark:ring-violet-500/30;
+    }
+
+    .th-sort {
+        @apply hover:text-ink-800 inline-flex items-center gap-1 cursor-pointer select-none;
+    }
+
+    .stat-card {
+        @apply card relative overflow-hidden p-5 dark:bg-ink-900 dark:border-ink-800;
+    }
+
+    .stat-icon {
+        @apply inline-flex h-10 w-10 items-center justify-center rounded-lg;
+    }
+}

@@ -1,0 +1,192 @@
+﻿1
+00:00:01,000 --> 00:00:05,000
+Alright, before we install VentureX, let's make sure your system
+
+2
+00:00:05,000 --> 00:00:08,000
+has everything it needs. Don't worry â€” I'll walk you through
+
+3
+00:00:08,000 --> 00:00:11,500
+checking each requirement, and I'll show you exactly what to do
+
+4
+00:00:11,500 --> 00:00:13,000
+if something's missing.
+
+5
+00:00:14,000 --> 00:00:17,500
+First up â€” PHP. VentureX needs PHP 8.3 or higher.
+
+6
+00:00:17,500 --> 00:00:20,500
+Let's check what you've got. Open your terminal
+
+7
+00:00:20,500 --> 00:00:23,000
+and type this command.
+
+8
+00:00:24,000 --> 00:00:27,500
+See that version number? You need 8.3 or above.
+
+9
+00:00:27,500 --> 00:00:31,000
+If you see something like 8.2 or lower, you'll need to upgrade.
+
+10
+00:00:31,000 --> 00:00:35,000
+On Windows, I'd recommend downloading from the official PHP website.
+
+11
+00:00:35,000 --> 00:00:38,500
+On Mac, use Homebrew. On Linux, your package manager
+
+12
+00:00:38,500 --> 00:00:42,000
+makes this pretty straightforward.
+
+13
+00:00:43,000 --> 00:00:46,500
+Next â€” MySQL. You need version 8.0 or higher.
+
+14
+00:00:46,500 --> 00:00:50,000
+MariaDB 10.6 or above works too, if that's what you prefer.
+
+15
+00:00:50,000 --> 00:00:53,000
+Let's check.
+
+16
+00:00:54,000 --> 00:00:57,500
+There's my MySQL version. If you don't have MySQL installed yet,
+
+17
+00:00:57,500 --> 00:01:01,000
+don't panic â€” we'll cover the database setup in the next video.
+
+18
+00:01:01,000 --> 00:01:05,000
+Just make a note that you'll need it.
+
+19
+00:01:06,000 --> 00:01:09,500
+Now, Composer â€” this is PHP's package manager. Think of it like npm,
+
+20
+00:01:09,500 --> 00:01:13,000
+but for PHP. You need version 2.x.
+
+21
+00:01:14,000 --> 00:01:17,500
+If you see version 2.something, you're good. If Composer isn't installed,
+
+22
+00:01:17,500 --> 00:01:21,000
+head to getcomposer.org and follow their installation guide.
+
+23
+00:01:21,000 --> 00:01:25,000
+It's a one-time setup.
+
+24
+00:01:26,000 --> 00:01:29,500
+We also need Node.js and npm. VentureX uses Tailwind CSS
+
+25
+00:01:29,500 --> 00:01:33,000
+for the frontend, so we need Node to compile those assets.
+
+26
+00:01:33,000 --> 00:01:37,000
+Version 20 or higher is what we're after.
+
+27
+00:01:38,000 --> 00:01:41,500
+There's my Node version and npm version. Both look good.
+
+28
+00:01:41,500 --> 00:01:45,000
+If you need to install or update Node, I recommend using nvm â€”
+
+29
+00:01:45,000 --> 00:01:49,000
+the Node Version Manager â€” it makes switching between versions really easy.
+
+30
+00:01:50,000 --> 00:01:53,500
+Finally, you'll need a web server. Apache with mod_rewrite enabled
+
+31
+00:01:53,500 --> 00:01:57,000
+works great. Nginx is also fully supported. But here's a nice
+
+32
+00:01:57,000 --> 00:02:01,000
+shortcut for development â€” PHP has a built-in server that works
+
+33
+00:02:01,000 --> 00:02:04,500
+perfectly for getting started. We'll use that in this series
+
+34
+00:02:04,500 --> 00:02:08,000
+to keep things simple.
+
+35
+00:02:09,000 --> 00:02:12,500
+Okay, requirements check â€” done! Now let's grab the files.
+
+36
+00:02:12,500 --> 00:02:16,000
+Head over to the Codester marketplace and search for VentureX ERP.
+
+37
+00:02:16,000 --> 00:02:20,000
+The item number is VentureX-ERP-2026-01483863236.
+
+38
+00:02:20,000 --> 00:02:24,000
+You can also find the direct link in the video description below.
+
+39
+00:02:25,000 --> 00:02:28,500
+Once you're on the page, hit that download button.
+
+40
+00:02:28,500 --> 00:02:32,000
+You'll get a ZIP file containing everything you need.
+
+41
+00:02:33,000 --> 00:02:36,500
+Let's extract this and take a look at what's inside.
+
+42
+00:02:36,500 --> 00:02:40,000
+I'll right-click the ZIP file and extract it to my project folder.
+
+43
+00:02:41,000 --> 00:02:44,500
+Here's the file structure. You can see the standard Laravel directories â€”
+
+44
+00:02:44,500 --> 00:02:48,000
+app, config, database, resources, routes â€” plus some custom modules
+
+45
+00:02:48,000 --> 00:02:52,000
+for the ERP functionality. Don't worry about memorizing all this now.
+
+46
+00:02:52,000 --> 00:02:55,500
+We'll explore each part as we go through the installation.
+
+47
+00:02:55,500 --> 00:02:59,000
+In the next video, we'll set up our database so VentureX has
+
+48
+00:02:59,000 --> 00:03:02,500
+somewhere to store all its data. See you there!
+

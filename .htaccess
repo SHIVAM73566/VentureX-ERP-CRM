@@ -1,0 +1,80 @@
+# TWITTER ERP — Root .htaccess
+# Block access to sensitive files and directories
+# Place this in the PROJECT ROOT (not public/)
+
+# Block .env
+<Files .env>
+    Require all denied
+</Files>
+
+# Block .git
+<Directory .git>
+    Require all denied
+</Directory>
+
+# Block common sensitive files
+<FilesMatch "\.(env|git|htaccess|htpasswd|ini|log|sh|sql|bak|dist|DS_Store)$">
+    Require all denied
+</FilesMatch>
+
+# Block access to hidden files (dotfiles)
+<DirectoryMatch "/\.">
+    Require all denied
+</DirectoryMatch>
+
+# Block access to storage directory
+<Directory storage>
+    Require all denied
+</Directory>
+
+# Block access to config directory
+<Directory config>
+    Require all denied
+</Directory>
+
+# Block access to routes directory
+<Directory routes>
+    Require all denied
+</Directory>
+
+# Block access to app directory
+<Directory app>
+    Require all denied
+</Directory>
+
+# Block access to bootstrap directory
+<Directory bootstrap>
+    Require all denied
+</Directory>
+
+# Block access to database directory
+<Directory database>
+    Require all denied
+</Directory>
+
+# Block composer files
+<Files composer.json>
+    Require all denied
+</Files>
+<Files composer.lock>
+    Require all denied
+</Files>
+<Files package.json>
+    Require all denied
+</Files>
+<Files package-lock.json>
+    Require all denied
+</Files>
+
+# Block phpunit files
+<Files phpunit.xml>
+    Require all denied
+</Files>
+<Files phpunit.mysql.xml>
+    Require all denied
+</Files>
+
+# Redirect all non-public requests to public/
+RewriteEngine On
+RewriteRule ^$ public/ [L]
+RewriteRule (.*) public/$1 [L]

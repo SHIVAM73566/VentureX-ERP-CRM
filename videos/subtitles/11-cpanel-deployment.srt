@@ -1,0 +1,475 @@
+1
+00:00:01,000 --> 00:00:05,000
+Hey everyone! Welcome back to the VentureX series.
+
+2
+00:00:05,200 --> 00:00:10,000
+So you've got VentureX installed locally, you've explored the CRM,
+inventory, even the AI features —
+
+3
+00:00:10,200 --> 00:00:13,500
+and now you're ready to take it live.
+
+4
+00:00:13,700 --> 00:00:18,000
+In this video, I'm going to walk you through deploying
+VentureX on a shared hosting account using cPanel.
+
+5
+00:00:18,200 --> 00:00:21,000
+No terminal commands, no server admin degree required.
+
+6
+00:00:21,200 --> 00:00:24,000
+If you can upload a file, you can do this.
+
+7
+00:00:24,200 --> 00:00:26,000
+Let's get started.
+
+8
+00:00:27,000 --> 00:00:30,000
+Before we jump in, here's what you'll need.
+
+9
+00:00:30,200 --> 00:00:34,500
+First, a shared hosting account — any provider
+that gives you cPanel works.
+
+10
+00:00:34,700 --> 00:00:38,000
+I'm using Hostinger here, but GoDaddy, Bluehost,
+SiteGround, they all look basically the same.
+
+11
+00:00:38,200 --> 00:00:43,000
+Second, you need PHP 8.2 or higher enabled on your hosting.
+
+12
+00:00:43,200 --> 00:00:47,000
+Most hosts have this now, but if yours is stuck on PHP 7,
+you'll need to upgrade in your hosting dashboard.
+
+13
+00:00:47,200 --> 00:00:51,000
+Third, MySQL 5.7 or higher — again,
+most hosts include this by default.
+
+14
+00:00:51,200 --> 00:00:55,000
+And finally, your VentureX files ready to download.
+
+15
+00:00:55,200 --> 00:00:59,000
+You can grab the latest release from the GitHub repository
+or the official download link.
+
+16
+00:00:59,200 --> 00:01:01,000
+Got all four? Great. Let's open cPanel.
+
+17
+00:01:02,000 --> 00:01:06,000
+Alright, here's your cPanel dashboard.
+
+18
+00:01:06,200 --> 00:01:10,000
+Look for the File Manager icon — it's usually
+under the Files section.
+
+19
+00:01:10,200 --> 00:01:12,000
+Click that.
+
+20
+00:01:12,200 --> 00:01:16,000
+Now you'll see your hosting file structure.
+
+21
+00:01:16,200 --> 00:01:20,000
+Navigate to public_html — that's your website's root folder.
+
+22
+00:01:20,200 --> 00:01:24,000
+If there's an index.php or default.html in there from your host,
+you can delete it.
+
+23
+00:01:24,200 --> 00:01:27,000
+Now click Upload at the top.
+
+24
+00:01:27,200 --> 00:01:30,000
+You'll see a file upload page.
+
+25
+00:01:30,200 --> 00:01:34,000
+Drag your VentureX zip file right into the upload area,
+or click Select File.
+
+26
+00:01:34,200 --> 00:01:38,000
+Wait for it to finish — the bar should turn green at 100%.
+
+27
+00:01:38,200 --> 00:01:43,000
+Head back to File Manager, find the zip file,
+right-click it, and choose Extract.
+
+28
+00:01:43,200 --> 00:01:47,000
+Extract it right into public_html.
+
+29
+00:01:47,200 --> 00:01:51,000
+If your zip has a folder inside like 'venturex-main',
+you'll want to move everything from that folder up to public_html directly.
+
+30
+00:01:51,200 --> 00:01:55,000
+I'll show you — click into the folder, Select All,
+then Move, and type public_html as the destination.
+
+31
+00:01:55,200 --> 00:01:58,000
+Now your files are in the right place.
+
+32
+00:01:59,000 --> 00:02:02,000
+File uploaded. Next, we need a database.
+
+33
+00:02:02,200 --> 00:02:06,000
+Back in cPanel, find MySQL Database Wizard —
+it walks you through the whole process.
+
+34
+00:02:06,200 --> 00:02:10,000
+Step one: name your database. I'll call mine venturex_prod.
+
+35
+00:02:10,200 --> 00:02:12,000
+Click Next Step.
+
+36
+00:02:12,200 --> 00:02:16,000
+Step two: create a database user. I'll use vxuser.
+
+37
+00:02:16,200 --> 00:02:20,000
+Generate a strong password — click the Password Generator button,
+copy that password somewhere safe, you'll need it.
+
+38
+00:02:20,200 --> 00:02:24,000
+Check the box to confirm you saved it, then Create User.
+
+39
+00:02:24,200 --> 00:02:28,000
+Step three: add the user to the database.
+Check ALL PRIVILEGES —
+
+40
+00:02:28,200 --> 00:02:31,000
+that gives your app full access to its own database.
+
+41
+00:02:31,200 --> 00:02:33,000
+Click Next Step.
+
+42
+00:02:33,200 --> 00:02:36,000
+Done! Write down your database name, username, and password.
+
+43
+00:02:36,200 --> 00:02:38,000
+You'll need all three in a minute.
+
+44
+00:02:39,000 --> 00:02:43,000
+Now here's where some people get stuck.
+
+45
+00:02:43,200 --> 00:02:47,000
+VentureX uses Composer to install its PHP dependencies.
+
+46
+00:02:47,200 --> 00:02:51,000
+If your host has cPanel Terminal — that's the black icon
+that looks like a command line — you can use that.
+
+47
+00:02:51,200 --> 00:02:53,000
+Open it.
+
+48
+00:02:53,200 --> 00:02:57,000
+You'll need to be in your project directory,
+so type: cd public_html.
+
+49
+00:02:57,200 --> 00:03:00,000
+Then run: composer install.
+
+50
+00:03:00,200 --> 00:03:04,000
+If your host doesn't have cPanel Terminal,
+or if Composer isn't available, here's the workaround.
+
+51
+00:03:04,200 --> 00:03:08,000
+Some hosts let you run Composer from the PHP version selector area,
+or you can check if there's a 'Composer' app in cPanel under Software.
+
+52
+00:03:08,200 --> 00:03:13,000
+If none of that works, don't panic.
+
+53
+00:03:13,200 --> 00:03:18,000
+You can run composer install on your local machine,
+upload the entire vendor folder via File Manager,
+
+54
+00:03:18,200 --> 00:03:20,000
+and it works exactly the same way.
+
+55
+00:03:20,200 --> 00:03:25,000
+The vendor folder contains all the pre-installed dependencies —
+just zip it up locally after running composer install,
+
+56
+00:03:25,200 --> 00:03:28,000
+upload the zip, extract it in public_html, and you're good.
+
+57
+00:03:29,000 --> 00:03:32,000
+Time to configure your environment file.
+
+58
+00:03:32,200 --> 00:03:36,000
+In File Manager, find the .env file in your project root.
+Right-click, Edit.
+
+59
+00:03:36,200 --> 00:03:40,000
+If you don't see a .env file,
+look for .env.example — rename it to .env.
+
+60
+00:03:40,200 --> 00:03:43,000
+Now let's fill in the values.
+
+61
+00:03:43,200 --> 00:03:47,000
+First, APP_URL — set this to your domain,
+like https://yourdomain.com.
+
+62
+00:03:47,200 --> 00:03:50,000
+APP_ENV should be 'production'.
+
+63
+00:03:50,200 --> 00:03:52,000
+APP_KEY — you can leave this blank for now, we'll generate it.
+
+64
+00:03:52,200 --> 00:03:55,000
+DB_CONNECTION is mysql.
+
+65
+00:03:55,200 --> 00:03:58,000
+DB_HOST is usually localhost on shared hosting.
+
+66
+00:03:58,200 --> 00:04:00,000
+DB_PORT is 3306.
+
+67
+00:04:00,200 --> 00:04:04,000
+DB_DATABASE — that's the database name you just created.
+
+68
+00:04:04,200 --> 00:04:07,000
+DB_USERNAME — that's the user you created.
+
+69
+00:04:07,200 --> 00:04:11,000
+DB_PASSWORD — paste in that strong password you saved.
+
+70
+00:04:11,200 --> 00:04:15,000
+Scroll down to MAIL settings if you want email notifications to work —
+set MAIL_HOST, MAIL_PORT, MAIL_USERNAME, and MAIL_PASSWORD
+
+71
+00:04:15,200 --> 00:04:18,000
+with your email provider's SMTP details.
+
+72
+00:04:18,200 --> 00:04:20,000
+Save the file.
+
+73
+00:04:21,000 --> 00:04:23,000
+Almost there. We need to generate the application encryption key.
+
+74
+00:04:23,200 --> 00:04:27,000
+Back in cPanel Terminal, in your public_html directory,
+run: php artisan key:generate.
+
+75
+00:04:27,200 --> 00:04:30,000
+You should see a green success message.
+
+76
+00:04:30,200 --> 00:04:34,000
+If you can't access Terminal, here's the trick —
+you can generate a key locally using the same command,
+
+77
+00:04:34,200 --> 00:04:38,000
+then copy the 32-character string it gives you
+and paste it into the APP_KEY field in your .env file.
+
+78
+00:04:38,200 --> 00:04:42,000
+Just make sure to add base64: before the key in the .env file.
+
+79
+00:04:42,200 --> 00:04:44,000
+Save and close.
+
+80
+00:04:45,000 --> 00:04:48,000
+VentureX needs a couple of scheduled tasks to work properly —
+
+81
+00:04:48,200 --> 00:04:51,000
+things like sending email reminders, cleaning up old data,
+
+82
+00:04:51,200 --> 00:04:54,000
+and running AI queue jobs.
+
+83
+00:04:54,200 --> 00:04:57,000
+In cPanel, find Cron Jobs.
+
+84
+00:04:57,200 --> 00:05:01,000
+You'll see a section called Add New Cron Job.
+
+85
+00:05:01,200 --> 00:05:05,000
+Set the timing to Every Minute —
+that's the asterisk notation: * * * * *.
+
+86
+00:05:05,200 --> 00:05:09,000
+Then in the command field, type:
+cd /home/yourusername/public_html && php artisan schedule:run >> /dev/null 2>&1.
+
+87
+00:05:09,200 --> 00:05:13,000
+Replace yourusername with your actual cPanel username.
+
+88
+00:05:13,200 --> 00:05:15,000
+Click Add New Cron Job.
+
+89
+00:05:15,200 --> 00:05:18,000
+That's it — your scheduler is running.
+
+90
+00:05:18,200 --> 00:05:22,000
+Some hosts have a minimum of 1 minute,
+some only allow 5 minutes.
+
+91
+00:05:22,200 --> 00:05:25,000
+If 1 minute isn't available, 5 minutes works fine
+for most use cases.
+
+92
+00:05:26,000 --> 00:05:29,000
+Let's secure your site with HTTPS.
+
+93
+00:05:29,200 --> 00:05:33,000
+Most cPanel hosts include free SSL through Let's Encrypt.
+
+94
+00:05:33,200 --> 00:05:37,000
+Find the SSL/TLS section, or look for
+'Let's Encrypt' or 'SSL Certificates' in your dashboard.
+
+95
+00:05:37,200 --> 00:05:41,000
+Select your domain, choose the Let's Encrypt option,
+and click Issue or Install.
+
+96
+00:05:41,200 --> 00:05:43,000
+It takes about 30 seconds.
+
+97
+00:05:43,200 --> 00:05:47,000
+Once it's installed, go back to your .env file
+and make sure APP_URL starts with https://, not http://.
+
+98
+00:05:47,200 --> 00:05:51,000
+If you don't see the SSL option in cPanel,
+contact your host — some require you to enable it from the hosting dashboard first.
+
+99
+00:05:51,200 --> 00:05:55,000
+After SSL is active, try visiting your site.
+You should see the padlock icon in the browser.
+
+100
+00:05:56,000 --> 00:05:58,000
+Moment of truth — open your browser
+and go to your domain.
+
+101
+00:05:58,200 --> 00:06:02,000
+You should see the VentureX login page!
+
+102
+00:06:02,200 --> 00:06:06,000
+Log in with the default credentials
+or the ones you set during local installation.
+
+103
+00:06:06,200 --> 00:06:10,000
+If you see a blank page,
+check that all files uploaded correctly and that your .env database details are right.
+
+104
+00:06:10,200 --> 00:06:15,000
+If you get a 500 error, it's usually a permissions issue —
+in File Manager, set storage and bootstrap/cache folders to 755 permissions.
+
+105
+00:06:15,200 --> 00:06:19,000
+If you see 'Whoops, something went wrong,'
+double-check your APP_KEY — it might be missing the base64: prefix.
+
+106
+00:06:19,200 --> 00:06:22,000
+And that's it! You've just deployed VentureX on shared hosting.
+
+107
+00:06:22,200 --> 00:06:26,000
+In the next video, we'll cover VPS and cloud deployment
+for those who need more power.
+
+108
+00:06:26,200 --> 00:06:28,000
+See you there!
