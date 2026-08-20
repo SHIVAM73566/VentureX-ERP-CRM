@@ -370,7 +370,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
 });
 
 // Security Dashboard Routes
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin/security')->name('security.')->group(function () {
+Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/security')->name('security.')->group(function () {
     Route::get('/', [SecurityController::class, 'index'])->name('dashboard');
     Route::get('/events', [SecurityController::class, 'events'])->name('events');
     Route::post('/lockdown', [SecurityController::class, 'lockdown'])->middleware('step_up')->name('lockdown');
@@ -424,7 +424,7 @@ Route::middleware(['auth'])->prefix('support')->name('support.')->group(function
     Route::post('errors/report', [ErrorReportController::class, 'store'])->name('errors.report');
 });
 
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin/support')->name('admin.support.')->group(function () {
+Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/support')->name('admin.support.')->group(function () {
     Route::get('/', [AdminSupportController::class, 'index'])->name('index');
     Route::get('tickets/{ticket}', [AdminSupportController::class, 'show'])->name('tickets.show');
     Route::post('tickets/{ticket}/assign', [AdminSupportController::class, 'assign'])->name('tickets.assign');
@@ -434,13 +434,13 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin/support')->name('
     Route::put('tickets/{ticket}', [AdminSupportController::class, 'update'])->name('update');
 });
 
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin/errors')->name('admin.errors.')->group(function () {
+Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/errors')->name('admin.errors.')->group(function () {
     Route::get('/', [AdminErrorCenter::class, 'index'])->name('index');
     Route::get('{error}', [AdminErrorCenter::class, 'show'])->name('show');
     Route::put('{error}', [AdminErrorCenter::class, 'update'])->name('update');
 });
 
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin/control-center')->name('admin.control-center.')->group(function () {
+Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/control-center')->name('admin.control-center.')->group(function () {
     Route::get('/', [AdminControlCenter::class, 'index'])->name('index');
     Route::get('customers', [AdminControlCenter::class, 'customers'])->name('customers');
     Route::get('customers/{company}', [AdminControlCenter::class, 'customer'])->name('customer');
@@ -453,7 +453,7 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin/control-center')-
 });
 
 // Data Import Routes
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin/imports')->name('admin.imports.')->group(function () {
+Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/imports')->name('admin.imports.')->group(function () {
     Route::get('/', [ImportController::class, 'index'])->name('index');
     Route::get('/create', [ImportController::class, 'create'])->name('create');
     Route::post('/upload', [ImportController::class, 'upload'])->name('upload');

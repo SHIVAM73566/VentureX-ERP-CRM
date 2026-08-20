@@ -45,7 +45,7 @@ class InstallerController extends Controller
         $request->validate([
             'db_host' => 'required|string|max:255',
             'db_port' => 'required|integer|min:1|max:65535',
-            'db_database' => 'required|string|max:255',
+            'db_database' => ['required', 'string', 'max:64', 'regex:/^[a-zA-Z0-9_]+$/'],
             'db_username' => 'required|string|max:255',
             'db_password' => 'nullable|string|max:255',
         ]);
@@ -357,8 +357,8 @@ class InstallerController extends Controller
                 $value = '"'.$value.'"';
             }
 
-            if (preg_match("/^{$envKey}=.*/m", $envContent)) {
-                $envContent = preg_replace("/^{$envKey}=.*/m", "{$envKey}={$value}", $envContent);
+            if (preg_match("/^" . preg_quote($envKey, '/') . "=.*/m", $envContent)) {
+                $envContent = preg_replace("/^" . preg_quote($envKey, '/') . "=.*/m", "{$envKey}={$value}", $envContent);
             } else {
                 $envContent .= "\n{$envKey}={$value}";
             }

@@ -35,7 +35,7 @@ class ImportController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:51200',
+            'file' => 'required|file|max:51200|mimes:csv,json,txt',
         ]);
 
         $service = new ImportService;

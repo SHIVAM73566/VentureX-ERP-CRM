@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Protected API routes
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     // ─── Token Management ──────────────────────────────────────────────
     Route::get('/tokens', [TokenController::class, 'index'])->name('api.tokens.index');
