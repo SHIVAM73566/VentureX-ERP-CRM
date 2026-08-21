@@ -1,61 +1,68 @@
-# VentureX ERP & CRM - AI-Powered CRM & ERP Business Operating System
+# VentureX ERP & CRM - AI-Powered Business Management Suite
 
-![VentureX ERP & CRM](https://img.shields.io/badge/Version-1.0.0-blue) ![Laravel](https://img.shields.io/badge/Laravel-13-red) ![PHP](https://img.shields.io/badge/PHP-8.3+-purple) ![License](https://img.shields.io/badge/License-Proprietary-green)
+![Version](https://img.shields.io/badge/Version-1.0.0-blue) ![Laravel](https://img.shields.io/badge/Laravel-13-red) ![PHP](https://img.shields.io/badge/PHP-8.3+-purple) ![License](https://img.shields.io/badge/License-Proprietary-green)
 
 A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS.
 
-## ðŸŽ¯ Features
+## Features
 
 ### Core Modules
-- **CRM** â€” Customer management, pipeline, activities, portal
-- **Sales** â€” Quotations, orders, invoices, payments
-- **Inventory** â€” Products, warehouses, stock management
-- **Procurement** â€” Purchase orders, RFQs, suppliers
-- **Finance** â€” Chart of accounts, journals, AR/AP
-- **Logistics** â€” Shipments, containers, tracking
-- **HR** â€” Employees, leave, payroll, performance
-- **Projects** â€” Tasks, time tracking, milestones
-- **Helpdesk** â€” Tickets, SLA, knowledge base
+- **CRM** - Customer management, pipeline, activities, contacts
+- **Sales** - Quotations, orders, invoices, payments
+- **Inventory** - Products, warehouses, stock management
+- **Procurement** - Purchase orders, RFQs, suppliers, supplier offers
+- **Finance** - Chart of accounts, journals, AR/AP, dashboards
+- **Logistics** - Shipments, containers, landed costs
+- **Support** - Help center, tickets, documentation, FAQ
+- **Admin** - Users, roles, settings, import/export, audit logs
 
-### AI Features
+### AI Features (Work Without API Keys)
 - Natural language chat assistant
-- Revenue forecasting
-- Customer behavior analysis
-- Risk detection and alerts
-- Multi-provider support (GPT-5, Claude, Gemini, DeepSeek, NVIDIA)
+- AI Copilot with context-aware suggestions
+- AI Support Assistant with built-in knowledge base
+- AI Document Reader for file analysis
+- AI Procurement intelligence
+- Rule-based business insights
+- Multi-provider support (NVIDIA, RapidAPI, local fallback)
 
 ### Security
-- 3-Step Registration (Email, Phone, Selfie)
-- 2FA/MFA with TOTP
-- App Lock with 6-digit PIN
-- Device trust and fingerprinting
+- Multi-Factor Authentication (TOTP)
+- Role-Based Access Control (RBAC)
 - 10-layer security architecture
 - Emergency lockdown mode
-- Role-Based Access Control (RBAC)
 - Complete audit logging
+- Rate limiting and brute force protection
 
-## ðŸ“¸ Screenshots
+## Screenshots
 
-| Dashboard | Customers | Support |
-|-----------|-----------|---------|
-| ![Dashboard](screenshots/Product%20demo/02-dashboard-desktop.png) | ![Customers](screenshots/Product%20demo/03-customers.png) | ![Support](screenshots/Product%20demo/01-login.png) |
+| Dashboard | Customers | Login |
+|-----------|-----------|-------|
+| ![Dashboard](screenshots/Product%20demo/Dashboard%20of%20desktop.png) | ![Customers](screenshots/Product%20demo/customer%20dashboard.png) | ![Login](screenshots/Product%20demo/LOGIN%20DAHBOARD.png) |
 
 | Purchase Orders | Sales Orders | Invoices |
 |-----------------|--------------|----------|
-| ![Purchase Orders](screenshots/Product%20demo/07-purchase-orders.png) | ![Sales Orders](screenshots/Product%20demo/08-sales-orders.png) | ![Invoices](screenshots/Product%20demo/09-invoices.png) |
+| ![Purchase Orders](screenshots/Product%20demo/Purchase%20Orders.png) | ![Sales Orders](screenshots/Product%20demo/Sales%20Orders.png) | ![Invoices](screenshots/Product%20demo/Invoices.png) |
 
-| AI Quotas | Audit Log | Roles & Permissions |
-|-----------|-----------|---------------------|
-| ![AI Quotas](screenshots/Product%20demo/13-ai-quotas.png) | ![Audit Log](screenshots/Product%20demo/14-audit-log.png) | ![RBAC](screenshots/Product%20demo/15-rbac-roles.png) |
+| Leads | Opportunities | Pipeline |
+|-------|---------------|----------|
+| ![Leads](screenshots/Product%20demo/LEADS.png) | ![Opportunities](screenshots/Product%20demo/Opportunities.png) | ![Pipeline](screenshots/Product%20demo/Opportunity%20Pipeline.png) |
 
-| Mobile Dashboard | Mobile Customers | Export Center |
-|------------------|------------------|---------------|
-| ![Mobile Dashboard](screenshots/Product%20demo/17-dashboard-mobile.png) | ![Mobile Customers](screenshots/Product%20demo/18-customers-mobile.png) | ![Exports](screenshots/Product%20demo/12-exports.png) |
+| AI Quotas | Audit Logs | Roles |
+|-----------|------------|-------|
+| ![AI Quotas](screenshots/Product%20demo/AI%20Quotas.png) | ![Audit Logs](screenshots/Product%20demo/Audit%20Logs.png) | ![Roles](screenshots/Product%20demo/Roles.png) |
 
-## ðŸš€ Quick Start
+| Import Data | Export Center | Finance Dashboard |
+|-------------|---------------|-------------------|
+| ![Import Data](screenshots/Product%20demo/Import%20Data.png) | ![Export Center](screenshots/Product%20demo/Export%20Center.png) | ![Finance Dashboard](screenshots/Product%20demo/Finance%20Dashboard.png) |
+
+| AI Support | Landed Costs |
+|------------|--------------|
+| ![AI Support](screenshots/Product%20demo/AI%20Support%20Assistant.png) | ![Landed Costs](screenshots/Product%20demo/Landed%20Costs.png) |
+
+## Quick Start
 
 ### Requirements
-- PHP 8.2+
+- PHP 8.3+
 - MySQL 8.0+ or MariaDB 10.6+
 - Composer
 - Node.js 18+
@@ -63,10 +70,10 @@ A complete, production-ready AI-powered CRM and ERP business operating system bu
 ### Installation
 
 ```bash
-# 1. Clone/extract the project
+# 1. Extract the project
 cd /var/www/html
-unzip VentureX-ERP.zip
-cd VentureX-ERP
+unzip VentureX-ERP-CRM-v1.0.0.zip
+cd VentureX-ERP-CRM
 
 # 2. Install dependencies
 composer install
@@ -88,96 +95,74 @@ npm run build
 php artisan serve
 ```
 
+Open http://localhost:8000/install in your browser to run the 6-step installation wizard.
+
 ### Demo Credentials
 
-> âš ï¸ **Security Notice**: These are DEMO credentials for testing only. Change all passwords before production use.
+> **Security Notice**: These are DEMO credentials for testing only. Change all passwords before production use.
 
 | Role | Email | Password |
 |------|-------|----------|
-| Demo Admin | demo_admin@example.com | Demo_Admin_2026! |
-| Demo Manager | demo_manager@example.com | Demo_Manager_2026! |
-| Demo Sales | demo_sales@example.com | Demo_Sales_2026! |
+| Super Admin | demo_admin@example.com | Demo_Admin_2026! |
+| CEO | demo_manager@example.com | Demo_Manager_2026! |
+| Sales Manager | demo_sales@example.com | Demo_Sales_2026! |
 
-Run `php artisan db:seed --class=DemoCredentialSeeder` to create demo accounts.
+## AI Configuration (Optional)
 
-Open http://127.0.0.1:8000 and login with any credentials above.
+All AI features work **out-of-the-box without any API keys** using built-in local intelligence. For enhanced AI capabilities:
 
-## ðŸ“š Documentation
+1. Get a free NVIDIA API key from https://build.nvidia.com
+2. Add `NVIDIA_API_KEY=nvapi-xxx` to your `.env` file
+3. AI features will now use NVIDIA Nemotron for intelligent responses
+
+## Documentation
 
 - [Installation Guide](documentation/INSTALLATION.md)
 - [User Guide](documentation/USER_GUIDE.md)
+- [Admin Guide](documentation/ADMIN_GUIDE.md)
 - [Security Guide](documentation/SECURITY.md)
 - [Deployment Guide](documentation/DEPLOYMENT.md)
 - [API Documentation](documentation/API_DOCUMENTATION.md)
 - [Troubleshooting](documentation/TROUBLESHOOTING.md)
 - [Changelog](CHANGELOG.md)
 
-## ðŸ—ï¸ Architecture
+## Architecture
 
 ```
 VentureX ERP & CRM/
-â”œâ”€â”€ app/
-â”‚   â”œâ”€â”€ Http/Controllers/    # 62+ Controllers
-â”‚   â”œâ”€â”€ Models/              # 64+ Eloquent Models
-â”‚   â”œâ”€â”€ Services/            # 32+ Business Services
-â”‚   â””â”€â”€ Policies/            # 32 Authorization Policies
-â”œâ”€â”€ database/migrations/     # 36 Database Migrations
-â”œâ”€â”€ resources/views/         # 125 Blade Views
-â”œâ”€â”€ routes/                  # 220+ Routes
-â”œâ”€â”€ config/                  # 22 Configuration Files
-â””â”€â”€ documentation/           # Complete Documentation
+  app/
+    Http/Controllers/    # 62+ Controllers
+    Models/              # 64+ Eloquent Models
+    Services/            # 32+ Business Services
+    Policies/            # 32 Authorization Policies
+  database/migrations/   # 39 Database Migrations
+  resources/views/       # 125+ Blade Views
+  routes/                # 220+ Routes
+  config/                # 22 Configuration Files
+  documentation/         # Complete Documentation
+  docker/                # Docker Support
 ```
 
-## ðŸ”’ Security
-
-VentureX ERP & CRM includes a comprehensive 10-layer security architecture:
-
-1. **HTTPS Enforcement** â€” Force SSL/TLS connections
-2. **Security Headers** â€” CSP, HSTS, X-Frame-Options
-3. **Rate Limiting** â€” API and form submission throttling
-4. **Brute Force Protection** â€” Login attempt limiting
-5. **Multi-Factor Authentication** â€” TOTP-based 2FA
-6. **Role-Based Access Control** â€” Granular permissions
-7. **Emergency Lockdown** â€” System-wide security mode
-8. **Input Validation** â€” Server-side sanitization
-9. **File Upload Security** â€” Malware scanning
-10. **Audit Logging** â€” Complete activity tracking
-
-## ðŸ“Š Statistics
-
-- **250+** Features
-- **125** Blade Views
-- **64+** Eloquent Models
-- **62+** Controllers
-- **36** Database Migrations
-- **32+** Services
-- **32** Policies
-- **220+** Routes
-- **22** Configuration Files
-- **22** Documentation Files
-
-## ðŸ› ï¸ Tech Stack
+## Tech Stack
 
 - **Backend:** Laravel 13, PHP 8.3+
 - **Frontend:** Blade, Alpine.js 3, Tailwind CSS v4
 - **Database:** MySQL 8.0+, MariaDB 10.6+
 - **Build:** Vite 8.x
 - **Server:** Apache 2.4+, Nginx 1.24+
+- **Payment:** Payoneer (manual), PayPal
+- **AI:** NVIDIA Nemotron, RapidAPI, Local Intelligence
 
-## ðŸ“„ License
+## License
 
-This project is licensed under a Commercial License â€” see the [LICENSE](LICENSE) file for details.
+This project is licensed under a Commercial License - see the [LICENSE](LICENSE) file for details.
 
-## ðŸ“ž Support
+## Support
 
-- ðŸ“§ Email: support@venturexerp.com
-- ðŸ“– Documentation: /documentation/
-- ðŸ› Issues: GitHub Issues
-
-## â­ Star Us
-
-If you find VentureX ERP & CRM useful, please give us a star on GitHub!
+- Email: support@venturexerp.com
+- Documentation: /documentation/
+- Issues: GitHub Issues
 
 ---
 
-**VentureX ERP & CRM** â€” Built with â¤ï¸ for modern businesses.
+**VentureX ERP & CRM** - Built for modern businesses.
