@@ -126,7 +126,28 @@ class AiDocumentReaderController extends Controller
             ]);
             Log::warning('Document reader AI failed', ['run' => $run->id, 'error' => $e->getMessage()]);
 
-            return back()->with('error', 'Document analysis failed. Please try again later.');
+            // Local fallback: return what we can extract from the document
+            $localAnalysis = "**Document Analysis (Local Mode)**\n\n"
+                ."Document: {$document->original_name}\n"
+                ."Type: ".($document->mime_type ?? 'unknown')."\n"
+                ."Size: ".number_format((int) ($document->file_size ?? 0))." bytes\n"
+                ."Content preview (first 500 chars):\n\n"
+                .substr($text, 0, 500)."\n\n"
+                ."---\n"
+                ."[NOTE] AI-powered deep analysis requires an API key (NVIDIA_API_KEY or RAPIDAPI_KEY). "
+                ."Set it in your .env file and run: `php artisan config:clear`\n"
+                ."For now, the raw document text is shown above for manual review.";
+
+            $run->update([
+                'status' => 'completed',
+                'provider' => 'local',
+                'model' => 'local',
+                'output' => ['content' => $localAnalysis],
+                'finished_at' => now(),
+            ]);
+
+            return redirect()->route('ai.document-reader', ['run' => $run->id])
+                ->with('info', 'AI analysis unavailable. Showing local document preview.');
         }
     }
 }

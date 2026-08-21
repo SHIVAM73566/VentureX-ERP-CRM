@@ -30,7 +30,26 @@ class AiInsightsController extends Controller
         } catch (AiException $e) {
             Log::warning('AI insights failed', ['error' => $e->getMessage()]);
 
-            return response()->json(['error' => 'Unable to generate insights at this time.'], 502);
+            // Local fallback: compute insights directly from database business rules.
+            $rules = $this->insights->rules();
+
+            $lines = collect($rules)
+                ->map(fn ($r) => '['.strtoupper((string) $r['tone']).'] '.$r['text'])
+                ->implode("\n");
+
+            $content = "AI-generated insights are not available right now. Here are rule-based insights computed from your ERP data:\n\n"
+                .($lines !== '' ? $lines : 'No critical signals detected.')
+                ."\n\n[TIP] To enable AI insights, set an API key (NVIDIA_API_KEY or RAPIDAPI_KEY) in your .env file and run: php artisan config:clear.";
+
+            return response()->json([
+                'content' => $content,
+                'generated_at' => now()->toIso8601String(),
+                'provider' => 'local',
+                'model' => 'business_rules',
+                'cached' => false,
+                'mode' => 'local_fallback',
+                'insights' => $rules,
+            ]);
         }
     }
 }

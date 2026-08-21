@@ -108,9 +108,19 @@ class CopilotController extends Controller
                 'error' => ['message' => $e->getMessage()],
                 'finished_at' => now(),
             ]);
-            Log::warning('Copilot failed', ['run' => $run->id, 'error' => $e->getMessage()]);
 
-            return response()->json(['error' => 'AI copilot is temporarily unavailable. Please try again later.'], 502);
+            // Provide a helpful local fallback response
+            $localContext = $this->context->receivablesPayables()."\n".$this->context->inventory();
+            $fallbackContent = "AI analysis is not available right now. Here is a summary from your ERP data:\n\n"
+                ."To enable AI features, set an API key (NVIDIA_API_KEY or RAPIDAPI_KEY) in your .env file "
+                ."and run: php artisan config:clear\n\n"
+                ."**Your Current Business Data:**\n".$localContext;
+
+            return response()->json([
+                'content' => $fallbackContent,
+                'mode' => 'local_fallback',
+                'cached' => false,
+            ]);
         }
     }
 

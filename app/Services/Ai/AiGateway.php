@@ -77,7 +77,6 @@ class AiGateway
                 $msg .= 'Upgrade your plan at '.url('/ai/plan');
                 throw new AiException($msg);
             }
-            $this->quota->record(auth()->id());
         }
 
         $cacheKey = $this->cacheKey($task, $system, $user, $providerOverride, $modelOverride, $maxTokens, $context);
@@ -100,19 +99,34 @@ class AiGateway
 
         $this->assertRateLimit($primary);
 
-        // Deduplicate concurrent identical requests.
-        $lock = Cache::lock('ai:dedup:'.$cacheKey, (int) config('ai.dedup_lock_ttl', 180));
-        $acquired = $lock->get();
+        // Deduplicate concurrent identical requests. Some cache drivers (e.g.
+        // file) do not support atomic locks; degrade to no deduplication then.
+        $lock = null;
+        $acquired = true;
 
-        if (! $acquired) {
+        try {
+            $lock = Cache::lock('ai:dedup:'.$cacheKey, (int) config('ai.dedup_lock_ttl', 180));
+            $acquired = $lock->get();
+        } catch (\InvalidArgumentException) {
+            // LockProvider not supported by this cache driver; skip dedup.
+            $lock = null;
+            $acquired = true;
+        }
+
+        if ($lock !== null && ! $acquired) {
             $cached = $this->waitForDuplicate($cacheKey, $task);
             if ($cached !== null) {
                 return $cached;
             }
 
             // The in-flight request likely failed; try to acquire and run.
-            $lock = Cache::lock('ai:dedup:'.$cacheKey, (int) config('ai.dedup_lock_ttl', 180));
-            $acquired = $lock->get();
+            try {
+                $lock = Cache::lock('ai:dedup:'.$cacheKey, (int) config('ai.dedup_lock_ttl', 180));
+                $acquired = $lock->get();
+            } catch (\InvalidArgumentException) {
+                $lock = null;
+                $acquired = true;
+            }
         }
 
         try {
@@ -124,6 +138,12 @@ class AiGateway
 
                     return [...$cached, 'cached' => true];
                 }
+            }
+
+            // Record quota only when a request actually reaches a provider,
+            // so cache hits never burn quota.
+            if (config('ai.quota.enabled', true)) {
+                $this->quota->record(auth()->id());
             }
 
             $result = $this->callWithFallback($task, $resolved, $system, $user, $temperature, $maxTokens, $providerOverride);
@@ -147,7 +167,7 @@ class AiGateway
 
             return [...$payload, 'cached' => false];
         } finally {
-            if ($acquired) {
+            if ($acquired && $lock !== null) {
                 try {
                     $lock->release();
                 } catch (Throwable) {

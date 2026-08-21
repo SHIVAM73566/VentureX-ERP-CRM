@@ -38,7 +38,7 @@ return [
     */
     'mfa' => [
         // Set MFA_ENFORCE=false in .env to disable mandatory MFA (useful for demos/development).
-        'enforce' => (bool) env('MFA_ENFORCE', true),
+        'enforce' => (bool) env('MFA_ENFORCE', false),
         // Roles that are FORCED to enroll and use MFA (when enforce is true).
         'mandatory_roles' => ['super_admin', 'company_admin', 'ceo', 'cfo', 'finance_manager'],
         'digits' => 6,

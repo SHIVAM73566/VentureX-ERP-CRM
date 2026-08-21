@@ -101,6 +101,29 @@ class AiAssistantController extends Controller
             'started_at' => now(),
         ]);
 
+        // Try local intelligence first (free, instant, works without API keys)
+        $localAnswer = $this->local->answer($data['message']);
+        if ($localAnswer !== null) {
+            $assistantMessage = AiMessage::create([
+                'conversation_id' => $conversation->id,
+                'role' => 'assistant',
+                'content' => $localAnswer,
+                'metadata' => ['mode' => 'local', 'tags' => ['fact']],
+            ]);
+            $run->update([
+                'status' => 'completed',
+                'provider' => 'local',
+                'model' => 'local',
+                'output' => ['content' => $localAnswer],
+                'finished_at' => now(),
+            ]);
+            $conversation->touch();
+            return response()->json([
+                'message' => $assistantMessage,
+                'run' => $run,
+            ]);
+        }
+
         try {
             $system = $this->systemPrompt($skill, $user);
 
@@ -186,7 +209,7 @@ class AiAssistantController extends Controller
             Log::warning('AI assistant failed', ['run' => $run->id, 'error' => $e->getMessage()]);
 
             $errorMsg = str_contains($e->getMessage(), 'not configured')
-                ? 'AI is not configured. Set RAPIDAPI_KEY in your .env file. Your ERP data is still accessible through the modules.'
+                ? 'AI is not configured. Set an AI provider API key (e.g. NVIDIA_API_KEY or RAPIDAPI_KEY) in your .env file, then run: php artisan config:clear. See documentation/AI-SETUP.md for setup instructions.'
                 : 'AI assistant is temporarily unavailable. Please try again later.';
 
             return response()->json(['error' => $errorMsg], 502);

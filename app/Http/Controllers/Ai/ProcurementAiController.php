@@ -100,7 +100,24 @@ class ProcurementAiController extends Controller
             ]);
             Log::warning('Procurement AI failed', ['run' => $run->id, 'error' => $e->getMessage()]);
 
-            return back()->with('error', 'Procurement analysis failed. Please try again later.');
+            // Local fallback: show the procurement context as facts
+            $localAnalysis = "**Procurement Analysis (Local Mode)**\n\n"
+                .$context."\n\n"
+                ."---\n"
+                ."[NOTE] AI-powered analysis requires an API key (NVIDIA_API_KEY or RAPIDAPI_KEY). "
+                ."Set it in your .env file and run: `php artisan config:clear`\n"
+                ."The data above shows your current procurement status for manual review.";
+
+            $run->update([
+                'status' => 'completed',
+                'provider' => 'local',
+                'model' => 'local',
+                'output' => ['content' => $localAnalysis],
+                'finished_at' => now(),
+            ]);
+
+            return redirect()->route('ai.procurement', ['run' => $run->id])
+                ->with('info', 'AI analysis unavailable. Showing local procurement data.');
         }
     }
 
