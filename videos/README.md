@@ -1,6 +1,6 @@
 # VentureX ERP & CRM — Video Tutorial Series
 
-10-part installation and usage video guide for VentureX ERP & CRM.
+15-part installation, deployment, and usage video guide for VentureX ERP & CRM.
 
 ## Quick Start
 
@@ -20,8 +20,13 @@ Open `players/index.html` in your browser to browse all videos, scripts, and sub
 | 8 | Inventory & Procurement | 4-5 min | [Script](scripts/08-inventory-procurement.md) | [SRT](subtitles/08-inventory-procurement.srt) |
 | 9 | AI Features & Multi-Provider Setup | 4-5 min | [Script](scripts/09-ai-features.md) | [SRT](subtitles/09-ai-features.srt) |
 | 10 | Settings, Users & Going Live | 5-6 min | [Script](scripts/10-settings-going-live.md) | [SRT](subtitles/10-settings-going-live.srt) |
+| 11 | cPanel Deployment — Shared Hosting | 18 min | [Script](scripts/11-cpanel-deployment.md) | [SRT](subtitles/11-cpanel-deployment.srt) |
+| 12 | VPS & Cloud Deployment | 22 min | [Script](scripts/12-vps-cloud-deployment.md) | [SRT](subtitles/12-vps-cloud-deployment.srt) |
+| 13 | WordPress Integration | 15 min | [Script](scripts/13-wordpress-integration.md) | [SRT](subtitles/13-wordpress-integration.srt) |
+| 14 | Wix, Blogger & External Integrations | 17 min | [Script](scripts/14-external-integration.md) | [SRT](subtitles/14-external-integration.srt) |
+| 15 | Backup, Restore & Troubleshooting | 19 min | [Script](scripts/15-backup-troubleshooting.md) | [SRT](subtitles/15-backup-troubleshooting.srt) |
 
-**Total Runtime:** ~42-52 minutes
+**Total Runtime:** ~130 minutes (2 hours 10 minutes)
 
 ## What's Included
 

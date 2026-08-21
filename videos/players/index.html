@@ -52,14 +52,14 @@
 <body>
     <div class="header">
         <h1>VentureX ERP & CRM</h1>
-        <p>Video Tutorial Series — 10 Episodes | Step-by-Step Installation &amp; Usage Guide</p>
+        <p>Video Tutorial Series — 15 Episodes | Step-by-Step Installation, Deployment &amp; Integration Guide</p>
     </div>
 
     <div class="container">
         <div class="grid" id="video-grid"></div>
         <div class="toc">
             <h2>Quick Navigation</h2>
-            <a href="#video-1">Video 1</a> · <a href="#video-2">Video 2</a> · <a href="#video-3">Video 3</a> · <a href="#video-4">Video 4</a> · <a href="#video-5">Video 5</a> · <a href="#video-6">Video 6</a> · <a href="#video-7">Video 7</a> · <a href="#video-8">Video 8</a> · <a href="#video-9">Video 9</a> · <a href="#video-10">Video 10</a>
+            <a href="#video-1">1</a> · <a href="#video-2">2</a> · <a href="#video-3">3</a> · <a href="#video-4">4</a> · <a href="#video-5">5</a> · <a href="#video-6">6</a> · <a href="#video-7">7</a> · <a href="#video-8">8</a> · <a href="#video-9">9</a> · <a href="#video-10">10</a> · <a href="#video-11">11</a> · <a href="#video-12">12</a> · <a href="#video-13">13</a> · <a href="#video-14">14</a> · <a href="#video-15">15</a>
         </div>
     </div>
 
@@ -91,7 +91,12 @@
         {id:7, title:"CRM & Sales Pipeline", duration:"5-6 min", desc:"Companies, contacts, activities, Kanban deal pipeline, sales forecasting.", tags:["crm","sales"], tagClass:""},
         {id:8, title:"Inventory & Procurement", duration:"4-5 min", desc:"Products, stock management, purchase orders, vendor management.", tags:["inventory","procurement"], tagClass:""},
         {id:9, title:"AI Features & Multi-Provider Setup", duration:"4-5 min", desc:"AI dashboard, provider routing, NVIDIA setup, quotas, health monitoring.", tags:["ai","nvidia","gemini"], tagClass:"ai"},
-        {id:10, title:"Settings, Users & Going Live", duration:"5-6 min", desc:"User roles, security, audit logs, production deployment checklist.", tags:["settings","deploy"], tagClass:"deploy"}
+        {id:10, title:"Settings, Users & Going Live", duration:"5-6 min", desc:"User roles, security, audit logs, production deployment checklist.", tags:["settings","deploy"], tagClass:"deploy"},
+        {id:11, title:"cPanel Deployment — Shared Hosting", duration:"18 min", desc:"Upload, extract, database, composer, .env, cron, SSL on cPanel shared hosting.", tags:["cpanel","hosting","deploy"], tagClass:"deploy"},
+        {id:12, title:"VPS & Cloud Deployment", duration:"22 min", desc:"Ubuntu/Nginx setup, Supervisor, Certbot, DigitalOcean/AWS/Linode deployment.", tags:["vps","nginx","deploy"], tagClass:"deploy"},
+        {id:13, title:"WordPress Integration", duration:"15 min", desc:"VentureX WordPress plugin, lead forms, shortcode, WooCommerce sync.", tags:["wordpress","plugin","integration"], tagClass:"env"},
+        {id:14, title:"Wix, Blogger & External Integrations", duration:"17 min", desc:"API tokens, webhooks, CORS, Wix Velo code, Blogger gadgets, REST API usage.", tags:["wix","blogger","api"], tagClass:"ai"},
+        {id:15, title:"Backup, Restore & Troubleshooting", duration:"19 min", desc:"Database backups, file restores, common errors, log debugging, performance tuning.", tags:["backup","troubleshoot"], tagClass:"deploy"}
     ];
 
     const grid = document.getElementById('video-grid');
@@ -119,7 +124,8 @@
         "01-welcome-overview","02-system-requirements","03-database-setup",
         "04-environment-config","05-installation","06-first-login-dashboard",
         "07-crm-sales-pipeline","08-inventory-procurement","09-ai-features",
-        "10-settings-going-live"
+        "10-settings-going-live","11-cpanel-deployment","12-vps-cloud-deployment",
+        "13-wordpress-integration","14-external-integration","15-backup-troubleshooting"
     ];
 
     async function openVideo(id){

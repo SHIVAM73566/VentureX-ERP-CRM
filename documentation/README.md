@@ -53,7 +53,7 @@ Open http://127.0.0.1:8000 and login with demo credentials:
 - Email: `demo_admin@example.com`
 - Password: `Demo_Admin_2026!`
 
-> âš ï¸ These are demo credentials for testing only. Change passwords before production use.
+> —¸ These are demo credentials for testing only. Change passwords before production use.
 
 ### Alternative: CLI Setup Wizard
 
@@ -119,7 +119,7 @@ Interactive wizard that guides you through the entire installation process.
 - Knowledge base
 - Customer satisfaction
 
-## ðŸ” Security
+## ðŸ” Security
 
 VentureX ERP & CRM includes comprehensive security features:
 
@@ -152,7 +152,7 @@ Configure your preferred provider in Settings > AI Configuration.
 - **Video Tutorials:** Available on YouTube
 - **Community Forum:** Coming soon
 
-## ðŸ“ License
+## ðŸ“ License
 
 VentureX ERP & CRM is licensed under a Commercial License — see the [LICENSE](../LICENSE) file for details.
 

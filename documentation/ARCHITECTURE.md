@@ -396,9 +396,9 @@ documents
 Livewire components handle dynamic UI without custom JavaScript:
 
 ```
-Browser Event â†’ Alpine.js â†’ Livewire AJAX â†’ /livewire/update
-â†’ Livewire Component Method â†’ Eloquent Query
-â†’ Component Re-render â†’ HTML Diff â†’ Browser DOM Update
+Browser Event •’ Alpine.js •’ Livewire AJAX •’ /livewire/update
+•’ Livewire Component Method •’ Eloquent Query
+•’ Component Re-render •’ HTML Diff •’ Browser DOM Update
 ```
 
 **Component Organization:**
@@ -486,12 +486,12 @@ storage/
 ### Exception Flow
 
 ```
-Exception thrown â†’ Laravel Exception Handler
-—œ—€—€ HTTP Exception â†’ Render appropriate HTTP response
-—œ—€—€ Validation Exception â†’ Redirect with errors
-—œ—€—€ Authentication Exception â†’ Redirect to login
-—œ—€—€ Authorization Exception â†’ 403 response
-—”—€—€ Uncaught Exception â†’ 500 response + log
+Exception thrown •’ Laravel Exception Handler
+—œ—€—€ HTTP Exception •’ Render appropriate HTTP response
+—œ—€—€ Validation Exception •’ Redirect with errors
+—œ—€—€ Authentication Exception •’ Redirect to login
+—œ—€—€ Authorization Exception •’ 403 response
+—”—€—€ Uncaught Exception •’ 500 response + log
 ```
 
 ### Logging
@@ -506,12 +506,12 @@ Exception thrown â†’ Laravel Exception Handler
 ## Security Layers
 
 ```
-Request â†’ Nginx (SSL, security headers)
-â†’ PHP (input validation)
-â†’ Laravel Middleware (CSRF, auth, permissions)
-â†’ Controller (form validation, authorization)
-â†’ Eloquent (parameterized queries)
-â†’ Database (user privileges)
+Request •’ Nginx (SSL, security headers)
+•’ PHP (input validation)
+•’ Laravel Middleware (CSRF, auth, permissions)
+•’ Controller (form validation, authorization)
+•’ Eloquent (parameterized queries)
+•’ Database (user privileges)
 ```
 
 ---

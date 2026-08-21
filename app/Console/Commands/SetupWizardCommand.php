@@ -21,10 +21,10 @@ class SetupWizardCommand extends Command
     public function handle(DatabaseManager $db): int
     {
         $this->newLine();
-        $this->info('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
-        $this->info('â•‘           VentureX ERP & CRM — Setup Wizard                    â•‘');
-        $this->info('â•‘   Configure your application in a few simple steps.     â•‘');
-        $this->info('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+        $this->info('•”•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••—');
+        $this->info('•‘           VentureX ERP & CRM — Setup Wizard                    •‘');
+        $this->info('•‘   Configure your application in a few simple steps.     •‘');
+        $this->info('••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••');
         $this->newLine();
 
         // —€—€ Step 13 (early): Generate APP_KEY if missing —€—€
@@ -342,18 +342,18 @@ class SetupWizardCommand extends Command
             $this->newLine();
 
             // Final success
-            $this->info('â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—');
-            $this->info('â•‘          VentureX ERP & CRM — Setup Complete!                  â•‘');
-            $this->info('â• â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•£');
-            $this->info('â•‘                                                         â•‘');
-            $this->info('â•‘  Admin Login:                                           â•‘');
-            $this->info('â•‘    Email:    '.str_pad($this->answers['admin_email'], 43).'â•‘');
-            $this->info('â•‘    Password: (the one you just set)                     â•‘');
-            $this->info('â•‘                                                         â•‘');
-            $this->info('â•‘  Start the dev server:                                  â•‘');
-            $this->info('â•‘    php artisan serve                                    â•‘');
-            $this->info('â•‘                                                         â•‘');
-            $this->info('â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
+            $this->info('•”•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••—');
+            $this->info('•‘          VentureX ERP & CRM — Setup Complete!                  •‘');
+            $this->info('• •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••');
+            $this->info('•‘                                                         •‘');
+            $this->info('•‘  Admin Login:                                           •‘');
+            $this->info('•‘    Email:    '.str_pad($this->answers['admin_email'], 43).'•‘');
+            $this->info('•‘    Password: (the one you just set)                     •‘');
+            $this->info('•‘                                                         •‘');
+            $this->info('•‘  Start the dev server:                                  •‘');
+            $this->info('•‘    php artisan serve                                    •‘');
+            $this->info('•‘                                                         •‘');
+            $this->info('••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••');
             $this->newLine();
 
             return self::SUCCESS;

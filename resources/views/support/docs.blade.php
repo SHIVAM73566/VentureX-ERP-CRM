@@ -155,13 +155,13 @@
                     </ul>
 
                     <h3 class="text-base font-bold text-ink-800">Company Setup</h3>
-                    <p class="text-sm text-ink-600">Navigate to <strong>Administration â†’ Companies</strong> to configure your company profile, tax settings, currency, and branding.</p>
+                    <p class="text-sm text-ink-600">Navigate to <strong>Administration •’ Companies</strong> to configure your company profile, tax settings, currency, and branding.</p>
 
                     <h3 class="text-base font-bold text-ink-800">User Roles & Permissions</h3>
-                    <p class="text-sm text-ink-600">Go to <strong>Administration â†’ Roles & Permissions</strong> to define roles and assign granular permissions to each module.</p>
+                    <p class="text-sm text-ink-600">Go to <strong>Administration •’ Roles & Permissions</strong> to define roles and assign granular permissions to each module.</p>
 
                     <h3 class="text-base font-bold text-ink-800">Notification Settings</h3>
-                    <p class="text-sm text-ink-600">Configure email and in-app notifications under <strong>Administration â†’ Settings</strong> to control what alerts are sent and to whom.</p>
+                    <p class="text-sm text-ink-600">Configure email and in-app notifications under <strong>Administration •’ Settings</strong> to control what alerts are sent and to whom.</p>
                 </div>
 
                 {{-- Modules --}}
@@ -236,7 +236,7 @@
                             <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-600">
                                 <li>Ensure AI API keys are configured in <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">.env</code></li>
                                 <li>Check API quotas with your AI provider</li>
-                                <li>Review AI usage logs in <strong>AI Center â†’ AI Usage</strong></li>
+                                <li>Review AI usage logs in <strong>AI Center •’ AI Usage</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -248,7 +248,7 @@
                     <p class="text-sm text-ink-600">VentureX ERP & CRM exposes a RESTful API for integration with external systems.</p>
 
                     <h3 class="text-base font-bold text-ink-800">Authentication</h3>
-                    <p class="text-sm text-ink-600">All API requests require a Bearer token. Generate tokens from <strong>Administration â†’ Settings â†’ API Tokens</strong>.</p>
+                    <p class="text-sm text-ink-600">All API requests require a Bearer token. Generate tokens from <strong>Administration •’ Settings •’ API Tokens</strong>.</p>
                     <code class="block rounded-lg bg-ink-900 px-4 py-2 text-xs text-emerald-400">Authorization: Bearer your-api-token-here</code>
 
                     <h3 class="text-base font-bold text-ink-800">Base URL</h3>

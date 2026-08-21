@@ -24,27 +24,27 @@
 
             <div class="mb-6 flex items-center justify-center gap-2 text-xs font-semibold text-ink-400 dark:text-ink-500">
                 <span class="flex items-center gap-1.5">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">âœ“</span>
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">“</span>
                     Requirements
                 </span>
                 <span class="h-px w-6 bg-ink-200 dark:bg-ink-700"></span>
                 <span class="flex items-center gap-1.5">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">âœ“</span>
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">“</span>
                     Database
                 </span>
                 <span class="h-px w-6 bg-ink-200 dark:bg-ink-700"></span>
                 <span class="flex items-center gap-1.5">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">âœ“</span>
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">“</span>
                     Config
                 </span>
                 <span class="h-px w-6 bg-ink-200 dark:bg-ink-700"></span>
                 <span class="flex items-center gap-1.5">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">âœ“</span>
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">“</span>
                     Admin
                 </span>
                 <span class="h-px w-6 bg-ink-200 dark:bg-ink-700"></span>
                 <span class="flex items-center gap-1.5">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">âœ“</span>
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">“</span>
                     Install
                 </span>
             </div>
@@ -76,7 +76,7 @@
                                     <li>Change the demo credentials (demo_admin@example.com) before production use.</li>
                                     <li>Set APP_DEBUG=false in production.</li>
                                     <li>Configure your mail settings for password resets.</li>
-                                    <li>Set up your AI provider keys in Settings â†’ AI Configuration.</li>
+                                    <li>Set up your AI provider keys in Settings •’ AI Configuration.</li>
                                 </ul>
                             </div>
                         </div>

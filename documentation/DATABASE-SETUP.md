@@ -329,7 +329,7 @@ php artisan db:seed --class=DemoCredentialSeeder
 | Demo Manager  | demo_manager@example.com    | Demo_Manager_2026!|
 | Demo Sales    | demo_sales@example.com      | Demo_Sales_2026!  |
 
-> âš ï¸ Change all passwords before production use.
+> —¸ Change all passwords before production use.
 
 #### RoleSeeder
 

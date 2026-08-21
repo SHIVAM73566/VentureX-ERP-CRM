@@ -24,12 +24,12 @@
 
             <div class="mb-6 flex items-center justify-center gap-2 text-xs font-semibold text-ink-400 dark:text-ink-500">
                 <span class="flex items-center gap-1.5">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">âœ“</span>
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">“</span>
                     Requirements
                 </span>
                 <span class="h-px w-6 bg-ink-200 dark:bg-ink-700"></span>
                 <span class="flex items-center gap-1.5">
-                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">âœ“</span>
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">“</span>
                     Database
                 </span>
                 <span class="h-px w-6 bg-ink-200 dark:bg-ink-700"></span>
@@ -157,8 +157,8 @@
                 </div>
 
                 <div class="flex items-center justify-between pt-2">
-                    <a href="{{ route('installer.database') }}" class="btn-secondary">â† Back</a>
-                    <button type="submit" class="btn-accent">Save & Continue â†’</button>
+                    <a href="{{ route('installer.database') }}" class="btn-secondary">• Back</a>
+                    <button type="submit" class="btn-accent">Save & Continue •’</button>
                 </div>
             </form>
         </div>

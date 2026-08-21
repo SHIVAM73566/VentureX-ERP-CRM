@@ -148,7 +148,7 @@ Create and send price quotations to customers.
 Confirmed orders from accepted quotations.
 
 **Workflow:**
-1. Quotation accepted â†’ Sales Order created
+1. Quotation accepted •’ Sales Order created
 2. Order confirmed by sales manager
 3. Fulfillment initiated (inventory/shipping)
 4. Invoice generated

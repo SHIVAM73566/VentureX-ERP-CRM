@@ -4,7 +4,7 @@ Hey everyone, and welcome! I'm really excited to walk you through
 
 2
 00:00:05,000 --> 00:00:08,500
-VentureX ERP and CRM â€” this is genuinely one of the most
+VentureX ERP and CRM — this is genuinely one of the most
 
 3
 00:00:08,500 --> 00:00:11,500
@@ -24,11 +24,11 @@ and ERP business operating system. Think of it as your
 
 7
 00:00:21,000 --> 00:00:24,500
-company's entire back office â€” sales, inventory, finance,
+company's entire back office — sales, inventory, finance,
 
 8
 00:00:24,500 --> 00:00:28,000
-HR, customer support â€” all in one place, with artificial
+HR, customer support — all in one place, with artificial
 
 9
 00:00:28,000 --> 00:00:32,000
@@ -40,7 +40,7 @@ Under the hood, it's built on Laravel 13 with PHP 8.3,
 
 11
 00:00:37,000 --> 00:00:40,500
-MySQL 8, and Tailwind CSS 4. For the tech folks watching â€”
+MySQL 8, and Tailwind CSS 4. For the tech folks watching —
 
 12
 00:00:40,500 --> 00:00:44,000
@@ -48,7 +48,7 @@ this is a modern, performant stack. And here's what really
 
 13
 00:00:44,000 --> 00:00:47,500
-sets it apart: the AI integration supports multiple providers â€”
+sets it apart: the AI integration supports multiple providers —
 
 14
 00:00:47,500 --> 00:00:51,000
@@ -84,7 +84,7 @@ managing an agency, or you're a developer looking for a solid
 
 22
 00:01:18,000 --> 00:01:21,500
-foundation to build on â€” this is for you. It's flexible enough
+foundation to build on — this is for you. It's flexible enough
 
 23
 00:01:21,500 --> 00:01:25,000
@@ -92,7 +92,7 @@ to customize, but powerful enough to use right out of the box.
 
 24
 00:01:26,000 --> 00:01:29,500
-In this tutorial series, I'm going to walk you through everything â€”
+In this tutorial series, I'm going to walk you through everything —
 
 25
 00:01:29,500 --> 00:01:33,000
@@ -108,7 +108,7 @@ running on your own machine. Oh, and you can find it on the
 
 28
 00:01:40,000 --> 00:01:43,500
-Codester marketplace â€” look for item number
+Codester marketplace — look for item number
 
 29
 00:01:43,500 --> 00:01:48,000
