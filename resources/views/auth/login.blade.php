@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Sign in â€" {{ config('app.name', 'VentureX ERP & CRM') }}</title>
+    <title>Sign in —" {{ config('app.name', 'VentureX ERP & CRM') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -57,7 +57,7 @@
 
                     <div>
                         <label for="password" class="label">Password</label>
-                        <input id="password" type="password" name="password" required autocomplete="current-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" class="input">
+                        <input id="password" type="password" name="password" required autocomplete="current-password" placeholder="—¢—¢—¢—¢—¢—¢—¢—¢" class="input">
                     </div>
 
                     <div class="flex items-center justify-between">

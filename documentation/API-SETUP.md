@@ -1,6 +1,6 @@
 # API Setup Guide
 
-**VentureX ERP & CRM â€” AI-Powered CRM & ERP Business Operating System**
+**VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
 > Version 1.0.0 | AI Provider and API Key Configuration
 
@@ -19,7 +19,7 @@
 
 ## Overview
 
-VentureX ERP & CRM integrates with multiple AI providers through a unified gateway architecture. All AI calls are made by the backend â€” the browser never communicates with AI providers directly. API keys are stored as environment variables and are never exposed to clients.
+VentureX ERP & CRM integrates with multiple AI providers through a unified gateway architecture. All AI calls are made by the backend — the browser never communicates with AI providers directly. API keys are stored as environment variables and are never exposed to clients.
 
 ### Supported Providers
 
@@ -33,7 +33,7 @@ VentureX ERP & CRM integrates with multiple AI providers through a unified gatew
 | OpenAI             | Bearer token    | `OPENAI_API_KEY`        | General purpose AI                 |
 | Anthropic          | Bearer token    | `ANTHROPIC_API_KEY`     | Complex reasoning, analysis        |
 
-> **Note:** VentureX ERP & CRM has **no public REST API**. AI features are accessed exclusively through the web UI (Livewire components). There are no `/api/customers`, `/api/leads`, or similar REST endpoints.
+> **Note:** This guide covers AI provider configuration only. VentureX ERP & CRM also provides a full RESTful API authenticated via Laravel Sanctum tokens (e.g., `/api/crm/customers`, `/api/crm/leads`, `/api/sales/invoices`). See API_DOCUMENTATION.md and the root `API-SETUP.md` for endpoint details.
 
 ---
 
@@ -194,9 +194,9 @@ AI_FALLBACK_ORDER=gemini,deepseek
 
 The system tries providers in this order:
 
-1. **Primary** â€” The provider set in `AI_PROVIDER`
-2. **Fallback 1** â€” First provider in `AI_FALLBACK_ORDER`
-3. **Fallback 2** â€” Second provider in `AI_FALLBACK_ORDER`
+1. **Primary** — The provider set in `AI_PROVIDER`
+2. **Fallback 1** — First provider in `AI_FALLBACK_ORDER`
+3. **Fallback 2** — Second provider in `AI_FALLBACK_ORDER`
 
 ### Task-Based Routing
 

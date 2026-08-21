@@ -1,8 +1,8 @@
-# Installation Guide â€” VentureX ERP & CRM
+# Installation Guide — VentureX ERP & CRM
 
 **AI-Powered CRM & ERP Business Operating System**
 
-Complete, step-by-step instructions for installing VentureX ERP & CRM on any environment. Follow the numbered steps â€” each step includes a screenshot reference so you can verify you're on the right track.
+Complete, step-by-step instructions for installing VentureX ERP & CRM on any environment. Follow the numbered steps — each step includes a screenshot reference so you can verify you're on the right track.
 
 ---
 
@@ -14,11 +14,11 @@ Complete, step-by-step instructions for installing VentureX ERP & CRM on any env
 
 - [Quick Start (5 Minutes)](#quick-start-5-minutes)
 - [What You Need Before Starting](#what-you-need-before-starting)
-- [Method 1 â€” Local Computer (Easiest)](#method-1--local-computer-easiest)
-- [Method 2 â€” VPS / Cloud Server](#method-2--vps--cloud-server)
-- [Method 3 â€” Shared Hosting (cPanel)](#method-3--shared-hosting-cpanel)
-- [Method 4 â€” Docker](#method-4--docker)
-- [Method 5 â€” Laravel Herd (Fastest)](#method-5--laravel-herd-fastest)
+- [Method 1 — Local Computer (Easiest)](#method-1--local-computer-easiest)
+- [Method 2 — VPS / Cloud Server](#method-2--vps--cloud-server)
+- [Method 3 — Shared Hosting (cPanel)](#method-3--shared-hosting-cpanel)
+- [Method 4 — Docker](#method-4--docker)
+- [Method 5 — Laravel Herd (Fastest)](#method-5--laravel-herd-fastest)
 - [After Installation](#after-installation)
 - [Troubleshooting](#troubleshooting)
 - [Screenshots Checklist](#screenshots-checklist)
@@ -109,18 +109,18 @@ If any are missing, enable them in your `php.ini` file by removing the `;` from 
 
 ---
 
-## Method 1 â€” Local Computer (Easiest)
+## Method 1 — Local Computer (Easiest)
 
 This is the simplest way to install VentureX ERP & CRM on your own Windows, Mac, or Linux computer.
 
-### Step 1 â€” Extract the Files
+### Step 1 — Extract the Files
 
 1. Unzip the `VentureX-ERP-UPLOAD.zip` file
 2. Move the extracted folder to your projects folder (e.g., `C:\projects\VentureX-ERP` or `~/projects/VentureX-ERP`)
 
-> ðŸ“¸ **Screenshot:** `images/step-01-extract.svg` â€” The extracted folder structure showing all files.
+> ðŸ“¸ **Screenshot:** `images/step-01-extract.svg` — The extracted folder structure showing all files.
 
-### Step 2 â€” Install PHP Dependencies
+### Step 2 — Install PHP Dependencies
 
 Open your terminal in the project folder and run:
 
@@ -131,9 +131,9 @@ composer install
 
 This installs all the PHP packages the app needs. Wait for it to finish (takes 1-2 minutes).
 
-> ðŸ“¸ **Screenshot:** `images/step-02-composer.svg` â€” Composer installing packages (green checkmarks).
+> ðŸ“¸ **Screenshot:** `images/step-02-composer.svg` — Composer installing packages (green checkmarks).
 
-### Step 3 â€” Set Up Environment File
+### Step 3 — Set Up Environment File
 
 Run these commands to create your configuration file and generate a security key:
 
@@ -142,9 +142,9 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-> ðŸ“¸ **Screenshot:** `images/step-03-configure.svg` â€” Terminal showing "Application key set successfully."
+> ðŸ“¸ **Screenshot:** `images/step-03-configure.svg` — Terminal showing "Application key set successfully."
 
-### Step 4 â€” Create Your Database
+### Step 4 — Create Your Database
 
 Open MySQL and create a database:
 
@@ -164,7 +164,7 @@ EXIT;
 
 > ðŸ“¸ **Screenshot:** MySQL terminal showing "Query OK" messages.
 
-### Step 5 â€” Configure Database Connection
+### Step 5 — Configure Database Connection
 
 Open the `.env` file in a text editor and update these lines:
 
@@ -179,7 +179,7 @@ DB_PASSWORD=your_password_here
 
 > ðŸ“¸ **Screenshot:** The .env file with database settings highlighted.
 
-### Step 6 â€” Run Migrations (Creates All Tables)
+### Step 6 — Run Migrations (Creates All Tables)
 
 ```bash
 php artisan migrate --seed
@@ -189,9 +189,9 @@ This creates all the database tables and fills them with default data including 
 
 Type `yes` when asked about running pending migrations.
 
-> ðŸ“¸ **Screenshot:** `images/step-04-migrate.svg` â€” Terminal showing all migrations running successfully.
+> ðŸ“¸ **Screenshot:** `images/step-04-migrate.svg` — Terminal showing all migrations running successfully.
 
-### Step 7 â€” Install JavaScript Dependencies & Build
+### Step 7 — Install JavaScript Dependencies & Build
 
 ```bash
 npm install
@@ -200,7 +200,7 @@ npm run build
 
 > ðŸ“¸ **Screenshot:** npm installing packages and building assets.
 
-### Step 8 â€” Start the Application
+### Step 8 — Start the Application
 
 ```bash
 php artisan serve
@@ -210,7 +210,7 @@ The server starts at **http://localhost:8000**.
 
 > ðŸ“¸ **Screenshot:** Terminal showing "Server running on http://127.0.0.1:8000".
 
-### Step 9 â€” Open in Browser & Log In
+### Step 9 — Open in Browser & Log In
 
 1. Open your browser and go to **http://localhost:8000**
 2. You'll see the login page
@@ -225,7 +225,7 @@ The server starts at **http://localhost:8000**.
 
 > ðŸ“¸ **Screenshot:** The main dashboard after logging in.
 
-### Step 10 â€” Change Admin Password
+### Step 10 — Change Admin Password
 
 1. Go to **Settings** or your **Profile**
 2. Change the default password to something secure
@@ -235,23 +235,23 @@ The server starts at **http://localhost:8000**.
 
 ---
 
-## Method 2 â€” VPS / Cloud Server
+## Method 2 — VPS / Cloud Server
 
 Works with DigitalOcean, Linode, AWS EC2, Vultr, Hetzner, or any VPS running Ubuntu 22.04/24.04.
 
-### Step 1 â€” SSH Into Your Server
+### Step 1 — SSH Into Your Server
 
 ```bash
 ssh root@your_server_ip
 ```
 
-### Step 2 â€” Update System
+### Step 2 — Update System
 
 ```bash
 apt update && apt upgrade -y
 ```
 
-### Step 3 â€” Install PHP 8.3
+### Step 3 — Install PHP 8.3
 
 ```bash
 apt install -y software-properties-common
@@ -261,7 +261,7 @@ apt install -y php8.3 php8.3-cli php8.3-fpm php8.3-mbstring php8.3-xml php8.3-cu
   php8.3-zip php8.3-bcmath php8.3-gd php8.3-mysql php8.3-intl php8.3-redis php8.3-opcache
 ```
 
-### Step 4 â€” Install MySQL 8.0
+### Step 4 — Install MySQL 8.0
 
 ```bash
 apt install -y mysql-server
@@ -276,7 +276,7 @@ Answer the prompts:
 - Remove test database: **Yes**
 - Reload privilege tables: **Yes**
 
-### Step 5 â€” Install Node.js
+### Step 5 — Install Node.js
 
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
@@ -289,14 +289,14 @@ node -v
 npm -v
 ```
 
-### Step 6 â€” Install Composer
+### Step 6 — Install Composer
 
 ```bash
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 ```
 
-### Step 7 â€” Upload & Install Files
+### Step 7 — Upload & Install Files
 
 ```bash
 mkdir -p /var/www/VentureX-ERP
@@ -311,7 +311,7 @@ sudo -u www-data npm install
 sudo -u www-data npm run build
 ```
 
-### Step 8 â€” Create Database
+### Step 8 — Create Database
 
 ```bash
 mysql -u root -p
@@ -325,7 +325,7 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-### Step 9 â€” Configure Environment
+### Step 9 — Configure Environment
 
 ```bash
 cd /var/www/VentureX-ERP
@@ -353,7 +353,7 @@ CACHE_DRIVER=redis
 QUEUE_CONNECTION=redis
 ```
 
-### Step 10 â€” Configure Nginx
+### Step 10 — Configure Nginx
 
 ```bash
 apt install -y nginx
@@ -402,7 +402,7 @@ nginx -t
 systemctl restart nginx
 ```
 
-### Step 11 â€” SSL Certificate (Required)
+### Step 11 — SSL Certificate (Required)
 
 ```bash
 apt install -y certbot python3-certbot-nginx
@@ -410,7 +410,7 @@ certbot --nginx -d yourdomain.com -d www.yourdomain.com
 certbot renew --dry-run
 ```
 
-### Step 12 â€” Set Permissions & Run Migrations
+### Step 12 — Set Permissions & Run Migrations
 
 ```bash
 cd /var/www/VentureX-ERP
@@ -421,7 +421,7 @@ find bootstrap/cache -type d -exec chmod 775 {} \;
 sudo -u www-data php artisan migrate --seed
 ```
 
-### Step 13 â€” Set Up Cron Job
+### Step 13 — Set Up Cron Job
 
 ```bash
 crontab -u www-data -e
@@ -432,7 +432,7 @@ Add:
 * * * * * cd /var/www/VentureX-ERP && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-### Step 14 â€” Verify
+### Step 14 — Verify
 
 Open **https://yourdomain.com** and log in with the default credentials.
 
@@ -440,9 +440,9 @@ Open **https://yourdomain.com** and log in with the default credentials.
 
 ---
 
-## Method 3 â€” Shared Hosting (cPanel)
+## Method 3 — Shared Hosting (cPanel)
 
-### Step 1 â€” Build Locally First
+### Step 1 — Build Locally First
 
 On your local computer:
 
@@ -456,7 +456,7 @@ php artisan key:generate
 
 Edit `.env` with your hosting database details (you'll create the database in Step 3).
 
-### Step 2 â€” Upload Files
+### Step 2 — Upload Files
 
 1. Log in to **cPanel**
 2. Open **File Manager**
@@ -465,7 +465,7 @@ Edit `.env` with your hosting database details (you'll create the database in St
 
 > ðŸ“¸ **Screenshot:** cPanel File Manager showing uploaded files.
 
-### Step 3 â€” Create Database in cPanel
+### Step 3 — Create Database in cPanel
 
 1. Go to **cPanel â†’ MySQL Databases**
 2. Create database: `yourcpaneluser_VENTUREX_ERP`
@@ -474,7 +474,7 @@ Edit `.env` with your hosting database details (you'll create the database in St
 
 > ðŸ“¸ **Screenshot:** cPanel database creation screen.
 
-### Step 4 â€” Configure .env
+### Step 4 — Configure .env
 
 Edit `.env` with your hosting details:
 
@@ -487,13 +487,13 @@ DB_USERNAME=yourcpaneluser_dbuser
 DB_PASSWORD=your_database_password
 ```
 
-### Step 5 â€” Set Permissions
+### Step 5 — Set Permissions
 
 In cPanel File Manager:
 - Right-click `storage/` â†’ Permissions â†’ **777** (recursive)
 - Right-click `bootstrap/cache/` â†’ Permissions â†’ **777** (recursive)
 
-### Step 6 â€” Import Database
+### Step 6 — Import Database
 
 If SSH is available:
 ```bash
@@ -508,7 +508,7 @@ If SSH is NOT available:
 
 > ðŸ“¸ **Screenshot:** phpMyAdmin import screen.
 
-### Step 7 â€” Configure Document Root
+### Step 7 — Configure Document Root
 
 Your hosting must point to the `public/` folder. In cPanel:
 1. Go to **Addon Domains** or **Subdomains**
@@ -516,15 +516,15 @@ Your hosting must point to the `public/` folder. In cPanel:
 
 If you can't change document root, move `public/index.php` to `public_html/` and edit the paths inside it.
 
-### Step 8 â€” Verify
+### Step 8 — Verify
 
 Open **https://yourdomain.com** and log in.
 
 ---
 
-## Method 4 â€” Docker
+## Method 4 — Docker
 
-### Step 1 â€” Create Dockerfile
+### Step 1 — Create Dockerfile
 
 Create a `Dockerfile` in the project root:
 
@@ -552,7 +552,7 @@ EXPOSE 8000
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
 ```
 
-### Step 2 â€” Create docker-compose.yml
+### Step 2 — Create docker-compose.yml
 
 ```yaml
 version: "3.9"
@@ -601,7 +601,7 @@ networks:
   VentureX-ERP-network:
 ```
 
-### Step 3 â€” Run
+### Step 3 — Run
 
 ```bash
 docker compose up -d
@@ -615,22 +615,22 @@ Open **http://localhost:8000**.
 
 ---
 
-## Method 5 â€” Laravel Herd (Fastest)
+## Method 5 — Laravel Herd (Fastest)
 
 Laravel Herd is the easiest way to run PHP apps on macOS and Windows.
 
-### Step 1 â€” Install Herd
+### Step 1 — Install Herd
 
 Download from https://herd.laravel.com and install.
 
-### Step 2 â€” Install MySQL via Herd
+### Step 2 — Install MySQL via Herd
 
 1. Open Herd
 2. Go to **Services**
 3. Click **Install** next to MySQL
 4. Start the MySQL service
 
-### Step 3 â€” Add Your Project
+### Step 3 — Add Your Project
 
 ```bash
 herd clone <repository-url> VentureX-ERP
@@ -638,7 +638,7 @@ herd clone <repository-url> VentureX-ERP
 
 Or place the project in `~/Herd/VentureX-ERP`.
 
-### Step 4 â€” Configure
+### Step 4 — Configure
 
 ```bash
 cd ~/Herd/VentureX-ERP
@@ -655,7 +655,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-### Step 5 â€” Create Database & Migrate
+### Step 5 — Create Database & Migrate
 
 ```bash
 mysql -u root -e "CREATE DATABASE VENTUREX_ERP CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
@@ -663,7 +663,7 @@ php artisan migrate --seed
 npm install && npm run build
 ```
 
-### Step 6 â€” Open
+### Step 6 — Open
 
 Herd automatically assigns a `.test` domain. Open **http://VentureX-ERP.test** in your browser.
 
@@ -759,10 +759,10 @@ When setting up your marketplace listing, take these screenshots from a running 
 
 | Filename | What to Capture |
 |----------|----------------|
-| `feature-crm.png` | CRM module â€” customers list |
-| `feature-sales.png` | Sales â€” quotations or invoices |
-| `feature-inventory.png` | Inventory â€” products list |
-| `feature-finance.png` | Finance â€” accounts dashboard |
+| `feature-crm.png` | CRM module — customers list |
+| `feature-sales.png` | Sales — quotations or invoices |
+| `feature-inventory.png` | Inventory — products list |
+| `feature-finance.png` | Finance — accounts dashboard |
 | `feature-ai.png` | AI Copilot or Assistant |
 | `feature-support.png` | Support ticket system |
 | `feature-pipeline.png` | Sales pipeline board |
@@ -774,7 +774,7 @@ When setting up your marketplace listing, take these screenshots from a running 
 
 If you need installation help, contact us at **support@venturexerp.com**
 
-We also offer paid installation services for $49 â€” includes full server setup, database configuration, SSL, and optimization.
+We also offer paid installation services for $49 — includes full server setup, database configuration, SSL, and optimization.
 
 ---
 

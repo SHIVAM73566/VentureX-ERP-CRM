@@ -157,7 +157,7 @@ return [
     |
     | If APP_DEBUG is accidentally set to true in production, these sensitive
     | variables will be hidden from the Whoops error page. This is a safety
-    | net â€” APP_DEBUG should ALWAYS be false in production.
+    | net — APP_DEBUG should ALWAYS be false in production.
     | Reference: VentureX-ERP-2026-01483863236
     |
     */

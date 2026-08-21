@@ -23,7 +23,7 @@ VentureX ERP & CRM is a monolithic, server-rendered web application built on the
 | Layer | Technology | Purpose |
 |-------|------------|---------|
 | HTTP Server | Nginx/Apache | Request handling, static files |
-| Application | PHP 8.2+ | Business logic |
+| Application | PHP 8.3+ | Business logic |
 | Framework | Laravel 13 | MVC, routing, ORM, queue |
 | Templating | Blade | Server-side HTML rendering |
 | Interactivity | Alpine.js 3 | Client-side JavaScript |
@@ -41,68 +41,68 @@ VentureX ERP & CRM is a monolithic, server-rendered web application built on the
 
 ```
 VentureX-ERP/
-â”œâ”€â”€ app/
-â”‚   â”œâ”€â”€ Console/              # Artisan commands
-â”‚   â”œâ”€â”€ Exceptions/           # Exception handlers
-â”‚   â”œâ”€â”€ Http/
-â”‚   â”‚   â”œâ”€â”€ Controllers/      # Route controllers
-â”‚   â”‚   â”‚   â”œâ”€â”€ CRM/
-â”‚   â”‚   â”‚   â”œâ”€â”€ Sales/
-â”‚   â”‚   â”‚   â”œâ”€â”€ Procurement/
-â”‚   â”‚   â”‚   â”œâ”€â”€ Inventory/
-â”‚   â”‚   â”‚   â”œâ”€â”€ Logistics/
-â”‚   â”‚   â”‚   â”œâ”€â”€ Finance/
-â”‚   â”‚   â”‚   â”œâ”€â”€ AI/
-â”‚   â”‚   â”‚   â””â”€â”€ Admin/
-â”‚   â”‚   â”œâ”€â”€ Middleware/        # Request middleware
-â”‚   â”‚   â””â”€â”€ Requests/         # Form request validation
-â”‚   â”œâ”€â”€ Livewire/             # Livewire components
-â”‚   â”‚   â”œâ”€â”€ CRM/
-â”‚   â”‚   â”œâ”€â”€ Sales/
-â”‚   â”‚   â”œâ”€â”€ Procurement/
-â”‚   â”‚   â”œâ”€â”€ Inventory/
-â”‚   â”‚   â”œâ”€â”€ Logistics/
-â”‚   â”‚   â”œâ”€â”€ Finance/
-â”‚   â”‚   â”œâ”€â”€ AI/
-â”‚   â”‚   â””â”€â”€ Admin/
-â”‚   â”œâ”€â”€ Models/               # Eloquent models
-â”‚   â””â”€â”€ Providers/            # Service providers
-â”œâ”€â”€ bootstrap/                # Application bootstrap
-â”œâ”€â”€ config/                   # Configuration files
-â”œâ”€â”€ database/
-â”‚   â”œâ”€â”€ migrations/           # Database migrations
-â”‚   â””â”€â”€ seeders/              # Database seeders
-â”œâ”€â”€ docs/                     # Documentation
-â”œâ”€â”€ lang/                     # Language files
-â”œâ”€â”€ public/                   # Web root
-â”‚   â”œâ”€â”€ build/                # Compiled assets (Vite)
-â”‚   â””â”€â”€ storage/              # Public storage symlink
-â”œâ”€â”€ resources/
-â”‚   â”œâ”€â”€ css/                  # CSS source (Tailwind)
-â”‚   â”œâ”€â”€ js/                   # JavaScript source
-â”‚   â””â”€â”€ views/                # Blade templates
-â”‚       â”œâ”€â”€ components/       # Reusable components
-â”‚       â”œâ”€â”€ layouts/          # Layout templates
-â”‚       â”œâ”€â”€ crm/              # CRM views
-â”‚       â”œâ”€â”€ sales/            # Sales views
-â”‚       â”œâ”€â”€ procurement/      # Procurement views
-â”‚       â”œâ”€â”€ inventory/        # Inventory views
-â”‚       â”œâ”€â”€ logistics/        # Logistics views
-â”‚       â”œâ”€â”€ finance/          # Finance views
-â”‚       â”œâ”€â”€ ai/               # AI views
-â”‚       â””â”€â”€ admin/            # Admin views
-â”œâ”€â”€ routes/                   # Route definitions
-â”‚   â””â”€â”€ web.php               # All web routes
-â”œâ”€â”€ storage/                  # Application storage
-â”‚   â”œâ”€â”€ app/                  # Private uploads
-â”‚   â”œâ”€â”€ framework/            # Framework cache
-â”‚   â””â”€â”€ logs/                 # Application logs
-â”œâ”€â”€ tests/                    # Test files
-â”œâ”€â”€ .env.example              # Environment template
-â”œâ”€â”€ composer.json             # PHP dependencies
-â”œâ”€â”€ package.json              # Node.js dependencies
-â”œâ”€â”€ vite.config.js            # Vite configuration
-â””â”€â”€ tailwind.config.js        # Tailwind configuration
+—œ—€—€ app/
+—‚   —œ—€—€ Console/              # Artisan commands
+—‚   —œ—€—€ Exceptions/           # Exception handlers
+—‚   —œ—€—€ Http/
+—‚   —‚   —œ—€—€ Controllers/      # Route controllers
+—‚   —‚   —‚   —œ—€—€ CRM/
+—‚   —‚   —‚   —œ—€—€ Sales/
+—‚   —‚   —‚   —œ—€—€ Procurement/
+—‚   —‚   —‚   —œ—€—€ Inventory/
+—‚   —‚   —‚   —œ—€—€ Logistics/
+—‚   —‚   —‚   —œ—€—€ Finance/
+—‚   —‚   —‚   —œ—€—€ AI/
+—‚   —‚   —‚   —”—€—€ Admin/
+—‚   —‚   —œ—€—€ Middleware/        # Request middleware
+—‚   —‚   —”—€—€ Requests/         # Form request validation
+—‚   —œ—€—€ Livewire/             # Livewire components
+—‚   —‚   —œ—€—€ CRM/
+—‚   —‚   —œ—€—€ Sales/
+—‚   —‚   —œ—€—€ Procurement/
+—‚   —‚   —œ—€—€ Inventory/
+—‚   —‚   —œ—€—€ Logistics/
+—‚   —‚   —œ—€—€ Finance/
+—‚   —‚   —œ—€—€ AI/
+—‚   —‚   —”—€—€ Admin/
+—‚   —œ—€—€ Models/               # Eloquent models
+—‚   —”—€—€ Providers/            # Service providers
+—œ—€—€ bootstrap/                # Application bootstrap
+—œ—€—€ config/                   # Configuration files
+—œ—€—€ database/
+—‚   —œ—€—€ migrations/           # Database migrations
+—‚   —”—€—€ seeders/              # Database seeders
+—œ—€—€ docs/                     # Documentation
+—œ—€—€ lang/                     # Language files
+—œ—€—€ public/                   # Web root
+—‚   —œ—€—€ build/                # Compiled assets (Vite)
+—‚   —”—€—€ storage/              # Public storage symlink
+—œ—€—€ resources/
+—‚   —œ—€—€ css/                  # CSS source (Tailwind)
+—‚   —œ—€—€ js/                   # JavaScript source
+—‚   —”—€—€ views/                # Blade templates
+—‚       —œ—€—€ components/       # Reusable components
+—‚       —œ—€—€ layouts/          # Layout templates
+—‚       —œ—€—€ crm/              # CRM views
+—‚       —œ—€—€ sales/            # Sales views
+—‚       —œ—€—€ procurement/      # Procurement views
+—‚       —œ—€—€ inventory/        # Inventory views
+—‚       —œ—€—€ logistics/        # Logistics views
+—‚       —œ—€—€ finance/          # Finance views
+—‚       —œ—€—€ ai/               # AI views
+—‚       —”—€—€ admin/            # Admin views
+—œ—€—€ routes/                   # Route definitions
+—‚   —”—€—€ web.php               # All web routes
+—œ—€—€ storage/                  # Application storage
+—‚   —œ—€—€ app/                  # Private uploads
+—‚   —œ—€—€ framework/            # Framework cache
+—‚   —”—€—€ logs/                 # Application logs
+—œ—€—€ tests/                    # Test files
+—œ—€—€ .env.example              # Environment template
+—œ—€—€ composer.json             # PHP dependencies
+—œ—€—€ package.json              # Node.js dependencies
+—œ—€—€ vite.config.js            # Vite configuration
+—”—€—€ tailwind.config.js        # Tailwind configuration
 ```
 
 ---
@@ -115,252 +115,252 @@ VentureX-ERP/
 
 ```
 users
-â”œâ”€â”€ id (bigint, PK)
-â”œâ”€â”€ name (string)
-â”œâ”€â”€ email (string, unique)
-â”œâ”€â”€ password (string, hashed)
-â”œâ”€â”€ mfa_secret (string, nullable)
-â”œâ”€â”€ mfa_enabled (boolean)
-â”œâ”€â”€ status (enum: active, inactive)
-â”œâ”€â”€ remember_token (string, nullable)
-â”œâ”€â”€ created_at (timestamp)
-â”œâ”€â”€ updated_at (timestamp)
-â””â”€â”€ deleted_at (timestamp, nullable)
+—œ—€—€ id (bigint, PK)
+—œ—€—€ name (string)
+—œ—€—€ email (string, unique)
+—œ—€—€ password (string, hashed)
+—œ—€—€ mfa_secret (string, nullable)
+—œ—€—€ mfa_enabled (boolean)
+—œ—€—€ status (enum: active, inactive)
+—œ—€—€ remember_token (string, nullable)
+—œ—€—€ created_at (timestamp)
+—œ—€—€ updated_at (timestamp)
+—”—€—€ deleted_at (timestamp, nullable)
 
 roles (Spatie)
-â”œâ”€â”€ id (bigint, PK)
-â”œâ”€â”€ name (string, unique)
-â”œâ”€â”€ guard_name (string)
-â””â”€â”€ created_at, updated_at
+—œ—€—€ id (bigint, PK)
+—œ—€—€ name (string, unique)
+—œ—€—€ guard_name (string)
+—”—€—€ created_at, updated_at
 
 permissions (Spatie)
-â”œâ”€â”€ id (bigint, PK)
-â”œâ”€â”€ name (string, unique)
-â”œâ”€â”€ guard_name (string)
-â””â”€â”€ created_at, updated_at
+—œ—€—€ id (bigint, PK)
+—œ—€—€ name (string, unique)
+—œ—€—€ guard_name (string)
+—”—€—€ created_at, updated_at
 
 model_has_roles (Spatie)
-â”œâ”€â”€ role_id (bigint, FK)
-â””â”€â”€ model_id (bigint, FK)
+—œ—€—€ role_id (bigint, FK)
+—”—€—€ model_id (bigint, FK)
 
 model_has_permissions (Spatie)
-â”œâ”€â”€ permission_id (bigint, FK)
-â””â”€â”€ model_id (bigint, FK)
+—œ—€—€ permission_id (bigint, FK)
+—”—€—€ model_id (bigint, FK)
 ```
 
 #### Companies
 
 ```
 companies
-â”œâ”€â”€ id (bigint, PK)
-â”œâ”€â”€ name (string)
-â”œâ”€â”€ legal_name (string, nullable)
-â”œâ”€â”€ registration_number (string, nullable)
-â”œâ”€â”€ address (text, nullable)
-â”œâ”€â”€ city (string, nullable)
-â”œâ”€â”€ state (string, nullable)
-â”œâ”€â”€ country (string, nullable)
-â”œâ”€â”€ postal_code (string, nullable)
-â”œâ”€â”€ phone (string, nullable)
-â”œâ”€â”€ email (string, nullable)
-â”œâ”€â”€ website (string, nullable)
-â”œâ”€â”€ tax_id (string, nullable)
-â”œâ”€â”€ vat_number (string, nullable)
-â”œâ”€â”€ currency (string, default: USD)
-â”œâ”€â”€ fiscal_year_start (date, nullable)
-â”œâ”€â”€ status (enum: active, inactive)
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id (bigint, PK)
+—œ—€—€ name (string)
+—œ—€—€ legal_name (string, nullable)
+—œ—€—€ registration_number (string, nullable)
+—œ—€—€ address (text, nullable)
+—œ—€—€ city (string, nullable)
+—œ—€—€ state (string, nullable)
+—œ—€—€ country (string, nullable)
+—œ—€—€ postal_code (string, nullable)
+—œ—€—€ phone (string, nullable)
+—œ—€—€ email (string, nullable)
+—œ—€—€ website (string, nullable)
+—œ—€—€ tax_id (string, nullable)
+—œ—€—€ vat_number (string, nullable)
+—œ—€—€ currency (string, default: USD)
+—œ—€—€ fiscal_year_start (date, nullable)
+—œ—€—€ status (enum: active, inactive)
+—œ—€—€ created_at, updated_at, deleted_at
 ```
 
 #### CRM Module
 
 ```
 customers
-â”œâ”€â”€ id, company_id, name, email, phone, address, city, state, country
-â”œâ”€â”€ postal_code, website, notes, tags, status
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, name, email, phone, address, city, state, country
+—œ—€—€ postal_code, website, notes, tags, status
+—œ—€—€ created_at, updated_at, deleted_at
 
 leads
-â”œâ”€â”€ id, company_id, customer_id, name, email, phone, source
-â”œâ”€â”€ status (new, contacted, qualified, unqualified)
-â”œâ”€â”€ assigned_to, value, description
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, customer_id, name, email, phone, source
+—œ—€—€ status (new, contacted, qualified, unqualified)
+—œ—€—€ assigned_to, value, description
+—œ—€—€ created_at, updated_at, deleted_at
 
 opportunities
-â”œâ”€â”€ id, company_id, customer_id, lead_id, name, stage
-â”œâ”€â”€ value, expected_close_date, probability
-â”œâ”€â”€ assigned_to, description
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, customer_id, lead_id, name, stage
+—œ—€—€ value, expected_close_date, probability
+—œ—€—€ assigned_to, description
+—œ—€—€ created_at, updated_at, deleted_at
 
 contacts
-â”œâ”€â”€ id, company_id, customer_id, name, email, phone
-â”œâ”€â”€ job_title, department, notes
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, customer_id, name, email, phone
+—œ—€—€ job_title, department, notes
+—œ—€—€ created_at, updated_at, deleted_at
 
 activities
-â”œâ”€â”€ id, company_id, type, subject, description
-â”œâ”€â”€ related_type, related_id (polymorphic)
-â”œâ”€â”€ assigned_to, due_date, completed_at
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, type, subject, description
+—œ—€—€ related_type, related_id (polymorphic)
+—œ—€—€ assigned_to, due_date, completed_at
+—œ—€—€ created_at, updated_at, deleted_at
 ```
 
 #### Sales Module
 
 ```
 quotations
-â”œâ”€â”€ id, company_id, customer_id, quotation_number
-â”œâ”€â”€ status (draft, sent, accepted, rejected, expired)
-â”œâ”€â”€ subtotal, tax_amount, total, discount
-â”œâ”€â”€ valid_until, notes
-â”œâ”€â”€ created_by, created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, customer_id, quotation_number
+—œ—€—€ status (draft, sent, accepted, rejected, expired)
+—œ—€—€ subtotal, tax_amount, total, discount
+—œ—€—€ valid_until, notes
+—œ—€—€ created_by, created_at, updated_at, deleted_at
 
 quotation_items
-â”œâ”€â”€ id, quotation_id, product_id, description
-â”œâ”€â”€ quantity, unit_price, discount, tax_rate
-â”œâ”€â”€ total, created_at, updated_at
+—œ—€—€ id, quotation_id, product_id, description
+—œ—€—€ quantity, unit_price, discount, tax_rate
+—œ—€—€ total, created_at, updated_at
 
 sales_orders
-â”œâ”€â”€ id, company_id, customer_id, quotation_id, order_number
-â”œâ”€â”€ status, subtotal, tax_amount, total
-â”œâ”€â”€ notes, created_by
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, customer_id, quotation_id, order_number
+—œ—€—€ status, subtotal, tax_amount, total
+—œ—€—€ notes, created_by
+—œ—€—€ created_at, updated_at, deleted_at
 
 invoices
-â”œâ”€â”€ id, company_id, customer_id, sales_order_id, invoice_number
-â”œâ”€â”€ status (draft, sent, partially_paid, paid, overdue, void)
-â”œâ”€â”€ subtotal, tax_amount, total, amount_paid
-â”œâ”€â”€ due_date, notes, created_by
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, customer_id, sales_order_id, invoice_number
+—œ—€—€ status (draft, sent, partially_paid, paid, overdue, void)
+—œ—€—€ subtotal, tax_amount, total, amount_paid
+—œ—€—€ due_date, notes, created_by
+—œ—€—€ created_at, updated_at, deleted_at
 
 payments
-â”œâ”€â”€ id, company_id, invoice_id, amount, payment_method
-â”œâ”€â”€ reference_number, notes, paid_at
-â”œâ”€â”€ created_by, created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, invoice_id, amount, payment_method
+—œ—€—€ reference_number, notes, paid_at
+—œ—€—€ created_by, created_at, updated_at, deleted_at
 ```
 
 #### Procurement Module
 
 ```
 suppliers
-â”œâ”€â”€ id, company_id, name, email, phone, address
-â”œâ”€â”€ city, state, country, website, notes
-â”œâ”€â”€ rating, status
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, name, email, phone, address
+—œ—€—€ city, state, country, website, notes
+—œ—€—€ rating, status
+—œ—€—€ created_at, updated_at, deleted_at
 
 supplier_offers
-â”œâ”€â”€ id, company_id, supplier_id, offer_number
-â”œâ”€â”€ status, subtotal, tax_amount, total
-â”œâ”€â”€ valid_until, notes
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, supplier_id, offer_number
+—œ—€—€ status, subtotal, tax_amount, total
+—œ—€—€ valid_until, notes
+—œ—€—€ created_at, updated_at, deleted_at
 
 rfqs
-â”œâ”€â”€ id, company_id, rfq_number, title, description
-â”œâ”€â”€ status, due_date, created_by
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, rfq_number, title, description
+—œ—€—€ status, due_date, created_by
+—œ—€—€ created_at, updated_at, deleted_at
 
 purchase_requisitions
-â”œâ”€â”€ id, company_id, requisition_number, title, description
-â”œâ”€â”€ status (draft, pending_approval, approved, rejected)
-â”œâ”€â”€ requested_by, approved_by, department
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, requisition_number, title, description
+—œ—€—€ status (draft, pending_approval, approved, rejected)
+—œ—€—€ requested_by, approved_by, department
+—œ—€—€ created_at, updated_at, deleted_at
 
 purchase_orders
-â”œâ”€â”€ id, company_id, supplier_id, po_number
-â”œâ”€â”€ status (draft, pending_approval, approved, sent, received, closed)
-â”œâ”€â”€ subtotal, tax_amount, total
-â”œâ”€â”€ expected_delivery_date, notes
-â”œâ”€â”€ created_by, approved_by
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, supplier_id, po_number
+—œ—€—€ status (draft, pending_approval, approved, sent, received, closed)
+—œ—€—€ subtotal, tax_amount, total
+—œ—€—€ expected_delivery_date, notes
+—œ—€—€ created_by, approved_by
+—œ—€—€ created_at, updated_at, deleted_at
 ```
 
 #### Inventory Module
 
 ```
 products
-â”œâ”€â”€ id, company_id, sku, name, description
-â”œâ”€â”€ category, type, unit_of_measure
-â”œâ”€â”€ cost_price, selling_price
-â”œâ”€â”€ minimum_stock, maximum_stock, reorder_point
-â”œâ”€â”€ status, created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, sku, name, description
+—œ—€—€ category, type, unit_of_measure
+—œ—€—€ cost_price, selling_price
+—œ—€—€ minimum_stock, maximum_stock, reorder_point
+—œ—€—€ status, created_at, updated_at, deleted_at
 
 warehouses
-â”œâ”€â”€ id, company_id, name, code, address
-â”œâ”€â”€ city, state, country, status
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, name, code, address
+—œ—€—€ city, state, country, status
+—œ—€—€ created_at, updated_at, deleted_at
 
 stock_movements
-â”œâ”€â”€ id, company_id, product_id, warehouse_id
-â”œâ”€â”€ type (purchase, sale, transfer, adjustment, return, write_off)
-â”œâ”€â”€ quantity, reference_type, reference_id
-â”œâ”€â”€ notes, created_by
-â”œâ”€â”€ created_at, updated_at
+—œ—€—€ id, company_id, product_id, warehouse_id
+—œ—€—€ type (purchase, sale, transfer, adjustment, return, write_off)
+—œ—€—€ quantity, reference_type, reference_id
+—œ—€—€ notes, created_by
+—œ—€—€ created_at, updated_at
 ```
 
 #### Logistics Module
 
 ```
 shipments
-â”œâ”€â”€ id, company_id, sales_order_id, shipment_number
-â”œâ”€â”€ status, carrier, tracking_number
-â”œâ”€â”€ shipped_at, delivered_at
-â”œâ”€â”€ notes, created_by
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, sales_order_id, shipment_number
+—œ—€—€ status, carrier, tracking_number
+—œ—€—€ shipped_at, delivered_at
+—œ—€—€ notes, created_by
+—œ—€—€ created_at, updated_at, deleted_at
 
 containers
-â”œâ”€â”€ id, company_id, container_number, shipment_id
-â”œâ”€â”€ type, status, carrier
-â”œâ”€â”€ departure_date, arrival_date
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, container_number, shipment_id
+—œ—€—€ type, status, carrier
+—œ—€—€ departure_date, arrival_date
+—œ—€—€ created_at, updated_at, deleted_at
 
 landed_costs
-â”œâ”€â”€ id, company_id, purchase_order_id
-â”œâ”€â”€ shipping_cost, duty, insurance, other_fees
-â”œâ”€â”€ total_landed_cost, allocated
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, purchase_order_id
+—œ—€—€ shipping_cost, duty, insurance, other_fees
+—œ—€—€ total_landed_cost, allocated
+—œ—€—€ created_at, updated_at, deleted_at
 ```
 
 #### Finance Module
 
 ```
 accounts
-â”œâ”€â”€ id, company_id, code, name, type (asset, liability, equity, revenue, expense)
-â”œâ”€â”€ description, status, parent_id
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, code, name, type (asset, liability, equity, revenue, expense)
+—œ—€—€ description, status, parent_id
+—œ—€—€ created_at, updated_at, deleted_at
 
 journal_entries
-â”œâ”€â”€ id, company_id, entry_number, date
-â”œâ”€â”€ description, reference_type, reference_id
-â”œâ”€â”€ status (draft, posted, void)
-â”œâ”€â”€ created_by, posted_by
-â”œâ”€â”€ created_at, updated_at, deleted_at
+—œ—€—€ id, company_id, entry_number, date
+—œ—€—€ description, reference_type, reference_id
+—œ—€—€ status (draft, posted, void)
+—œ—€—€ created_by, posted_by
+—œ—€—€ created_at, updated_at, deleted_at
 
 journal_entry_lines
-â”œâ”€â”€ id, journal_entry_id, account_id
-â”œâ”€â”€ debit, credit, description
-â”œâ”€â”€ created_at, updated_at
+—œ—€—€ id, journal_entry_id, account_id
+—œ—€—€ debit, credit, description
+—œ—€—€ created_at, updated_at
 ```
 
 #### Admin Module
 
 ```
 audit_logs
-â”œâ”€â”€ id, company_id, user_id, event
-â”œâ”€â”€ auditable_type, auditable_id
-â”œâ”€â”€ old_values (json), new_values (json)
-â”œâ”€â”€ ip_address, user_agent
-â”œâ”€â”€ created_at
+—œ—€—€ id, company_id, user_id, event
+—œ—€—€ auditable_type, auditable_id
+—œ—€—€ old_values (json), new_values (json)
+—œ—€—€ ip_address, user_agent
+—œ—€—€ created_at
 
 approvals
-â”œâ”€â”€ id, company_id, approvable_type, approvable_id
-â”œâ”€â”€ status, level, approver_id
-â”œâ”€â”€ notes, approved_at
-â”œâ”€â”€ created_at, updated_at
+—œ—€—€ id, company_id, approvable_type, approvable_id
+—œ—€—€ status, level, approver_id
+—œ—€—€ notes, approved_at
+—œ—€—€ created_at, updated_at
 
 documents
-â”œâ”€â”€ id, company_id, name, file_path
-â”œâ”€â”€ file_type, file_size, mime_type
-â”œâ”€â”€ documentable_type, documentable_id
-â”œâ”€â”€ uploaded_by, created_at, updated_at
+—œ—€—€ id, company_id, name, file_path
+—œ—€—€ file_type, file_size, mime_type
+—œ—€—€ documentable_type, documentable_id
+—œ—€—€ uploaded_by, created_at, updated_at
 ```
 
 ---
@@ -405,33 +405,33 @@ Browser Event â†’ Alpine.js â†’ Livewire AJAX â†’ /livewire/updat
 
 ```
 app/Livewire/
-â”œâ”€â”€ CRM/
-â”‚   â”œâ”€â”€ CustomerList.php      # List with search/filter
-â”‚   â”œâ”€â”€ CustomerForm.php      # Create/edit form
-â”‚   â”œâ”€â”€ CustomerDetail.php    # Detail view
-â”‚   â”œâ”€â”€ PipelineBoard.php     # Drag-and-drop pipeline
-â”‚   â””â”€â”€ ActivityLog.php       # Activity feed
-â”œâ”€â”€ Sales/
-â”‚   â”œâ”€â”€ QuotationForm.php
-â”‚   â”œâ”€â”€ InvoiceList.php
-â”‚   â””â”€â”€ PaymentForm.php
-â”œâ”€â”€ Procurement/
-â”‚   â”œâ”€â”€ PurchaseOrderForm.php
-â”‚   â”œâ”€â”€ ApprovalWorkflow.php
-â”‚   â””â”€â”€ RFQManager.php
-â”œâ”€â”€ Inventory/
-â”‚   â”œâ”€â”€ ProductList.php
-â”‚   â””â”€â”€ StockAdjustment.php
-â”œâ”€â”€ Finance/
-â”‚   â”œâ”€â”€ JournalEntryForm.php
-â”‚   â””â”€â”€ AccountList.php
-â”œâ”€â”€ AI/
-â”‚   â”œâ”€â”€ ChatInterface.php
-â”‚   â””â”€â”€ AnalysisPanel.php
-â””â”€â”€ Admin/
-    â”œâ”€â”€ UserManagement.php
-    â”œâ”€â”€ RolePermissions.php
-    â””â”€â”€ SystemSettings.php
+—œ—€—€ CRM/
+—‚   —œ—€—€ CustomerList.php      # List with search/filter
+—‚   —œ—€—€ CustomerForm.php      # Create/edit form
+—‚   —œ—€—€ CustomerDetail.php    # Detail view
+—‚   —œ—€—€ PipelineBoard.php     # Drag-and-drop pipeline
+—‚   —”—€—€ ActivityLog.php       # Activity feed
+—œ—€—€ Sales/
+—‚   —œ—€—€ QuotationForm.php
+—‚   —œ—€—€ InvoiceList.php
+—‚   —”—€—€ PaymentForm.php
+—œ—€—€ Procurement/
+—‚   —œ—€—€ PurchaseOrderForm.php
+—‚   —œ—€—€ ApprovalWorkflow.php
+—‚   —”—€—€ RFQManager.php
+—œ—€—€ Inventory/
+—‚   —œ—€—€ ProductList.php
+—‚   —”—€—€ StockAdjustment.php
+—œ—€—€ Finance/
+—‚   —œ—€—€ JournalEntryForm.php
+—‚   —”—€—€ AccountList.php
+—œ—€—€ AI/
+—‚   —œ—€—€ ChatInterface.php
+—‚   —”—€—€ AnalysisPanel.php
+—”—€—€ Admin/
+    —œ—€—€ UserManagement.php
+    —œ—€—€ RolePermissions.php
+    —”—€—€ SystemSettings.php
 ```
 
 ---
@@ -464,19 +464,19 @@ app/Livewire/
 
 ```
 storage/
-â”œâ”€â”€ app/
-â”‚   â””â”€â”€ public/              # Publicly accessible uploads
-â”‚       â”œâ”€â”€ avatars/         # User profile pictures
-â”‚       â”œâ”€â”€ documents/       # Uploaded documents
-â”‚       â”œâ”€â”€ imports/         # Imported files
-â”‚       â””â”€â”€ exports/         # Generated exports
-â”œâ”€â”€ framework/
-â”‚   â”œâ”€â”€ cache/               # Application cache
-â”‚   â”œâ”€â”€ sessions/            # Session files
-â”‚   â””â”€â”€ views/               # Compiled Blade views
-â””â”€â”€ logs/
-    â”œâ”€â”€ laravel.log          # Application log
-    â””â”€â”€ worker.log           # Queue worker log
+—œ—€—€ app/
+—‚   —”—€—€ public/              # Publicly accessible uploads
+—‚       —œ—€—€ avatars/         # User profile pictures
+—‚       —œ—€—€ documents/       # Uploaded documents
+—‚       —œ—€—€ imports/         # Imported files
+—‚       —”—€—€ exports/         # Generated exports
+—œ—€—€ framework/
+—‚   —œ—€—€ cache/               # Application cache
+—‚   —œ—€—€ sessions/            # Session files
+—‚   —”—€—€ views/               # Compiled Blade views
+—”—€—€ logs/
+    —œ—€—€ laravel.log          # Application log
+    —”—€—€ worker.log           # Queue worker log
 ```
 
 ---
@@ -487,11 +487,11 @@ storage/
 
 ```
 Exception thrown â†’ Laravel Exception Handler
-â”œâ”€â”€ HTTP Exception â†’ Render appropriate HTTP response
-â”œâ”€â”€ Validation Exception â†’ Redirect with errors
-â”œâ”€â”€ Authentication Exception â†’ Redirect to login
-â”œâ”€â”€ Authorization Exception â†’ 403 response
-â””â”€â”€ Uncaught Exception â†’ 500 response + log
+—œ—€—€ HTTP Exception â†’ Render appropriate HTTP response
+—œ—€—€ Validation Exception â†’ Redirect with errors
+—œ—€—€ Authentication Exception â†’ Redirect to login
+—œ—€—€ Authorization Exception â†’ 403 response
+—”—€—€ Uncaught Exception â†’ 500 response + log
 ```
 
 ### Logging

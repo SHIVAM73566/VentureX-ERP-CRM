@@ -15,9 +15,9 @@
 
 ### Scene 2: What You Need Before We Start (01:00 - 02:30)
 **Screen:** A simple slide or Notepad document listing prerequisites
-**Voiceover:** "Before we jump in, here's what you'll need. First, a shared hosting account — any provider that gives you cPanel works. I'm using Hostinger here, but GoDaddy, Bluehost, SiteGround, they all look basically the same. Second, you need PHP 8.2 or higher enabled on your hosting. Most hosts have this now, but if yours is stuck on PHP 7, you'll need to upgrade in your hosting dashboard. Third, MySQL 5.7 or higher — again, most hosts include this by default. And finally, your VentureX files ready to download. You can grab the latest release from the GitHub repository or the official download link. Got all four? Great. Let's open cPanel."
+**Voiceover:** "Before we jump in, here's what you'll need. First, a shared hosting account — any provider that gives you cPanel works. I'm using Hostinger here, but GoDaddy, Bluehost, SiteGround, they all look basically the same. Second, you need PHP 8.3 or higher enabled on your hosting. Most hosts have this now, but if yours is stuck on PHP 7, you'll need to upgrade in your hosting dashboard. Third, MySQL 5.7 or higher — again, most hosts include this by default. And finally, your VentureX files ready to download. You can grab the latest release from the GitHub repository or the official download link. Got all four? Great. Let's open cPanel."
 **Action:** Cursor highlights each item in the list as it's mentioned
-**Caption:** Prerequisites: cPanel hosting, PHP 8.2+, MySQL 5.7+, VentureX files
+**Caption:** Prerequisites: cPanel hosting, PHP 8.3+, MySQL 5.7+, VentureX files
 
 ### Scene 3: Uploading Files via File Manager (02:30 - 05:30)
 **Screen:** cPanel dashboard, then File Manager

@@ -44,7 +44,7 @@ SiteGround, they all look basically the same.
 
 11
 00:00:38,200 --> 00:00:43,000
-Second, you need PHP 8.2 or higher enabled on your hosting.
+Second, you need PHP 8.3 or higher enabled on your hosting.
 
 12
 00:00:43,200 --> 00:00:47,000

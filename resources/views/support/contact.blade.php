@@ -67,8 +67,8 @@
                     </div>
                     <div>
                         <h3 class="font-semibold text-ink-800">Support Hours</h3>
-                        <p class="mt-1 text-sm text-ink-500">Monday â€“ Friday: 8:00 AM â€“ 8:00 PM (UTC)</p>
-                        <p class="text-sm text-ink-500">Saturday: 9:00 AM â€“ 5:00 PM (UTC)</p>
+                        <p class="mt-1 text-sm text-ink-500">Monday — Friday: 8:00 AM — 8:00 PM (UTC)</p>
+                        <p class="text-sm text-ink-500">Saturday: 9:00 AM — 5:00 PM (UTC)</p>
                         <p class="text-sm text-ink-500">Sunday: Closed</p>
                         <p class="mt-2 text-xs text-ink-400">Urgent tickets are monitored 24/7.</p>
                     </div>

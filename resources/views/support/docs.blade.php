@@ -54,20 +54,20 @@
                 {{-- Getting Started --}}
                 <div x-show="activeSection === 'getting-started'" x-transition class="card space-y-4">
                     <h2 class="text-xl font-bold text-ink-900">Getting Started with VentureX ERP & CRM</h2>
-                    <p class="text-sm text-ink-600">Welcome to VentureX ERP & CRM â€” a comprehensive business operating system that combines CRM, ERP, and AI capabilities into a single platform.</p>
+                    <p class="text-sm text-ink-600">Welcome to VentureX ERP & CRM — a comprehensive business operating system that combines CRM, ERP, and AI capabilities into a single platform.</p>
 
                     <h3 class="text-base font-bold text-ink-800">What is VentureX ERP & CRM?</h3>
                     <p class="text-sm text-ink-600">VentureX ERP & CRM is a unified business management platform designed for small to enterprise businesses. It integrates customer relationship management, sales, procurement, inventory, logistics, finance, and artificial intelligence into one cohesive system.</p>
 
                     <h3 class="text-base font-bold text-ink-800">Core Modules</h3>
                     <ul class="list-disc space-y-1 pl-5 text-sm text-ink-600">
-                        <li><strong>CRM</strong> â€” Manage customers, contacts, leads, opportunities, and activities</li>
-                        <li><strong>Sales</strong> â€” Handle quotations, orders, invoices, and payments</li>
-                        <li><strong>Procurement</strong> â€” Manage suppliers, purchase requisitions, orders, and RFQs</li>
-                        <li><strong>Inventory</strong> â€” Track products, warehouses, and stock levels</li>
-                        <li><strong>Logistics</strong> â€” Coordinate shipments, containers, and landed costs</li>
-                        <li><strong>Finance</strong> â€” Monitor chart of accounts, journals, receivables, and payables</li>
-                        <li><strong>AI Center</strong> â€” Leverage AI assistants, copilots, and document readers</li>
+                        <li><strong>CRM</strong> — Manage customers, contacts, leads, opportunities, and activities</li>
+                        <li><strong>Sales</strong> — Handle quotations, orders, invoices, and payments</li>
+                        <li><strong>Procurement</strong> — Manage suppliers, purchase requisitions, orders, and RFQs</li>
+                        <li><strong>Inventory</strong> — Track products, warehouses, and stock levels</li>
+                        <li><strong>Logistics</strong> — Coordinate shipments, containers, and landed costs</li>
+                        <li><strong>Finance</strong> — Monitor chart of accounts, journals, receivables, and payables</li>
+                        <li><strong>AI Center</strong> — Leverage AI assistants, copilots, and document readers</li>
                     </ul>
 
                     <h3 class="text-base font-bold text-ink-800">Quick Links</h3>
@@ -85,10 +85,10 @@
 
                     <h3 class="text-base font-bold text-ink-800">Server Requirements</h3>
                     <ul class="list-disc space-y-1 pl-5 text-sm text-ink-600">
-                        <li>PHP 8.2 or higher</li>
+                        <li>PHP 8.3 or higher</li>
                         <li>MySQL 8.0+ or MariaDB 10.6+</li>
                         <li>Composer 2.x</li>
-                        <li>Node.js 18+ and npm</li>
+                        <li>Node.js 20+ and npm</li>
                         <li>Laravel 13.x</li>
                     </ul>
 
@@ -147,11 +147,11 @@
                     <h3 class="text-base font-bold text-ink-800">Environment Variables</h3>
                     <p class="text-sm text-ink-600">Key settings in your <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">.env</code> file:</p>
                     <ul class="list-disc space-y-1 pl-5 text-sm text-ink-600">
-                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">APP_NAME</code> â€” Your company name (shown in the UI)</li>
-                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">APP_URL</code> â€” Your application URL</li>
-                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">DB_*</code> â€” Database connection settings</li>
-                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">MAIL_*</code> â€” Email configuration for notifications</li>
-                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">AI_* </code> â€” AI provider API keys (OpenAI, Anthropic, etc.)</li>
+                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">APP_NAME</code> — Your company name (shown in the UI)</li>
+                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">APP_URL</code> — Your application URL</li>
+                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">DB_*</code> — Database connection settings</li>
+                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">MAIL_*</code> — Email configuration for notifications</li>
+                        <li><code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">AI_* </code> — AI provider API keys (OpenAI, Anthropic, etc.)</li>
                     </ul>
 
                     <h3 class="text-base font-bold text-ink-800">Company Setup</h3>
@@ -172,7 +172,7 @@
                     <div class="divide-y divide-ink-100">
                         <div class="py-3">
                             <h3 class="text-sm font-bold text-ink-800">CRM Module</h3>
-                            <p class="mt-1 text-sm text-ink-600">Manage your entire customer lifecycle â€” from initial lead capture through opportunity tracking to closed deals. Includes contact management, activity logging, and a visual sales pipeline.</p>
+                            <p class="mt-1 text-sm text-ink-600">Manage your entire customer lifecycle — from initial lead capture through opportunity tracking to closed deals. Includes contact management, activity logging, and a visual sales pipeline.</p>
                         </div>
                         <div class="py-3">
                             <h3 class="text-sm font-bold text-ink-800">Sales Module</h3>
@@ -180,7 +180,7 @@
                         </div>
                         <div class="py-3">
                             <h3 class="text-sm font-bold text-ink-800">Procurement Module</h3>
-                            <p class="mt-1 text-sm text-ink-600">Streamline your purchasing workflow â€” from supplier management and RFQs to purchase requisitions and orders. Includes AI-powered procurement recommendations.</p>
+                            <p class="mt-1 text-sm text-ink-600">Streamline your purchasing workflow — from supplier management and RFQs to purchase requisitions and orders. Includes AI-powered procurement recommendations.</p>
                         </div>
                         <div class="py-3">
                             <h3 class="text-sm font-bold text-ink-800">Inventory Module</h3>

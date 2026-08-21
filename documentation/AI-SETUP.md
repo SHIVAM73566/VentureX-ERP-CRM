@@ -1,6 +1,6 @@
 # AI Setup Guide
 
-**VentureX ERP & CRM â€” AI-Powered CRM & ERP Business Operating System**
+**VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
 > Version 1.0.0 | AI Gateway and Provider Configuration
 
@@ -26,38 +26,38 @@ The AI Gateway is the central hub that manages all AI interactions within Ventur
 ### Architecture
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                 VentureX ERP & CRM                       â”‚
-â”‚                                                   â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”       â”‚
-â”‚  â”‚   Sales   â”‚  â”‚   CRM    â”‚  â”‚Inventory â”‚  ...  â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”˜       â”‚
-â”‚        â”‚            â”‚              â”‚               â”‚
-â”‚        â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜               â”‚
-â”‚                 â–¼                                  â”‚
-â”‚        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                          â”‚
-â”‚        â”‚   AI Service   â”‚                          â”‚
-â”‚        â””â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”˜                          â”‚
-â”‚                â–¼                                   â”‚
-â”‚     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                       â”‚
-â”‚     â”‚     AI Gateway       â”‚                       â”‚
-â”‚     â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚                       â”‚
-â”‚     â”‚  â”‚  Rate Limiter  â”‚  â”‚                       â”‚
-â”‚     â”‚  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤  â”‚                       â”‚
-â”‚     â”‚  â”‚  Cache Layer   â”‚  â”‚                       â”‚
-â”‚     â”‚  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤  â”‚                       â”‚
-â”‚     â”‚  â”‚  Quota Engine  â”‚  â”‚                       â”‚
-â”‚     â”‚  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤  â”‚                       â”‚
-â”‚     â”‚  â”‚  Router        â”‚  â”‚                       â”‚
-â”‚     â”‚  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤  â”‚                       â”‚
-â”‚     â”‚  â”‚  Fallback      â”‚  â”‚                       â”‚
-â”‚     â”‚  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤  â”‚                       â”‚
-â”‚     â”‚  â”‚  Cost Tracker  â”‚  â”‚                       â”‚
-â”‚     â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚                       â”‚
-â”‚     â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”¬â”€â”€â”€â”¬â”€â”€â”€â”¬â”€â”€â”€â”˜                       â”‚
-â”‚            â”‚   â”‚   â”‚   â”‚                            â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”¼â”€â”€â”€â”¼â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-             â–¼   â–¼   â–¼   â–¼
+—Œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—
+—‚                 VentureX ERP & CRM                       —‚
+—‚                                                   —‚
+—‚  —Œ—€—€—€—€—€—€—€—€—€—€—  —Œ—€—€—€—€—€—€—€—€—€—€—  —Œ—€—€—€—€—€—€—€—€—€—€—       —‚
+—‚  —‚   Sales   —‚  —‚   CRM    —‚  —‚Inventory —‚  ...  —‚
+—‚  —”—€—€—€—€—€——€—€—€—€—˜  —”—€—€—€—€——€—€—€—€—€—˜  —”—€—€—€—€——€—€—€—€—€—˜       —‚
+—‚        —‚            —‚              —‚               —‚
+—‚        —”—€—€—€—€—€—€—€—€——€—€—€—´—€—€—€—€—€—€—€—€—€—€—€—€—€—€—˜               —‚
+—‚                 –¼                                  —‚
+—‚        —Œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—                          —‚
+—‚        —‚   AI Service   —‚                          —‚
+—‚        —”—€—€—€—€—€—€—€——€—€—€—€—€—€—€—€—˜                          —‚
+—‚                –¼                                   —‚
+—‚     —Œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—                       —‚
+—‚     —‚     AI Gateway       —‚                       —‚
+—‚     —‚  —Œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—  —‚                       —‚
+—‚     —‚  —‚  Rate Limiter  —‚  —‚                       —‚
+—‚     —‚  —œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—¤  —‚                       —‚
+—‚     —‚  —‚  Cache Layer   —‚  —‚                       —‚
+—‚     —‚  —œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—¤  —‚                       —‚
+—‚     —‚  —‚  Quota Engine  —‚  —‚                       —‚
+—‚     —‚  —œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—¤  —‚                       —‚
+—‚     —‚  —‚  Router        —‚  —‚                       —‚
+—‚     —‚  —œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—¤  —‚                       —‚
+—‚     —‚  —‚  Fallback      —‚  —‚                       —‚
+—‚     —‚  —œ—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—¤  —‚                       —‚
+—‚     —‚  —‚  Cost Tracker  —‚  —‚                       —‚
+—‚     —‚  —”—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—˜  —‚                       —‚
+—‚     —”—€—€—€—€—€—€——€—€—€——€—€—€——€—€—€——€—€—€—˜                       —‚
+—‚            —‚   —‚   —‚   —‚                            —‚
+—”—€—€—€—€—€—€—€—€—€—€—€—€—¼—€—€—€—¼—€—€—€—¼—€—€—€—¼—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—€—˜
+             –¼   –¼   –¼   –¼
          NVIDIA Swift Gemini Claude DeepSeek
 ```
 
@@ -181,10 +181,10 @@ When a quota is reached:
 
 Navigate to **Settings > AI Providers > Usage Dashboard** to view:
 
-- **Usage by User** â€” Who is using the most AI resources
-- **Usage by Module** â€” Which features consume the most queries
-- **Usage by Provider** â€” Distribution across providers
-- **Cost Breakdown** â€” Estimated cost per user, module, and provider
+- **Usage by User** — Who is using the most AI resources
+- **Usage by Module** — Which features consume the most queries
+- **Usage by Provider** — Distribution across providers
+- **Cost Breakdown** — Estimated cost per user, module, and provider
 
 ---
 
@@ -210,8 +210,8 @@ From the admin panel:
 
 1. Navigate to **Settings > AI Providers > Cache**.
 2. View cache statistics:
-   - **Hit Rate** â€” Percentage of queries served from cache
-   - **Total Cached** â€” Number of cached responses
+   - **Hit Rate** — Percentage of queries served from cache
+   - **Total Cached** — Number of cached responses
 3. Click **Clear Cache** to flush all cached responses.
 
 ### Cache Invalidation
@@ -250,16 +250,16 @@ AI_FALLBACK_ORDER=gemini,deepseek
 
 The system tries providers in this order:
 
-1. **Primary** â€” The provider set in `AI_PROVIDER`
-2. **Fallback 1** â€” First provider in `AI_FALLBACK_ORDER`
-3. **Fallback 2** â€” Second provider in `AI_FALLBACK_ORDER`
+1. **Primary** — The provider set in `AI_PROVIDER`
+2. **Fallback 1** — First provider in `AI_FALLBACK_ORDER`
+3. **Fallback 2** — Second provider in `AI_FALLBACK_ORDER`
 
 ### Provider Health Monitoring
 
 A provider that fails repeatedly within the health window is temporarily skipped:
 
-- `AI_HEALTH_MAX_FAILURES` â€” Number of failures before skipping (default: 3)
-- `AI_HEALTH_WINDOW` â€” Time window in seconds (default: 600)
+- `AI_HEALTH_MAX_FAILURES` — Number of failures before skipping (default: 3)
+- `AI_HEALTH_WINDOW` — Time window in seconds (default: 600)
 
 A successful request resets the failure counter.
 
@@ -297,11 +297,11 @@ Estimated cost per million tokens is configured in `config/ai.php` under `cost_p
 
 Navigate to **Settings > AI Providers > Cost Dashboard** to view:
 
-- **Daily Cost** â€” Estimated cost per day
-- **Monthly Cost** â€” Running total for the current month
-- **Cost by Provider** â€” Breakdown by provider
-- **Cost by User** â€” Per-user spending
-- **Cost by Feature** â€” Which AI features cost the most
+- **Daily Cost** — Estimated cost per day
+- **Monthly Cost** — Running total for the current month
+- **Cost by Provider** — Breakdown by provider
+- **Cost by User** — Per-user spending
+- **Cost by Feature** — Which AI features cost the most
 
 ---
 
@@ -309,43 +309,43 @@ Navigate to **Settings > AI Providers > Cost Dashboard** to view:
 
 ### Sales Module AI Features
 
-- **Sales Forecasting** â€” Predict future revenue based on historical data, pipeline, and market trends.
-- **Lead Scoring** â€” Automatically score leads based on conversion probability.
-- **Deal Insights** â€” Analyze opportunity health and recommend next actions.
-- **Email Generation** â€” Draft follow-up emails and proposals.
-- **Competitor Analysis** â€” Summarize competitive landscape for a deal.
+- **Sales Forecasting** — Predict future revenue based on historical data, pipeline, and market trends.
+- **Lead Scoring** — Automatically score leads based on conversion probability.
+- **Deal Insights** — Analyze opportunity health and recommend next actions.
+- **Email Generation** — Draft follow-up emails and proposals.
+- **Competitor Analysis** — Summarize competitive landscape for a deal.
 
 ### CRM Module AI Features
 
-- **Customer Segmentation** â€” Identify customer segments and patterns.
-- **Churn Prediction** â€” Flag at-risk customers before they leave.
-- **Recommendation Engine** â€” Suggest cross-sell and upsell opportunities.
-- **Sentiment Analysis** â€” Analyze customer feedback and communications.
-- **Contact Enrichment** â€” Suggest missing contact information.
+- **Customer Segmentation** — Identify customer segments and patterns.
+- **Churn Prediction** — Flag at-risk customers before they leave.
+- **Recommendation Engine** — Suggest cross-sell and upsell opportunities.
+- **Sentiment Analysis** — Analyze customer feedback and communications.
+- **Contact Enrichment** — Suggest missing contact information.
 
 ### Inventory Module AI Features
 
-- **Demand Forecasting** â€” Predict product demand for better stock management.
-- **Reorder Optimization** â€” Calculate optimal reorder quantities and timing.
-- **Dead Stock Detection** â€” Identify slow-moving and obsolete inventory.
-- **Price Optimization** â€” Suggest pricing adjustments based on market data.
-- **Supplier Risk Assessment** â€” Evaluate supplier reliability and risk.
+- **Demand Forecasting** — Predict product demand for better stock management.
+- **Reorder Optimization** — Calculate optimal reorder quantities and timing.
+- **Dead Stock Detection** — Identify slow-moving and obsolete inventory.
+- **Price Optimization** — Suggest pricing adjustments based on market data.
+- **Supplier Risk Assessment** — Evaluate supplier reliability and risk.
 
 ### Finance Module AI Features
 
-- **Anomaly Detection** â€” Identify unusual financial transactions.
-- **Cash Flow Prediction** â€” Forecast future cash positions.
-- **Expense Categorization** â€” Auto-categorize expenses.
-- **Budget Variance Analysis** â€” Analyze deviations from budget.
-- **Tax Optimization** â€” Identify tax-saving opportunities.
+- **Anomaly Detection** — Identify unusual financial transactions.
+- **Cash Flow Prediction** — Forecast future cash positions.
+- **Expense Categorization** — Auto-categorize expenses.
+- **Budget Variance Analysis** — Analyze deviations from budget.
+- **Tax Optimization** — Identify tax-saving opportunities.
 
 ### Document Module AI Features
 
-- **Document Summarization** â€” Generate summaries of long documents.
-- **Key Information Extraction** â€” Pull important data from documents.
-- **Contract Analysis** â€” Identify key terms and risks in contracts.
-- **OCR Enhancement** â€” Improve text extraction from scanned documents.
-- **Document Classification** â€” Auto-categorize uploaded documents.
+- **Document Summarization** — Generate summaries of long documents.
+- **Key Information Extraction** — Pull important data from documents.
+- **Contract Analysis** — Identify key terms and risks in contracts.
+- **OCR Enhancement** — Improve text extraction from scanned documents.
+- **Document Classification** — Auto-categorize uploaded documents.
 
 ---
 
@@ -391,7 +391,7 @@ Navigate to **Settings > AI Providers > Cost Dashboard** to view:
 
 AI-related activity is logged in:
 
-- `storage/logs/laravel.log` â€” General application errors including AI gateway errors
+- `storage/logs/laravel.log` — General application errors including AI gateway errors
 
 Filter AI-specific logs:
 

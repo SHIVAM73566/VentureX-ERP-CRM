@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Upload Selfie â€” {{ config('app.name', 'VentureX ERP & CRM') }}</title>
+    <title>Upload Selfie — {{ config('app.name', 'VentureX ERP & CRM') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>

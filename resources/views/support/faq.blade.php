@@ -86,7 +86,7 @@
                     <svg :class="open === 1 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <div x-show="open === 1" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    You need PHP 8.2+, MySQL 8.0+, Composer 2.x, Node.js 18+, and at least 512 MB of memory. See our Installation Guide for full details.
+                    You need PHP 8.3+, MySQL 8.0+, Composer 2.x, Node.js 20+, and at least 512 MB of memory. See our Installation Guide for full details.
                 </div>
             </div>
 

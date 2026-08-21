@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-**VentureX ERP & CRM â€” AI-Powered CRM & ERP Business Operating System**
+**VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
 > Version 1.0.0
 
@@ -14,7 +14,7 @@ VentureX ERP & CRM is an AI-powered CRM and ERP business operating system design
 
 ### What technology stack does it use?
 
-VentureX ERP & CRM is built on Laravel 13.25 (PHP 8.2+), with Blade templates, Alpine.js 3 for interactivity, Tailwind CSS v4 for styling, MySQL 8.0 for data storage, and Vite for asset compilation. It supports Redis for caching and queuing in production.
+VentureX ERP & CRM is built on Laravel 13.25 (PHP 8.3+), with Blade templates, Alpine.js 3 for interactivity, Tailwind CSS v4 for styling, MySQL 8.0 for data storage, and Vite for asset compilation. It supports Redis for caching and queuing in production.
 
 ### Is there a free trial or demo available?
 
@@ -46,7 +46,7 @@ VentureX ERP & CRM supports the latest versions of Chrome, Firefox, Safari, and 
 
 ### What are the minimum server requirements?
 
-You need PHP 8.2+, MySQL 8.0, a web server (Apache or Nginx), Composer 2.8+, and Node.js 20+. A minimum of 2 GB RAM and 2 GB disk space is required. See [INSTALLATION.md](INSTALLATION.md) for the full list.
+You need PHP 8.3+, MySQL 8.0, a web server (Apache or Nginx), Composer 2.8+, and Node.js 20+. A minimum of 2 GB RAM and 2 GB disk space is required. See [INSTALLATION.md](INSTALLATION.md) for the full list.
 
 ### How do I install VentureX ERP & CRM?
 

@@ -123,13 +123,13 @@ Interactive wizard that guides you through the entire installation process.
 
 VentureX ERP & CRM includes comprehensive security features:
 
-- **3-Step Registration** â€” Email, Phone, and Selfie verification
-- **Multi-Factor Authentication** â€” TOTP-based 2FA
-- **App Lock** â€” 6-digit PIN protection
-- **Device Trust** â€” Trusted device management
-- **RBAC** â€” Role-based access control
-- **Audit Logging** â€” Complete activity tracking
-- **Emergency Lockdown** â€” System-wide security mode
+- **3-Step Registration** — Email, Phone, and Selfie verification
+- **Multi-Factor Authentication** — TOTP-based 2FA
+- **App Lock** — 6-digit PIN protection
+- **Device Trust** — Trusted device management
+- **RBAC** — Role-based access control
+- **Audit Logging** — Complete activity tracking
+- **Emergency Lockdown** — System-wide security mode
 
 See [SECURITY.md](SECURITY.md) for detailed security documentation.
 
@@ -137,11 +137,11 @@ See [SECURITY.md](SECURITY.md) for detailed security documentation.
 
 VentureX ERP & CRM integrates with multiple AI providers:
 
-- **GPT-5** â€” OpenAI's latest model
-- **Claude** â€” Anthropic's AI assistant
-- **Gemini** â€” Google's AI model
-- **DeepSeek** â€” Advanced reasoning model
-- **NVIDIA** â€” Enterprise AI platform
+- **GPT-5** — OpenAI's latest model
+- **Claude** — Anthropic's AI assistant
+- **Gemini** — Google's AI model
+- **DeepSeek** — Advanced reasoning model
+- **NVIDIA** — Enterprise AI platform
 
 Configure your preferred provider in Settings > AI Configuration.
 
@@ -154,6 +154,6 @@ Configure your preferred provider in Settings > AI Configuration.
 
 ## ðŸ“ License
 
-VentureX ERP & CRM is licensed under a Commercial License â€” see the [LICENSE](../LICENSE) file for details.
+VentureX ERP & CRM is licensed under a Commercial License — see the [LICENSE](../LICENSE) file for details.
 
 > **Note:** This software is proprietary. Unauthorized copying, modification, or distribution is prohibited.

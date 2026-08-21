@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Reset Password â€” {{ config('app.name', 'VentureX ERP & CRM') }}</title>
+    <title>Reset Password — {{ config('app.name', 'VentureX ERP & CRM') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -62,7 +62,7 @@
 
                     <div>
                         <label for="password" class="label">New password</label>
-                        <input id="password" type="password" name="password" required autocomplete="new-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" class="input">
+                        <input id="password" type="password" name="password" required autocomplete="new-password" placeholder="—¢—¢—¢—¢—¢—¢—¢—¢" class="input">
                         <p class="mt-1 text-xs text-ink-500">Min 10 chars, uppercase, lowercase, number, and special character.</p>
                         @error('password')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
@@ -71,7 +71,7 @@
 
                     <div>
                         <label for="password_confirmation" class="label">Confirm password</label>
-                        <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" class="input">
+                        <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="—¢—¢—¢—¢—¢—¢—¢—¢" class="input">
                     </div>
 
                     @if ($errors->any())

@@ -436,7 +436,7 @@ Second, npm install fails with a Node version error —
 
 110
 00:07:13,000 --> 00:07:17,000
-VentureX requires Node 18 or later.
+VentureX requires Node 20 or later.
 
 111
 00:07:17,000 --> 00:07:21,000

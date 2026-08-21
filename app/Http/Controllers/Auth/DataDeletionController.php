@@ -117,7 +117,7 @@ class DataDeletionController extends Controller
     }
 
     /**
-     * Anonymize user data â€” replaces all PII with anonymous values.
+     * Anonymize user data — replaces all PII with anonymous values.
      * Preserves referential integrity for audit trails.
      */
     protected function anonymizeUser(User $user): void

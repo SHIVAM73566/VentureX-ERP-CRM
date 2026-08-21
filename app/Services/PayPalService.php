@@ -51,7 +51,7 @@ class PayPalService
 
     /**
      * Create a PayPal order for a standard plan purchase.
-     * Server-side price calculation â€” never trusts client input.
+     * Server-side price calculation — never trusts client input.
      */
     public function createOrder(string $planKey, int $userId): array
     {
@@ -198,7 +198,7 @@ class PayPalService
     public function verifyWebhookSignature(array $headers, string $body): bool
     {
         if (empty($this->webhookId)) {
-            Log::warning('PayPal webhook verification skipped â€” no webhook_id configured');
+            Log::warning('PayPal webhook verification skipped — no webhook_id configured');
 
             return false;
         }

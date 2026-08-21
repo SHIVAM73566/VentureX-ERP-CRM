@@ -153,7 +153,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>{{ $title ? $title.' â€” ' : '' }}{{ config('app.name', 'MyERP') }}</title>
+    <title>{{ $title ? $title.' — ' : '' }}{{ config('app.name', 'MyERP') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <script>
         if (localStorage.getItem('theme') === 'dark') {
@@ -236,7 +236,7 @@
 
                 <form action="{{ route('search') }}" method="GET" class="relative hidden max-w-md flex-1 md:block">
                     <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400 dark:text-ink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['search'] }}"/></svg>
-                    <input type="search" name="q" placeholder="Search customers, suppliers, leads, offersâ€¦" class="w-full rounded-lg border border-ink-200 bg-ink-50 py-2 pl-9 pr-3 text-sm text-ink-700 placeholder-ink-400 focus:border-navy-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-navy-500/20 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-200 dark:placeholder-ink-500 dark:focus:border-navy-400 dark:focus:bg-ink-900 dark:focus:ring-navy-400/30">
+                    <input type="search" name="q" placeholder="Search customers, suppliers, leads, offers—¦" class="w-full rounded-lg border border-ink-200 bg-ink-50 py-2 pl-9 pr-3 text-sm text-ink-700 placeholder-ink-400 focus:border-navy-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-navy-500/20 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-200 dark:placeholder-ink-500 dark:focus:border-navy-400 dark:focus:bg-ink-900 dark:focus:ring-navy-400/30">
                 </form>
 
                 <div class="ml-auto flex items-center gap-1">
@@ -320,7 +320,7 @@
             </main>
 
             <footer class="border-t border-ink-200 px-6 py-4 text-xs text-ink-400 flex items-center justify-between dark:border-ink-800 dark:text-ink-500">
-                <span>Â© {{ date('Y') }} {{ config('app.name') }} â€” Universal CRM + ERP + AI Business Operating System</span>
+                <span>Â© {{ date('Y') }} {{ config('app.name') }} — Universal CRM + ERP + AI Business Operating System</span>
                 <a href="{{ route('pages.about') }}" class="hover:text-ink-600 dark:hover:text-ink-300">About</a>
             </footer>
         </div>

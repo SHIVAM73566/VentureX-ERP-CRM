@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| VentureX ERP & CRM â€” AI Gateway Configuration
+| VentureX ERP & CRM — AI Gateway Configuration
 |--------------------------------------------------------------------------
 | All provider calls are made by the backend AI Gateway only. The browser
 | never talks to a provider directly. API keys are injected via environment
@@ -59,7 +59,7 @@ return [
     ],
 
     /*
-    | AI Quota System â€” daily and weekly limits per user, role, and company.
+    | AI Quota System — daily and weekly limits per user, role, and company.
     | When a quota is exhausted the gateway blocks further requests and the
     | UI offers a "Request More AI Access" button for admin approval.
     */
@@ -104,7 +104,7 @@ return [
     | General purpose   -> NVIDIA first (fast default)
     */
     'task_routing' => [
-        // Complex analysis â€” Gemini excels at long-context reasoning
+        // Complex analysis — Gemini excels at long-context reasoning
         'deep_analysis' => ['providers' => ['gemini', 'nvidia', 'openai'], 'fallback' => 'local'],
         'executive_summary' => ['providers' => ['gemini', 'nvidia', 'openai'], 'fallback' => 'local'],
         'executive_review' => ['providers' => ['gemini', 'nvidia', 'openai'], 'fallback' => 'local'],
@@ -118,19 +118,19 @@ return [
         'supplier_comparison' => ['providers' => ['gemini', 'nvidia', 'openai'], 'fallback' => 'local'],
         'daily_priorities' => ['providers' => ['gemini', 'nvidia', 'openai'], 'fallback' => 'local'],
 
-        // Code/technical â€” NVIDIA and OpenAI are strongest for code
+        // Code/technical — NVIDIA and OpenAI are strongest for code
         'code_review' => ['providers' => ['nvidia', 'openai'], 'fallback' => 'local'],
         'technical_analysis' => ['providers' => ['nvidia', 'openai'], 'fallback' => 'local'],
 
-        // Creative/analysis â€” Gemini and OpenAI for creative writing
+        // Creative/analysis — Gemini and OpenAI for creative writing
         'creative_writing' => ['providers' => ['gemini', 'openai'], 'fallback' => 'local'],
         'market_analysis' => ['providers' => ['gemini', 'nvidia', 'openai'], 'fallback' => 'local'],
 
-        // Quick tasks â€” fast/cheap providers first
+        // Quick tasks — fast/cheap providers first
         'quick_question' => ['providers' => ['nvidia', 'openai', 'gemini'], 'fallback' => 'local'],
         'data_lookup' => ['providers' => ['nvidia', 'gemini'], 'fallback' => 'local'],
 
-        // General purpose â€” NVIDIA first (fast, good default)
+        // General purpose — NVIDIA first (fast, good default)
         'general' => ['providers' => ['nvidia', 'gemini', 'openai'], 'fallback' => 'local'],
         'general_assistant' => ['providers' => ['nvidia', 'gemini', 'openai'], 'fallback' => 'local'],
         'chat' => ['providers' => ['nvidia', 'gemini', 'openai'], 'fallback' => 'local'],
@@ -226,7 +226,7 @@ return [
     | path '/' targets the RapidAPI host root (DeepSeek).
     */
     'providers' => [
-        // Disabled â€” swift-ai.p.rapidapi.com is unreliable/unavailable.
+        // Disabled — swift-ai.p.rapidapi.com is unreliable/unavailable.
         // Re-enable only with a verified RapidAPI subscription.
         'swift' => [
             'base_url' => env('SWIFT_AI_ENDPOINT', 'https://swift-ai.p.rapidapi.com/chat/completions'),
@@ -253,7 +253,7 @@ return [
             'api_key' => env('RAPIDAPI_KEY', ''),
             'auth_mode' => 'rapidapi',
         ],
-        // Disabled â€” claude-3-5-sonnet.p.rapidapi.com is a fake/unreliable endpoint.
+        // Disabled — claude-3-5-sonnet.p.rapidapi.com is a fake/unreliable endpoint.
         // Use the official 'anthropic' provider with a direct API key instead.
         'claude' => [
             'base_url' => env('CLAUDE_RAPIDAPI_ENDPOINT', 'https://claude-3-5-sonnet.p.rapidapi.com/'),

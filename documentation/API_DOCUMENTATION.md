@@ -1,6 +1,6 @@
 # API Documentation
 
-VentureX ERP & CRM is a server-rendered application built with Laravel Blade, Alpine.js, and Livewire. There is no public REST API.
+VentureX ERP & CRM is a server-rendered application built with Laravel Blade, Alpine.js, and Livewire, complemented by a full RESTful API authenticated via Laravel Sanctum tokens. See `routes/api.php` for the complete route definitions.
 
 This document describes the internal application architecture, routing structure, and integration points.
 
@@ -12,10 +12,10 @@ VentureX ERP & CRM uses a **monolithic server-rendered architecture**:
 
 - **Server-side rendering** via Laravel Blade templates
 - **Client-side interactivity** via Alpine.js and Livewire
-- **No public REST/GraphQL API endpoints**
-- **Session-based authentication** (not token-based)
+- **Full REST API** under `/api` (defined in `routes/api.php` with 18 controllers)
+- **Session-based authentication** for web routes; **Laravel Sanctum token authentication** for API routes
 
-All data operations occur through Blade routes and Livewire components, not through API endpoints.
+Web UI data operations occur through Blade routes and Livewire components, while external integrations use the REST API.
 
 ---
 
@@ -48,13 +48,13 @@ All routes are defined in `routes/web.php` and protected by authentication middl
 
 All routes pass through these middleware layers:
 
-1. **TrustProxies** â€“ Handles proxy headers
-2. **PreventRequestsDuringMaintenance** â€“ Maintenance mode
-3. **ValidatePostSize** â€“ Request size limits
-4. **TrimStrings** â€“ Input trimming
-5. **ConvertEmptyStringsToNull** â€“ Null conversion
-6. **Authenticate** â€“ Session authentication
-7. **Authorize** â€“ Role/permission checking (Spatie Permission)
+1. **TrustProxies** — Handles proxy headers
+2. **PreventRequestsDuringMaintenance** — Maintenance mode
+3. **ValidatePostSize** — Request size limits
+4. **TrimStrings** — Input trimming
+5. **ConvertEmptyStringsToNull** — Null conversion
+6. **Authenticate** — Session authentication
+7. **Authorize** — Role/permission checking (Spatie Permission)
 
 ### Role-Based Route Protection
 
@@ -76,25 +76,25 @@ Livewire provides dynamic, server-rendered interactive components without writin
 
 ```
 app/Livewire/
-â”œâ”€â”€ CRM/
-â”‚   â”œâ”€â”€ CustomerList.php
-â”‚   â”œâ”€â”€ CustomerForm.php
-â”‚   â””â”€â”€ ...
-â”œâ”€â”€ Sales/
-â”‚   â”œâ”€â”€ QuotationList.php
-â”‚   â””â”€â”€ ...
-â”œâ”€â”€ Procurement/
-â”‚   â””â”€â”€ ...
-â”œâ”€â”€ Inventory/
-â”‚   â””â”€â”€ ...
-â”œâ”€â”€ Logistics/
-â”‚   â””â”€â”€ ...
-â”œâ”€â”€ Finance/
-â”‚   â””â”€â”€ ...
-â”œâ”€â”€ AI/
-â”‚   â””â”€â”€ ...
-â””â”€â”€ Admin/
-    â””â”€â”€ ...
+—œ—€—€ CRM/
+—‚   —œ—€—€ CustomerList.php
+—‚   —œ—€—€ CustomerForm.php
+—‚   —”—€—€ ...
+—œ—€—€ Sales/
+—‚   —œ—€—€ QuotationList.php
+—‚   —”—€—€ ...
+—œ—€—€ Procurement/
+—‚   —”—€—€ ...
+—œ—€—€ Inventory/
+—‚   —”—€—€ ...
+—œ—€—€ Logistics/
+—‚   —”—€—€ ...
+—œ—€—€ Finance/
+—‚   —”—€—€ ...
+—œ—€—€ AI/
+—‚   —”—€—€ ...
+—”—€—€ Admin/
+    —”—€—€ ...
 ```
 
 ### Livewire Events
@@ -207,7 +207,7 @@ All forms and Livewire requests include CSRF tokens:
 
 ## Integration Points
 
-While no public API exists, VentureX ERP & CRM supports:
+In addition to the REST API (see `routes/api.php` and the root `API-SETUP.md` for endpoint details), VentureX ERP & CRM supports:
 
 ### File Imports
 
@@ -281,12 +281,12 @@ All models follow standard Eloquent patterns:
 
 ---
 
-## Future API Support
+## API Availability
 
-A REST API layer is planned for future releases to support:
+The REST API described above is available today, implemented in `routes/api.php` with token-based authentication via Laravel Sanctum (the `TokenController` issues and manages personal access tokens). It supports:
+
 - Third-party integrations
 - Mobile applications
-- Webhook delivery
 - External system connectivity
 
-This will be implemented as a separate API module with token-based authentication (Laravel Sanctum).
+Planned enhancements include webhook delivery. See the root `API-SETUP.md` for authentication examples and endpoint listings.

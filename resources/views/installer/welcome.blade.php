@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Installer â€” VentureX ERP & CRM</title>
+    <title>Installer — VentureX ERP & CRM</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {

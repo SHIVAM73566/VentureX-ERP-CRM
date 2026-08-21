@@ -1,6 +1,6 @@
 # API Setup Guide
 
-**VentureX ERP & CRM â€” AI-Powered CRM & ERP Business Operating System**
+**VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
 > Version 1.0.0 | AI Provider and API Configuration
 
@@ -40,14 +40,14 @@ VentureX ERP & CRM integrates with multiple AI providers through a unified gatew
 
 ```
 Application Request
-        â”‚
-        â–¼
-   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-   â”‚  AI Gateway  â”‚
-   â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”˜
-          â”‚
-    â”Œâ”€â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-    â–¼     â–¼     â–¼         â–¼          â–¼
+        —‚
+        –¼
+   —Œ—€—€—€—€—€—€—€—€—€—€—€—€—€—
+   —‚  AI Gateway  —‚
+   —”—€—€—€—€—€—€——€—€—€—€—€—€—˜
+          —‚
+    —Œ—€—€—€—€—€—¼—€—€—€—€—€——€—€—€—€—€—€—€—€—€——€—€—€—€—€—€—€—€—€—€—
+    –¼     –¼     –¼         –¼          –¼
  NVIDIA Swift Gemini DeepSeek Claude
 ```
 
@@ -134,9 +134,9 @@ Example fallback chain:
 
 ```
 Primary: NVIDIA NIM
-  â””â”€ Fallback 1: Google Gemini
-       â””â”€ Fallback 2: Anthropic Claude
-            â””â”€ Fallback 3: DeepSeek
+  —”—€ Fallback 1: Google Gemini
+       —”—€ Fallback 2: Anthropic Claude
+            —”—€ Fallback 3: DeepSeek
 ```
 
 ---
@@ -350,7 +350,7 @@ Default limits (varies by plan):
 
 ### Storing API Keys
 
-API keys are stored encrypted in the database using Laravel's built-in encryption. They are never exposed in full in the admin panel â€” only the last 4 characters are shown.
+API keys are stored encrypted in the database using Laravel's built-in encryption. They are never exposed in full in the admin panel — only the last 4 characters are shown.
 
 ### Key Rotation
 
@@ -374,11 +374,11 @@ API keys are stored encrypted in the database using Laravel's built-in encryptio
 
 Navigate to **Settings > AI Providers > Usage** to view:
 
-- **Calls Today** â€” Number of API calls made today
-- **Tokens Used** â€” Total tokens consumed today
-- **Cost Estimate** â€” Estimated cost based on provider pricing
-- **Error Rate** â€” Percentage of failed requests
-- **Average Response Time** â€” Mean latency per provider
+- **Calls Today** — Number of API calls made today
+- **Tokens Used** — Total tokens consumed today
+- **Cost Estimate** — Estimated cost based on provider pricing
+- **Error Rate** — Percentage of failed requests
+- **Average Response Time** — Mean latency per provider
 
 ---
 
@@ -403,9 +403,9 @@ VentureX ERP & CRM enforces rate limiting to prevent abuse and control costs.
 1. Navigate to **Settings > Security > Rate Limits**.
 2. Adjust limits for each scope.
 3. Configure response behavior when limits are exceeded:
-   - **Return Error** â€” Return a 429 status code
-   - **Queue Request** â€” Add to a processing queue
-   - **Degrade Gracefully** â€” Use cached or simplified responses
+   - **Return Error** — Return a 429 status code
+   - **Queue Request** — Add to a processing queue
+   - **Degrade Gracefully** — Use cached or simplified responses
 
 ### Provider-Level Rate Limits
 
@@ -434,10 +434,10 @@ Configure webhooks to notify external systems of events:
 1. Navigate to **Settings > Webhooks**.
 2. Click **+ New Webhook**.
 3. Configure:
-   - **URL** â€” The endpoint to receive webhook payloads
-   - **Events** â€” Select which events trigger the webhook
-   - **Secret** â€” A shared secret for payload verification
-   - **Headers** â€” Custom headers to include in the request
+   - **URL** — The endpoint to receive webhook payloads
+   - **Events** — Select which events trigger the webhook
+   - **Secret** — A shared secret for payload verification
+   - **Headers** — Custom headers to include in the request
 4. Click **Test Webhook** to verify connectivity.
 5. Click **Save**.
 

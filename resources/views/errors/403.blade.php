@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Access Denied â€” {{ config('app.name', 'VentureX ERP & CRM') }}</title>
+    <title>Access Denied — {{ config('app.name', 'VentureX ERP & CRM') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="stylesheet" href="{{ asset('build/assets/fonts-C9MNnjVw.css') }}">
     @vite(['resources/css/app.css'])

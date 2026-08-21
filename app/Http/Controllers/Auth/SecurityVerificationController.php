@@ -91,7 +91,7 @@ class SecurityVerificationController extends Controller
             return redirect()->route('register');
         }
 
-        // Verify phone OTP â€” always required, no bypass
+        // Verify phone OTP — always required, no bypass
         $phoneOtp = $request->input('phone_otp');
         if (! AdvancedSecurityService::verifyPhoneOtp($step2['email'] ?? $step1['email'], $phoneOtp)) {
             return back()->withErrors(['phone_otp' => 'Invalid phone code']);

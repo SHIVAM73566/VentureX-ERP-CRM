@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Installing â€” VentureX ERP & CRM</title>
+    <title>Installing — VentureX ERP & CRM</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -150,7 +150,7 @@
 
                 if (!response.ok || data.error) {
                     for (let i = 0; i < stepLabels.length; i++) {
-                        renderStep(i, stepLabels[i] + (i === stepLabels.length - 1 ? ' â€” ' + (data.error || 'Failed') : ''), i === stepLabels.length - 1 ? 'error' : (i < stepLabels.length - 1 ? 'done' : 'running'));
+                        renderStep(i, stepLabels[i] + (i === stepLabels.length - 1 ? ' — ' + (data.error || 'Failed') : ''), i === stepLabels.length - 1 ? 'error' : (i < stepLabels.length - 1 ? 'done' : 'running'));
                     }
                     errorBox.textContent = 'Installation failed: ' + (data.error || 'Unknown error');
                     errorBox.classList.remove('hidden');
@@ -162,11 +162,11 @@
                 }
 
                 progressFill.style.width = '100%';
-                progressText.textContent = '100% â€” Complete!';
+                progressText.textContent = '100% — Complete!';
                 successBox.classList.remove('hidden');
 
             } catch (err) {
-                renderStep(stepLabels.length - 1, stepLabels[stepLabels.length - 1] + ' â€” ' + err.message, 'error');
+                renderStep(stepLabels.length - 1, stepLabels[stepLabels.length - 1] + ' — ' + err.message, 'error');
                 errorBox.textContent = 'Installation failed: ' + err.message;
                 errorBox.classList.remove('hidden');
             }

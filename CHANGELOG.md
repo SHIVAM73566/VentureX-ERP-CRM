@@ -1,4 +1,4 @@
-# Changelog â€” VentureX ERP & CRM
+# Changelog — VentureX ERP & CRM
 
 All notable changes to VentureX ERP & CRM are documented in this file.
 
@@ -6,12 +6,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Sem
 
 ---
 
-## [1.0.0] â€” 2026-08-16
+## [1.0.0] — 2026-08-16
 
 ### Initial Release
 
 #### CRM & Sales
-- 360Â° customer profiles with full interaction history
+- 360Â� customer profiles with full interaction history
 - Lead capture, scoring, and lifecycle tracking
 - Sales pipeline with drag-and-drop deal stages
 - Quotation builder with multi-level approval workflows

@@ -57,10 +57,10 @@ Manage your customer database.
 Track potential customers through the sales funnel.
 
 **Lead Stages:**
-1. New â€“ Initial contact
-2. Contacted â€“ First communication made
-3. Qualified â€“ Meets criteria
-4. Unqualified â€“ Does not meet criteria
+1. New — Initial contact
+2. Contacted — First communication made
+3. Qualified — Meets criteria
+4. Unqualified — Does not meet criteria
 
 **Create Lead:**
 1. Click "New Lead"
@@ -131,11 +131,11 @@ Create and send price quotations to customers.
 7. Save as draft or send directly
 
 **Quotation Statuses:**
-- Draft â€“ Being prepared
-- Sent â€“ Delivered to customer
-- Accepted â€“ Customer approved
-- Rejected â€“ Customer declined
-- Expired â€“ Validity period passed
+- Draft — Being prepared
+- Sent — Delivered to customer
+- Accepted — Customer approved
+- Rejected — Customer declined
+- Expired — Validity period passed
 
 **Actions:**
 - Convert to Sales Order

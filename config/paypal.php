@@ -56,7 +56,7 @@ return [
     | Plans & Pricing
     |--------------------------------------------------------------------------
     |
-    | Server-side pricing â€” NEVER trust client-submitted prices.
+    | Server-side pricing — NEVER trust client-submitted prices.
     | All prices are in cents (integer) to avoid floating-point issues.
     |
     */
@@ -66,21 +66,21 @@ return [
             'price_cents' => 4900,      // $49.00
             'currency' => 'USD',
             'billing_cycle' => 'one_time',
-            'description' => 'VentureX ERP & CRM Starter â€” Single site license with 6 months support',
+            'description' => 'VentureX ERP & CRM Starter — Single site license with 6 months support',
         ],
         'professional' => [
             'name' => 'Professional Plan',
             'price_cents' => 14900,     // $149.00
             'currency' => 'USD',
             'billing_cycle' => 'one_time',
-            'description' => 'VentureX ERP & CRM Professional â€” Single site license with 12 months support',
+            'description' => 'VentureX ERP & CRM Professional — Single site license with 12 months support',
         ],
         'enterprise' => [
             'name' => 'Enterprise Plan',
             'price_cents' => 49900,     // $499.00
             'currency' => 'USD',
             'billing_cycle' => 'one_time',
-            'description' => 'VentureX ERP & CRM Enterprise â€” Priority support with source code access',
+            'description' => 'VentureX ERP & CRM Enterprise — Priority support with source code access',
         ],
         'custom_donation' => [
             'name' => 'Custom Payment / Feature Request',

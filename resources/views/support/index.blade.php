@@ -93,7 +93,7 @@
                     <div class="flex items-start gap-3">
                         <span class="mt-0.5 flex h-2 w-2 shrink-0 rounded-full bg-emerald-500"></span>
                         <div>
-                            <p class="text-sm font-semibold text-ink-800">Scheduled Maintenance â€” August 20</p>
+                            <p class="text-sm font-semibold text-ink-800">Scheduled Maintenance — August 20</p>
                             <p class="mt-0.5 text-xs text-ink-500">August 12, 2026</p>
                             <p class="mt-1 text-sm text-ink-600">We will perform infrastructure upgrades from 02:00 to 06:00 UTC. The system may be briefly unavailable.</p>
                         </div>

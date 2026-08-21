@@ -1,6 +1,6 @@
 # Database Setup Guide
 
-**VentureX ERP & CRM â€” AI-Powered CRM & ERP Business Operating System**
+**VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
 > Version 1.0.0 | MySQL 8.0 Configuration and Management
 
@@ -313,7 +313,7 @@ php artisan db:seed --class=DemoDataSeeder
 
 Creates the default company:
 
-- **Jain Metal** â€” Primary demo company
+- **Jain Metal** — Primary demo company
 
 #### UserSeeder
 

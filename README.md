@@ -65,7 +65,7 @@ A complete, production-ready AI-powered CRM and ERP business operating system bu
 - PHP 8.3+
 - MySQL 8.0+ or MariaDB 10.6+
 - Composer
-- Node.js 18+
+- Node.js 20+
 
 ### Installation
 

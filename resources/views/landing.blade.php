@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name') }} â€” CRM + ERP + AI Business Operating System</title>
+    <title>{{ config('app.name') }} — CRM + ERP + AI Business Operating System</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <meta name="description" content="VentureX ERP & CRM is a universal CRM + ERP platform for sales, procurement, inventory, finance, logistics and AI business intelligence. One system, full audit trail, role-based security, AI insights on demand.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="{{ url('/') }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ config('app.name') }} â€” CRM + ERP + AI Business Operating System">
+    <meta property="og:title" content="{{ config('app.name') }} — CRM + ERP + AI Business Operating System">
     <meta property="og:description" content="One platform for sales, procurement, inventory, finance, logistics and AI business intelligence. Role-based security with a full audit trail.">
     <meta property="og:url" content="{{ url('/') }}">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="{{ config('app.name') }} â€” CRM + ERP + AI">
+    <meta name="twitter:title" content="{{ config('app.name') }} — CRM + ERP + AI">
     <meta name="twitter:description" content="Universal CRM + ERP + AI Business Operating System.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -51,7 +51,7 @@
                     {
                         "@@type": "Question",
                         "name": "How does AI work inside VentureX ERP & CRM?",
-                        "acceptedAnswer": { "@@type": "Answer", "text": "AI runs securely on the backend. You can ask the Business Copilot about your data, generate AI insights, and use one-click AI analysis on customers, suppliers, invoices and inventory. AI only explains and recommends â€” it never changes your ERP data without human approval." }
+                        "acceptedAnswer": { "@@type": "Answer", "text": "AI runs securely on the backend. You can ask the Business Copilot about your data, generate AI insights, and use one-click AI analysis on customers, suppliers, invoices and inventory. AI only explains and recommends — it never changes your ERP data without human approval." }
                     },
                     {
                         "@@type": "Question",
@@ -87,7 +87,7 @@
             <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
                 <p class="text-sm font-semibold uppercase tracking-widest text-accent-400">CRM Â· ERP Â· AI</p>
                 <h1 class="mt-4 max-w-3xl text-3xl font-bold leading-tight sm:text-5xl">One business operating system for sales, procurement, inventory and finance.</h1>
-                <p class="mt-5 max-w-2xl text-base text-slate-300 sm:text-lg">VentureX ERP & CRM brings customers, suppliers, stock, money and AI intelligence into a single secure platform â€” with role-based access and a full audit trail.</p>
+                <p class="mt-5 max-w-2xl text-base text-slate-300 sm:text-lg">VentureX ERP & CRM brings customers, suppliers, stock, money and AI intelligence into a single secure platform — with role-based access and a full audit trail.</p>
                 <div class="mt-8 flex flex-wrap gap-3">
                     <a href="{{ route('login') }}" class="btn-accent">Sign in to your workspace</a>
                     <span class="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white/80">
@@ -107,19 +107,19 @@
                 <article class="card"><h3 class="text-sm font-bold text-ink-900">Inventory</h3><p class="mt-1 text-sm text-ink-500">Products, warehouses, stock movements and reorder-level alerts.</p></article>
                 <article class="card"><h3 class="text-sm font-bold text-ink-900">Finance</h3><p class="mt-1 text-sm text-ink-500">Chart of accounts, journal entries, receivables and payables.</p></article>
                 <article class="card"><h3 class="text-sm font-bold text-ink-900">Logistics</h3><p class="mt-1 text-sm text-ink-500">Shipments, containers and landed-cost tracking.</p></article>
-                <article class="card"><h3 class="text-sm font-bold text-ink-900">AI Center</h3><p class="mt-1 text-sm text-ink-500">Business Copilot, AI insights and one-click analysis â€” secure, backend-only.</p></article>
+                <article class="card"><h3 class="text-sm font-bold text-ink-900">AI Center</h3><p class="mt-1 text-sm text-ink-500">Business Copilot, AI insights and one-click analysis — secure, backend-only.</p></article>
                 <article class="card"><h3 class="text-sm font-bold text-ink-900">Security</h3><p class="mt-1 text-sm text-ink-500">Role-based permissions, multi-factor authentication and a full audit trail.</p></article>
             </div>
         </section>
 
         <section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6" aria-label="AI overview">
             <div class="card p-8">
-                <h2 class="text-2xl font-bold text-ink-900">AI that explains â€” it never changes your data</h2>
+                <h2 class="text-2xl font-bold text-ink-900">AI that explains — it never changes your data</h2>
                 <p class="mt-3 max-w-3xl text-sm text-ink-600">Ask the Business Copilot about receivables, overdue invoices, stock levels or suppliers. Generate AI business insights, or run one-click AI analysis on any customer, supplier, invoice or product. Every answer is generated on the secure backend, labelled with its facts, and always subject to human review before anything is acted on.</p>
                 <div class="mt-6 grid gap-3 text-sm sm:grid-cols-3">
-                    <p class="rounded-lg bg-ink-50 p-3 text-ink-700"><strong class="text-ink-900">[FACT]</strong> â€” statements grounded in your data</p>
-                    <p class="rounded-lg bg-ink-50 p-3 text-ink-700"><strong class="text-ink-900">[RECOMMENDATION]</strong> â€” suggested next actions</p>
-                    <p class="rounded-lg bg-ink-50 p-3 text-ink-700"><strong class="text-ink-900">[ASSUMPTION]</strong> â€” clearly marked estimates</p>
+                    <p class="rounded-lg bg-ink-50 p-3 text-ink-700"><strong class="text-ink-900">[FACT]</strong> — statements grounded in your data</p>
+                    <p class="rounded-lg bg-ink-50 p-3 text-ink-700"><strong class="text-ink-900">[RECOMMENDATION]</strong> — suggested next actions</p>
+                    <p class="rounded-lg bg-ink-50 p-3 text-ink-700"><strong class="text-ink-900">[ASSUMPTION]</strong> — clearly marked estimates</p>
                 </div>
             </div>
         </section>
@@ -159,7 +159,7 @@
                 </details>
                 <details class="card group">
                     <summary class="cursor-pointer text-sm font-semibold text-ink-900">How does AI work inside VentureX ERP & CRM?</summary>
-                    <p class="mt-2 text-sm text-ink-600">AI runs securely on the backend. You can ask the Business Copilot about your data, generate AI insights, and use one-click AI analysis on customers, suppliers, invoices and inventory. AI only explains and recommends â€” it never changes your ERP data without human approval.</p>
+                    <p class="mt-2 text-sm text-ink-600">AI runs securely on the backend. You can ask the Business Copilot about your data, generate AI insights, and use one-click AI analysis on customers, suppliers, invoices and inventory. AI only explains and recommends — it never changes your ERP data without human approval.</p>
                 </details>
                 <details class="card group">
                     <summary class="cursor-pointer text-sm font-semibold text-ink-900">Is my business data secure?</summary>
@@ -175,7 +175,7 @@
 
     <footer class="border-t border-ink-200 bg-white">
         <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-sm text-ink-400 sm:flex-row sm:px-6">
-            <p>Â© {{ date('Y') }} {{ config('app.name') }} â€” Universal CRM + ERP + AI Business Operating System</p>
+            <p>Â© {{ date('Y') }} {{ config('app.name') }} — Universal CRM + ERP + AI Business Operating System</p>
             <a href="{{ route('login') }}" class="text-navy-600 hover:text-navy-500">Sign in</a>
         </div>
     </footer>

@@ -6,7 +6,7 @@
 - [ ] Screen recording ready at 1920x1080
 - [ ] Terminal open in project root directory
 - [ ] `.env` file already configured (from Video 4)
-- [ ] PHP 8.3, Composer, Node.js 18+, npm all installed
+- [ ] PHP 8.3, Composer, Node.js 20+, npm all installed
 - [ ] MySQL 8 running and `VENTUREX_ERP` database created
 - [ ] Voiceover mic tested
 
@@ -84,7 +84,7 @@
 
 ### [4:45 - 5:15] COMMON ERRORS AND FIXES
 **On Screen:** Terminal showing error messages
-**Voiceover:** "Let's cover the most common installation errors. First, `composer install` fails with a memory error — fix this by setting `memory_limit = 512M` in your `php.ini` file. Second, `npm install` fails with a Node version error — VentureX requires Node 18 or later. Check your version with `node -v` and update if needed using nvm. Third, port 8000 is already in use — either stop the other process or use `php artisan serve --port=8080`. Fourth, database connection refused — make sure MySQL is running and your `.env` credentials match your MySQL setup. Fifth, migration fails with a table already exists error — run `php artisan migrate:fresh --seed` to reset."
+**Voiceover:** "Let's cover the most common installation errors. First, `composer install` fails with a memory error — fix this by setting `memory_limit = 512M` in your `php.ini` file. Second, `npm install` fails with a Node version error — VentureX requires Node 20 or later. Check your version with `node -v` and update if needed using nvm. Third, port 8000 is already in use — either stop the other process or use `php artisan serve --port=8080`. Fourth, database connection refused — make sure MySQL is running and your `.env` credentials match your MySQL setup. Fifth, migration fails with a table already exists error — run `php artisan migrate:fresh --seed` to reset."
 **Action:** Show each error message briefly and the corresponding fix command.
 
 ---

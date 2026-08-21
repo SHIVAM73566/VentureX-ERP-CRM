@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Crypto;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * License Key Manager for VentureX ERP & CRM
@@ -26,7 +26,7 @@ class LicenseManager
             'version' => '1.0.0',
         ]);
 
-        $encrypted = Crypto::encrypt($payload);
+        $encrypted = Crypt::encrypt($payload);
         $hash = hash_hmac('sha256', $encrypted, config('app.key'));
 
         return strtoupper(substr($hash, 0, 4).'-'.

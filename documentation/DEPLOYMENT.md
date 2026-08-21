@@ -1,6 +1,6 @@
 # Deployment Guide
 
-**VentureX ERP & CRM â€” AI-Powered CRM & ERP Business Operating System**
+**VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
 > Version 1.0.0 | Production Deployment Instructions
 
@@ -30,7 +30,7 @@
 | Component      | Minimum                          | Recommended                    |
 |----------------|----------------------------------|--------------------------------|
 | OS             | Ubuntu 22.04 LTS                 | Ubuntu 24.04 LTS              |
-| PHP            | 8.2.0                            | 8.3+                          |
+| PHP            | 8.3                              | 8.3+                          |
 | Extensions     | ctype, curl, dom, fileinfo, filter, hash, mbstring, openssl, pcre, pdo, tokenizer, xml, zip, bcmath, gd, intl | All minimum + opcache, redis |
 | MySQL          | 8.0                              | 8.0+ with InnoDB              |
 | Web Server     | Apache 2.4+ or Nginx 1.24+      | Nginx 1.26+                   |
@@ -55,7 +55,7 @@
 ## Pre-Deployment Checklist
 
 - [ ] Server meets minimum requirements
-- [ ] PHP 8.2+ installed with all required extensions
+- [ ] PHP 8.3+ installed with all required extensions
 - [ ] MySQL 8.0 installed and configured
 - [ ] Web server installed and configured
 - [ ] SSL certificate obtained and installed

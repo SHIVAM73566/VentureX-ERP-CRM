@@ -94,11 +94,11 @@ Permissions follow a hierarchical structure:
 
 ```
 Module
-â”œâ”€â”€ View (list, read)
-â”œâ”€â”€ Create
-â”œâ”€â”€ Edit
-â”œâ”€â”€ Delete
-â””â”€â”€ Export
+—œ—€—€ View (list, read)
+—œ—€—€ Create
+—œ—€—€ Edit
+—œ—€—€ Delete
+—”—€—€ Export
 ```
 
 **Permission Groups:**
