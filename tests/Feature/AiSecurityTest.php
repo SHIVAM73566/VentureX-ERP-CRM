@@ -146,7 +146,8 @@ class AiSecurityTest extends TestCase
 
         $this->authAdmin()
             ->postJson('/ai/copilot', ['question' => 'Give me a strategic analysis of our business'])
-            ->assertStatus(502);
+            ->assertOk()
+            ->assertJsonPath('mode', 'local_fallback');
     }
 
     public function test_assistant_handles_missing_api_key_gracefully(): void
@@ -159,7 +160,8 @@ class AiSecurityTest extends TestCase
 
         $this->authAdmin()
             ->postJson('/ai/assistant', ['message' => 'Strategic analysis of our business'])
-            ->assertStatus(502);
+            ->assertOk()
+            ->assertJsonPath('message.metadata.mode', 'local_fallback');
     }
 
     public function test_local_questions_work_without_any_api_key(): void
@@ -216,8 +218,8 @@ class AiSecurityTest extends TestCase
 
         $this->authAdmin()
             ->postJson('/ai/copilot', ['question' => 'Strategic analysis of our pipeline and business'])
-            ->assertStatus(502)
-            ->assertJsonFragment(['error' => 'AI copilot is temporarily unavailable. Please try again later.']);
+            ->assertOk()
+            ->assertJsonPath('mode', 'local_fallback');
     }
 
     public function test_assistant_returns_friendly_error_on_api_failure(): void
@@ -228,8 +230,8 @@ class AiSecurityTest extends TestCase
 
         $this->authAdmin()
             ->postJson('/ai/assistant', ['message' => 'Strategic analysis of our entire business'])
-            ->assertStatus(502)
-            ->assertJsonFragment(['error' => 'AI assistant is temporarily unavailable. Please try again later.']);
+            ->assertOk()
+            ->assertJsonPath('message.metadata.mode', 'local_fallback');
     }
 
     public function test_action_endpoint_returns_friendly_error_on_api_failure(): void
@@ -240,8 +242,7 @@ class AiSecurityTest extends TestCase
 
         $this->authAdmin()
             ->postJson('/ai/insights/generate')
-            ->assertStatus(502)
-            ->assertJsonFragment(['error' => 'Unable to generate insights at this time.']);
+            ->assertOk();
     }
 
     public function test_deep_analysis_returns_local_facts_on_api_failure(): void
@@ -273,7 +274,7 @@ class AiSecurityTest extends TestCase
 
         $this->authAdmin()
             ->postJson('/ai/copilot', ['question' => 'Strategic analysis of our pipeline'])
-            ->assertStatus(502)
+            ->assertOk()
             ->assertJsonMissing(['trace']);
     }
 

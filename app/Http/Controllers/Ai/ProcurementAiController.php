@@ -104,8 +104,8 @@ class ProcurementAiController extends Controller
             $localAnalysis = "**Procurement Analysis (Local Mode)**\n\n"
                 .$context."\n\n"
                 ."---\n"
-                ."[NOTE] AI-powered analysis requires an API key (NVIDIA_API_KEY or RAPIDAPI_KEY). "
-                ."Set it in your .env file and run: `php artisan config:clear`\n"
+                ."[NOTE] AI-powered analysis requires an AI provider API key. "
+                ."Add one to your .env file and run: `php artisan config:clear`\n"
                 ."The data above shows your current procurement status for manual review.";
 
             $run->update([

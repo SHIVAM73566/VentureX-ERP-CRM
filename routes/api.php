@@ -32,12 +32,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Protected API routes
-Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->name('api.')->group(function () {
 
     // ─── Token Management ──────────────────────────────────────────────
-    Route::get('/tokens', [TokenController::class, 'index'])->name('api.tokens.index');
-    Route::post('/tokens', [TokenController::class, 'store'])->name('api.tokens.create');
-    Route::delete('/tokens/{id}', [TokenController::class, 'destroy'])->name('api.tokens.destroy');
+    Route::get('/tokens', [TokenController::class, 'index'])->name('tokens.index');
+    Route::post('/tokens', [TokenController::class, 'store'])->name('tokens.create');
+    Route::delete('/tokens/{id}', [TokenController::class, 'destroy'])->name('tokens.destroy');
 
     // ─── CRM ───────────────────────────────────────────────────────────
     Route::prefix('crm')->group(function () {
@@ -76,11 +76,11 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     // ─── AI ────────────────────────────────────────────────────────────
     Route::prefix('ai')->group(function () {
-        Route::get('/conversations', [AiController::class, 'conversations'])->name('ai.conversations');
-        Route::post('/conversations', [AiController::class, 'storeConversation'])->name('ai.conversations.store');
-        Route::get('/conversations/{conversation}', [AiController::class, 'showConversation'])->name('ai.conversations.show');
-        Route::post('/conversations/{conversation}/messages', [AiController::class, 'sendMessage'])->name('ai.conversations.messages');
-        Route::get('/insights', [AiController::class, 'insights'])->name('ai.insights');
+        Route::get('/conversations', [AiController::class, 'conversations'])->name('conversations');
+        Route::post('/conversations', [AiController::class, 'storeConversation'])->name('conversations.store');
+        Route::get('/conversations/{conversation}', [AiController::class, 'showConversation'])->name('conversations.show');
+        Route::post('/conversations/{conversation}/messages', [AiController::class, 'sendMessage'])->name('conversations.messages');
+        Route::get('/insights', [AiController::class, 'insights'])->name('insights');
     });
 
     // ─── Support ───────────────────────────────────────────────────────
@@ -92,5 +92,5 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     Route::get('/user', fn () => response()->json([
         'success' => true,
         'data' => auth()->user(),
-    ]))->name('api.user');
+    ]))->name('user');
 });

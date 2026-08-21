@@ -132,8 +132,8 @@ class AiGatewayFeatureTest extends TestCase
 
         $response = $this->postJson('/ai/copilot', ['question' => 'Give me a deep strategic analysis of our sales pipeline momentum and competitive positioning.']);
 
-        $response->assertStatus(502);
-        $response->assertJsonMissing(['content']);
+        $response->assertOk();
+        $response->assertJsonPath('mode', 'local_fallback');
     }
 
     public function test_ai_action_requires_ai_permission(): void
@@ -151,7 +151,7 @@ class AiGatewayFeatureTest extends TestCase
 
         config(['ai.providers.nvidia.api_key' => null]);
 
-        $this->postJson('/ai/insights/generate')->assertStatus(502);
+        $this->postJson('/ai/insights/generate')->assertOk();
     }
 
     public function test_unauthenticated_ai_endpoints_redirect(): void

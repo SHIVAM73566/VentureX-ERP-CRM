@@ -145,7 +145,7 @@ class SupportAssistantController extends Controller
             ."- **Admin**: Users, roles, settings, security\n"
             ."- **Reports & Analytics**: Data export, import, dashboards\n\n"
             ."[STEP]\nPlease describe your question in more detail, or navigate to the relevant module from the sidebar.\n"
-            ."[TIP] AI-powered responses require an API key. Set NVIDIA_API_KEY in .env and run: php artisan config:clear";
+            ."[TIP] AI-powered responses require an AI provider API key. Add one to your .env file and run: php artisan config:clear";
     }
 
     protected function buildSystemPrompt($user, $company): string

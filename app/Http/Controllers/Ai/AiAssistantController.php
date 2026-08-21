@@ -191,28 +191,24 @@ class AiAssistantController extends Controller
             ]);
 
             $localAnswer = $this->local->answer($data['message']);
-            if ($localAnswer !== null) {
-                $assistantMessage = AiMessage::create([
-                    'conversation_id' => $conversation->id,
-                    'role' => 'assistant',
-                    'content' => "AI analysis is not currently configured. Here is the answer from your ERP data:\n\n".$localAnswer,
-                    'metadata' => ['mode' => 'local', 'tags' => ['fact']],
-                ]);
-                $conversation->touch();
+            $fallbackContent = $localAnswer
+                ? "AI analysis is not currently configured. Here is the answer from your ERP data:\n\n".$localAnswer
+                : "AI analysis is not available right now. Your ERP system is running normally.\n\n"
+                    ."To enable AI features, add an AI provider API key to your .env file, then run: php artisan config:clear.\n\n"
+                    ."You can still use all ERP modules — CRM, Sales, Inventory, Procurement, Finance, and Logistics — without AI.";
 
-                return response()->json([
-                    'message' => $assistantMessage,
-                    'run' => $run,
-                ]);
-            }
+            $assistantMessage = AiMessage::create([
+                'conversation_id' => $conversation->id,
+                'role' => 'assistant',
+                'content' => $fallbackContent,
+                'metadata' => ['mode' => 'local_fallback', 'tags' => ['fact']],
+            ]);
+            $conversation->touch();
 
-            Log::warning('AI assistant failed', ['run' => $run->id, 'error' => $e->getMessage()]);
-
-            $errorMsg = str_contains($e->getMessage(), 'not configured')
-                ? 'AI is not configured. Set an AI provider API key (e.g. NVIDIA_API_KEY or RAPIDAPI_KEY) in your .env file, then run: php artisan config:clear. See documentation/AI-SETUP.md for setup instructions.'
-                : 'AI assistant is temporarily unavailable. Please try again later.';
-
-            return response()->json(['error' => $errorMsg], 502);
+            return response()->json([
+                'message' => $assistantMessage,
+                'run' => $run,
+            ]);
         }
     }
 

@@ -134,8 +134,8 @@ class AiDocumentReaderController extends Controller
                 ."Content preview (first 500 chars):\n\n"
                 .substr($text, 0, 500)."\n\n"
                 ."---\n"
-                ."[NOTE] AI-powered deep analysis requires an API key (NVIDIA_API_KEY or RAPIDAPI_KEY). "
-                ."Set it in your .env file and run: `php artisan config:clear`\n"
+                ."[NOTE] AI-powered deep analysis requires an AI provider API key. "
+                ."Add one to your .env file and run: `php artisan config:clear`\n"
                 ."For now, the raw document text is shown above for manual review.";
 
             $run->update([

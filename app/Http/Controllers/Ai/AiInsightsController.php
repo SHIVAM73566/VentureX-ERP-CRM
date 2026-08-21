@@ -39,7 +39,7 @@ class AiInsightsController extends Controller
 
             $content = "AI-generated insights are not available right now. Here are rule-based insights computed from your ERP data:\n\n"
                 .($lines !== '' ? $lines : 'No critical signals detected.')
-                ."\n\n[TIP] To enable AI insights, set an API key (NVIDIA_API_KEY or RAPIDAPI_KEY) in your .env file and run: php artisan config:clear.";
+                ."\n\n[TIP] To enable AI insights, add an AI provider API key to your .env file and run: php artisan config:clear.";
 
             return response()->json([
                 'content' => $content,

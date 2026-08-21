@@ -4,8 +4,14 @@ namespace App\Services;
 
 use App\Models\Customer;
 use App\Models\ExportRequest;
+use App\Models\Invoice;
 use App\Models\Lead;
 use App\Models\Opportunity;
+use App\Models\Payment;
+use App\Models\Product;
+use App\Models\Quotation;
+use App\Models\Shipment;
+use App\Models\SalesOrder;
 use App\Models\Supplier;
 use App\Models\SupplierOffer;
 use App\Models\User;
@@ -20,6 +26,13 @@ class ExportService
         'leads' => ['model' => Lead::class, 'columns' => ['company_name', 'contact_name', 'email', 'phone', 'source', 'status']],
         'opportunities' => ['model' => Opportunity::class, 'columns' => ['name', 'customer_id', 'expected_value', 'stage', 'probability']],
         'offers' => ['model' => SupplierOffer::class, 'columns' => ['supplier_id', 'material_category', 'grade', 'quantity_mt', 'price_per_mt', 'quality_status', 'risk_level']],
+        'orders' => ['model' => SalesOrder::class, 'columns' => ['order_number', 'status', 'payment_status', 'order_date', 'delivery_date', 'subtotal', 'discount', 'tax', 'shipping', 'total', 'paid_amount', 'notes']],
+        'quotations' => ['model' => Quotation::class, 'columns' => ['quotation_number', 'status', 'currency_code', 'subtotal', 'discount', 'tax', 'total', 'valid_until', 'notes']],
+        'invoices' => ['model' => Invoice::class, 'columns' => ['invoice_number', 'status', 'issue_date', 'due_date', 'subtotal', 'discount', 'tax', 'total', 'paid_amount', 'notes']],
+        'payments' => ['model' => Payment::class, 'columns' => ['payment_number', 'payment_date', 'amount', 'method', 'reference', 'status', 'notes']],
+        'products' => ['model' => Product::class, 'columns' => ['sku', 'name', 'category', 'description', 'purchase_price', 'selling_price', 'reorder_level', 'status', 'notes']],
+        'shipments' => ['model' => Shipment::class, 'columns' => ['shipment_number', 'type', 'mode', 'carrier', 'tracking_number', 'origin', 'destination', 'status', 'departure_date', 'arrival_date', 'delivered_at', 'weight', 'volume', 'notes']],
+        'users' => ['model' => User::class, 'columns' => ['name', 'first_name', 'last_name', 'email', 'phone', 'job_title', 'timezone', 'is_active', 'email_verified_at', 'last_login_at']],
     ];
 
     /** PII patterns that should be redacted regardless of column name. */
