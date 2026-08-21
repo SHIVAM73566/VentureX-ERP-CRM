@@ -127,8 +127,11 @@ class DashboardController extends Controller
         if ($this->safeHasPermission($user, 'finance.view')) {
             $actions[] = ['label' => 'Finance dashboard', 'route' => 'finance.dashboard', 'color' => 'green'];
         }
-        if ($this->safeHasPermission($user, 'exports.view')) {
+        if ($this->safeHasPermission($user, 'exports.view') || $user->hasRole('super_admin')) {
             $actions[] = ['label' => 'Export center', 'route' => 'admin.exports.index', 'color' => 'gray'];
+        }
+        if ($this->safeHasPermission($user, 'exports.import') || $user->hasRole('super_admin')) {
+            $actions[] = ['label' => 'Import data', 'route' => 'admin.imports.index', 'color' => 'gray'];
         }
         if ($this->safeHasPermission($user, 'ai.chat')) {
             $actions[] = ['label' => 'AI copilot', 'route' => 'ai.copilot', 'color' => 'purple'];
