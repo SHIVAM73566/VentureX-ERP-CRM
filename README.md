@@ -4,6 +4,13 @@
 
 A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS.
 
+## Purchase Full Source Code
+
+Get the complete source code with documentation, video tutorials, and support:
+
+[![Gumroad](https://img.shields.io/badge/Download-%2459-Gumroad-orange)](https://gumroad.com/l/venturex-erp)
+[![Payhip](https://img.shields.io/badge/Download-%2459-Payhip-blue)](https://payhip.com/b/venturex-erp)
+
 ## Features
 
 ### Core Modules
@@ -162,6 +169,13 @@ This project is licensed under a Commercial License - see the [LICENSE](LICENSE)
 - Email: support@venturexerp.com
 - Documentation: /documentation/
 - Issues: GitHub Issues
+
+## Sponsor This Project
+
+If you find VentureX ERP & CRM useful, consider supporting the project:
+
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-red)](https://github.com/sponsors/SHIVAM73566)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-yellow)](https://buymeacoffee.com/venturexerp)
 
 ---
 
