@@ -8,8 +8,16 @@ A complete, production-ready AI-powered CRM and ERP business operating system bu
 
 Get the complete source code with documentation, video tutorials, and support:
 
-[![Gumroad](https://img.shields.io/badge/Download-%2459-Gumroad-orange)](https://gumroad.com/l/venturex-erp)
-[![Payhip](https://img.shields.io/badge/Download-%2459-Payhip-blue)](https://payhip.com/b/venturex-erp)
+| Tier | Price | Features |
+|------|-------|----------|
+| **Single** | $89.99 | Limited features, AI included, 5-day free AI trial |
+| **Professional** | $150.22 | Full business features, priority support |
+| **Enterprise** | $350 | Full updates for company/big business, dedicated support |
+
+> **Enterprise Discount:** Use code `SAVE29` for $29 off!
+
+[![Gumroad](https://img.shields.io/badge/Buy%20on-Gumroad-orange)](https://gumroad.com/l/venturex-erp)
+[![Payhip](https://img.shields.io/badge/Buy%20on-Payhip-blue)](https://payhip.com/b/venturex-erp)
 
 ## Deploy with GitHub Action
 
