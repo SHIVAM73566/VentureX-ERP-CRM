@@ -11,6 +11,12 @@ Get the complete source code with documentation, video tutorials, and support:
 [![Gumroad](https://img.shields.io/badge/Download-%2459-Gumroad-orange)](https://gumroad.com/l/venturex-erp)
 [![Payhip](https://img.shields.io/badge/Download-%2459-Payhip-blue)](https://payhip.com/b/venturex-erp)
 
+## Deploy with GitHub Action
+
+Deploy to your server in one click:
+
+[![GitHub Action](https://img.shields.io/badge/GitHub%20Action-Deploy%20Now-blue)](https://github.com/marketplace/actions/venturex-erp-crm-deploy)
+
 ## Features
 
 ### Core Modules
