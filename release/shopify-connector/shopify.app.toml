@@ -1,0 +1,48 @@
+# Add this [webhooks] block to your generated shopify.app.toml
+# File location: venturex-sync/shopify.app.toml
+
+name = "venturex-sync"
+handle = "venturex-sync"
+description = "Sync Shopify orders and products into VentureX ERP & CRM"
+
+[build]
+automatically_update_urls_on_dev = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/auth/oauth/scopes
+scopes = "read_orders,read_products,read_customers,write_inventory"
+
+[auth]
+redirect_urls = [
+  "/auth/callback",
+  "/auth/signup",
+  "/auth/login"
+]
+
+[webhooks]
+api_version = "2025-01"
+
+[[webhooks.subscriptions]]
+topics = ["orders/create"]
+uri = "/webhooks/orders/create"
+
+[[webhooks.subscriptions]]
+topics = ["products/create", "products/update"]
+uri = "/webhooks/products"
+
+# MANDATORY GDPR COMPLIANCE WEBHOOKS
+# Apps are rejected without these three topics registered:
+[[webhooks.subscriptions]]
+topics = ["customers/data_request"]
+uri = "/webhooks/customers/data_request"
+
+[[webhooks.subscriptions]]
+topics = ["customers/redact"]
+uri = "/webhooks/customers/redact"
+
+[[webhooks.subscriptions]]
+topics = ["shop/redact"]
+uri = "/webhooks/shop/redact"
+
+[pos]
+embedded = false

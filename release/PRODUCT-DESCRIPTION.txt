@@ -1,0 +1,39 @@
+VentureX ERP & CRM - AI-Powered Business Operating System | Laravel 13
+
+SHORT DESCRIPTION (155 chars)
+Complete AI-powered ERP & CRM on Laravel 13 - sales, inventory, accounting, logistics, support + AI Copilot with no API keys. One-time $89.99.
+
+FULL DESCRIPTION
+VentureX ERP & CRM is a complete AI-powered business operating system built with Laravel 13. One professional platform for CRM and sales pipeline (Kanban), multi-warehouse inventory, procurement with RFQ workflows, double-entry accounting, logistics with container and landed-cost management, customer support tickets, and an integrated AI Copilot that routes across NVIDIA, Gemini, OpenAI and Claude - and works WITHOUT any API keys thanks to local fallback mode.
+
+WHAT YOU GET
+- Production-ready source code: 92 controllers, 74 models, 44 services
+- 169 responsive Blade views (Tailwind CSS v4 + Alpine.js)
+- REST API with 18 endpoint controllers for mobile apps
+- Security: RBAC permissions, 2FA (TOTP), audit logs, step-up auth
+- Web installer wizard: live in 5 minutes without command line
+- Docker deployment files included
+- WordPress lead-capture plugin included
+- 23 documentation files + 15-part video tutorial series
+- Demo data seeder to explore instantly
+
+REQUIREMENTS
+PHP 8.3+, MySQL 5.7+ or MariaDB 10.6+, Apache or Nginx. Node.js 20+ optional for asset rebuild.
+
+LICENSE
+Commercial license: unlimited domains, rebranding allowed, client projects allowed. Source code redistribution not permitted.
+
+SUPPORT
+support@venturexerp.com - documentation and video tutorials included.
+
+PRICING TIERS
+Single $89.99 | Professional $150.22 | Enterprise $350.00 (code SAVE29 saves $29)
+
+REFUND POLICY (SHORT VERSION FOR ANY PLATFORM)
+5-Day Money-Back Guarantee. Full refund if AI features unused; refunds prorated by API usage when AI features were consumed. Technical issues unresolved within 48 hours always fully refunded. Products shared or redistributed are not refundable. Contact support@venturexerp.com.
+
+TECH FACTS FOR DUE DILIGENCE
+- 339 PHPUnit tests passing, 464 assertions, 0 failures
+- 0 syntax errors across 340+ PHP files
+- Public repo: https://github.com/SHIVAM73566/VentureX-ERP-CRM
+- Live GitHub Marketplace Action: venturex-deploy-action v1.0.0
