@@ -1,4 +1,4 @@
-# VentureX ERP & CRM Documentation
+﻿# VentureX ERP & CRM Documentation
 
 Welcome to the VentureX ERP & CRM documentation. This guide covers everything you need to know to install, configure, and use VentureX ERP & CRM.
 
@@ -150,10 +150,8 @@ Configure your preferred provider in Settings > AI Configuration.
 - **Email:** support@venturexerp.com
 - **Documentation:** This folder
 - **Video Tutorials:** Available on YouTube
-- **Community Forum:** Coming soon
+- **Community Forum:** [GitHub Discussions](https://github.com/SHIVAM73566/VentureX-ERP-CRM/discussions)
 
-## ðŸ“ License
-
-VentureX ERP & CRM is licensed under a Commercial License — see the [LICENSE](../LICENSE) file for details.
+## License
 
 > **Note:** This software is proprietary. Unauthorized copying, modification, or distribution is prohibited.
