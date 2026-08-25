@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" font-family="Segoe UI, Arial, sans-serif">
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a"/><stop offset="100%" style="stop-color:#1e293b"/></linearGradient></defs>
+  <rect width="800" height="450" fill="url(#bg)" rx="12"/>
+  <rect x="0" y="0" width="800" height="56" fill="#1e40af" rx="12"/><rect x="0" y="30" width="800" height="26" fill="#1e40af"/>
+  <text x="400" y="24" text-anchor="middle" fill="#93c5fd" font-size="12">VentureX ERP & CRM — Installation Guide</text>
+  <text x="400" y="46" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Step 6: Start the Application</text>
+  <rect x="40" y="75" width="720" height="140" rx="8" fill="#0d1117" stroke="#21262d"/>
+  <rect x="40" y="75" width="720" height="32" rx="8" fill="#161b22"/><rect x="40" y="99" width="720" height="8" fill="#161b22"/>
+  <circle cx="60" cy="91" r="5" fill="#ef4444"/><circle cx="76" cy="91" r="5" fill="#eab308"/><circle cx="92" cy="91" r="5" fill="#22c55e"/>
+  <text x="400" y="96" text-anchor="middle" fill="#8b949e" font-size="11">Terminal</text>
+  <text x="60" y="130" fill="#7ee787" font-size="13" font-family="monospace">C:\Projects\venturex-erp&gt; <tspan fill="#c9d1d9">php artisan serve</tspan></text>
+  <text x="60" y="158" fill="#79c0ff" font-size="13" font-family="monospace">   INFO  Server running on [<tspan fill="#4ade80">http://127.0.0.1:8000</tspan>].</text>
+  <text x="60" y="183" fill="#d29922" font-size="12" font-family="monospace">   Press Ctrl+C to stop the server</text>
+  <rect x="40" y="235" width="720" height="190" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="2"/>
+  <rect x="40" y="235" width="720" height="40" rx="8" fill="#052e16"/>
+  <text x="400" y="261" text-anchor="middle" fill="#4ade80" font-size="18" font-weight="700">🚀 Server is Running!</text>
+  <text x="60" y="300" fill="#e2e8f0" font-size="15">Open your browser and go to:</text>
+  <rect x="60" y="315" width="400" height="35" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+  <text x="260" y="338" text-anchor="middle" fill="#3b82f6" font-size="16" font-weight="700">http://localhost:8000</text>
+  <text x="60" y="375" fill="#94a3b8" font-size="13">You should see the login page →</text>
+  <text x="60" y="400" fill="#94a3b8" font-size="13">Keep this terminal window open while using the app.</text>
+</svg>

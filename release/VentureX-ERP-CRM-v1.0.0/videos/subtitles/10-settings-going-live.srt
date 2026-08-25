@@ -1,0 +1,335 @@
+1
+00:00:01,000 --> 00:00:05,500
+Welcome to the final video in the VentureX tutorial series.
+
+2
+00:00:05,500 --> 00:00:10,000
+Today we walk through the Settings module, user management,
+
+3
+00:00:10,000 --> 00:00:14,500
+security features, and everything you need to know
+
+4
+00:00:14,500 --> 00:00:18,000
+before deploying to production.
+
+5
+00:00:20,000 --> 00:00:24,000
+The Settings module is your central configuration hub.
+
+6
+00:00:24,000 --> 00:00:28,500
+On the left sidebar you'll see sections for General, Users,
+
+7
+00:00:28,500 --> 00:00:33,000
+Security, Audit Logs, Support, Error Center, and Control Center.
+
+8
+00:00:33,000 --> 00:00:38,000
+General settings cover your company name, logo,
+
+9
+00:00:38,000 --> 00:00:42,500
+timezone, currency, and default language.
+
+10
+00:00:42,500 --> 00:00:47,000
+Changes here apply globally across the system.
+
+11
+00:00:55,000 --> 00:00:59,500
+User management lets you add, edit, and deactivate team members.
+
+12
+00:00:59,500 --> 00:01:04,000
+Click Add User to create a new account.
+
+13
+00:01:04,000 --> 00:01:08,500
+Fill in name, email, assign a role, and set an initial password.
+
+14
+00:01:08,500 --> 00:01:13,000
+Each user receives an email notification with their login credentials.
+
+15
+00:01:15,000 --> 00:01:19,500
+Roles determine what each user can access.
+
+16
+00:01:19,500 --> 00:01:24,000
+Super Admin has unrestricted access to everything.
+
+17
+00:01:24,000 --> 00:01:28,500
+CEO sees all dashboards and reports.
+
+18
+00:01:28,500 --> 00:01:33,000
+Sales Manager can manage deals and contacts but not system settings.
+
+19
+00:01:33,000 --> 00:01:37,500
+Each role is carefully scoped to enforce least-privilege access.
+
+20
+00:01:38,000 --> 00:01:42,500
+VentureX ships with predefined roles.
+
+21
+00:01:42,500 --> 00:01:47,000
+Super Admin, CEO, Sales Manager, Inventory Manager,
+
+22
+00:01:47,000 --> 00:01:51,500
+HR Manager, Accountant, and Support Agent.
+
+23
+00:01:51,500 --> 00:01:56,000
+Each role maps to a specific set of permissions.
+
+24
+00:01:56,000 --> 00:02:00,000
+If you need a custom role, you can define one from the Roles panel.
+
+25
+00:02:00,000 --> 00:02:04,500
+The Security Center gives you control over password policies,
+
+26
+00:02:04,500 --> 00:02:09,000
+session management, and trusted devices.
+
+27
+00:02:09,000 --> 00:02:13,500
+You can enforce minimum password length, require special characters,
+
+28
+00:02:13,500 --> 00:02:18,000
+and set password expiration periods.
+
+29
+00:02:18,000 --> 00:02:22,500
+Session settings let you define idle timeout
+
+30
+00:02:22,500 --> 00:02:27,000
+and maximum session duration.
+
+31
+00:02:27,000 --> 00:02:31,500
+Trusted Devices lists every device that has logged into the system.
+
+32
+00:02:31,500 --> 00:02:36,000
+If you spot an unfamiliar device, click Revoke to force a re-login.
+
+33
+00:02:37,000 --> 00:02:41,500
+Every significant action in VentureX is recorded in the Audit Logs.
+
+34
+00:02:41,500 --> 00:02:46,000
+This includes login attempts, data modifications,
+
+35
+00:02:46,000 --> 00:02:50,500
+setting changes, and AI interactions.
+
+36
+00:02:50,500 --> 00:02:55,000
+Use the filters to search by user, date range, or action type.
+
+37
+00:02:55,000 --> 00:03:00,000
+This is invaluable for compliance and troubleshooting.
+
+38
+00:03:00,500 --> 00:03:05,000
+The built-in Support Tickets system lets your team report issues
+
+39
+00:03:05,000 --> 00:03:09,500
+without leaving the application.
+
+40
+00:03:09,500 --> 00:03:14,000
+Users can submit tickets with a category, priority, and description.
+
+41
+00:03:14,000 --> 00:03:18,500
+Admins can assign, track, and resolve tickets directly from this panel.
+
+42
+00:03:20,500 --> 00:03:25,000
+The Error Center aggregates application errors in real time.
+
+43
+00:03:25,000 --> 00:03:29,500
+Each entry shows the error message, the file and line number,
+
+44
+00:03:29,500 --> 00:03:34,000
+the user who triggered it, and the full stack trace.
+
+45
+00:03:34,000 --> 00:03:38,500
+You can mark errors as resolved or export them for external tracking.
+
+46
+00:03:40,000 --> 00:03:44,500
+The Control Center is your administrative command panel.
+
+47
+00:03:44,500 --> 00:03:49,000
+Customer Management lets you view and manage all registered companies.
+
+48
+00:03:49,000 --> 00:03:53,500
+The Announcements panel lets you push system-wide messages to all users.
+
+49
+00:03:53,500 --> 00:03:58,000
+The Updates panel tracks system version history and pending updates.
+
+50
+00:04:05,000 --> 00:04:09,500
+Before going live, run through this deployment checklist.
+
+51
+00:04:09,500 --> 00:04:14,000
+First, set APP_DEBUG to false in your .env file.
+
+52
+00:04:14,000 --> 00:04:18,500
+This is critical for security. Never expose debug information in production.
+
+53
+00:04:19,500 --> 00:04:24,000
+Second, configure your real mail server.
+
+54
+00:04:24,000 --> 00:04:28,500
+Replace the Mailtrap settings with your actual SMTP credentials.
+
+55
+00:04:29,500 --> 00:04:34,000
+Third, set up SSL or HTTPS.
+
+56
+00:04:34,000 --> 00:04:38,500
+Use Let's Encrypt for free certificates,
+
+57
+00:04:38,500 --> 00:04:43,000
+or your hosting provider's built-in SSL.
+
+58
+00:04:43,000 --> 00:04:47,500
+VentureX should never run over plain HTTP in production.
+
+59
+00:04:48,500 --> 00:04:53,000
+Fourth, configure queue workers.
+
+60
+00:04:53,000 --> 00:04:57,500
+VentureX uses Laravel queues for background jobs
+
+61
+00:04:57,500 --> 00:05:02,000
+like email sending and AI processing.
+
+62
+00:05:02,000 --> 00:05:06,500
+Use Supervisor to manage the queue process in production.
+
+63
+00:05:07,500 --> 00:05:12,000
+Fifth, set up automated backups.
+
+64
+00:05:12,000 --> 00:05:16,500
+Use mysqldump with a cron job to back up your database daily.
+
+65
+00:05:16,500 --> 00:05:21,000
+Store backups offsite for disaster recovery.
+
+66
+00:05:22,000 --> 00:05:26,500
+Sixth, verify file permissions.
+
+67
+00:05:26,500 --> 00:05:31,000
+The storage and bootstrap cache directories must be writable by the web server.
+
+68
+00:05:32,000 --> 00:05:36,500
+Finally, if you need PayPal payments, Firebase push notifications,
+
+69
+00:05:36,500 --> 00:05:41,000
+Google OAuth, or Microsoft OAuth, each has its own
+
+70
+00:05:41,000 --> 00:05:45,500
+configuration section in .env.
+
+71
+00:05:45,500 --> 00:05:50,000
+Fill in the credentials from each provider's developer console.
+
+72
+00:05:51,000 --> 00:05:55,500
+VentureX supports exporting your data as CSV or JSON
+
+73
+00:05:55,500 --> 00:06:00,000
+for external analysis or migration.
+
+74
+00:06:00,000 --> 00:06:04,500
+Click Export, select the module, and download the file.
+
+75
+00:06:04,500 --> 00:06:09,000
+To import data, upload a CSV matching the module's expected format
+
+76
+00:06:09,000 --> 00:06:13,500
+and the system validates and imports it row by row.
+
+77
+00:06:14,500 --> 00:06:19,000
+If you need help, start with the built-in documentation,
+
+78
+00:06:19,000 --> 00:06:23,500
+accessible from the Help menu in the top navigation bar.
+
+79
+00:06:23,500 --> 00:06:28,000
+For specific issues, submit a Support Ticket from Settings.
+
+80
+00:06:28,000 --> 00:06:32,500
+For community help, visit the GitHub repository and open an issue.
+
+81
+00:06:34,000 --> 00:06:38,500
+That wraps up the VentureX tutorial series.
+
+82
+00:06:38,500 --> 00:06:43,000
+You've seen every major module — from CRM and sales
+
+83
+00:06:43,000 --> 00:06:47,500
+to inventory, HR, accounting, AI features, and now deployment.
+
+84
+00:06:47,500 --> 00:06:52,000
+Thank you for watching, and enjoy building with VentureX.

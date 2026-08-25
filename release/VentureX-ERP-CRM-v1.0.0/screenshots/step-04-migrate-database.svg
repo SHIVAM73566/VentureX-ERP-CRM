@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" font-family="Segoe UI, Arial, sans-serif">
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a"/><stop offset="100%" style="stop-color:#1e293b"/></linearGradient></defs>
+  <rect width="800" height="450" fill="url(#bg)" rx="12"/>
+  <rect x="0" y="0" width="800" height="56" fill="#1e40af" rx="12"/><rect x="0" y="30" width="800" height="26" fill="#1e40af"/>
+  <text x="400" y="24" text-anchor="middle" fill="#93c5fd" font-size="12">VentureX ERP & CRM — Installation Guide</text>
+  <text x="400" y="46" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Step 4: Create Database Tables</text>
+  <rect x="40" y="75" width="720" height="280" rx="8" fill="#0d1117" stroke="#21262d"/>
+  <rect x="40" y="75" width="720" height="32" rx="8" fill="#161b22"/><rect x="40" y="99" width="720" height="8" fill="#161b22"/>
+  <circle cx="60" cy="91" r="5" fill="#ef4444"/><circle cx="76" cy="91" r="5" fill="#eab308"/><circle cx="92" cy="91" r="5" fill="#22c55e"/>
+  <text x="400" y="96" text-anchor="middle" fill="#8b949e" font-size="11">Terminal — php artisan migrate --seed</text>
+  <text x="60" y="130" fill="#7ee787" font-size="13" font-family="monospace">C:\Projects\venturex-erp&gt; <tspan fill="#c9d1d9">php artisan migrate --seed</tspan></text>
+  <text x="60" y="160" fill="#79c0ff" font-size="12" font-family="monospace">   INFO  Running migrations.</text>
+  <text x="60" y="185" fill="#8b949e" font-size="11" font-family="monospace">  2024_01_01_000001_create_companies_table</text>
+  <text x="60" y="203" fill="#8b949e" font-size="11" font-family="monospace">  2024_01_01_000002_create_users_table</text>
+  <text x="60" y="221" fill="#8b949e" font-size="11" font-family="monospace">  2024_01_01_000003_create_roles_table</text>
+  <text x="60" y="239" fill="#8b949e" font-size="11" font-family="monospace">  2024_01_01_000004_create_customers_table</text>
+  <text x="60" y="257" fill="#8b949e" font-size="11" font-family="monospace">  ... (36 migrations total)</text>
+  <text x="60" y="282" fill="#79c0ff" font-size="12" font-family="monospace">   INFO  Seeding database.</text>
+  <text x="60" y="310" fill="#7ee787" font-size="13" font-family="monospace">✓ All 36 tables created and seeded successfully</text>
+  <rect x="40" y="370" width="720" height="60" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="400" y="395" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="700">Tables Created:</text>
+  <text x="400" y="418" text-anchor="middle" fill="#94a3b8" font-size="12">companies • users • roles • customers • leads • opportunities • products • warehouses • stock_movements • purchase_orders • purchase_requisitions • rfqs • suppliers • sales_orders • quotations • invoices • payments • accounts • journals • activities • contacts • documents • exports • approvals • audit_logs • ai_runs • ai_skills • ai_quotas • support_tickets • support_replies • error_reports • customer_licenses • customer_installations • system_announcements • product_updates • support_notifications</text>
+</svg>

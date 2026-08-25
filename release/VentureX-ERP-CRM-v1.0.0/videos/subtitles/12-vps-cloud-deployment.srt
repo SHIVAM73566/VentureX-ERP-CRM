@@ -1,0 +1,646 @@
+1
+00:00:01,000 --> 00:00:04,000
+Welcome back to the VentureX series!
+
+2
+00:00:04,200 --> 00:00:08,000
+In the last video, we deployed on shared hosting with cPanel —
+simple, but sometimes you need more.
+
+3
+00:00:08,200 --> 00:00:12,000
+More control, more performance, more flexibility.
+
+4
+00:00:12,200 --> 00:00:14,500
+That's where a VPS or cloud server comes in.
+
+5
+00:00:14,700 --> 00:00:19,000
+In this video, I'm going to set up a fresh Ubuntu server,
+install everything VentureX needs,
+
+6
+00:00:19,200 --> 00:00:22,000
+deploy the application, and configure it for production.
+
+7
+00:00:22,200 --> 00:00:26,000
+I'm using DigitalOcean here, but this works on
+AWS EC2, Linode, Vultr — any Ubuntu VPS.
+
+8
+00:00:26,200 --> 00:00:28,000
+Let's spin up a server.
+
+9
+00:00:29,000 --> 00:00:32,000
+In your cloud provider's dashboard,
+create a new server.
+
+10
+00:00:32,200 --> 00:00:36,000
+For the OS, pick Ubuntu 22.04 LTS or 24.04 LTS —
+both work great with VentureX.
+
+11
+00:00:36,200 --> 00:00:40,000
+For plan size, the basic $12/month plan
+with 2 gigs of RAM and one CPU is enough to get started.
+
+12
+00:00:40,200 --> 00:00:43,000
+You can always scale up later.
+
+13
+00:00:43,200 --> 00:00:46,000
+Choose a data center region close to your users.
+
+14
+00:00:46,200 --> 00:00:49,000
+Set your root password — make it strong, write it down.
+
+15
+00:00:49,200 --> 00:00:52,000
+Give your server a hostname like venturex-prod.
+
+16
+00:00:52,200 --> 00:00:54,000
+Click Create Droplet.
+
+17
+00:00:54,200 --> 00:00:57,000
+Wait about 60 seconds for it to spin up.
+
+18
+00:00:57,200 --> 00:01:00,000
+Once it's ready, copy the IP address.
+
+19
+00:01:00,200 --> 00:01:02,000
+We're going to connect to it now.
+
+20
+00:01:03,000 --> 00:01:07,000
+Open your terminal — or use PowerShell on Windows,
+or Terminal on Mac.
+
+21
+00:01:07,200 --> 00:01:10,000
+Type: ssh root@your_server_ip.
+
+22
+00:01:10,200 --> 00:01:13,000
+Accept the fingerprint, enter your password. You're in!
+
+23
+00:01:13,200 --> 00:01:16,000
+First thing — let's update the server.
+
+24
+00:01:16,200 --> 00:01:20,000
+Run: apt update && apt upgrade -y.
+
+25
+00:01:20,200 --> 00:01:23,000
+This pulls in all the latest security patches. Takes a minute.
+
+26
+00:01:23,200 --> 00:01:27,000
+Next, let's create a non-root user for security.
+Run: adduser venturex.
+
+27
+00:01:27,200 --> 00:01:31,000
+Set a password, fill in the details
+or just press Enter through them.
+
+28
+00:01:31,200 --> 00:01:35,000
+Now give this user sudo privileges:
+usermod -aG sudo venturex.
+
+29
+00:01:35,200 --> 00:01:38,000
+Then set up the firewall — we'll use UFW.
+
+30
+00:01:38,200 --> 00:01:42,000
+Run: ufw allow OpenSSH,
+then ufw allow 'Nginx Full', then ufw enable.
+
+31
+00:01:42,200 --> 00:01:44,000
+Say yes.
+
+32
+00:01:44,200 --> 00:01:48,000
+Now switch to your new user: su - venturex.
+
+33
+00:01:48,200 --> 00:01:52,000
+From here on, we're working as the venturex user, not root. Much safer.
+
+34
+00:01:53,000 --> 00:01:55,000
+Now let's install PHP.
+
+35
+00:01:55,200 --> 00:01:59,000
+We need PHP 8.3 with a bunch of extensions.
+
+36
+00:01:59,200 --> 00:02:04,000
+First, add the PHP repository:
+sudo add-apt-repository ppa:ondrej/php -y.
+
+37
+00:02:04,200 --> 00:02:07,000
+Then update again: sudo apt update.
+
+38
+00:02:07,200 --> 00:02:12,000
+Now install PHP and the extensions VentureX needs:
+sudo apt install php8.3 php8.3-fpm php8.3-mysql
+
+39
+00:02:12,200 --> 00:02:17,000
+php8.3-curl php8.3-gd php8.3-mbstring
+php8.3-xml php8.3-zip php8.3-bcmath php8.3-intl
+
+40
+00:02:17,200 --> 00:02:20,000
+php8.3-readline php8.3-opcache -y.
+
+41
+00:02:20,200 --> 00:02:24,000
+That's a lot of packages, but they're all important —
+curl for API calls, mbstring for text handling, opcache for performance.
+
+42
+00:02:24,200 --> 00:02:27,000
+Verify it worked: php -v.
+
+43
+00:02:27,200 --> 00:02:30,000
+You should see PHP 8.3.something. Nice.
+
+44
+00:02:31,000 --> 00:02:33,000
+Next up, MySQL.
+
+45
+00:02:33,200 --> 00:02:37,000
+Run: sudo apt install mysql-server -y.
+
+46
+00:02:37,200 --> 00:02:41,000
+Once it's installed, run the security script:
+sudo mysql_secure_installation.
+
+47
+00:02:41,200 --> 00:02:44,000
+It'll ask you a few questions.
+
+48
+00:02:44,200 --> 00:02:48,000
+Set the VALIDATE PASSWORD component —
+I choose MEDIUM for a good balance.
+
+49
+00:02:48,200 --> 00:02:50,000
+Set a strong root password.
+
+50
+00:02:50,200 --> 00:02:52,000
+Remove anonymous users? Yes.
+
+51
+00:02:52,200 --> 00:02:54,000
+Disallow root login remotely? Yes.
+
+52
+00:02:54,200 --> 00:02:56,000
+Remove the test database? Yes.
+
+53
+00:02:56,200 --> 00:02:58,000
+Reload privilege tables? Yes.
+
+54
+00:02:58,200 --> 00:03:02,000
+Now let's create the database and user for VentureX.
+Log into MySQL: sudo mysql.
+
+55
+00:03:02,200 --> 00:03:04,000
+You're at the MySQL prompt now.
+
+56
+00:03:04,200 --> 00:03:08,000
+Run these three commands:
+CREATE DATABASE venturex_prod;
+
+57
+00:03:08,200 --> 00:03:12,000
+CREATE USER 'vxuser'@'localhost'
+IDENTIFIED BY 'your_strong_password';
+
+58
+00:03:12,200 --> 00:03:16,000
+GRANT ALL PRIVILEGES ON venturex_prod.*
+TO 'vxuser'@'localhost';
+
+59
+00:03:16,200 --> 00:03:19,000
+FLUSH PRIVILEGES; EXIT;
+
+60
+00:03:19,200 --> 00:03:21,000
+Database is ready.
+
+61
+00:03:22,000 --> 00:03:25,000
+Now Nginx — this is our web server.
+
+62
+00:03:25,200 --> 00:03:28,000
+Install it: sudo apt install nginx -y.
+
+63
+00:03:28,200 --> 00:03:32,000
+Start it and enable it on boot:
+sudo systemctl start nginx && sudo systemctl enable nginx.
+
+64
+00:03:32,200 --> 00:03:36,000
+Test it — open your browser and go to your server's IP.
+
+65
+00:03:36,200 --> 00:03:39,000
+You should see the default Nginx welcome page. If you do, Nginx is working.
+
+66
+00:03:39,200 --> 00:03:43,000
+Now let's configure it for VentureX.
+
+67
+00:03:43,200 --> 00:03:47,000
+Create a new config file:
+sudo nano /etc/nginx/sites-available/venturex.
+
+68
+00:03:47,200 --> 00:03:51,000
+Paste in this server block — I'll link the config in the description.
+
+69
+00:03:51,200 --> 00:03:55,000
+The key parts are: server_name your_domain.com,
+root pointing to /home/venturex/public_html/public,
+
+70
+00:03:55,200 --> 00:03:59,000
+and the location block handling PHP-FPM
+with the try_files directive for Laravel routing.
+
+71
+00:03:59,200 --> 00:04:02,000
+Save the file with Ctrl+O, Ctrl+X.
+
+72
+00:04:02,200 --> 00:04:06,000
+Enable it: sudo ln -s
+/etc/nginx/sites-available/venturex /etc/nginx/sites-enabled/.
+
+73
+00:04:06,200 --> 00:04:10,000
+Remove the default:
+sudo rm /etc/nginx/sites-enabled/default.
+
+74
+00:04:10,200 --> 00:04:13,000
+Test the config: sudo nginx -t.
+
+75
+00:04:13,200 --> 00:04:17,000
+If it says syntax is ok and test is successful,
+reload Nginx: sudo systemctl reload nginx.
+
+76
+00:04:18,000 --> 00:04:21,000
+Time to get VentureX on the server.
+
+77
+00:04:21,200 --> 00:04:24,000
+Two options here.
+
+78
+00:04:24,200 --> 00:04:28,000
+Option one — Git.
+If your code is in a Git repository:
+cd /home/venturex,
+
+79
+00:04:28,200 --> 00:04:32,000
+then git clone your-repo-url public_html.
+
+80
+00:04:32,200 --> 00:04:35,000
+It clones everything into the public_html folder.
+
+81
+00:04:35,200 --> 00:04:38,000
+Option two — SCP from your local machine.
+
+82
+00:04:38,200 --> 00:04:43,000
+Open a new terminal on your computer:
+scp -r /path/to/venturex/*
+
+83
+00:04:43,200 --> 00:04:47,000
+venturex@your_server_ip:/home/venturex/public_html.
+
+84
+00:04:47,200 --> 00:04:50,000
+Enter your password, and it copies everything over.
+
+85
+00:04:50,200 --> 00:04:54,000
+Once the files are there, set permissions:
+sudo chown -R venturex:venturex /home/venturex/public_html.
+
+86
+00:04:54,200 --> 00:04:57,000
+Then: cd public_html.
+
+87
+00:04:57,200 --> 00:05:00,000
+Copy the environment file: cp .env.example .env.
+
+88
+00:05:00,200 --> 00:05:03,000
+Edit it: nano .env.
+
+89
+00:05:03,200 --> 00:05:07,000
+Fill in your database details —
+DB_HOST is 127.0.0.1, DB_DATABASE is venturex_prod,
+
+90
+00:05:07,200 --> 00:05:10,000
+DB_USERNAME is vxuser, DB_PASSWORD is your password.
+
+91
+00:05:10,200 --> 00:05:13,000
+Set APP_URL to https://yourdomain.com.
+
+92
+00:05:13,200 --> 00:05:15,000
+Save and exit.
+
+93
+00:05:15,200 --> 00:05:18,000
+Generate the key: php artisan key:generate.
+
+94
+00:05:18,200 --> 00:05:22,000
+Install dependencies:
+composer install --no-dev --optimize-autoloader.
+
+95
+00:05:22,200 --> 00:05:26,000
+Set permissions again:
+chmod -R 755 storage bootstrap/cache.
+
+96
+00:05:26,200 --> 00:05:29,000
+Create the storage link: php artisan storage:link.
+
+97
+00:05:30,000 --> 00:05:33,000
+Free SSL with Certbot.
+
+98
+00:05:33,200 --> 00:05:37,000
+First, make sure your domain's DNS is pointing to your server IP —
+A record pointing to the IP address.
+
+99
+00:05:37,200 --> 00:05:41,000
+Once DNS has propagated, install Certbot:
+sudo apt install certbot python3-certbot-nginx -y.
+
+100
+00:05:41,200 --> 00:05:45,000
+Run it: sudo certbot --nginx
+-d yourdomain.com -d www.yourdomain.com.
+
+101
+00:05:45,200 --> 00:05:49,000
+It'll ask for your email, agree to terms,
+and ask if you want to redirect HTTP to HTTPS — choose yes.
+
+102
+00:05:49,200 --> 00:05:52,000
+Certbot automatically configures Nginx for you.
+
+103
+00:05:52,200 --> 00:05:55,000
+Verify: sudo certbot certificates.
+
+104
+00:05:55,200 --> 00:05:58,000
+You'll see your domain with a valid certificate.
+
+105
+00:05:58,200 --> 00:06:01,000
+Auto-renewal is set up by default.
+
+106
+00:06:01,200 --> 00:06:04,000
+Test it: sudo certbot renew --dry-run.
+
+107
+00:06:04,200 --> 00:06:07,000
+If no errors, you're good.
+
+108
+00:06:07,200 --> 00:06:10,000
+Your site is now live with HTTPS.
+
+109
+00:06:11,000 --> 00:06:15,000
+VentureX uses queues for background jobs —
+things like sending bulk emails,
+
+110
+00:06:15,200 --> 00:06:18,000
+processing AI requests, and generating reports.
+
+111
+00:06:18,200 --> 00:06:21,000
+We need Supervisor to keep those workers running.
+
+112
+00:06:21,200 --> 00:06:25,000
+Install it: sudo apt install supervisor -y.
+
+113
+00:06:25,200 --> 00:06:29,000
+Create a worker config:
+sudo nano /etc/supervisor/conf.d/venturex-worker.conf.
+
+114
+00:06:29,200 --> 00:06:33,000
+Paste this in — a program block with the command
+php artisan queue:work, user venturex,
+
+115
+00:06:33,200 --> 00:06:36,000
+autostart and autorestart enabled.
+
+116
+00:06:36,200 --> 00:06:38,000
+Save and exit.
+
+117
+00:06:38,200 --> 00:06:41,000
+Reload Supervisor: sudo supervisorctl reread,
+
+118
+00:06:41,200 --> 00:06:44,000
+then sudo supervisorctl update,
+
+119
+00:06:44,200 --> 00:06:48,000
+then sudo supervisorctl start venturex-worker:*.
+
+120
+00:06:48,200 --> 00:06:51,000
+Check status: sudo supervisorctl status.
+
+121
+00:06:51,200 --> 00:06:54,000
+You should see your worker running.
+
+122
+00:06:54,200 --> 00:06:57,000
+If it says FATAL, check the log file for errors.
+
+123
+00:06:58,000 --> 00:07:01,000
+Let's squeeze some extra performance out.
+
+124
+00:07:01,200 --> 00:07:05,000
+First, PHP OPcache — check it's enabled:
+php -m | grep opcache.
+
+125
+00:07:05,200 --> 00:07:07,000
+It should show up.
+
+126
+00:07:07,200 --> 00:07:11,000
+Then edit PHP config:
+sudo nano /etc/php/8.3/fpm/php.ini.
+
+127
+00:07:11,200 --> 00:07:15,000
+Find these settings and adjust them:
+opcache.enable=1, opcache.memory_consumption=128,
+
+128
+00:07:15,200 --> 00:07:19,000
+opcache.max_accelerated_files=10000,
+opcache.revalidate_freq=2.
+
+129
+00:07:19,200 --> 00:07:21,000
+Save.
+
+130
+00:07:21,200 --> 00:07:25,000
+Restart PHP-FPM:
+sudo systemctl restart php8.3-fpm.
+
+131
+00:07:25,200 --> 00:07:29,000
+Next, Nginx caching. Add these lines to your server block:
+location ~* \.(jpg|jpeg|png|gif|ico|css|js)$
+
+132
+00:07:29,200 --> 00:07:33,000
+{ expires 30d; add_header Cache-Control "public, immutable"; }
+
+133
+00:07:33,200 --> 00:07:37,000
+This tells the browser to cache static files for 30 days.
+
+134
+00:07:37,200 --> 00:07:39,000
+Reload Nginx.
+
+135
+00:07:39,200 --> 00:07:43,000
+Finally, MySQL tuning:
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf.
+
+136
+00:07:43,200 --> 00:07:47,000
+For a 2GB RAM server,
+set innodb_buffer_pool_size to 256M
+
+137
+00:07:47,200 --> 00:07:50,000
+and query_cache_size to 32M.
+
+138
+00:07:50,200 --> 00:07:53,000
+Restart MySQL: sudo systemctl restart mysql.
+
+139
+00:07:53,200 --> 00:07:57,000
+These changes alone can make your site feel twice as fast.
+
+140
+00:07:58,000 --> 00:08:01,000
+And that's it — VentureX is live on your own VPS!
+
+141
+00:08:01,200 --> 00:08:05,000
+You've got full control, full performance,
+and you're not sharing resources with anyone.
+
+142
+00:08:05,200 --> 00:08:08,000
+Open your browser, go to your domain, and log in.
+
+143
+00:08:08,200 --> 00:08:12,000
+Everything should work exactly like it did locally,
+but now it's production-ready.
+
+144
+00:08:12,200 --> 00:08:16,000
+A few tips going forward:
+set up automatic backups with a script and cron job,
+
+145
+00:08:16,200 --> 00:08:20,000
+monitor your server with something like Netdata or UptimeRobot,
+
+146
+00:08:20,200 --> 00:08:24,000
+and keep your system updated regularly
+with sudo apt update && sudo apt upgrade.
+
+147
+00:08:24,200 --> 00:08:28,000
+In the next video, we'll cover WordPress integration —
+how to connect your WordPress site directly to VentureX.
+
+148
+00:08:28,200 --> 00:08:30,000
+See you there!

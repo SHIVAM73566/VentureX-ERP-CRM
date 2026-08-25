@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" font-family="Segoe UI, Arial, sans-serif">
+  <defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#0f172a"/><stop offset="100%" style="stop-color:#1e293b"/></linearGradient></defs>
+  <rect width="800" height="450" fill="url(#bg)" rx="12"/>
+  <rect x="0" y="0" width="800" height="56" fill="#1e40af" rx="12"/><rect x="0" y="30" width="800" height="26" fill="#1e40af"/>
+  <text x="400" y="24" text-anchor="middle" fill="#93c5fd" font-size="12">VentureX ERP & CRM — Installation Guide</text>
+  <text x="400" y="46" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Step 1: Extract the ZIP File</text>
+  <rect x="40" y="75" width="340" height="350" rx="8" fill="#1e293b" stroke="#334155"/>
+  <rect x="40" y="75" width="340" height="30" rx="8" fill="#0f172a"/><rect x="40" y="97" width="340" height="8" fill="#0f172a"/>
+  <circle cx="58" cy="90" r="5" fill="#ef4444"/><circle cx="74" cy="90" r="5" fill="#eab308"/><circle cx="90" cy="90" r="5" fill="#22c55e"/>
+  <text x="210" y="95" text-anchor="middle" fill="#94a3b8" font-size="11">Downloads Folder</text>
+  <rect x="58" y="115" width="300" height="30" rx="4" fill="#422006" stroke="#f59e0b"/>
+  <text x="74" y="135" fill="#fbbf24" font-size="12">📦 VentureX-ERP-CRM.zip  (782 KB)</text>
+  <text x="210" y="168" text-anchor="middle" fill="#3b82f6" font-size="14" font-weight="600">↓  Right-click → Extract All</text>
+  <rect x="58" y="185" width="300" height="228" rx="4" fill="#0f172a" stroke="#334155"/>
+  <text x="74" y="205" fill="#79c0ff" font-size="12" font-weight="600">venturex-erp/</text>
+  <text x="90" y="224" fill="#94a3b8" font-size="11">├── app/  (62 controllers, 64 models)</text>
+  <text x="90" y="242" fill="#94a3b8" font-size="11">├── database/migrations/  (36 tables)</text>
+  <text x="90" y="260" fill="#94a3b8" font-size="11">├── resources/views/  (125 templates)</text>
+  <text x="90" y="278" fill="#94a3b8" font-size="11">├── routes/web.php  (220+ routes)</text>
+  <text x="90" y="296" fill="#94a3b8" font-size="11">├── documentation/  (install guides)</text>
+  <text x="90" y="314" fill="#7ee787" font-size="11">├── .env.example  ← config template</text>
+  <text x="90" y="332" fill="#7ee787" font-size="11">├── artisan</text>
+  <text x="90" y="350" fill="#7ee787" font-size="11">├── composer.json</text>
+  <text x="90" y="368" fill="#7ee787" font-size="11">├── package.json</text>
+  <text x="90" y="386" fill="#7ee787" font-size="11">└── vite.config.js</text>
+  <rect x="410" y="75" width="350" height="350" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="585" y="105" text-anchor="middle" fill="#e2e8f0" font-size="16" font-weight="700">How to Extract</text>
+  <rect x="428" y="118" width="314" height="90" rx="6" fill="#0f172a"/>
+  <text x="444" y="140" fill="#3b82f6" font-size="14" font-weight="700">🪟 Windows</text>
+  <text x="444" y="160" fill="#cbd5e1" font-size="12">1. Right-click the ZIP file</text>
+  <text x="444" y="178" fill="#cbd5e1" font-size="12">2. Select "Extract All..."</text>
+  <text x="444" y="196" fill="#cbd5e1" font-size="12">3. Choose your projects folder</text>
+  <rect x="428" y="218" width="314" height="75" rx="6" fill="#0f172a"/>
+  <text x="444" y="240" fill="#3b82f6" font-size="14" font-weight="700">🍎 Mac</text>
+  <text x="444" y="260" fill="#cbd5e1" font-size="12">Double-click the ZIP file</text>
+  <text x="444" y="278" fill="#cbd5e1" font-size="12">→ Extracts to same folder automatically</text>
+  <rect x="428" y="303" width="314" height="55" rx="6" fill="#0f172a"/>
+  <text x="444" y="325" fill="#3b82f6" font-size="14" font-weight="700">🐧 Linux</text>
+  <text x="444" y="345" fill="#c9d1d9" font-size="12" font-family="monospace">unzip VentureX-ERP-CRM.zip -d venturex-erp</text>
+  <rect x="428" y="368" width="314" height="48" rx="6" fill="#052e16" stroke="#22c55e"/>
+  <text x="585" y="390" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="700">✓ After extracting, open the venturex-erp folder</text>
+  <text x="585" y="408" text-anchor="middle" fill="#4ade80" font-size="11">You should see all the project files inside</text>
+</svg>

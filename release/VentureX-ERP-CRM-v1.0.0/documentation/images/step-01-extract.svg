@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)" rx="12"/>
+
+  <!-- Header -->
+  <rect x="20" y="20" width="760" height="50" fill="#1e40af" rx="8"/>
+  <circle cx="50" cy="45" r="16" fill="white"/>
+  <text x="50" y="50" text-anchor="middle" fill="#1e40af" font-family="Arial" font-size="16" font-weight="bold">1</text>
+  <text x="400" y="50" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="18" font-weight="bold">Step 1: Extract the ZIP File</text>
+
+  <!-- File explorer mockup -->
+  <rect x="30" y="90" width="370" height="380" fill="#1e293b" stroke="#334155" stroke-width="1" rx="8"/>
+  <rect x="30" y="90" width="370" height="35" fill="#0f172a" rx="8"/>
+  <rect x="30" y="115" width="370" height="10" fill="#0f172a"/>
+  <text x="50" y="113" fill="#94a3b8" font-family="Arial" font-size="12">📁 Downloads</text>
+  <circle cx="55" cy="107" r="5" fill="#ef4444"/><circle cx="72" cy="107" r="5" fill="#eab308"/><circle cx="89" cy="107" r="5" fill="#22c55e"/>
+
+  <!-- ZIP file -->
+  <rect x="50" y="140" width="330" height="40" fill="#422006" stroke="#f59e0b" stroke-width="1" rx="4"/>
+  <text x="70" y="164" fill="#fbbf24" font-family="Arial" font-size="13">📦 VentureX-ERP-CRM.zip</text>
+  <text x="320" y="164" fill="#94a3b8" font-family="Arial" font-size="11">782 KB</text>
+
+  <!-- Arrow -->
+  <text x="215" y="200" text-anchor="middle" fill="#3b82f6" font-family="Arial" font-size="24">↓ Right-click → Extract All</text>
+
+  <!-- Extracted folder -->
+  <rect x="50" y="220" width="330" height="230" fill="#0f172a" stroke="#334155" stroke-width="1" rx="4"/>
+  <text x="70" y="244" fill="#79c0ff" font-family="monospace" font-size="12">venture-x-erp-crm/</text>
+  <text x="90" y="264" fill="#79c0ff" font-family="monospace" font-size="11">├── app/</text>
+  <text x="90" y="282" fill="#94a3b8" font-family="monospace" font-size="10">│   ├── Http/Controllers/</text>
+  <text x="90" y="298" fill="#94a3b8" font-family="monospace" font-size="10">│   ├── Models/</text>
+  <text x="90" y="314" fill="#94a3b8" font-family="monospace" font-size="10">│   └── Services/</text>
+  <text x="90" y="334" fill="#79c0ff" font-family="monospace" font-size="11">├── database/migrations/</text>
+  <text x="90" y="354" fill="#79c0ff" font-family="monospace" font-size="11">├── resources/views/</text>
+  <text x="90" y="374" fill="#79c0ff" font-family="monospace" font-size="11">├── routes/web.php</text>
+  <text x="90" y="394" fill="#7ee787" font-family="monospace" font-size="11">├── .env.example</text>
+  <text x="90" y="414" fill="#7ee787" font-family="monospace" font-size="11">├── artisan</text>
+  <text x="90" y="434" fill="#7ee787" font-family="monospace" font-size="11">└── composer.json</text>
+
+  <!-- Right side: Instructions -->
+  <rect x="420" y="90" width="350" height="380" fill="#1e293b" stroke="#334155" stroke-width="1" rx="8"/>
+  <text x="440" y="120" fill="#e2e8f0" font-family="Arial" font-size="16" font-weight="bold">How to Extract</text>
+
+  <rect x="440" y="140" width="310" height="70" fill="#0f172a" rx="6"/>
+  <text x="460" y="162" fill="#3b82f6" font-family="Arial" font-size="13" font-weight="bold">Windows</text>
+  <text x="460" y="182" fill="#cbd5e1" font-family="Arial" font-size="12">Right-click ZIP → Extract All</text>
+  <text x="460" y="198" fill="#cbd5e1" font-family="Arial" font-size="12">→ Choose C:\Projects folder</text>
+
+  <rect x="440" y="220" width="310" height="70" fill="#0f172a" rx="6"/>
+  <text x="460" y="242" fill="#3b82f6" font-family="Arial" font-size="13" font-weight="bold">Mac</text>
+  <text x="460" y="262" fill="#cbd5e1" font-family="Arial" font-size="12">Double-click the ZIP file</text>
+  <text x="460" y="278" fill="#cbd5e1" font-family="Arial" font-size="12">→ Extracts to same folder</text>
+
+  <rect x="440" y="300" width="310" height="70" fill="#0f172a" rx="6"/>
+  <text x="460" y="322" fill="#3b82f6" font-family="Arial" font-size="13" font-weight="bold">Linux</text>
+  <text x="460" y="342" fill="#cbd5e1" font-family="monospace" font-size="12">unzip VentureX-ERP-CRM.zip</text>
+  <text x="460" y="358" fill="#cbd5e1" font-family="Arial" font-size="12">-d venture-x-erp-crm</text>
+
+  <rect x="440" y="380" width="310" height="70" fill="#052e16" rx="6"/>
+  <text x="460" y="402" fill="#4ade80" font-family="Arial" font-size="13" font-weight="bold">✓ After Extracting</text>
+  <text x="460" y="422" fill="#cbd5e1" font-family="Arial" font-size="12">You should see the venture-x-erp-crm</text>
+  <text x="460" y="438" fill="#cbd5e1" font-family="Arial" font-size="12">folder with all project files inside</text>
+</svg>

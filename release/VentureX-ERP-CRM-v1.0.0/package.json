@@ -1,0 +1,30 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "name": "VentureX-ERP",
+    "description": "VentureX ERP & CRM - AI-Powered CRM & ERP Business Operating System frontend assets",
+    "private": true,
+    "license": "UNLICENSED",
+    "author": {
+        "name": "Shivam Chaturvedi",
+        "email": "chaturvedishivam179@gmail.com",
+        "homepage": "https://ventureai.pro"
+    },
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.0.0",
+        "alpinejs": "^3.14.0",
+        "laravel-vite-plugin": "^3.1",
+        "tailwindcss": "^4.0.0",
+        "vite": "^8.0.0"
+    },
+    "optionalDependencies": {
+        "@laravel/multiplex": "^0.4.1"
+    },
+    "engines": {
+        "node": ">=20.0.0"
+    }
+}

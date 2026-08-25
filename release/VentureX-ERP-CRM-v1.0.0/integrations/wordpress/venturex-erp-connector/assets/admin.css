@@ -1,0 +1,39 @@
+.venturex-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    max-width: 700px;
+}
+
+.venturex-card h2 {
+    margin-top: 0;
+    font-size: 1.4em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.venturex-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.venturex-status--connected {
+    background: #d4edda;
+    color: #155724;
+}
+
+.venturex-status--disconnected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.venturex-loading {
+    color: #666;
+    font-style: italic;
+    margin-left: 10px;
+}

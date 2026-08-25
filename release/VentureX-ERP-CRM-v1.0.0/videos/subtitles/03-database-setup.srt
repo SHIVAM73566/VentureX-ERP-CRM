@@ -1,0 +1,227 @@
+1
+00:00:01,000 --> 00:00:05,000
+Welcome back! Now that we've got all our requirements in place,
+
+2
+00:00:05,000 --> 00:00:08,500
+it's time to set up the database. This is where VentureX will
+
+3
+00:00:08,500 --> 00:00:12,000
+store all its data — customer records, transactions, inventory,
+
+4
+00:00:12,000 --> 00:00:15,000
+everything. Let's get into it.
+
+5
+00:00:16,000 --> 00:00:19,500
+I'm going to show you three ways to set this up. First, the command line —
+
+6
+00:00:19,500 --> 00:00:23,000
+this is the most direct method and my personal favorite.
+
+7
+00:00:23,000 --> 00:00:26,500
+Open your terminal and log into MySQL as the root user.
+
+8
+00:00:27,500 --> 00:00:31,000
+You'll be prompted for your root password. Type it in —
+
+9
+00:00:31,000 --> 00:00:34,500
+you won't see the characters as you type, that's normal for security.
+
+10
+00:00:34,500 --> 00:00:38,000
+Hit Enter, and if your password is correct, you'll see the MySQL monitor prompt.
+
+11
+00:00:39,000 --> 00:00:42,500
+Alright, we're in. Now let's create the database.
+
+12
+00:00:42,500 --> 00:00:46,000
+I'm going to type this command exactly.
+
+13
+00:00:47,000 --> 00:00:50,500
+VENTUREX_ERP — that's the name of our database.
+
+14
+00:00:50,500 --> 00:00:54,000
+The semicolon at the end is important, don't forget it.
+
+15
+00:00:54,000 --> 00:00:57,500
+You should see 'Query OK' which means the database was created successfully.
+
+16
+00:00:57,500 --> 00:01:01,000
+Let's verify it exists.
+
+17
+00:01:02,000 --> 00:01:05,500
+There it is — VENTUREX_ERP shows up in the list. Perfect.
+
+18
+00:01:06,000 --> 00:01:09,500
+Next, we need to create a dedicated user for this database.
+
+19
+00:01:09,500 --> 00:01:13,000
+You never want to use root for your application —
+
+20
+00:01:13,000 --> 00:01:17,000
+that's a security best practice. Let's create a user with limited privileges.
+
+21
+00:01:18,000 --> 00:01:21,500
+I'm creating a user called VENTUREX_ERP_user that can only connect
+
+22
+00:01:21,500 --> 00:01:25,000
+from localhost — that's the 127.0.0.1 part.
+
+23
+00:01:25,000 --> 00:01:28,500
+And I'm setting a strong password. Now, replace 'YourSecurePassword123!'
+
+24
+00:01:28,500 --> 00:01:32,000
+with something unique and strong.
+
+25
+00:01:32,000 --> 00:01:36,000
+Don't use the same password I'm using here.
+
+26
+00:01:37,000 --> 00:01:40,500
+Now we need to give this user permission to actually work with our database.
+
+27
+00:01:40,500 --> 00:01:44,000
+We'll grant all privileges on the VENTUREX_ERP database
+
+28
+00:01:44,000 --> 00:01:47,500
+to our new user.
+
+29
+00:01:48,500 --> 00:01:52,000
+This gives our user full access to everything inside the VENTUREX_ERP database,
+
+30
+00:01:52,000 --> 00:01:55,500
+but nothing outside of it. That's exactly what we want.
+
+31
+00:01:55,500 --> 00:01:59,000
+Let's flush the privileges to make sure MySQL picks up the changes.
+
+32
+00:02:00,000 --> 00:02:03,500
+Now, if the command line feels a bit intimidating, here's the GUI approach
+
+33
+00:02:03,500 --> 00:02:07,000
+using phpMyAdmin. This comes bundled with tools like XAMPP and WAMP,
+
+34
+00:02:07,000 --> 00:02:10,500
+so you might already have it.
+
+35
+00:02:11,500 --> 00:02:15,000
+Log in with your MySQL credentials. Once you're in,
+
+36
+00:02:15,000 --> 00:02:18,500
+click on the 'Databases' tab at the top.
+
+37
+00:02:19,500 --> 00:02:23,000
+Type your database name — VENTUREX_ERP — and hit Create.
+
+38
+00:02:23,000 --> 00:02:26,500
+One click, done. For creating a user, go to the 'User accounts' tab,
+
+39
+00:02:26,500 --> 00:02:30,000
+click 'Add user account', fill in the username, host, and password,
+
+40
+00:02:30,000 --> 00:02:34,000
+then scroll down and check 'Grant all privileges' for the VENTUREX_ERP database.
+
+41
+00:02:35,000 --> 00:02:38,500
+And for those of you who prefer a desktop application,
+
+42
+00:02:38,500 --> 00:02:42,000
+MySQL Workbench is another great option. It's free and available
+
+43
+00:02:42,000 --> 00:02:46,000
+for Windows, Mac, and Linux.
+
+44
+00:02:47,000 --> 00:02:50,500
+Connect to your MySQL server, then open a new query tab.
+
+45
+00:02:50,500 --> 00:02:54,000
+You can paste the same SQL commands we ran in the terminal —
+
+46
+00:02:54,000 --> 00:02:57,500
+the CREATE DATABASE, CREATE USER, and GRANT PRIVILEGES statements.
+
+47
+00:02:57,500 --> 00:03:01,000
+Execute them one by one, and you're set.
+
+48
+00:03:02,000 --> 00:03:05,500
+Let's verify everything is working. I'll log in with the new user credentials
+
+49
+00:03:05,500 --> 00:03:09,000
+to make sure the user was created correctly.
+
+50
+00:03:10,000 --> 00:03:13,500
+Now let's check that we can see our database.
+
+51
+00:03:14,500 --> 00:03:18,000
+And there it is — VENTUREX_ERP is visible to our new user.
+
+52
+00:03:18,000 --> 00:03:21,500
+That confirms the privileges were granted correctly.
+
+53
+00:03:21,500 --> 00:03:25,000
+Our database is ready to go.
+
+54
+00:03:26,000 --> 00:03:29,500
+That's it! Your database is set up and ready.
+
+55
+00:03:29,500 --> 00:03:33,000
+In the next video, we'll configure the VentureX environment file
+
+56
+00:03:33,000 --> 00:03:36,500
+and connect it to this database. Almost there —
+
+57
+00:03:36,500 --> 00:03:40,000
+see you in the next one!

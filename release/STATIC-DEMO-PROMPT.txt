@@ -1,0 +1,364 @@
+PROMPT — BUILD A STATIC INTERACTIVE DEMO OF VENTUREX ERP & CRM
+================================================================
+
+You are a senior frontend developer. Build a COMPLETE STATIC INTERACTIVE DEMO of "VentureX ERP & CRM" — a single-file HTML page (or small multi-page static site) that LOOKS AND FEELS identical to the real application. All data is fake/placeholder. No backend. No database. No real auth. Purely visual. This demo will be hosted on GitHub Pages for pre-sales previews and marketplace submissions.
+
+CRITICAL PURPOSE: This demo lets potential buyers CLICK THROUGH the real UI to understand every feature before purchasing. Codester, clients, and sales channels use this to see the product.
+
+═══════════════════════════════════════════
+DESIGN SYSTEM (EXACT — copy these values)
+═══════════════════════════════════════════
+
+COLORS:
+- Primary brand: #4F46E5 (indigo-600)
+- Secondary: #7C3AED (violet-600)
+- Success: #10B981 (emerald-500)
+- Warning: #F59E0B (amber-500)
+- Danger: #EF4444 (red-500)
+- Background: #F8FAFC (slate-50)
+- Sidebar: #0F172A (slate-900)
+- Sidebar active item: #4F46E5
+- Card: #FFFFFF
+- Text primary: #0F172A
+- Text muted: #64748B
+- Border: #E2E8F0
+- Hover: #F1F5F9
+
+TYPOGRAPHY:
+- Font: "Inter", -apple-system, system-ui, sans-serif (Google Fonts CDN OK)
+- Sidebar: 14px, font-weight 500
+- Headings: 20-24px, font-weight 700
+- Body text: 14px, line-height 1.6
+
+LAYOUT:
+- Sidebar: fixed left, 250px wide, full height, dark (#0F172A)
+- Top bar: sticky, 64px height, white, has: breadcrumbs, search icon, bell icon, user avatar dropdown
+- Main content: scrollable area to the right of sidebar, 24px padding
+- Cards: border-radius 12px, padding 24px, border 1px solid #E2E8F0, shadow: 0 1px 3px rgba(0,0,0,0.08)
+
+═══════════════════════════════════════════
+LOGIN PAGE (first thing users see)
+═══════════════════════════════════════════
+
+Design: centered card on a gradient background (indigo-to-violet, like #4F46E5 → #7C3AED).
+Card width: ~400px, white, rounded-xl, shadow-xl.
+
+Content:
+- Logo mark (a square with gradient + text "VentureX" + "ERP & CRM" below in small gray text)
+- H1: "Welcome Back" (font-size: 24px)
+- Subtitle: "Sign in to your business operating system"
+- Form fields: Email input, Password input (with eye toggle icon)
+- "Remember me" checkbox
+- "Forgot password?" link (gray, right-aligned)
+- Primary button: "Sign In" (indigo gradient background, full width, rounded-lg)
+- Footer text: "Don't have an account? Contact support@venturexerp.com"
+
+INTERACTION:
+- Default pre-filled: email = "demo_admin@example.com", password = "••••••••"
+- Clicking "Sign In" triggers a 1-second fake loading spinner, then navigates to Dashboard
+- Also add 2 more demo login options below the form (as links/cards):
+  "Login as CEO — demo_manager@example.com"
+  "Login as Sales Manager — demo_sales@example.com"
+  (all three go to same dashboard, just change the user name in top bar)
+
+═══════════════════════════════════════════
+SIDEBAR NAVIGATION (persistent on all pages)
+═══════════════════════════════════════════
+
+Left sidebar, dark background, logo at top, then nav sections:
+
+LOGO: square gradient icon + "VentureX" in white bold + "ERP & CRM" in small slate-400
+
+NAV ITEMS (grouped):
+```
+[Section: MAIN]
+  🏠 Dashboard            (icon: grid/squares)
+  📊 Analytics            (icon: chart-bar)
+
+[Section: CRM]
+  👥 Contacts             (icon: users)
+  🏢 Companies            (icon: building)
+  📞 Leads                (icon: phone)
+  💰 Opportunities        (icon: currency-dollar)
+
+[Section: SALES]
+  📋 Quotations           (icon: document-text)
+  🧾 Invoices             (icon: receipt)
+  📦 Sales Orders         (icon: shopping-cart)
+
+[Section: INVENTORY]
+  📦 Products             (icon: cube)
+  🏭 Warehouses           (icon: home-modern)
+  📑 Stock Movements      (icon: arrows-right-left)
+
+[Section: PROCUREMENT]
+  🛒 Purchase Orders      (icon: clipboard-document-list)
+  📄 Requisitions         (icon: document-duplicate)
+  📩 RFQs                 (icon: paper-airplane)
+
+[Section: FINANCE]
+  💳 Accounts             (icon: banknotes)
+  📒 Journal Entries      (icon: book-open)
+  📊 Reports              (icon: chart-pie)
+
+[Section: LOGISTICS]
+  🚚 Shipments            (icon: truck)
+  📦 Containers           (icon: square-3-stack-3d)
+  🌍 Landed Costs         (icon: globe-alt)
+
+[Section: SUPPORT]
+  🎫 Tickets              (icon: ticket)
+  ❓ FAQ                   (icon: question-mark-circle)
+
+[Section: AI]
+  🤖 AI Copilot           (icon: sparkles, with a green dot "AI" badge)
+
+[Section: SYSTEM]
+  👥 Users                 (icon: user-group)
+  🔐 Security              (icon: shield-check)
+  📝 Audit Logs            (icon: clipboard-document-check)
+  ⚙️ Settings              (icon: cog-6-tooth)
+```
+
+ACTIVE STATE: left border 3px indigo, background slightly lighter (#1E293B), text white
+HOVER STATE: background #1E293B, text white
+INACTIVE: text #94A3B8
+
+Bottom of sidebar: 
+- Dark mode toggle (sun/moon icon)
+- User mini-card: small avatar circle + "Demo Admin" + "Super Admin" role label
+- Collapse sidebar button (hamburger icon, at very top of sidebar next to logo)
+
+═══════════════════════════════════════════
+PAGES (click sidebar = show that page's content, all in single-page navigation)
+═══════════════════════════════════════════
+
+PAGE 1: DASHBOARD (default after login)
+
+Top row (4 stat cards in a grid):
+| Card               | Value    | Change      | Color   | Icon            |
+|--------------------|----------|-------------|---------|-----------------|
+| Total Revenue      | $284,520 | +12.5%      | green   | currency-dollar |
+| Active Leads       | 1,247    | +8.3%       | blue    | users           |
+| Open Invoices      | 89       | -3.2%       | amber   | receipt         |
+| Support Tickets    | 42       | +5.1%       | red     | ticket          |
+
+Each stat card: white bg, icon in colored circle (left), value big bold (right), small green/red change badge, 24h label.
+
+Row 2 (2 columns):
+LEFT (60% width): Revenue chart (use CSS-only bar chart or lightweight canvas chart)
+- Monthly bars: Jan-Dec with fake revenue data growing from $15k to $35k
+- Y-axis labels, X-axis month labels
+- Title: "Revenue Overview"
+- Subtitle: "Monthly revenue for 2026"
+
+RIGHT (40% width): "Recent Activity" feed
+- 6 activity items, each: colored dot + text + time ago
+  - "New lead: Acme Corp" — 2 min ago
+  - "Invoice #1042 paid" — 15 min ago
+  - "Purchase order #308 approved" — 1 hr ago
+  - "Support ticket #128 resolved" — 3 hrs ago
+  - "New opportunity: $45,000" — 5 hrs ago
+  - "Stock adjustment: Product #89" — yesterday
+
+Row 3 (3 columns):
+LEFT: "Top Deals" table (5 rows: company, value, stage, probability)
+MIDDLE: "Pipeline Status" horizontal stacked bar chart (leads/prospecting/proposal/negotiation/won)
+RIGHT: "Recent Orders" table (5 rows: order#, customer, amount, status badges)
+
+Row 4 (2 columns):
+LEFT: "Tasks Due This Week" checklist (5 items with checkboxes, priorities: high/medium/low with colored dots)
+RIGHT: "Inventory Alerts" card (5 products with stock level progress bars, red for low stock)
+
+PAGE 2: CONTACTS
+
+Table view with:
+- Search bar + "Add Contact" button (top right)
+- Column headers: Name, Email, Phone, Company, Status, Last Contact, Actions (edit/delete icons)
+- 8 rows of realistic demo data (names, emails, companies)
+- Pagination: "Showing 1-8 of 156 contacts"
+- Filter chips at top: "All (156)" | "Active (132)" | "Inactive (24)"
+
+PAGE 3: LEADS
+
+Kanban board view with 5 columns:
+| New (12) | Contacted (8) | Qualified (5) | Proposal (4) | Won (3) |
+Each column has 3-4 lead cards:
+- Company name (bold)
+- Contact name
+- Value ($)
+- Source badge (referral/website/cold-call/linkedin)
+- Priority dot (red/amber/green)
+- Mini avatar
+
+Cards have drag handle icon (visual only — static demo)
+
+PAGE 4: INVOICES
+
+Table with:
+- Status filter tabs: All | Draft | Sent | Paid | Overdue
+- 10 invoice rows: Invoice#, Customer, Date, Due Date, Amount, Status (colored badge)
+- Status colors: Draft=gray, Sent=blue, Paid=green, Overdue=red
+- Top-right: "Create Invoice" button (indigo)
+- Summary row at bottom: Total: $124,890
+
+PAGE 5: AI COPILOT
+
+Split layout:
+LEFT (chat panel, 60%): 
+- Chat interface with message bubbles
+- Messages pre-populated:
+  - User: "Show me Q3 revenue summary"
+  - AI: "Q3 2026 revenue totalled $89,420 across 47 invoices. Top customer: Acme Corp ($23,100). Gross margin: 62%. [chart preview]"
+  - User: "Which supplier has the best pricing for Widget X?"
+  - AI: "Based on the last 5 purchase orders, Supplier B offers the best unit price at $4.20/unit vs Supplier A at $4.85/unit. I recommend requesting a new RFQ to negotiate further."
+- Message input bar at bottom with "Send" button and attachment icon
+- Provider indicator badge: "Powered by: NVIDIA Nemotron (local)"
+
+RIGHT (sidebar panel, 40%):
+- "AI Insights" card: 3 pre-generated insights
+  - "Revenue is trending 15% higher than last quarter"
+  - "3 invoices are overdue by more than 30 days"
+  - "Top-performing product: Enterprise Widget (32% of revenue)"
+- "Providers" card: toggle switches for NVIDIA/Gemini/OpenAI/Claude (visual only)
+- "Usage This Month" card: progress bar showing 47/200 queries used
+
+PAGE 6: QUOTATIONS
+
+Table view similar to invoices:
+- 8 quotation rows with customer, amount, date, status (draft/sent/accepted/rejected)
+- Status badges with colors
+- "Create Quotation" button
+- Filter tabs
+
+PAGE 7: PURCHASE ORDERS
+
+Table:
+- 8 rows: PO#, Supplier, Date, Amount, Status (pending/approved/received)
+- Status badge colors
+- "Create Purchase Order" button
+
+PAGE 8: TICKETS
+
+Kanban view (like Leads):
+| Open (8) | In Progress (5) | Resolved (12) | Closed (6) |
+Each card: ticket#, subject, customer name, priority badge, time open
+
+PAGE 9: SETTINGS
+
+Tabbed interface:
+Tabs: General | Security | Users | API | Notifications
+Default tab "General" shows:
+- App name field (pre-filled "VentureX ERP & CRM")
+- Company name field
+- Currency selector (USD)
+- Timezone selector
+- Logo upload area (visual only)
+- Save button
+
+Tab "Users" shows: table of 5 users with name, email, role badge, status, actions
+
+PAGE 10: SECURITY & AUDIT LOGS
+
+- Filter bar: Date range, Event type dropdown, User dropdown
+- Log table: Timestamp, User, Action, IP Address, Details (15 rows of realistic entries)
+  Examples:
+  - "2026-08-25 09:42:15 | demo_admin | Login successful | 192.168.1.42"
+  - "2026-08-25 09:45:03 | demo_admin | Created invoice #1043 | 192.168.1.42"
+  - "2026-08-25 10:12:41 | demo_sales | Updated lead #892 status | 10.0.0.15"
+  - "2026-08-25 10:30:00 | system | Backup completed | localhost"
+
+═══════════════════════════════════════════
+TOP BAR (persistent)
+═══════════════════════════════════════════
+
+- Left: hamburger collapse icon + breadcrumb (e.g., "Dashboard" or "CRM > Leads")
+- Center: search input (visual only, with magnifying glass icon, placeholder "Search anything...")
+- Right: 
+  - Bell notification icon (with red badge "3")
+  - AI sparkle icon (links to AI Copilot page)
+  - User avatar circle + "Demo Admin" name + dropdown arrow
+  - Dropdown shows: "Profile", "Settings", "Logout" (Logout goes back to login page)
+
+═══════════════════════════════════════════
+INTERACTIONS (all pure HTML/CSS/JS, no backend)
+═══════════════════════════════════════════
+
+1. SIDEBAR NAVIGATION: clicking any sidebar item shows that page's content div, hides others. Use data-page attributes and JS class toggling.
+
+2. LOGIN → DASHBOARD: login button triggers 1s spinner, then hides login page div and shows app layout div.
+
+3. LOGOUT: dropdown "Logout" hides app layout, shows login page div.
+
+4. Kanban cards (Leads/Tickets): visual hover lift effect only (translateY -2px, shadow increase).
+
+5. Charts: use CSS-only bar charts (div heights as percentages) OR include Chart.js CDN (single file allowed) for the dashboard revenue chart. Keep lightweight.
+
+6. Tabs (Settings, Invoice filters): click tab = show that tab's content panel.
+
+7. Search bar: on keyup, filter the current table rows by matching visible text (simple JS filter).
+
+8. Tables: sortable columns (click header = sort by that column, toggle asc/desc).
+
+9. Notifications bell: clicking shows a dropdown with 3 notification items.
+
+10. Sidebar collapse: clicking hamburger makes sidebar 60px wide (icons only, text hidden). Click again = restore.
+
+11. Dark mode toggle: switches CSS variables to dark palette. Persist via localStorage.
+
+12. RESPONSIVE: on screens < 768px, sidebar becomes a slide-out drawer (hamburger opens it as overlay). Top bar becomes fixed.
+
+13. SMOOTH TRANSITIONS: page content fades in (opacity 0→1, 200ms) when switching pages.
+
+═══════════════════════════════════════════
+DEMO DATA — REALISTIC FAKE ENTRIES
+═══════════════════════════════════════════
+
+COMPANIES:
+Acme Corporation, TechVista Solutions, GlobalTrade Inc, Pinnacle Systems, BlueWave Logistics, Quantum Analytics, SolarPeak Energy, Atlas Manufacturing, Meridian Consulting, NovaTech Industries
+
+CONTACTS:
+Sarah Chen (Acme, CEO), James Rodriguez (TechVista, CFO), Priya Sharma (GlobalTrade, COO), Michael O'Brien (Pinnacle, IT Director), Emily Watson (BlueWave, Procurement), David Kim (Quantum, VP Sales), Lisa Anderson (SolarPeak, Manager), Robert Taylor (Atlas, Operations)
+
+LEADS:
+Include mix of: $5K-$150K values, sources: Website, Referral, LinkedIn, Cold Call, Trade Show, Organic Search. Stages distributed across all 5 columns.
+
+PRODUCTS:
+Widget Alpha ($49.99), Widget Beta ($89.99), Widget Pro ($149.99), Widget Enterprise ($299.99), Service Package Basic ($500), Service Package Premium ($1,500)
+
+INVOICES:
+INV-1001 through INV-1010, amounts $500-$25,000, mix of Draft/Sent/Paid/Overdue statuses
+
+TICKETS:
+TICK-101 through TICK-108, subjects like "Login issue", "API rate limit error", "Export CSV not working", "Request new feature: bulk import", "Dashboard widget not loading"
+
+═══════════════════════════════════════════
+BOTTOM OF EVERY PAGE
+═══════════════════════════════════════════
+
+A small footer bar inside main content:
+"Powered by VentureX ERP & CRM v1.0.0 | Demo Mode — This is a preview, no data is saved"
+This makes it clear to Codester reviewers and visitors that this is a live product demo.
+
+═══════════════════════════════════════════
+TECHNICAL REQUIREMENTS
+═══════════════════════════════════════════
+
+- Single HTML file OR max 3 files (index.html + style.css + app.js)
+- All CSS inline or in <style> — Tailwind CDN via script tag is OK
+- Google Fonts CDN for Inter font is OK
+- Chart.js CDN for dashboard chart is OK
+- No other external dependencies
+- Works when opened directly from file:// (no server needed)
+- Works when hosted on GitHub Pages
+- Must be fully functional with all interactions on desktop AND mobile
+- Accessible: semantic HTML, aria labels, keyboard navigation, alt text, focus-visible styles
+- Total size under 200KB (excluding chart.js CDN)
+
+═══════════════════════════════════════════
+FINAL OUTPUT
+═══════════════════════════════════════════
+
+Produce the complete, working, production-ready static demo. Every page must be navigable, every interaction must work. This must pass visual inspection next to the real app — the goal is that a buyer cannot tell the difference between this demo and the actual product until they try to perform a real database operation.
+
+After building: test every page navigation, every click, every filter, dark mode toggle, login/logout flow, responsive breakpoint at 768px and 1440px. Report any broken interactions and fix them before outputting the final file.

@@ -1,0 +1,80 @@
+MASTER PROMPT — VentureX Landing Page for Blogger (Copy & Paste Everything Below)
+
+You are an elite web designer and conversion copywriter. Build me a COMPLETE, STUNNING, HIGH-CONVERTING landing page for my software product "VentureX ERP & CRM" as ONE SINGLE SELF-CONTAINED HTML FILE (all CSS inside <style>, all JavaScript inside <script> — no external files) that I can paste directly into a Blogger Page using the HTML view. It must render perfectly on Blogger, be fully responsive, accessible, SEO-optimized, AdSense-friendly, and visually spectacular with a modern 3D premium feel.
+
+═══════════════ PRODUCT FACTS (USE THESE EXACTLY) ═══════════════
+• Name: VentureX ERP & CRM — AI-Powered Business Operating System
+• Built on: Laravel 13, PHP 8.3+, MySQL, Tailwind CSS v4, Alpine.js, REST API
+• One-time price: $89.99 (Professional $150.22, Enterprise $350, discount code SAVE29)
+• Buy link (use on every CTA button): https://shivamverse418.gumroad.com/l/arrgpcw
+• GitHub: https://github.com/SHIVAM73566/VentureX-ERP-CRM
+• Support email: support@venturexerp.com
+• Key stats to display: 92 Controllers • 74 Models • 169 Views • 44 Services • 339 Tests Passing • 23 Docs Files • 15 Video Tutorials
+
+CORE MODULES TO SHOWCASE (with short benefit lines):
+1. CRM & Sales — leads, Kanban pipeline drag-and-drop, quotations PDF, invoices, sales orders
+2. Inventory & Procurement — multi-warehouse stock, purchase orders, RFQ → supplier selection
+3. Finance & Accounting — double-entry bookkeeping, AP/AR, aging reports, multi-currency
+4. Logistics & Shipping — shipments, containers, landed costs, Incoterms (FOB/CIF/EXW)
+5. Customer Support Desk — tickets, internal replies, error reports, FAQ center
+6. AI Copilot — business insights, document reader, procurement AI; works WITHOUT API keys via local fallback + optional NVIDIA/Gemini/OpenAI/Claude routing
+7. Security Center — role permissions RBAC, two-factor auth TOTP, audit logs, step-up auth
+8. Integrations — REST API (18 endpoints), WordPress lead-capture plugin included
+
+═══════════════ DESIGN REQUIREMENTS (MAKE IT BREATHTAKING) ═══════════════
+• Dark premium theme default (deep navy #0A0F1E base) with elegant light-mode toggle; respect prefers-color-scheme
+• Brand gradient: indigo #4F46E5 → violet #7C3AED; success accent emerald #10B981
+• Hero with animated 3D floating dashboard mockup: CSS perspective transforms, parallax layers responding to mouse movement, soft glowing gradient orbs behind, glassmorphism cards, subtle grain/noise overlay
+• Micro-interactions everywhere: magnetic hover buttons, card tilt-on-hover (3D rotateX/rotateY), animated counters that count up on scroll into view, scroll-reveal fade-up animations (IntersectionObserver), smooth anchor scrolling, sticky glass navbar that shrinks on scroll
+• Animated marquee strip of module names; animated gradient text headings; shimmer skeleton effect on media while loading
+• Typography: system font stack or Google Fonts (Inter/Sora); huge clamp()-based responsive headlines; generous whitespace
+• Fully accessible: semantic landmarks, aria-labels, keyboard-navigable tabs/modals/accordion, focus-visible rings, alt text on every image, prefers-reduced-motion support
+• Mobile-first responsive at 360/768/1024/1440 breakpoints; hamburger menu; sticky bottom CTA bar on mobile ("Buy $89.99")
+• Performance rules: zero external JS libraries, pure CSS animations, lazy-load all images/videos, defer YouTube iframes until clicked (thumbnail facade pattern), total file must stay under ~120KB before media
+
+═══════════════ MEDIA SYSTEM — ONE PLACE TO EDIT (CRITICAL) ═══════════════
+Put a clearly-commented MEDIA CONFIG object at the very TOP of the <script> tag:
+const MEDIA_CONFIG = {
+  logoUrl: "",            // paste logo URL here
+  heroVideoId: "",        // YouTube VIDEO ID for autoplaying muted looping hero background video
+  demoVideos: [ {title:"", youtubeId:""}, ... ],   // product demo videos grid
+  installVideos: [ {title:"", youtubeId:""}, ... ], // installation guide videos
+  screenshots: [ {src:"", caption:""}, ... ]        // app screenshot gallery
+};
+All sections must read from MEDIA_CONFIG. If a value is empty string, hide that item gracefully (never show broken UI). Videos use click-to-play facade: show YouTube thumbnail + play button, inject iframe only on click. Screenshot gallery opens in a beautiful lightbox modal with prev/next arrows and ESC-to-close.
+
+═══════════════ PAGE STRUCTURE (IN THIS ORDER) ═══════════════
+1. Sticky navbar: logo, links (Features, Demos, Install, Use Cases, Blog, FAQ), light/dark toggle, CTA "Buy Now $89.99"
+2. HERO: badge "v1.0.0 • Laravel 13 • PHP 8.3", H1 "Run Your Entire Business From One AI-Powered Dashboard", subheadline, dual CTA (Buy Now / Watch Live Demo scrolls to videos), trust row (500+ businesses, 5-Day Money-Back, Instant Download, Lifetime License), 3D floating dashboard visual with live-playing muted hero video inside a browser-chrome frame + floating stat chips
+3. Stats bar: animated counters of key stats above
+4. Modules showcase: tabbed interface (click each module tab to switch panel) OR bento grid — every module above with icon + 4 benefit bullets
+5. AI Copilot spotlight: dark gradient panel, animated terminal-style mock conversation between user and AI Copilot with typing dots animation, provider chips (NVIDIA/Gemini/OpenAI/Claude), big highlight "Works WITHOUT any API keys"
+6. LIVE DEMO THEATER: two tab groups — "Product Demos" grid (demoVideos) and "Installation Guides" grid (installVideos); each card = thumbnail facade + duration + title; note under section: "Watch real screens — nothing staged"
+7. Screenshots gallery: horizontal snap-scroll of screenshots from MEDIA_CONFIG with captions, lightbox on click
+8. INSTALLATION HUB — tabbed step-by-step guides, each tab numbered steps in styled timeline cards with code blocks:
+   Tab A: cPanel Hosting (upload ZIP → extract to public_html → visit /install wizard → done in 5 min)
+   Tab B: VPS (Ubuntu) (apt install PHP 8.3 MySQL Nginx → git clone → composer install --no-dev → npm run build → migrate --seed → certbot SSL)
+   Tab C: Cloud Servers (AWS Lightsail/DigitalOcean/Oracle free tier quick-launch commands + docker-compose up -d one-liner)
+   Tab D: Docker (copy .env.docker → docker-compose up -d → open port 8000)
+   Tab E: Add To Your Existing Site (iframe embed snippet + subdomain method + reverse-proxy Nginx snippet + WordPress plugin mention)
+   Tab F: Platform Integrations — four mini-cards: WIX (embed iframe block steps), SHOPIFY (REST sync overview + webhook endpoints), WOOCOMMERCE (plugin + webhook order sync steps), BLOGGER (embed demo/lead-capture widget snippet)
+9. USE CASES: 6 scenario cards with who-it's-for + outcome: Manufacturer tracking landed costs; Trading company managing RFQs; Agency reselling white-label installs; Retailer syncing online store orders; Service firm billing via quotations→invoices; Startup founder using AI Copilot as analyst
+10. WHAT'S INSIDE THE DOWNLOAD: checklist two-column (source code, docs, videos, Docker files, WordPress plugin, seeder demo data, REST API docs…)
+11. TESTIMONIALS placeholder row (3 glass cards with MEDIA_CONFIG.avatar-less initials, editable quotes marked EDIT-ME)
+12. PRICING: 3 tier cards ($89.99 highlighted MOST POPULAR ribbon / $150.22 / $350) each with feature list + buy buttons linking Gumroad; SAVE29 discount callout chip on Enterprise
+13. FAQ accordion (6 Q&As: requirements? can I rebrand? refunds 5-day policy? API keys needed for AI? updates included? commercial license terms?)
+14. BLOG SECTION: styled "Latest from our Blog" area with 4 post-card placeholders wired to real Blogger feed: fetch posts dynamically from your blog's /feeds/posts/default?alt=json (put YOUR_BLOG_URL in MEDIA_CONFIG.blogUrl; graceful fallback message if empty) — this keeps the landing page fresh AND satisfies AdSense content requirements
+15. FINAL CTA band: gradient panel "Your Business Deserves An Operating System" + big buy button + guarantee badges
+16. Footer: quick links, support email, refund policy summary line, copyright, social placeholders
+17. REQUIRED ADSENSE-FRIENDLY ELEMENTS: visible links/placeholders for About Us, Contact Us, Privacy Policy, Terms, Disclaimer pages; cookie-consent notice bar (pure JS, dismissible); all content real text (no lorem ipsum)
+
+═══════════════ SEO SPECIFICATIONS (MANDATORY) ═══════════════
+• <title>VentureX ERP & CRM — AI-Powered Business Operating System | Laravel 13</title>
+• meta description (~155 chars): "VentureX is a complete AI-powered ERP & CRM on Laravel 13 — sales, inventory, accounting, logistics, support + AI Copilot with no API keys. One-time $89.99."
+• keywords meta: venturex, erp crm laravel, ai copilot erp, business operating system, php erp script, open source crm alternative
+• Open Graph + Twitter Card tags (og:title, og:description, og:type=website, twitter:summary_large_image)
+• Canonical URL placeholder https://YOUR-BLOG.blogspot.com/p/venturex.html
+• JSON-LD schema.org SoftwareApplication block (name, applicationCategory=BusinessApplication, operatingSystem="Web, Self-hosted", offers price 89.99 USD, aggregateRating placeholder) + FAQPage schema mirroring the FAQ section
+• Single H1 only, logical H2/H3 hierarchy, descriptive img alt attributes, lazy loading + width/height attrs on media, internal anchor links with meaningful IDs
+
+Output ONLY the final complete HTML file, production-ready, with clear <!--EDIT--> comments marking: MEDIA_CONFIG location, canonical URL, testimonial texts, and blog URL. No explanations outside the code.

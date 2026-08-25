@@ -1,0 +1,546 @@
+1
+00:00:01,000 --> 00:00:04,000
+Welcome back to the VentureX tutorial series.
+
+2
+00:00:04,200 --> 00:00:08,500
+In this video, we're tackling Inventory
+and Procurement —
+
+3
+00:00:08,600 --> 00:00:11,500
+how to manage your products, track
+stock levels, handle purchase orders,
+
+4
+00:00:11,600 --> 00:00:15,000
+and keep your supply chain
+running smoothly. Let's get into it.
+
+5
+00:00:15,300 --> 00:00:19,000
+The Inventory module in VentureX is built
+around five key areas:
+
+6
+00:00:19,100 --> 00:00:22,500
+Products — your entire catalog,
+Categories — how you organize products,
+
+7
+00:00:22,600 --> 00:00:26,000
+Stock Levels — real-time inventory
+quantities, Transfers — moving stock
+
+8
+00:00:26,100 --> 00:00:29,500
+between locations, and Adjustments —
+correcting counts when reality doesn't
+
+9
+00:00:29,600 --> 00:00:33,000
+match the system. Let's start
+with categories.
+
+10
+00:00:33,300 --> 00:00:37,000
+Categories help you organize your
+products logically. Let's create one.
+
+11
+00:00:37,100 --> 00:00:40,500
+I'll click Add Category and name it
+'Software Licenses'.
+
+12
+00:00:40,600 --> 00:00:44,000
+Parent category can be left blank
+for top-level, or you can create
+
+13
+00:00:44,100 --> 00:00:47,500
+hierarchies like Electronics >
+Laptops > Gaming.
+
+14
+00:00:47,600 --> 00:00:50,500
+Let's keep it simple and save.
+
+15
+00:00:50,800 --> 00:00:54,000
+Now let's add a product.
+Navigate to Products and click Add Product.
+
+16
+00:00:54,300 --> 00:00:58,000
+Product name: 'VentureX Pro —
+Annual License'. SKU: VNTX-PRO-001 —
+
+17
+00:00:58,100 --> 00:01:01,500
+VentureX auto-generates SKUs
+if you prefer, but I like being explicit.
+
+18
+00:01:01,600 --> 00:01:05,000
+Category: Software Licenses.
+Description: full product description
+
+19
+00:01:05,100 --> 00:01:08,000
+for internal reference.
+Product type — is this a physical product
+
+20
+00:01:08,100 --> 00:01:11,500
+you ship, a digital product you deliver,
+or a service? I'll choose Digital
+
+21
+00:01:11,600 --> 00:01:14,500
+since this is a software license.
+
+22
+00:01:14,800 --> 00:01:18,500
+Pricing — let's set the regular price
+at $2,400 per year. Cost price —
+
+23
+00:01:18,600 --> 00:01:22,000
+what it costs you to deliver — let's
+say $0 for digital.
+
+24
+00:01:22,100 --> 00:01:25,500
+Tax class: Standard.
+The selling price field lets you set
+
+25
+00:01:25,600 --> 00:01:28,500
+promotional or tiered pricing.
+I'll leave it at the regular price for now.
+
+26
+00:01:28,800 --> 00:01:32,500
+Inventory tracking — toggle this on
+if you want VentureX to manage
+
+27
+00:01:32,600 --> 00:01:36,000
+stock quantities. For digital products,
+you'd typically set this to unlimited
+
+28
+00:01:36,100 --> 00:01:39,000
+or high stock. Let me enable it and
+set stock quantity to 9999.
+
+29
+00:01:39,100 --> 00:01:42,500
+Low stock threshold: 100 —
+we'll get an alert when we dip below that.
+
+30
+00:01:42,600 --> 00:01:46,000
+Manage stock by location: enabled
+if you have multiple warehouses.
+
+31
+00:01:46,100 --> 00:01:49,500
+I'll keep it simple with one location
+for now.
+
+32
+00:01:49,800 --> 00:01:53,000
+Weight and dimensions — optional for
+digital products but required
+
+33
+00:01:53,100 --> 00:01:56,500
+if you're shipping physical goods.
+Product images — you can upload multiple
+
+34
+00:01:56,600 --> 00:02:00,000
+images that appear in the catalog.
+Let me save this product.
+
+35
+00:02:00,300 --> 00:02:04,000
+There's our product in the list with a
+stock quantity of 9999.
+
+36
+00:02:04,100 --> 00:02:07,500
+Let's add a physical product too.
+I'll quickly create 'USB-C Docking Station'
+
+37
+00:02:07,600 --> 00:02:11,000
+as a physical product with a stock
+of 50 units.
+
+38
+00:02:11,300 --> 00:02:15,000
+The Stock Levels page gives you a
+real-time view of every product's
+
+39
+00:02:15,100 --> 00:02:18,500
+inventory status. You can see
+current stock, reserved stock —
+
+40
+00:02:18,600 --> 00:02:22,000
+that's items in pending orders —
+available stock, and the low stock flag.
+
+41
+00:02:22,100 --> 00:02:25,000
+Let me show you what happens
+when we sell something.
+
+42
+00:02:25,300 --> 00:02:29,000
+Stock Adjustments are for correcting
+discrepancies. Maybe you did a physical
+
+43
+00:02:29,100 --> 00:02:32,500
+count and found 48 docking stations
+instead of 50. Let's log an adjustment.
+
+44
+00:02:32,800 --> 00:02:36,500
+Product: USB-C Docking Station.
+Adjustment type: Decrease. Quantity: 2.
+
+45
+00:02:36,600 --> 00:02:40,000
+Reason: 'Physical count variance —
+2 units unaccounted for'.
+
+46
+00:02:40,100 --> 00:02:43,500
+Reference: 'Count 2026-08-20'.
+This keeps a full audit trail
+
+47
+00:02:43,600 --> 00:02:46,500
+of every stock change.
+
+48
+00:02:46,800 --> 00:02:50,000
+Stock is now at 48 units.
+Every adjustment is logged with
+
+49
+00:02:50,100 --> 00:02:53,500
+who made it, when, and why —
+full traceability.
+
+50
+00:02:53,800 --> 00:02:57,500
+If you operate multiple locations
+or warehouses, Stock Transfers let you
+
+51
+00:02:57,600 --> 00:03:01,000
+move inventory between them.
+Let's say we have a main warehouse
+
+52
+00:03:01,100 --> 00:03:04,000
+and a satellite office.
+I'll create a transfer.
+
+53
+00:03:04,300 --> 00:03:08,000
+From Location: Main Warehouse.
+To Location: Satellite Office.
+
+54
+00:03:08,100 --> 00:03:11,500
+Product: USB-C Docking Station.
+Quantity: 5. We're shipping 5 docking
+
+55
+00:03:11,600 --> 00:03:15,000
+stations to the satellite office.
+Add a note: 'Restocking satellite office
+
+56
+00:03:15,100 --> 00:03:18,000
+for local fulfillment.'
+
+57
+00:03:18,100 --> 00:03:21,500
+The transfer shows as pending
+until received. When the satellite office
+
+58
+00:03:21,600 --> 00:03:25,000
+confirms receipt, they mark it complete,
+and stock is deducted from the main
+
+59
+00:03:25,100 --> 00:03:28,000
+warehouse and added to the satellite.
+Full audit trail, zero guesswork.
+
+60
+00:03:28,300 --> 00:03:32,000
+Remember our low stock threshold of 10
+for the docking station? When available
+
+61
+00:03:32,100 --> 00:03:35,500
+stock drops below that number,
+VentureX triggers a low stock alert.
+
+62
+00:03:35,600 --> 00:03:39,000
+Let me simulate this by adjusting
+stock to 8 units.
+
+63
+00:03:39,300 --> 00:03:43,000
+There it is — a low stock alert badge
+appeared in the Inventory module
+
+64
+00:03:43,100 --> 00:03:46,500
+and in the notification center.
+Users with the right permissions
+
+65
+00:03:46,600 --> 00:03:50,000
+get emailed alerts too.
+You can configure alert thresholds
+
+66
+00:03:50,100 --> 00:03:53,000
+per product and per user role
+in Settings.
+
+67
+00:03:53,300 --> 00:03:57,000
+Now let's flip to the other side of
+the coin: Procurement. This module
+
+68
+00:03:57,100 --> 00:04:00,500
+handles purchasing from your suppliers —
+creating purchase orders, receiving goods,
+
+69
+00:04:00,600 --> 00:04:03,500
+and managing vendor relationships.
+
+70
+00:04:03,800 --> 00:04:07,500
+First, let's add a vendor.
+Navigate to Vendors and click Add Vendor.
+
+71
+00:04:07,800 --> 00:04:11,500
+Vendor name: 'TechSupply Global'.
+Contact person: 'Mike Chen'.
+
+72
+00:04:11,600 --> 00:04:15,000
+Email: purchasing@techsupply-global.com.
+Phone: 555-0300.
+
+73
+00:04:15,100 --> 00:04:18,500
+Address: their shipping address.
+Payment terms: Net 30.
+
+74
+00:04:18,600 --> 00:04:22,000
+Tax ID: optional but useful for
+accounting. I'll also add the tag
+
+75
+00:04:22,100 --> 00:04:25,000
+'Preferred Vendor'. Save.
+
+76
+00:04:25,300 --> 00:04:29,000
+Now let's create a purchase order.
+Navigate to Purchase Orders
+
+77
+00:04:29,100 --> 00:04:32,000
+and click Create PO.
+
+78
+00:04:32,300 --> 00:04:36,000
+Vendor: TechSupply Global.
+PO number auto-generates but I'll set it
+
+79
+00:04:36,100 --> 00:04:39,500
+manually to PO-2026-001.
+Order date: today.
+
+80
+00:04:39,600 --> 00:04:43,000
+Expected delivery: two weeks out.
+Now the line items —
+
+81
+00:04:43,100 --> 00:04:46,500
+I'm ordering 100 USB-C Docking Stations
+at $95 each, that's our cost price.
+
+82
+00:04:46,600 --> 00:04:50,000
+Add another line: 50 units of a
+Wireless Mouse at $22 each.
+
+83
+00:04:50,300 --> 00:04:54,000
+The total updates automatically —
+$9,500 plus $1,100, totaling $10,600.
+
+84
+00:04:54,100 --> 00:04:57,500
+You can add notes, attach files,
+and set approval workflows
+
+85
+00:04:57,600 --> 00:05:00,500
+if your organization requires PO approval
+before sending to vendors.
+
+86
+00:05:00,800 --> 00:05:04,500
+The PO is saved. Status is Pending.
+When you send it to the vendor,
+
+87
+00:05:04,600 --> 00:05:08,000
+you change it to Sent.
+When goods arrive, you receive them.
+
+88
+00:05:08,300 --> 00:05:12,000
+Let's simulate receiving this order.
+I'll open the PO and click Receive Items.
+
+89
+00:05:12,300 --> 00:05:16,000
+The receiving screen shows each line item.
+I ordered 100 docking stations — all 100
+
+90
+00:05:16,100 --> 00:05:19,500
+arrived in good condition, so I'll
+confirm 100 received.
+
+91
+00:05:19,600 --> 00:05:23,000
+Wireless mice — let's say 48 arrived,
+2 were damaged in transit. I'll enter 48
+
+92
+00:05:23,100 --> 00:05:26,500
+as received and note the discrepancy.
+When I save this, stock levels update
+
+93
+00:05:26,600 --> 00:05:30,000
+automatically — 100 docking stations
+and 48 mice are added to inventory.
+
+94
+00:05:30,300 --> 00:05:34,000
+Check the Stock Levels page — our
+docking station stock is now at 148,
+
+95
+00:05:34,100 --> 00:05:37,500
+and we have 48 wireless mice.
+The PO status changes to Partially Received
+
+96
+00:05:37,600 --> 00:05:41,000
+or Fully Received depending on what
+came in. If there's a discrepancy
+
+97
+00:05:41,100 --> 00:05:44,500
+with the vendor, you can log it
+and track the resolution.
+
+98
+00:05:44,800 --> 00:05:48,500
+VentureX gives you solid inventory
+reporting. You can view stock valuation —
+
+99
+00:05:48,600 --> 00:05:52,000
+what your inventory is worth at cost
+and at retail. Stock movement history —
+
+100
+00:05:52,100 --> 00:05:55,500
+every adjustment, transfer, and receipt
+logged chronologically.
+
+101
+00:05:55,600 --> 00:05:59,000
+Low stock reports — which products
+need reordering. Purchase order history —
+
+102
+00:05:59,100 --> 00:06:02,500
+what you've ordered, from whom, and when.
+And supplier performance —
+
+103
+00:06:02,600 --> 00:06:05,500
+lead times, fill rates,
+and defect rates.
+
+104
+00:06:05,800 --> 00:06:09,500
+Our stock valuation shows $18,915 in
+inventory at cost — 148 docking stations
+
+105
+00:06:09,600 --> 00:06:13,000
+at $95, 48 mice at $22, and 9999
+software licenses at $0 cost.
+
+106
+00:06:13,100 --> 00:06:16,500
+This feeds directly into your accounting
+module for balance sheet reporting.
+
+107
+00:06:16,800 --> 00:06:20,500
+That's Inventory and Procurement
+in VentureX.
+
+108
+00:06:20,600 --> 00:06:24,000
+You've seen how to manage products,
+categories, stock levels, adjustments,
+
+109
+00:06:24,100 --> 00:06:27,500
+transfers, purchase orders, and
+vendor relationships.
+
+110
+00:06:27,600 --> 00:06:31,000
+In the next video, we'll explore the
+AI features and how VentureX routes
+
+111
+00:06:31,100 --> 00:06:34,500
+tasks across multiple AI providers.
+See you there.

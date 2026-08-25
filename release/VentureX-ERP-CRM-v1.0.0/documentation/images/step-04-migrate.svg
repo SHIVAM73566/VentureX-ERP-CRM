@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)" rx="12"/>
+
+  <rect x="20" y="20" width="760" height="50" fill="#1e40af" rx="8"/>
+  <circle cx="50" cy="45" r="16" fill="white"/>
+  <text x="50" y="50" text-anchor="middle" fill="#1e40af" font-family="Arial" font-size="16" font-weight="bold">4</text>
+  <text x="400" y="50" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="18" font-weight="bold">Step 4: Create Database Tables</text>
+
+  <!-- Terminal -->
+  <rect x="30" y="90" width="740" height="280" fill="#0d1117" stroke="#21262d" stroke-width="1" rx="8"/>
+  <rect x="30" y="90" width="740" height="35" fill="#161b22" rx="8"/>
+  <rect x="30" y="115" width="740" height="10" fill="#161b22"/>
+  <circle cx="55" cy="107" r="5" fill="#ef4444"/><circle cx="72" cy="107" r="5" fill="#eab308"/><circle cx="89" cy="107" r="5" fill="#22c55e"/>
+  <text x="400" y="108" text-anchor="middle" fill="#8b949e" font-family="monospace" font-size="12">php artisan migrate --seed</text>
+
+  <text x="50" y="150" fill="#7ee787" font-family="monospace" font-size="13">C:\Projects\venturex-erp&gt; <tspan fill="#c9d1d9">php artisan migrate --seed</tspan></text>
+
+  <text x="50" y="180" fill="#79c0ff" font-family="monospace" font-size="12">   INFO  Running migrations.</text>
+  <text x="50" y="205" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000001_create_companies_table</text>
+  <text x="50" y="225" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000002_create_users_table</text>
+  <text x="50" y="245" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000003_create_roles_table</text>
+  <text x="50" y="265" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000004_create_customers_table</text>
+  <text x="50" y="285" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000005_create_products_table</text>
+  <text x="50" y="305" fill="#8b949e" font-family="monospace" font-size="11">  ... (36 migrations total)</text>
+  <text x="50" y="330" fill="#79c0ff" font-family="monospace" font-size="12">   INFO  Seeding database.</text>
+  <text x="50" y="355" fill="#7ee787" font-family="monospace" font-size="13">✓ Database seeded successfully</text>
+
+  <!-- Database tables grid -->
+  <rect x="30" y="390" width="740" height="90" fill="#1e293b" stroke="#334155" stroke-width="1" rx="8"/>
+  <text x="400" y="415" text-anchor="middle" fill="#e2e8f0" font-family="Arial" font-size="14" font-weight="bold">36 Tables Created</text>
+
+  <!-- Table pills -->
+  <rect x="50" y="430" width="80" height="22" fill="#172554" rx="11"/>
+  <text x="90" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">companies</text>
+  <rect x="140" y="430" width="55" height="22" fill="#172554" rx="11"/>
+  <text x="167" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">users</text>
+  <rect x="205" y="430" width="45" height="22" fill="#172554" rx="11"/>
+  <text x="227" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">roles</text>
+  <rect x="260" y="430" width="80" height="22" fill="#172554" rx="11"/>
+  <text x="300" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">customers</text>
+  <rect x="350" y="430" width="50" height="22" fill="#172554" rx="11"/>
+  <text x="375" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">leads</text>
+  <rect x="410" y="430" width="80" height="22" fill="#172554" rx="11"/>
+  <text x="450" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">products</text>
+  <rect x="500" y="430" width="65" height="22" fill="#172554" rx="11"/>
+  <text x="532" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">invoices</text>
+  <rect x="575" y="430" width="70" height="22" fill="#172554" rx="11"/>
+  <text x="610" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">payments</text>
+  <rect x="655" y="430" width="65" height="22" fill="#172554" rx="11"/>
+  <text x="687" y="445" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">tickets</text>
+  <rect x="50" y="458" width="70" height="22" fill="#172554" rx="11"/>
+  <text x="85" y="473" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">accounts</text>
+  <rect x="130" y="458" width="80" height="22" fill="#172554" rx="11"/>
+  <text x="170" y="473" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">warehouses</text>
+  <rect x="220" y="458" width="90" height="22" fill="#172554" rx="11"/>
+  <text x="265" y="473" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">purchase_orders</text>
+  <rect x="320" y="458" width="70" height="22" fill="#172554" rx="11"/>
+  <text x="355" y="473" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">shipments</text>
+  <rect x="400" y="458" width="80" height="22" fill="#172554" rx="11"/>
+  <text x="440" y="473" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">journals</text>
+  <rect x="490" y="458" width="100" height="22" fill="#172554" rx="11"/>
+  <text x="540" y="473" text-anchor="middle" fill="#60a5fa" font-family="Arial" font-size="10">+ 20 more tables</text>
+</svg>

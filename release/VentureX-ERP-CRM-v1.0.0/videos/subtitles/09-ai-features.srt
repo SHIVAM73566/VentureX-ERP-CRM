@@ -1,0 +1,481 @@
+1
+00:00:01,000 --> 00:00:04,000
+Welcome back to the VentureX tutorial series.
+
+2
+00:00:04,200 --> 00:00:08,500
+This video is about the feature that
+sets VentureX apart: its AI engine.
+
+3
+00:00:08,600 --> 00:00:12,500
+VentureX doesn't just connect to
+one AI provider — it intelligently
+
+4
+00:00:12,600 --> 00:00:16,000
+routes tasks across multiple providers
+based on what you're trying to do.
+
+5
+00:00:16,100 --> 00:00:18,500
+Let me show you how it works.
+
+6
+00:00:18,800 --> 00:00:22,500
+The AI Dashboard is your command center
+for everything AI in VentureX.
+
+7
+00:00:22,600 --> 00:00:26,500
+At the top, you see your current plan
+and usage — how many API calls
+
+8
+00:00:26,600 --> 00:00:30,000
+you've made this billing cycle,
+your remaining quota, and your cost breakdown.
+
+9
+00:00:30,100 --> 00:00:34,000
+Below that, the Provider Status panel
+shows which AI providers are connected
+
+10
+00:00:34,100 --> 00:00:37,000
+and their health. On the right,
+recent AI queries —
+
+11
+00:00:37,100 --> 00:00:40,500
+every request your system has made,
+which provider handled it, and the token count.
+
+12
+00:00:40,600 --> 00:00:43,500
+Let's break down each section.
+
+13
+00:00:43,800 --> 00:00:47,500
+Navigate to Usage & Plan.
+Your plan determines your monthly quota.
+
+14
+00:00:47,600 --> 00:00:51,000
+The Free tier gives you 1,000 AI requests
+per month. Pro gives you 10,000.
+
+15
+00:00:51,100 --> 00:00:54,500
+Enterprise is unlimited with
+dedicated infrastructure.
+
+16
+00:00:54,600 --> 00:00:58,500
+Each request has a token cost — and
+tokens are how AI providers bill you.
+
+17
+00:00:58,600 --> 00:01:02,000
+A typical search query might use 200 tokens,
+while a complex analysis could use 2,000.
+
+18
+00:01:02,100 --> 00:01:05,500
+VentureX tracks all of this in real-time.
+
+19
+00:01:05,800 --> 00:01:09,500
+The usage breakdown shows you which
+features are consuming AI the most —
+
+20
+00:01:09,600 --> 00:01:13,000
+search, insights, recommendations,
+and document analysis.
+
+21
+00:01:13,100 --> 00:01:16,500
+This helps you understand where your
+AI budget is going and optimize accordingly.
+
+22
+00:01:16,800 --> 00:01:20,500
+Here's where VentureX gets really smart.
+The multi-provider architecture lets you
+
+23
+00:01:20,600 --> 00:01:24,000
+configure multiple AI services and
+route tasks to the best one for the job.
+
+24
+00:01:24,100 --> 00:01:27,000
+Let's look at the providers page.
+
+25
+00:01:27,300 --> 00:01:31,000
+You'll see up to three provider cards:
+Google Gemini, NVIDIA NIM, and OpenAI.
+
+26
+00:01:31,100 --> 00:01:34,500
+Each shows connection status,
+API key configuration, and current health.
+
+27
+00:01:34,600 --> 00:01:37,500
+Let me explain why three providers.
+
+28
+00:01:37,800 --> 00:01:41,500
+VentureX uses intelligent task routing.
+When you perform an AI action,
+
+29
+00:01:41,600 --> 00:01:45,000
+the system analyzes the task type
+and sends it to the optimal provider.
+
+30
+00:01:45,100 --> 00:01:49,000
+Creative tasks like generating marketing
+copy, brainstorming, or content creation —
+
+31
+00:01:49,100 --> 00:01:52,500
+those go to Gemini, which excels at
+creative and nuanced language.
+
+32
+00:01:52,600 --> 00:01:56,500
+Code-related tasks — generating SQL queries,
+writing code, debugging —
+
+33
+00:01:56,600 --> 00:02:00,000
+those route to NVIDIA's NIM models,
+which are optimized for code generation.
+
+34
+00:02:00,100 --> 00:02:04,000
+General tasks — summarization, Q&A,
+data extraction, standard analysis —
+
+35
+00:02:04,100 --> 00:02:07,500
+those go to OpenAI, which has the
+broadest general capability.
+
+36
+00:02:07,600 --> 00:02:11,000
+The routing is automatic.
+You don't have to think about it.
+
+37
+00:02:11,100 --> 00:02:14,500
+But if you want to override it,
+you can pin a specific provider
+
+38
+00:02:14,600 --> 00:02:17,500
+for specific features in Settings.
+
+39
+00:02:17,800 --> 00:02:21,500
+Let me show you how to configure
+a provider. I'll set up NVIDIA —
+
+40
+00:02:21,600 --> 00:02:25,000
+it has a generous free tier.
+First, go to build.nvidia.com
+
+41
+00:02:25,100 --> 00:02:28,500
+and create a free account.
+Once you're in, navigate to your API keys
+
+42
+00:02:28,600 --> 00:02:32,000
+section and generate a new key.
+Copy that key — it starts with 'nvapi-'.
+
+43
+00:02:32,100 --> 00:02:35,500
+Back in VentureX, paste it into the
+NVIDIA API key field and click Save.
+
+44
+00:02:35,800 --> 00:02:39,500
+VentureX immediately tests the connection.
+If the key is valid, you'll see
+
+45
+00:02:39,600 --> 00:02:43,000
+the green Connected status.
+The free tier gives you a generous
+
+46
+00:02:43,100 --> 00:02:46,500
+monthly allowance — enough for most
+small to medium businesses.
+
+47
+00:02:46,600 --> 00:02:50,000
+If you hit the limit, tasks automatically
+fail over to the next available provider.
+
+48
+00:02:50,300 --> 00:02:54,000
+With all three providers connected,
+you have maximum redundancy
+
+49
+00:02:54,100 --> 00:02:57,500
+and the best task routing.
+Let me show you the health monitoring.
+
+50
+00:02:57,800 --> 00:03:01,500
+The AI Health page gives you
+real-time visibility into provider performance.
+
+51
+00:03:01,600 --> 00:03:05,000
+Response time — how fast each provider
+is responding to requests.
+
+52
+00:03:05,100 --> 00:03:08,500
+Error rate — percentage of failed requests.
+Uptime — availability over the last 30 days.
+
+53
+00:03:08,600 --> 00:03:12,000
+Rate limit status — how close you are
+to hitting provider-imposed limits.
+
+54
+00:03:12,100 --> 00:03:15,500
+If a provider goes down or slows
+significantly, VentureX automatically
+
+55
+00:03:15,600 --> 00:03:19,000
+routes around it. You'll see an alert
+here and in the notification center.
+
+56
+00:03:19,300 --> 00:03:23,000
+The quota system lets you set limits
+per user and per company —
+
+57
+00:03:23,100 --> 00:03:26,500
+if you're a multi-tenant installation.
+You can allocate monthly request limits,
+
+58
+00:03:26,600 --> 00:03:30,000
+set token budgets, and even restrict
+which providers specific users can access.
+
+59
+00:03:30,100 --> 00:03:34,000
+For example, your sales team gets
+500 requests on OpenAI for general analysis,
+
+60
+00:03:34,100 --> 00:03:37,500
+while your dev team gets 1,000 requests
+routed through NVIDIA for code tasks.
+
+61
+00:03:37,600 --> 00:03:41,000
+This granular control prevents runaway
+costs and ensures fair usage
+
+62
+00:03:41,100 --> 00:03:44,000
+across your organization.
+
+63
+00:03:44,300 --> 00:03:48,000
+Rate limiting protects both your budget
+and your provider relationships.
+
+64
+00:03:48,100 --> 00:03:51,500
+You can set per-minute, per-hour, and
+per-day limits for each provider.
+
+65
+00:03:51,600 --> 00:03:55,000
+Burst limits handle sudden spikes —
+like when multiple users run reports
+
+66
+00:03:55,100 --> 00:03:58,000
+simultaneously. Cool-down periods
+prevent abuse.
+
+67
+00:03:58,100 --> 00:04:01,500
+And priority queues ensure that
+critical operations — like a sales rep's
+
+68
+00:04:01,600 --> 00:04:05,000
+deal analysis — aren't blocked by
+background batch processing.
+
+69
+00:04:05,300 --> 00:04:09,000
+Let me show you AI in action.
+We're in the CRM module with Sarah Mitchell's
+
+70
+00:04:09,100 --> 00:04:12,000
+contact. See the AI sidebar
+or floating button?
+
+71
+00:04:12,100 --> 00:04:15,000
+Let's use AI-powered search.
+
+72
+00:04:15,300 --> 00:04:19,000
+AI Search lets you ask questions in
+natural language instead of building
+
+73
+00:04:19,100 --> 00:04:22,500
+complex filters. Watch:
+'Show me all contacts at technology companies
+
+74
+00:04:22,600 --> 00:04:26,000
+with deals over $10,000 in the
+negotiation stage.'
+
+75
+00:04:26,100 --> 00:04:29,500
+VentureX parses this, routes it to
+the appropriate provider,
+
+76
+00:04:29,600 --> 00:04:32,500
+and returns structured results.
+
+77
+00:04:32,800 --> 00:04:36,500
+AI Insights analyze a record and
+surface patterns. On this deal, it's
+
+78
+00:04:36,600 --> 00:04:40,000
+telling me: 'This deal has been in
+Negotiation for 14 days —
+
+79
+00:04:40,100 --> 00:04:43,500
+average for this deal size is 7 days.
+Consider scheduling a follow-up.'
+
+80
+00:04:43,600 --> 00:04:47,000
+It's also flagging: 'Sarah Mitchell has
+been highly engaged — 12 activities in
+
+81
+00:04:47,100 --> 00:04:50,000
+30 days. Strong relationship indicator.'
+
+82
+00:04:50,300 --> 00:04:54,000
+AI Recommendations in the Sales Pipeline
+suggest next actions for each deal.
+
+83
+00:04:54,100 --> 00:04:57,500
+It might recommend moving a stale deal
+to a different stage,
+
+84
+00:04:57,600 --> 00:05:01,000
+flagging a high-value deal that needs
+attention, or suggesting cross-sell
+
+85
+00:05:01,100 --> 00:05:04,000
+opportunities based on deal history.
+
+86
+00:05:04,300 --> 00:05:08,000
+Let me show you the fallback system
+in action. If I temporarily disable
+
+87
+00:05:08,100 --> 00:05:11,500
+one provider — say OpenAI — and run
+a general query, watch what happens.
+
+88
+00:05:11,600 --> 00:05:15,000
+The system detects OpenAI is unavailable,
+checks the task type, and routes it
+
+89
+00:05:15,100 --> 00:05:18,500
+to the next available provider —
+Gemini in this case.
+
+90
+00:05:18,600 --> 00:05:22,000
+You can see in the Recent Queries log:
+'Provider: Gemini (fallback from OpenAI).'
+
+91
+00:05:22,100 --> 00:05:25,500
+Your users never see an error —
+the system self-heals.
+
+92
+00:05:25,600 --> 00:05:29,000
+You can configure the fallback order
+in Settings, and you'll get an alert
+
+93
+00:05:29,100 --> 00:05:32,500
+whenever a fallback is triggered
+so you know a provider needs attention.
+
+94
+00:05:32,800 --> 00:05:36,500
+That's the AI engine in VentureX —
+multi-provider routing,
+
+95
+00:05:36,600 --> 00:05:40,000
+intelligent task allocation,
+health monitoring, quota management,
+
+96
+00:05:40,100 --> 00:05:43,500
+and automatic fallback.
+It's AI that works for you,
+
+97
+00:05:43,600 --> 00:05:46,500
+not the other way around.
+
+98
+00:05:46,600 --> 00:05:50,000
+In the next video, we'll cover
+Accounting and Financial Management.
+
+99
+00:05:50,100 --> 00:05:53,500
+Like and subscribe, and I'll see you
+in the next one.

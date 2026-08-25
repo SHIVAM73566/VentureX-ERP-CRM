@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VentureX ERP & CRM — Video Tutorial Series</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+        .header{background:linear-gradient(135deg,#1e40af,#3b82f6);padding:40px 20px;text-align:center}
+        .header h1{font-size:2rem;font-weight:700;margin-bottom:8px}
+        .header p{opacity:.85;font-size:1.05rem}
+        .container{max-width:1100px;margin:0 auto;padding:30px 20px}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+        .card{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden;transition:transform .2s,border-color .2s;cursor:pointer;text-decoration:none;color:inherit}
+        .card:hover{transform:translateY(-4px);border-color:#3b82f6}
+        .card-header{background:#0f172a;padding:16px 20px;display:flex;align-items:center;gap:14px}
+        .card-num{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1e40af,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0}
+        .card-num.done{background:linear-gradient(135deg,#166534,#22c55e)}
+        .card-title{font-weight:600;font-size:.95rem}
+        .card-duration{font-size:.8rem;color:#94a3b8;margin-top:2px}
+        .card-body{padding:16px 20px}
+        .card-desc{font-size:.88rem;color:#94a3b8;line-height:1.55}
+        .card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+        .tag{background:#0f172a;border:1px solid #334155;border-radius:6px;padding:3px 10px;font-size:.75rem;color:#94a3b8}
+        .tag.env{border-color:#f59e0b;color:#fbbf24}
+        .tag.db{border-color:#22c55e;color:#4ade80}
+        .tag.ai{border-color:#a855f7;color:#c084fc}
+        .tag.deploy{border-color:#ef4444;color:#f87171}
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;overflow-y:auto;padding:40px 20px}
+        .modal-overlay.active{display:block}
+        .modal{background:#1e293b;border-radius:12px;max-width:900px;margin:0 auto;border:1px solid #334155}
+        .modal-header{padding:20px 24px;border-bottom:1px solid #334155;display:flex;justify-content:space-between;align-items:center}
+        .modal-header h2{font-size:1.3rem}
+        .modal-close{background:none;border:none;color:#94a3b8;font-size:1.5rem;cursor:pointer;padding:4px 8px}
+        .modal-close:hover{color:#e2e8f0}
+        .modal-tabs{display:flex;border-bottom:1px solid #334155;padding:0 24px}
+        .modal-tab{padding:12px 20px;cursor:pointer;font-size:.9rem;color:#94a3b8;border-bottom:2px solid transparent;transition:all .15s}
+        .modal-tab.active{color:#3b82f6;border-bottom-color:#3b82f6}
+        .modal-tab:hover{color:#e2e8f0}
+        .modal-content{padding:24px;max-height:60vh;overflow-y:auto}
+        .modal-content pre{background:#0f172a;border-radius:8px;padding:16px;font-size:.85rem;line-height:1.7;overflow-x:auto;white-space:pre-wrap;word-break:break-word;color:#cbd5e1}
+        .srt-line{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #1e293b}
+        .srt-time{color:#3b82f6;font-family:monospace;font-size:.8rem}
+        .srt-text{color:#e2e8f0;margin-top:4px;line-height:1.5}
+        .toc{margin-top:30px;text-align:center}
+        .toc h2{font-size:1.1rem;color:#94a3b8;margin-bottom:10px}
+        .toc a{color:#3b82f6;text-decoration:none;font-size:.9rem}
+        .toc a:hover{text-decoration:underline}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>VentureX ERP & CRM</h1>
+        <p>Video Tutorial Series — 15 Episodes | Step-by-Step Installation, Deployment &amp; Integration Guide</p>
+    </div>
+
+    <div class="container">
+        <div class="grid" id="video-grid"></div>
+        <div class="toc">
+            <h2>Quick Navigation</h2>
+            <a href="#video-1">1</a> · <a href="#video-2">2</a> · <a href="#video-3">3</a> · <a href="#video-4">4</a> · <a href="#video-5">5</a> · <a href="#video-6">6</a> · <a href="#video-7">7</a> · <a href="#video-8">8</a> · <a href="#video-9">9</a> · <a href="#video-10">10</a> · <a href="#video-11">11</a> · <a href="#video-12">12</a> · <a href="#video-13">13</a> · <a href="#video-14">14</a> · <a href="#video-15">15</a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-tabs">
+                <div class="modal-tab active" onclick="showTab('script',this)">Script</div>
+                <div class="modal-tab" onclick="showTab('subtitles',this)">Subtitles (SRT)</div>
+            </div>
+            <div class="modal-content">
+                <pre id="modal-script"></pre>
+                <div id="modal-srt" style="display:none"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const videos = [
+        {id:1, title:"Welcome & Overview", duration:"2-3 min", desc:"Product tour, key features, AI capabilities, target audience, and demo credentials.", tags:["beginner"], tagClass:""},
+        {id:2, title:"System Requirements & Download", duration:"4-5 min", desc:"PHP, MySQL, Composer, Node.js requirements. Download from Codester and extract the ZIP.", tags:["requirements"], tagClass:"env"},
+        {id:3, title:"Database Setup", duration:"4-5 min", desc:"Create MySQL database, user, grants. CLI and phpMyAdmin walkthrough.", tags:["mysql","database"], tagClass:"db"},
+        {id:4, title:"Environment Configuration", duration:"3-4 min", desc:".env setup, APP_KEY generation, AI provider config, optional integrations.", tags:[".env","config"], tagClass:"env"},
+        {id:5, title:"Installation & Dependencies", duration:"5-6 min", desc:"Composer install, npm install, Vite build, migrations, seeding, artisan serve.", tags:["composer","npm","migrate"], tagClass:"db"},
+        {id:6, title:"First Login & Dashboard Tour", duration:"5-6 min", desc:"Login, dashboard stats, sidebar navigation, dark mode, responsive design.", tags:["login","dashboard"], tagClass:""},
+        {id:7, title:"CRM & Sales Pipeline", duration:"5-6 min", desc:"Companies, contacts, activities, Kanban deal pipeline, sales forecasting.", tags:["crm","sales"], tagClass:""},
+        {id:8, title:"Inventory & Procurement", duration:"4-5 min", desc:"Products, stock management, purchase orders, vendor management.", tags:["inventory","procurement"], tagClass:""},
+        {id:9, title:"AI Features & Multi-Provider Setup", duration:"4-5 min", desc:"AI dashboard, provider routing, NVIDIA setup, quotas, health monitoring.", tags:["ai","nvidia","gemini"], tagClass:"ai"},
+        {id:10, title:"Settings, Users & Going Live", duration:"5-6 min", desc:"User roles, security, audit logs, production deployment checklist.", tags:["settings","deploy"], tagClass:"deploy"},
+        {id:11, title:"cPanel Deployment — Shared Hosting", duration:"18 min", desc:"Upload, extract, database, composer, .env, cron, SSL on cPanel shared hosting.", tags:["cpanel","hosting","deploy"], tagClass:"deploy"},
+        {id:12, title:"VPS & Cloud Deployment", duration:"22 min", desc:"Ubuntu/Nginx setup, Supervisor, Certbot, DigitalOcean/AWS/Linode deployment.", tags:["vps","nginx","deploy"], tagClass:"deploy"},
+        {id:13, title:"WordPress Integration", duration:"15 min", desc:"VentureX WordPress plugin, lead forms, shortcode, WooCommerce sync.", tags:["wordpress","plugin","integration"], tagClass:"env"},
+        {id:14, title:"Wix, Blogger & External Integrations", duration:"17 min", desc:"API tokens, webhooks, CORS, Wix Velo code, Blogger gadgets, REST API usage.", tags:["wix","blogger","api"], tagClass:"ai"},
+        {id:15, title:"Backup, Restore & Troubleshooting", duration:"19 min", desc:"Database backups, file restores, common errors, log debugging, performance tuning.", tags:["backup","troubleshoot"], tagClass:"deploy"}
+    ];
+
+    const grid = document.getElementById('video-grid');
+    videos.forEach(v => {
+        grid.innerHTML += `
+        <div class="card" id="video-${v.id}" onclick="openVideo(${v.id})">
+            <div class="card-header">
+                <div class="card-num">${v.id}</div>
+                <div>
+                    <div class="card-title">${v.title}</div>
+                    <div class="card-duration">${v.duration}</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-desc">${v.desc}</div>
+                <div class="card-tags">
+                    ${v.tags.map(t => `<span class="tag ${v.tagClass}">${t}</span>`).join('')}
+                </div>
+            </div>
+        </div>`;
+    });
+
+    function pad(n){ return String(n).padStart(2,'0'); }
+    const scriptNames = [
+        "01-welcome-overview","02-system-requirements","03-database-setup",
+        "04-environment-config","05-installation","06-first-login-dashboard",
+        "07-crm-sales-pipeline","08-inventory-procurement","09-ai-features",
+        "10-settings-going-live","11-cpanel-deployment","12-vps-cloud-deployment",
+        "13-wordpress-integration","14-external-integration","15-backup-troubleshooting"
+    ];
+
+    async function openVideo(id){
+        const v = videos[id-1];
+        document.getElementById('modal-title').textContent = `Video ${id}: ${v.title}`;
+        document.getElementById('modal-script').textContent = 'Loading script...';
+        document.getElementById('modal-srt').innerHTML = '';
+        document.getElementById('modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        try {
+            const [scriptRes, srtRes] = await Promise.all([
+                fetch(`../scripts/${scriptNames[id-1]}.md`),
+                fetch(`../subtitles/${scriptNames[id-1]}.srt`)
+            ]);
+            const scriptText = await scriptRes.text();
+            const srtText = await srtRes.text();
+
+            document.getElementById('modal-script').textContent = scriptText;
+
+            const srtDiv = document.getElementById('modal-srt');
+            const blocks = srtText.trim().split(/\n\n+/);
+            srtDiv.innerHTML = blocks.map(b => {
+                const lines = b.trim().split('\n');
+                if(lines.length < 2) return '';
+                const time = lines[1] || '';
+                const text = lines.slice(2).join(' ');
+                return `<div class="srt-line"><div class="srt-time">${time}</div><div class="srt-text">${text}</div></div>`;
+            }).join('');
+
+            document.querySelectorAll('.modal-tab')[0].click();
+        } catch(e) {
+            document.getElementById('modal-script').textContent = 'Error loading files. Make sure you are opening this from the videos/players/ folder.';
+        }
+    }
+
+    function showTab(tab, el){
+        document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('modal-script').style.display = tab==='script' ? 'block' : 'none';
+        document.getElementById('modal-srt').style.display = tab==='subtitles' ? 'block' : 'none';
+    }
+
+    function closeModal(){
+        document.getElementById('modal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('modal').addEventListener('click', e => {
+        if(e.target === document.getElementById('modal')) closeModal();
+    });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+    </script>
+</body>
+</html>
