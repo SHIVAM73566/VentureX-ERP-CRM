@@ -10,7 +10,7 @@ class QuotationController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Quotation::query()
+        $query = Quotation::ofCompany()
             ->with('customer')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -48,11 +48,19 @@ class QuotationController extends ApiController
 
     public function show(Quotation $quotation): JsonResponse
     {
+        if ($quotation->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($quotation->load('customer', 'items', 'createdBy'));
     }
 
     public function update(Request $request, Quotation $quotation): JsonResponse
     {
+        if ($quotation->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'customer_id' => 'sometimes|exists:customers,id',
             'currency_code' => 'nullable|string|size:3',
@@ -73,6 +81,10 @@ class QuotationController extends ApiController
 
     public function destroy(Quotation $quotation): JsonResponse
     {
+        if ($quotation->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $quotation->delete();
 
         return $this->successResponse(null, 'Quotation deleted');

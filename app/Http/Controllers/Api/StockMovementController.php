@@ -10,7 +10,7 @@ class StockMovementController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = StockMovement::query()
+        $query = StockMovement::ofCompany()
             ->with('product', 'warehouse')
             ->when($request->filled('product_id'), fn ($q) => $q->where('product_id', $request->integer('product_id')))
             ->when($request->filled('warehouse_id'), fn ($q) => $q->where('warehouse_id', $request->integer('warehouse_id')))
@@ -42,11 +42,19 @@ class StockMovementController extends ApiController
 
     public function show(StockMovement $stockMovement): JsonResponse
     {
+        if ($stockMovement->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($stockMovement->load('product', 'warehouse', 'createdBy'));
     }
 
     public function destroy(StockMovement $stockMovement): JsonResponse
     {
+        if ($stockMovement->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $stockMovement->delete();
 
         return $this->successResponse(null, 'Stock movement deleted');

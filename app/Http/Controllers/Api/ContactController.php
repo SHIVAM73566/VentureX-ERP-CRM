@@ -10,7 +10,7 @@ class ContactController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Contact::query()
+        $query = Contact::ofCompany()
             ->with('customer')
             ->when($request->filled('customer_id'), fn ($q) => $q->where('customer_id', $request->integer('customer_id')))
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -50,11 +50,19 @@ class ContactController extends ApiController
 
     public function show(Contact $contact): JsonResponse
     {
+        if ($contact->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($contact->load('customer'));
     }
 
     public function update(Request $request, Contact $contact): JsonResponse
     {
+        if ($contact->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'first_name' => 'sometimes|string|max:100',
             'last_name' => 'nullable|string|max:100',
@@ -73,6 +81,10 @@ class ContactController extends ApiController
 
     public function destroy(Contact $contact): JsonResponse
     {
+        if ($contact->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $contact->delete();
 
         return $this->successResponse(null, 'Contact deleted');

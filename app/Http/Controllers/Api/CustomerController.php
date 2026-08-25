@@ -10,7 +10,7 @@ class CustomerController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Customer::query()
+        $query = Customer::ofCompany()
             ->withCount('contacts', 'opportunities')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -57,6 +57,10 @@ class CustomerController extends ApiController
 
     public function show(Customer $customer): JsonResponse
     {
+        if ($customer->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $customer->load('contacts', 'opportunities', 'country', 'branch');
 
         return $this->successResponse($customer);
@@ -64,6 +68,10 @@ class CustomerController extends ApiController
 
     public function update(Request $request, Customer $customer): JsonResponse
     {
+        if ($customer->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -89,6 +97,10 @@ class CustomerController extends ApiController
 
     public function destroy(Customer $customer): JsonResponse
     {
+        if ($customer->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $customer->delete();
 
         return $this->successResponse(null, 'Customer deleted');

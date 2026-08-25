@@ -10,7 +10,7 @@ class SalesOrderController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = SalesOrder::query()
+        $query = SalesOrder::ofCompany()
             ->with('customer')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -49,11 +49,19 @@ class SalesOrderController extends ApiController
 
     public function show(SalesOrder $salesOrder): JsonResponse
     {
+        if ($salesOrder->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($salesOrder->load('customer', 'quotation', 'items', 'invoices', 'createdBy'));
     }
 
     public function update(Request $request, SalesOrder $salesOrder): JsonResponse
     {
+        if ($salesOrder->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'customer_id' => 'sometimes|exists:customers,id',
             'status' => 'nullable|string|in:draft,confirmed,processing,shipped,completed,cancelled',
@@ -75,6 +83,10 @@ class SalesOrderController extends ApiController
 
     public function destroy(SalesOrder $salesOrder): JsonResponse
     {
+        if ($salesOrder->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $salesOrder->delete();
 
         return $this->successResponse(null, 'Sales order deleted');

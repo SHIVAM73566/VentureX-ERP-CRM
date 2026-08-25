@@ -42,7 +42,7 @@ class PurchaseOrderController extends Controller
             'total' => PurchaseOrder::ofCompany()->count(),
             'open' => PurchaseOrder::ofCompany()->whereIn('status', ['draft', 'pending', 'approved', 'ordered', 'partially_received'])->count(),
             'value' => (float) PurchaseOrder::ofCompany()->whereNotIn('status', ['cancelled'])->sum('total'),
-            'payable' => (float) PurchaseOrder::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as payable')->first()->payable,
+            'payable' => (float) PurchaseOrder::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as payable')->value('payable'),
         ];
 
         return view('procurement.orders.index', compact('orders', 'summary'));

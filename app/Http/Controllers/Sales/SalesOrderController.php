@@ -41,7 +41,7 @@ class SalesOrderController extends Controller
             'total' => SalesOrder::ofCompany()->count(),
             'open' => SalesOrder::ofCompany()->whereNotIn('status', ['completed', 'cancelled'])->count(),
             'value' => (float) SalesOrder::ofCompany()->whereNotIn('status', ['cancelled'])->sum('total'),
-            'outstanding' => (float) SalesOrder::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as outstanding')->first()->outstanding,
+            'outstanding' => (float) SalesOrder::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as outstanding')->value('outstanding'),
         ];
 
         return view('sales.orders.index', compact('orders', 'summary'));

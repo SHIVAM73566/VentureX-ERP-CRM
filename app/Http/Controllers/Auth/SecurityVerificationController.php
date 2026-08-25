@@ -91,6 +91,8 @@ class SecurityVerificationController extends Controller
             return redirect()->route('register');
         }
 
+        $step1 = $request->session()->get('register_step1');
+
         // Verify phone OTP — always required, no bypass
         $phoneOtp = $request->input('phone_otp');
         if (! AdvancedSecurityService::verifyPhoneOtp($step2['email'] ?? $step1['email'], $phoneOtp)) {
@@ -98,7 +100,6 @@ class SecurityVerificationController extends Controller
         }
 
         // Complete registration
-        $step1 = $request->session()->get('register_step1');
 
         $user = User::create([
             'name' => $step1['name'],

@@ -43,7 +43,7 @@ class InvoiceController extends Controller
             'total' => Invoice::ofCompany()->count(),
             'open' => Invoice::ofCompany()->whereIn('status', ['draft', 'sent', 'partial', 'overdue'])->count(),
             'value' => (float) Invoice::ofCompany()->whereNotIn('status', ['cancelled'])->sum('total'),
-            'outstanding' => (float) Invoice::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as outstanding')->first()->outstanding,
+            'outstanding' => (float) Invoice::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as outstanding')->value('outstanding'),
         ];
 
         return view('sales.invoices.index', compact('invoices', 'summary'));

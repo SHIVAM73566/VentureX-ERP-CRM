@@ -10,7 +10,7 @@ class JournalEntryController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = JournalEntry::query()
+        $query = JournalEntry::ofCompany()
             ->with('lines')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -59,11 +59,19 @@ class JournalEntryController extends ApiController
 
     public function show(JournalEntry $journalEntry): JsonResponse
     {
+        if ($journalEntry->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($journalEntry->load('lines.account', 'createdBy'));
     }
 
     public function update(Request $request, JournalEntry $journalEntry): JsonResponse
     {
+        if ($journalEntry->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         if ($journalEntry->status === 'posted') {
             return $this->errorResponse('Cannot update a posted journal entry', 422);
         }
@@ -81,6 +89,10 @@ class JournalEntryController extends ApiController
 
     public function destroy(JournalEntry $journalEntry): JsonResponse
     {
+        if ($journalEntry->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         if ($journalEntry->status === 'posted') {
             return $this->errorResponse('Cannot delete a posted journal entry', 422);
         }

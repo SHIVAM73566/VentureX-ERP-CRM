@@ -10,7 +10,7 @@ class ProductController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Product::query()
+        $query = Product::ofCompany()
             ->with('unit', 'supplier', 'taxRate')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -29,7 +29,7 @@ class ProductController extends ApiController
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'sku' => 'required|string|max:50|unique:products,sku',
+            'sku' => 'required|string|max:50|unique:products,sku,NULL,company_id,' . $this->companyId(),
             'name' => 'required|string|max:255',
             'category' => 'nullable|string|max:100',
             'description' => 'nullable|string',
@@ -54,6 +54,10 @@ class ProductController extends ApiController
 
     public function show(Product $product): JsonResponse
     {
+        if ($product->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($product->load('unit', 'supplier', 'taxRate')->toArray() + [
             'available_stock' => $product->availableStock(),
             'is_low_stock' => $product->isLowStock(),
@@ -62,6 +66,10 @@ class ProductController extends ApiController
 
     public function update(Request $request, Product $product): JsonResponse
     {
+        if ($product->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'category' => 'nullable|string|max:100',
@@ -83,6 +91,10 @@ class ProductController extends ApiController
 
     public function destroy(Product $product): JsonResponse
     {
+        if ($product->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $product->delete();
 
         return $this->successResponse(null, 'Product deleted');

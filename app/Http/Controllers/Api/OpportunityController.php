@@ -10,7 +10,7 @@ class OpportunityController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Opportunity::query()
+        $query = Opportunity::ofCompany()
             ->with('customer', 'lead', 'assignedTo')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -50,11 +50,19 @@ class OpportunityController extends ApiController
 
     public function show(Opportunity $opportunity): JsonResponse
     {
+        if ($opportunity->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($opportunity->load('customer', 'lead', 'assignedTo', 'activities'));
     }
 
     public function update(Request $request, Opportunity $opportunity): JsonResponse
     {
+        if ($opportunity->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'expected_value' => 'nullable|numeric|min:0',
@@ -74,6 +82,10 @@ class OpportunityController extends ApiController
 
     public function destroy(Opportunity $opportunity): JsonResponse
     {
+        if ($opportunity->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $opportunity->delete();
 
         return $this->successResponse(null, 'Opportunity deleted');

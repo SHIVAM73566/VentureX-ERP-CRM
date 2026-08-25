@@ -3,12 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\CompanyContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ApiController extends Controller
 {
+    protected function companyId(): int
+    {
+        return CompanyContext::id();
+    }
+
     protected function successResponse($data = null, string $message = 'Success', int $code = 200): JsonResponse
     {
         return response()->json([

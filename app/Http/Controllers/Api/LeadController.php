@@ -10,7 +10,7 @@ class LeadController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Lead::query()
+        $query = Lead::ofCompany()
             ->with('assignedTo', 'country')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -59,11 +59,19 @@ class LeadController extends ApiController
 
     public function show(Lead $lead): JsonResponse
     {
+        if ($lead->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($lead->load('assignedTo', 'country', 'opportunity'));
     }
 
     public function update(Request $request, Lead $lead): JsonResponse
     {
+        if ($lead->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'company_name' => 'sometimes|string|max:255',
             'contact_name' => 'nullable|string|max:255',
@@ -89,6 +97,10 @@ class LeadController extends ApiController
 
     public function destroy(Lead $lead): JsonResponse
     {
+        if ($lead->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $lead->delete();
 
         return $this->successResponse(null, 'Lead deleted');

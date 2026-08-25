@@ -10,7 +10,7 @@ class AccountController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Account::query()
+        $query = Account::ofCompany()
             ->with('parent')
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
             ->when($request->filled('is_active'), fn ($q) => $q->where('is_active', $request->boolean('is_active')))
@@ -40,6 +40,10 @@ class AccountController extends ApiController
 
     public function show(Account $account): JsonResponse
     {
+        if ($account->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($account->load('parent', 'children')->toArray() + [
             'balance' => $account->balance(),
         ]);
@@ -47,6 +51,10 @@ class AccountController extends ApiController
 
     public function update(Request $request, Account $account): JsonResponse
     {
+        if ($account->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'type' => 'sometimes|string|in:asset,liability,equity,income,expense',
@@ -62,6 +70,10 @@ class AccountController extends ApiController
 
     public function destroy(Account $account): JsonResponse
     {
+        if ($account->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         if ($account->lines()->exists()) {
             return $this->errorResponse('Cannot delete account with journal entries', 422);
         }

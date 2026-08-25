@@ -10,7 +10,7 @@ class SupportTicketController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = SupportTicket::query()
+        $query = SupportTicket::ofCompany()
             ->with('assignee')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -49,11 +49,19 @@ class SupportTicketController extends ApiController
 
     public function show(SupportTicket $supportTicket): JsonResponse
     {
+        if ($supportTicket->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($supportTicket->load('assignee', 'replies', 'errorReport'));
     }
 
     public function update(Request $request, SupportTicket $supportTicket): JsonResponse
     {
+        if ($supportTicket->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'subject' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
@@ -73,6 +81,10 @@ class SupportTicketController extends ApiController
 
     public function destroy(SupportTicket $supportTicket): JsonResponse
     {
+        if ($supportTicket->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $supportTicket->delete();
 
         return $this->successResponse(null, 'Ticket deleted');

@@ -10,7 +10,7 @@ class InvoiceController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Invoice::query()
+        $query = Invoice::ofCompany()
             ->with('customer', 'salesOrder')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -48,11 +48,19 @@ class InvoiceController extends ApiController
 
     public function show(Invoice $invoice): JsonResponse
     {
+        if ($invoice->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($invoice->load('customer', 'salesOrder', 'items', 'payments', 'createdBy'));
     }
 
     public function update(Request $request, Invoice $invoice): JsonResponse
     {
+        if ($invoice->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'customer_id' => 'sometimes|exists:customers,id',
             'status' => 'nullable|string|in:draft,sent,partial,paid,overdue,cancelled',
@@ -73,6 +81,10 @@ class InvoiceController extends ApiController
 
     public function destroy(Invoice $invoice): JsonResponse
     {
+        if ($invoice->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $invoice->delete();
 
         return $this->successResponse(null, 'Invoice deleted');

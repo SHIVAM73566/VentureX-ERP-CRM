@@ -10,7 +10,7 @@ class SupplierController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Supplier::query()
+        $query = Supplier::ofCompany()
             ->with('country')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -57,11 +57,19 @@ class SupplierController extends ApiController
 
     public function show(Supplier $supplier): JsonResponse
     {
+        if ($supplier->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($supplier->load('country', 'offers'));
     }
 
     public function update(Request $request, Supplier $supplier): JsonResponse
     {
+        if ($supplier->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'tax_id' => 'nullable|string|max:50',
@@ -87,6 +95,10 @@ class SupplierController extends ApiController
 
     public function destroy(Supplier $supplier): JsonResponse
     {
+        if ($supplier->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $supplier->delete();
 
         return $this->successResponse(null, 'Supplier deleted');

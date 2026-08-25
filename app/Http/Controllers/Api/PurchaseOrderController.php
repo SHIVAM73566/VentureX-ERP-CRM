@@ -10,7 +10,7 @@ class PurchaseOrderController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = PurchaseOrder::query()
+        $query = PurchaseOrder::ofCompany()
             ->with('supplier')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -50,11 +50,19 @@ class PurchaseOrderController extends ApiController
 
     public function show(PurchaseOrder $purchaseOrder): JsonResponse
     {
+        if ($purchaseOrder->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($purchaseOrder->load('supplier', 'rfq', 'items', 'createdBy'));
     }
 
     public function update(Request $request, PurchaseOrder $purchaseOrder): JsonResponse
     {
+        if ($purchaseOrder->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'supplier_id' => 'sometimes|exists:suppliers,id',
             'status' => 'nullable|string|in:draft,pending,approved,ordered,partially_received,received,cancelled',
@@ -77,6 +85,10 @@ class PurchaseOrderController extends ApiController
 
     public function destroy(PurchaseOrder $purchaseOrder): JsonResponse
     {
+        if ($purchaseOrder->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $purchaseOrder->delete();
 
         return $this->successResponse(null, 'Purchase order deleted');

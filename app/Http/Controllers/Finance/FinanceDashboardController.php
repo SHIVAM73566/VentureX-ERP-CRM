@@ -19,8 +19,8 @@ class FinanceDashboardController extends Controller
     {
         $this->authorize('viewAny', Account::class);
 
-        $totalReceivable = (float) Invoice::ofCompany()->whereNotIn('status', ['paid', 'cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as v')->first()->v;
-        $totalPayable = (float) PurchaseOrder::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as v')->first()->v;
+        $totalReceivable = (float) Invoice::ofCompany()->whereNotIn('status', ['paid', 'cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as v')->value('v');
+        $totalPayable = (float) PurchaseOrder::ofCompany()->whereNotIn('status', ['cancelled'])->selectRaw('COALESCE(SUM(total - paid_amount), 0) as v')->value('v');
         $cashReceived = (float) Payment::ofCompany()->where('status', 'completed')->sum('amount');
         $landedCosts = (float) LandedCost::ofCompany()->sum('amount');
 

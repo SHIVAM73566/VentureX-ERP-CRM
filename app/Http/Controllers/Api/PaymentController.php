@@ -10,7 +10,7 @@ class PaymentController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Payment::query()
+        $query = Payment::ofCompany()
             ->with('customer', 'invoice')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
@@ -47,11 +47,19 @@ class PaymentController extends ApiController
 
     public function show(Payment $payment): JsonResponse
     {
+        if ($payment->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         return $this->successResponse($payment->load('customer', 'invoice', 'createdBy'));
     }
 
     public function update(Request $request, Payment $payment): JsonResponse
     {
+        if ($payment->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $validated = $request->validate([
             'status' => 'nullable|string|in:pending,completed,failed,refunded',
             'amount' => 'sometimes|numeric|min:0.01',
@@ -67,6 +75,10 @@ class PaymentController extends ApiController
 
     public function destroy(Payment $payment): JsonResponse
     {
+        if ($payment->company_id !== $this->companyId()) {
+            return $this->errorResponse('Not found', 404);
+        }
+
         $payment->delete();
 
         return $this->successResponse(null, 'Payment deleted');
