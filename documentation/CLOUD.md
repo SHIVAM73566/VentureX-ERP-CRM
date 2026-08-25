@@ -17,7 +17,7 @@ This guide provides a generic approach to deploying VentureX ERP & CRM on cloud 
 
 - **Operating System**: Ubuntu 22.04 LTS or 24.04 LTS
 - **Web Server**: Nginx or Apache 2.4
-- **PHP**: 8.1 or higher (8.3 recommended)
+- **PHP**: 8.1 or higher (8.4 recommended)
 - **Database**: MySQL 8.0+ or MariaDB 10.6+
 - **Cache**: Redis 7.0+ (recommended) or Memcached
 - **Node.js**: 20.x (for building frontend assets)

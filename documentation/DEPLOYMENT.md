@@ -30,7 +30,7 @@
 | Component      | Minimum                          | Recommended                    |
 |----------------|----------------------------------|--------------------------------|
 | OS             | Ubuntu 22.04 LTS                 | Ubuntu 24.04 LTS              |
-| PHP            | 8.3                              | 8.3+                          |
+| PHP            | 8.4                              | 8.4+                          |
 | Extensions     | ctype, curl, dom, fileinfo, filter, hash, mbstring, openssl, pcre, pdo, tokenizer, xml, zip, bcmath, gd, intl | All minimum + opcache, redis |
 | MySQL          | 8.0                              | 8.0+ with InnoDB              |
 | Web Server     | Apache 2.4+ or Nginx 1.24+      | Nginx 1.26+                   |
@@ -55,7 +55,7 @@
 ## Pre-Deployment Checklist
 
 - [ ] Server meets minimum requirements
-- [ ] PHP 8.3+ installed with all required extensions
+- [ ] PHP 8.4+ installed with all required extensions
 - [ ] MySQL 8.0 installed and configured
 - [ ] Web server installed and configured
 - [ ] SSL certificate obtained and installed
@@ -195,7 +195,7 @@ server {
 
     # PHP-FPM
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
         fastcgi_hide_header X-Powered-By;

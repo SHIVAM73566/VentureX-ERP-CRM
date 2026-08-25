@@ -1,6 +1,6 @@
 # VentureX ERP & CRM - AI-Powered Business Management Suite
 
-![Version](https://img.shields.io/badge/Version-1.0.0-blue) ![Laravel](https://img.shields.io/badge/Laravel-13-red) ![PHP](https://img.shields.io/badge/PHP-8.3+-purple) ![License](https://img.shields.io/badge/License-Proprietary-green)
+![Version](https://img.shields.io/badge/Version-1.0.0-blue) ![Laravel](https://img.shields.io/badge/Laravel-13-red) ![PHP](https://img.shields.io/badge/PHP-8.4+-purple) ![License](https://img.shields.io/badge/License-Proprietary-green)
 
 A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS.
 
@@ -83,7 +83,7 @@ Deploy to your server in one click:
 ## Quick Start
 
 ### Requirements
-- PHP 8.3+
+- PHP 8.4+
 - MySQL 8.0+ or MariaDB 10.6+
 - Composer
 - Node.js 20+
@@ -166,7 +166,7 @@ VentureX ERP & CRM/
 
 ## Tech Stack
 
-- **Backend:** Laravel 13, PHP 8.3+
+- **Backend:** Laravel 13, PHP 8.4+
 - **Frontend:** Blade, Alpine.js 3, Tailwind CSS v4
 - **Database:** MySQL 8.0+, MariaDB 10.6+
 - **Build:** Vite 8.x

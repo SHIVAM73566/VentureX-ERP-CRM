@@ -5,7 +5,7 @@ This guide walks you through deploying VentureX ERP & CRM on a cPanel hosting en
 ## Prerequisites
 
 - cPanel hosting with:
-  - PHP 8.1 or higher (PHP 8.3 recommended)
+  - PHP 8.1 or higher (PHP 8.4 recommended)
   - MySQL 5.7 or higher (MySQL 8.0 recommended)
   - Composer (or ability to run via SSH)
   - SSH access (recommended) or File Manager access

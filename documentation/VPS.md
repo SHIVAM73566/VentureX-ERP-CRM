@@ -60,7 +60,7 @@ systemctl enable nginx
 systemctl start nginx
 ```
 
-### Install PHP 8.3
+### Install PHP 8.4
 
 ```bash
 # Add PHP repository
@@ -68,17 +68,17 @@ apt install software-properties-common -y
 add-apt-repository ppa:ondrej/php -y
 apt update
 
-# Install PHP 8.3 and extensions
-apt install php8.3-fpm php8.3-mysql php8.3-mbstring php8.3-xml \
-    php8.3-curl php8.3-gd php8.3-zip php8.3-bcmath php8.3-intl \
-    php8.3-opcache php8.3-redis -y
+# Install PHP 8.4 and extensions
+apt install php8.4-fpm php8.4-mysql php8.4-mbstring php8.4-xml \
+    php8.4-curl php8.4-gd php8.4-zip php8.4-bcmath php8.4-intl \
+    php8.4-opcache php8.4-redis -y
 ```
 
 ### Configure PHP
 
 Edit PHP configuration:
 ```bash
-nano /etc/php/8.3/fpm/php.ini
+nano /etc/php/8.4/fpm/php.ini
 ```
 
 Update these settings:
@@ -93,7 +93,7 @@ date.timezone = UTC
 
 Restart PHP-FPM:
 ```bash
-systemctl restart php8.3-fpm
+systemctl restart php8.4-fpm
 ```
 
 ### Install MySQL 8
@@ -246,7 +246,7 @@ server {
     }
 
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
@@ -429,7 +429,7 @@ ufw allow from 127.0.0.1 to any port 3306
 ### PHP-FPM Pool Configuration
 
 ```bash
-nano /etc/php/8.3/fpm/pool.d/www.conf
+nano /etc/php/8.4/fpm/pool.d/www.conf
 ```
 
 Optimize:
@@ -517,7 +517,7 @@ Monitor logs:
 tail -f /var/log/nginx/error.log
 
 # PHP-FPM
-tail -f /var/log/php8.3-fpm.log
+tail -f /var/log/php8.4-fpm.log
 
 # Application
 tail -f /var/www/venturex/storage/logs/laravel.log
@@ -566,13 +566,13 @@ Add:
 ```bash
 # Restart services
 systemctl restart nginx
-systemctl restart php8.3-fpm
+systemctl restart php8.4-fpm
 systemctl restart mysql
 systemctl restart redis-server
 
 # View logs
 journalctl -u nginx
-journalctl -u php8.3-fpm
+journalctl -u php8.4-fpm
 
 # Laravel commands
 cd /var/www/venturex
@@ -592,8 +592,8 @@ supervisorctl restart all
 
 ### 502 Bad Gateway
 
-- Check PHP-FPM is running: `systemctl status php8.3-fpm`
-- Check socket exists: `ls -la /var/run/php/php8.3-fpm.sock`
+- Check PHP-FPM is running: `systemctl status php8.4-fpm`
+- Check socket exists: `ls -la /var/run/php/php8.4-fpm.sock`
 - Check Nginx config: `nginx -t`
 
 ### Permission Issues

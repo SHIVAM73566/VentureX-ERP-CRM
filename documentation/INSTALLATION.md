@@ -56,7 +56,7 @@ Before installing, make sure you have these installed on your computer:
 
 | Software | What It Does | Download |
 |----------|-------------|----------|
-| **PHP 8.3+** | Runs the application | https://windows.php.net/download/ |
+| **PHP 8.4+** | Runs the application | https://windows.php.net/download/ |
 | **MySQL 8.0+** | Stores your data | https://dev.mysql.com/downloads/mysql/ |
 | **Composer** | Installs PHP packages | https://getcomposer.org/download/ |
 | **Node.js 20+** | Builds frontend assets | https://nodejs.org/ |
@@ -69,7 +69,7 @@ Open your terminal (Command Prompt or PowerShell) and run these commands one by 
 ```bash
 php -v
 ```
-You should see something like `PHP 8.3.x` or higher.
+You should see something like `PHP 8.4.x` or higher.
 
 ```bash
 mysql --version
@@ -251,14 +251,14 @@ ssh root@your_server_ip
 apt update && apt upgrade -y
 ```
 
-### Step 3 — Install PHP 8.3
+### Step 3 — Install PHP 8.4
 
 ```bash
 apt install -y software-properties-common
 add-apt-repository -y ppa:ondrej/php
 apt update
-apt install -y php8.3 php8.3-cli php8.3-fpm php8.3-mbstring php8.3-xml php8.3-curl \
-  php8.3-zip php8.3-bcmath php8.3-gd php8.3-mysql php8.3-intl php8.3-redis php8.3-opcache
+apt install -y php8.4 php8.4-cli php8.4-fpm php8.4-mbstring php8.4-xml php8.4-curl \
+  php8.4-zip php8.4-bcmath php8.4-gd php8.4-mysql php8.4-intl php8.4-redis php8.4-opcache
 ```
 
 ### Step 4 — Install MySQL 8.0
@@ -382,7 +382,7 @@ server {
     error_page 404 /index.php;
 
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
@@ -529,7 +529,7 @@ Open **https://yourdomain.com** and log in.
 Create a `Dockerfile` in the project root:
 
 ```dockerfile
-FROM php:8.3-cli
+FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y \
     git unzip libpng-dev libjpeg-dev libfreetype6-dev \
@@ -720,7 +720,7 @@ Herd automatically assigns a `.test` domain. Open **http://VentureX-ERP.test** i
 | **"No application encryption key"** | `.env` missing APP_KEY | Run `php artisan key:generate` |
 | **"Connection refused"** | MySQL not running | Start MySQL: `systemctl start mysql` |
 | **"Access denied for user"** | Wrong credentials | Verify username/password in `.env` |
-| **"Could not find driver"** | Missing PHP extension | Install `php8.3-mysql` extension |
+| **"Could not find driver"** | Missing PHP extension | Install `php8.4-mysql` extension |
 | **Permission denied on storage/** | Wrong file permissions | Run `chmod -R 775 storage bootstrap/cache` |
 | **Blank white screen** | PHP error | Check `storage/logs/laravel.log` |
 | **500 error in production** | Debug mode on | Set `APP_DEBUG=false` in `.env` |

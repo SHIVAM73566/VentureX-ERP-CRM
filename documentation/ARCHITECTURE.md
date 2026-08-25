@@ -23,7 +23,7 @@ VentureX ERP & CRM is a monolithic, server-rendered web application built on the
 | Layer | Technology | Purpose |
 |-------|------------|---------|
 | HTTP Server | Nginx/Apache | Request handling, static files |
-| Application | PHP 8.3+ | Business logic |
+| Application | PHP 8.4+ | Business logic |
 | Framework | Laravel 13 | MVC, routing, ORM, queue |
 | Templating | Blade | Server-side HTML rendering |
 | Interactivity | Alpine.js 3 | Client-side JavaScript |
