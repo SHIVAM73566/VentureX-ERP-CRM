@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VentureX ERP & CRM — Interactive Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#F8FAFC;--card:#FFFFFF;--text:#0F172A;--muted:#64748B;--border:#E2E8F0;--hover:#F1F5F9;--primary:#4F46E5;--primary-light:#EEF2FF;--secondary:#7C3AED;--success:#10B981;--success-bg:#ECFDF5;--warning:#F59E0B;--warning-bg:#FFFBEB;--danger:#EF4444;--danger-bg:#FEF2F2;--sidebar:#0F172A;--sidebar-hover:#1E293B;--sidebar-active:#1E293B;--sidebar-text:#94A3B8;--sidebar-active-border:#4F46E5}
+[data-theme="dark"]{--bg:#0F172A;--card:#1E293B;--text:#F1F5F9;--muted:#94A3B8;--border:#334155;--hover:#334155;--primary-light:#1E1B4B}
+body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;overflow:hidden;height:100vh}
+button{cursor:pointer;font-family:inherit;border:none;outline:none}
+input,select,textarea{font-family:inherit;font-size:14px;border:1px solid var(--border);border-radius:8px;padding:8px 12px;background:var(--card);color:var(--text);outline:none;transition:border .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);cursor:pointer;user-select:none}
+th:hover{color:var(--text)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px}
+tr:hover td{background:var(--hover)}
+
+/* LOGIN */
+.login-page{position:fixed;inset:0;background:linear-gradient(135deg,#4F46E5 0%,#7C3AED 100%);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .3s}
+.login-page.hidden{opacity:0;pointer-events:none}
+.login-card{background:#fff;border-radius:16px;padding:40px;width:420px;max-width:95vw;box-shadow:0 25px 60px rgba(0,0,0,.25)}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.login-logo-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#4F46E5,#7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px}
+.login-logo-text{font-size:20px;font-weight:700;color:#0F172A}
+.login-logo-sub{font-size:12px;color:#64748B;margin-top:2px}
+.login-card h1{font-size:24px;font-weight:700;margin-bottom:4px}
+.login-card .sub{color:#64748B;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:var(--text)}
+.form-group input{width:100%;padding:10px 12px}
+.form-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-size:13px}
+.form-row a{color:var(--primary);text-decoration:none}
+.form-row label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;width:100%;padding:12px;border-radius:10px;font-size:15px;font-weight:600;transition:transform .15s,box-shadow .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(79,70,229,.4)}
+.btn-primary:active{transform:translateY(0)}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.login-footer{text-align:center;margin-top:20px;font-size:12px;color:#94A3B8}
+.demo-roles{margin-top:20px;padding-top:20px;border-top:1px solid #E2E8F0}
+.demo-roles p{font-size:12px;color:#94A3B8;margin-bottom:8px;text-align:center}
+.demo-role{display:block;width:100%;padding:8px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;text-align:left;font-size:13px;color:#334155;transition:all .15s;margin-bottom:6px}
+.demo-role:hover{background:#EEF2FF;border-color:#4F46E5;color:#4F46E5}
+.demo-role strong{color:#0F172A}
+
+/* APP LAYOUT */
+.app{display:none;height:100vh;overflow:hidden}
+.app.active{display:flex}
+.sidebar{width:250px;min-width:250px;background:var(--sidebar);display:flex;flex-direction:column;transition:width .25s,min-width .25s;overflow:hidden;z-index:100}
+.sidebar.collapsed{width:60px;min-width:60px}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:16px 16px;border-bottom:1px solid #1E293B;min-height:64px}
+.sidebar-logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#4F46E5,#7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;flex-shrink:0}
+.sidebar-logo-text{white-space:nowrap;overflow:hidden}
+.sidebar-logo-text .brand{color:#fff;font-weight:700;font-size:15px}
+.sidebar-logo-text .sub{color:#64748B;font-size:11px}
+.sidebar.collapsed .sidebar-logo-text{display:none}
+.sidebar-nav{flex:1;overflow-y:auto;padding:8px}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
+.sidebar-section{padding:12px 12px 4px;font-size:10px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;overflow:hidden}
+.sidebar.collapsed .sidebar-section{text-align:center;font-size:0;padding:8px 0 4px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:var(--sidebar-text);cursor:pointer;transition:all .15s;white-space:nowrap;overflow:hidden;position:relative;font-weight:500;font-size:13px;margin-bottom:2px}
+.nav-item:hover{background:var(--sidebar-hover);color:#fff}
+.nav-item.active{background:var(--sidebar-active);color:#fff;border-left:3px solid var(--sidebar-active-border);padding-left:9px}
+.nav-item .icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.nav-item .badge{background:#10B981;color:#fff;font-size:9px;padding:2px 6px;border-radius:10px;margin-left:auto;font-weight:600}
+.sidebar.collapsed .nav-item span:not(.icon){display:none}
+.sidebar.collapsed .nav-item{justify-content:center;padding-left:0;padding-right:0}
+.sidebar-bottom{padding:12px;border-top:1px solid #1E293B;display:flex;align-items:center;gap:10px;min-height:60px}
+.sidebar-user{display:flex;align-items:center;gap:10px;overflow:hidden;flex:1}
+.sidebar-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4F46E5,#7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0}
+.sidebar-user-info{overflow:hidden;white-space:nowrap}
+.sidebar-user-info .name{color:#fff;font-size:13px;font-weight:600}
+.sidebar-user-info .role{color:#64748B;font-size:11px}
+.sidebar.collapsed .sidebar-user-info{display:none}
+.theme-toggle{background:none;color:#64748B;padding:6px;border-radius:6px;font-size:16px}
+.theme-toggle:hover{color:#fff;background:#1E293B}
+
+/* MAIN AREA */
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:64px;min-height:64px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;z-index:50}
+.hamburger{background:none;color:var(--muted);font-size:20px;padding:4px;display:none}
+.sidebar.collapsed + .main-area .hamburger,.sidebar.collapsed ~ .main-area .hamburger{display:flex}
+.breadcrumb{font-size:13px;color:var(--muted)}
+.breadcrumb span{color:var(--text);font-weight:600}
+.topbar-search{flex:1;max-width:400px;margin:0 auto}
+.topbar-search input{width:100%;border-radius:20px;padding:8px 16px 8px 36px;background:var(--hover);border:1px solid transparent;font-size:13px}
+.topbar-search input:focus{background:var(--card);border-color:var(--primary)}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.topbar-btn{background:none;color:var(--muted);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;position:relative}
+.topbar-btn:hover{background:var(--hover);color:var(--text)}
+.topbar-btn .dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:#EF4444;border-radius:50%;border:2px solid var(--card)}
+.user-menu{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:8px;cursor:pointer}
+.user-menu:hover{background:var(--hover)}
+.user-menu-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4F46E5,#7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
+.user-menu-name{font-size:13px;font-weight:600}
+.user-menu-chevron{color:var(--muted);font-size:12px}
+.user-dropdown{position:absolute;top:56px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:6px;min-width:180px;display:none;z-index:200}
+.user-dropdown.show{display:block}
+.user-dropdown a{display:block;padding:8px 12px;border-radius:6px;font-size:13px;color:var(--text);text-decoration:none}
+.user-dropdown a:hover{background:var(--hover)}
+.user-dropdown hr{border:none;border-top:1px solid var(--border);margin:4px 0}
+
+.notif-dropdown{position:absolute;top:56px;right:80px;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.12);padding:8px;min-width:320px;display:none;z-index:200;max-height:400px;overflow-y:auto}
+.notif-dropdown.show{display:block}
+.notif-dropdown h4{padding:8px 12px;font-size:14px;font-weight:600}
+.notif-item{display:flex;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:background .15s}
+.notif-item:hover{background:var(--hover)}
+.notif-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.notif-item .text{font-size:13px;color:var(--text)}
+.notif-item .time{font-size:11px;color:var(--muted)}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:24px}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.page{display:none;animation:fadeIn .2s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;transition:box-shadow .2s}
+.card:hover{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.card-header h3{font-size:16px;font-weight:600}
+.card-header .sub{font-size:12px;color:var(--muted)}
+.grid{display:grid;gap:20px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-1-2{grid-template-columns:1fr 2fr}
+.grid-2-1{grid-template-columns:2fr 1fr}
+
+/* STAT CARDS */
+.stat-card{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px}
+.stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.stat-icon.green{background:#ECFDF5;color:#10B981}
+.stat-icon.blue{background:#EEF2FF;color:#4F46E5}
+.stat-icon.amber{background:#FFFBEB;color:#F59E0B}
+.stat-icon.red{background:#FEF2F2;color:#EF4444}
+.stat-icon.purple{background:#F5F3FF;color:#7C3AED}
+.stat-value{font-size:24px;font-weight:800;line-height:1}
+.stat-label{font-size:13px;color:var(--muted);margin-top:2px}
+.stat-change{font-size:12px;font-weight:600;margin-top:4px;display:flex;align-items:center;gap:4px}
+.stat-change.up{color:#10B981}
+.stat-change.down{color:#EF4444}
+
+/* BADGES */
+.badge{display:inline-flex;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-green{background:#ECFDF5;color:#065F46}
+.badge-blue{background:#EEF2FF;color:#4338CA}
+.badge-amber{background:#FFFBEB;color:#92400E}
+.badge-red{background:#FEF2F2;color:#991B1B}
+.badge-gray{background:#F1F5F9;color:#475569}
+.badge-purple{background:#F5F3FF;color:#5B21B6}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#4338CA;box-shadow:0 2px 8px rgba(79,70,229,.3)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-outline{background:transparent;color:var(--primary);border:1px solid var(--primary)}
+.btn-outline:hover{background:var(--primary-light)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-success{background:var(--success);color:#fff}
+
+/* TABS */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--border);margin-bottom:20px}
+.tab{padding:10px 16px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* CHARTS */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:180px;padding:0 4px}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#4F46E5,#7C3AED);transition:height .5s ease;min-height:2px}
+.bar-label{font-size:10px;color:var(--muted)}
+
+/* PIPELINE BAR */
+.pipeline-bar{display:flex;border-radius:8px;overflow:hidden;height:32px}
+.pipeline-bar div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;transition:width .5s}
+
+/* ACTIVITY FEED */
+.activity-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.activity-text{font-size:13px;flex:1}
+.activity-time{font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* KANBAN */
+.kanban{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px}
+.kanban-col{min-width:260px;max-width:280px;flex:1;background:var(--hover);border-radius:12px;padding:12px}
+.kanban-col-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:0 4px}
+.kanban-col-header h4{font-size:13px;font-weight:600}
+.kanban-col-header span{font-size:12px;color:var(--muted)}
+.kanban-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;cursor:grab;transition:all .2s}
+.kanban-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-1px)}
+.kanban-card .title{font-weight:600;font-size:13px;margin-bottom:6px}
+.kanban-card .meta{font-size:12px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.kanban-card .tags{display:flex;gap:4px;margin-top:8px}
+
+/* PROGRESS BAR */
+.progress{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width .5s}
+.progress-green .progress-fill{background:#10B981}
+.progress-amber .progress-fill{background:#F59E0B}
+.progress-red .progress-fill{background:#EF4444}
+.progress-blue .progress-fill{background:#4F46E5}
+
+/* CHECKLIST */
+.check-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.check-item:last-child{border-bottom:none}
+.check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.check-box.checked{background:var(--primary);border-color:var(--primary);color:#fff}
+.check-box.checked::after{content:'✓';font-size:11px}
+.priority-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* SETTINGS TABS */
+.settings-tabs{display:flex;gap:4px;background:var(--hover);padding:4px;border-radius:10px;margin-bottom:24px;width:fit-content}
+.settings-tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
+.settings-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* AI CHAT */
+.ai-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;height:calc(100vh - 140px)}
+.ai-chat{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.ai-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px}
+.ai-msg{display:flex;gap:12px;max-width:85%}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ai-msg.user .ai-msg-avatar{background:var(--primary);color:#fff}
+.ai-msg.ai .ai-msg-avatar{background:#ECFDF5;color:#10B981}
+.ai-msg-bubble{padding:12px 16px;border-radius:12px;font-size:13px;line-height:1.6}
+.ai-msg.user .ai-msg-bubble{background:var(--primary);color:#fff;border-bottom-right-radius:4px}
+.ai-msg.ai .ai-msg-bubble{background:var(--hover);border-bottom-left-radius:4px}
+.ai-input{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border)}
+.ai-input input{flex:1;border-radius:20px;padding:10px 16px}
+.ai-input button{background:var(--primary);color:#fff;border-radius:20px;padding:10px 20px;font-weight:600;font-size:13px}
+.ai-sidebar .card{margin-bottom:16px}
+.insight-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.insight-item:last-child{border-bottom:none}
+.insight-icon{color:#10B981;font-size:14px;margin-top:2px}
+.insight-text{font-size:13px;line-height:1.5}
+
+/* FOOTER */
+.page-footer{text-align:center;padding:16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:24px}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2-1,.grid-1-2{grid-template-columns:1fr}.ai-layout{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{position:fixed;left:-260px;height:100vh;z-index:1000;transition:left .25s}.sidebar.mobile-open{left:0}.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:none}.sidebar-overlay.show{display:block}.hamburger{display:flex!important}.grid-4,.grid-3{grid-template-columns:1fr}.topbar-search{display:none}.kanban{flex-direction:column}.kanban-col{max-width:100%}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ LOGIN PAGE ═══════════════════ -->
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">V</div>
+      <div>
+        <div class="login-logo-text">VentureX</div>
+        <div class="login-logo-sub">ERP & CRM</div>
+      </div>
+    </div>
+    <h1>Welcome Back</h1>
+    <p class="sub">Sign in to your business operating system</p>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" value="demo_admin@example.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" value="password123">
+    </div>
+    <div class="form-row">
+      <label><input type="checkbox" checked> Remember me</label>
+      <a href="#">Forgot password?</a>
+    </div>
+    <button class="btn-primary" onclick="doLogin(this)">
+      <span>Sign In</span>
+      <div class="spinner" id="loginSpinner"></div>
+    </button>
+    <p class="login-footer">Don't have an account? Contact <a href="mailto:support@venturexerp.com" style="color:#4F46E5">support@venturexerp.com</a></p>
+    <div class="demo-roles">
+      <p>Or try a demo role:</p>
+      <button class="demo-role" onclick="loginAs('CEO','Demo CEO')"><strong> CEO</strong> — demo_manager@example.com</button>
+      <button class="demo-role" onclick="loginAs('Sales','Demo Sales')"><strong> Sales Manager</strong> — demo_sales@example.com</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ APP ═══════════════════ -->
+<div class="app" id="appLayout">
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">V</div>
+      <div class="sidebar-logo-text"><div class="brand">VentureX</div><div class="sub">ERP & CRM</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">MAIN</div>
+      <div class="nav-item active" data-page="dashboard" onclick="goPage(this)"><span class="icon">🏠</span><span>Dashboard</span></div>
+      <div class="nav-item" data-page="analytics" onclick="goPage(this)"><span class="icon">📊</span><span>Analytics</span></div>
+
+      <div class="sidebar-section">CRM</div>
+      <div class="nav-item" data-page="contacts" onclick="goPage(this)"><span class="icon">👥</span><span>Contacts</span></div>
+      <div class="nav-item" data-page="companies" onclick="goPage(this)"><span class="icon">🏢</span><span>Companies</span></div>
+      <div class="nav-item" data-page="leads" onclick="goPage(this)"><span class="icon">📞</span><span>Leads</span></div>
+      <div class="nav-item" data-page="opportunities" onclick="goPage(this)"><span class="icon">💰</span><span>Opportunities</span></div>
+
+      <div class="sidebar-section">SALES</div>
+      <div class="nav-item" data-page="quotations" onclick="goPage(this)"><span class="icon">📋</span><span>Quotations</span></div>
+      <div class="nav-item" data-page="invoices" onclick="goPage(this)"><span class="icon">🧾</span><span>Invoices</span></div>
+      <div class="nav-item" data-page="sales-orders" onclick="goPage(this)"><span class="icon">📦</span><span>Sales Orders</span></div>
+
+      <div class="sidebar-section">INVENTORY</div>
+      <div class="nav-item" data-page="products" onclick="goPage(this)"><span class="icon">📦</span><span>Products</span></div>
+      <div class="nav-item" data-page="warehouses" onclick="goPage(this)"><span class="icon">🏭</span><span>Warehouses</span></div>
+
+      <div class="sidebar-section">PROCUREMENT</div>
+      <div class="nav-item" data-page="purchase-orders" onclick="goPage(this)"><span class="icon">🛒</span><span>Purchase Orders</span></div>
+      <div class="nav-item" data-page="rfqs" onclick="goPage(this)"><span class="icon">📩</span><span>RFQs</span></div>
+
+      <div class="sidebar-section">FINANCE</div>
+      <div class="nav-item" data-page="accounts" onclick="goPage(this)"><span class="icon">💳</span><span>Accounts</span></div>
+      <div class="nav-item" data-page="journal" onclick="goPage(this)"><span class="icon">📒</span><span>Journal Entries</span></div>
+
+      <div class="sidebar-section">LOGISTICS</div>
+      <div class="nav-item" data-page="shipments" onclick="goPage(this)"><span class="icon">🚚</span><span>Shipments</span></div>
+      <div class="nav-item" data-page="containers" onclick="goPage(this)"><span class="icon">📦</span><span>Containers</span></div>
+
+      <div class="sidebar-section">SUPPORT</div>
+      <div class="nav-item" data-page="tickets" onclick="goPage(this)"><span class="icon">🎫</span><span>Tickets</span></div>
+      <div class="nav-item" data-page="faq" onclick="goPage(this)"><span class="icon">❓</span><span>FAQ</span></div>
+
+      <div class="sidebar-section">AI</div>
+      <div class="nav-item" data-page="ai" onclick="goPage(this)"><span class="icon">🤖</span><span>AI Copilot</span><span class="badge">AI</span></div>
+
+      <div class="sidebar-section">SYSTEM</div>
+      <div class="nav-item" data-page="users" onclick="goPage(this)"><span class="icon">👥</span><span>Users</span></div>
+      <div class="nav-item" data-page="security" onclick="goPage(this)"><span class="icon">🔐</span><span>Security & Logs</span></div>
+      <div class="nav-item" data-page="settings" onclick="goPage(this)"><span class="icon">⚙️</span><span>Settings</span></div>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">🌙</button>
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebarAvatar">DA</div>
+        <div class="sidebar-user-info">
+          <div class="name" id="sidebarName">Demo Admin</div>
+          <div class="role" id="sidebarRole">Super Admin</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+
+  <!-- Main -->
+  <div class="main-area">
+    <div class="topbar">
+      <button class="hamburger" onclick="toggleMobileSidebar()">☰</button>
+      <div class="breadcrumb">🏠 <span id="breadcrumbPage">Dashboard</span></div>
+      <div class="topbar-search"><input type="text" placeholder="Search anything..."></div>
+      <div class="topbar-actions">
+        <button class="topbar-btn" onclick="toggleNotif(event)" id="notifBtn">🔔<div class="dot"></div></button>
+        <button class="topbar-btn" onclick="goPage(document.querySelector('[data-page=ai]'))">✨</button>
+      </div>
+      <div class="user-menu" onclick="toggleUserMenu(event)" style="position:relative">
+        <div class="user-menu-avatar" id="userMenuAvatar">DA</div>
+        <span class="user-menu-name" id="userMenuName">Demo Admin</span>
+        <span class="user-menu-chevron">▾</span>
+      </div>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div class="notif-dropdown" id="notifDropdown">
+      <h4>Notifications</h4>
+      <div class="notif-item"><div class="dot" style="background:#10B981"></div><div><div class="text">New lead: Acme Corp just submitted a form</div><div class="time">2 min ago</div></div></div>
+      <div class="notif-item"><div class="dot" style="background:#4F46E5"></div><div><div class="text">Invoice #1042 has been paid — $12,400</div><div class="time">15 min ago</div></div></div>
+      <div class="notif-item"><div class="dot" style="background:#F59E0B"></div><div><div class="text">Purchase order #308 awaiting approval</div><div class="time">1 hr ago</div></div></div>
+    </div>
+
+    <!-- User Dropdown -->
+    <div class="user-dropdown" id="userDropdown">
+      <a href="#">👤 Profile</a>
+      <a href="#" onclick="goPage(document.querySelector('[data-page=settings]'));return false">⚙️ Settings</a>
+      <hr>
+      <a href="#" onclick="doLogout();return false">🚪 Logout</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- ════ DASHBOARD ════ -->
+      <div class="page active" id="page-dashboard">
+        <div class="grid grid-4" style="margin-bottom:24px">
+          <div class="stat-card"><div class="stat-icon green">💰</div><div><div class="stat-value">$284,520</div><div class="stat-label">Total Revenue</div><div class="stat-change up">↑ 12.5% vs last month</div></div></div>
+          <div class="stat-card"><div class="stat-icon blue">👥</div><div><div class="stat-value">1,247</div><div class="stat-label">Active Leads</div><div class="stat-change up">↑ 8.3% vs last month</div></div></div>
+          <div class="stat-card"><div class="stat-icon amber">🧾</div><div><div class="stat-value">89</div><div class="stat-label">Open Invoices</div><div class="stat-change down">↓ 3.2% vs last month</div></div></div>
+          <div class="stat-card"><div class="stat-icon red">🎫</div><div><div class="stat-value">42</div><div class="stat-label">Support Tickets</div><div class="stat-change up">↑ 5.1% vs last month</div></div></div>
+        </div>
+
+        <div class="grid grid-2" style="margin-bottom:24px">
+          <div class="card">
+            <div class="card-header"><div><h3>Revenue Overview</h3><div class="sub">Monthly revenue for 2026</div></div></div>
+            <div class="bar-chart" id="revenueChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Recent Activity</h3></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#10B981"></div><div class="activity-text">New lead: <strong>Acme Corp</strong> submitted contact form</div><div class="activity-time">2 min ago</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#4F46E5"></div><div class="activity-text">Invoice <strong>#1042</strong> paid — $12,400</div><div class="activity-time">15 min ago</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#F59E0B"></div><div class="activity-text">Purchase order <strong>#308</strong> approved</div><div class="activity-time">1 hr ago</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#10B981"></div><div class="activity-text">Support ticket <strong>#128</strong> resolved</div><div class="activity-time">3 hrs ago</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#7C3AED"></div><div class="activity-text">New opportunity: <strong>$45,000</strong> — Pinnacle Systems</div><div class="activity-time">5 hrs ago</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:#EF4444"></div><div class="activity-text">Stock adjustment: <strong>Widget Pro</strong> — 50 units received</div><div class="activity-time">Yesterday</div></div>
+          </div>
+        </div>
+
+        <div class="grid grid-3" style="margin-bottom:24px">
+          <div class="card">
+            <div class="card-header"><h3>Top Deals</h3></div>
+            <table>
+              <tr><td><strong>Acme Corp</strong></td><td>$125,000</td><td><span class="badge badge-green">Won</span></td></tr>
+              <tr><td><strong>TechVista</strong></td><td>$89,000</td><td><span class="badge badge-blue">Proposal</span></td></tr>
+              <tr><td><strong>GlobalTrade</strong></td><td>$67,500</td><td><span class="badge badge-amber">Negotiation</span></td></tr>
+              <tr><td><strong>Pinnacle</strong></td><td>$45,000</td><td><span class="badge badge-blue">Proposal</span></td></tr>
+              <tr><td><strong>BlueWave</strong></td><td>$32,000</td><td><span class="badge badge-gray">Prospecting</span></td></tr>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Pipeline Status</h3></div>
+            <div class="pipeline-bar" style="margin-top:8px">
+              <div style="width:15%;background:#94A3B8">Leads</div>
+              <div style="width:22%;background:#4F46E5">Prospect</div>
+              <div style="width:18%;background:#7C3AED">Proposal</div>
+              <div style="width:12%;background:#F59E0B">Negotiate</div>
+              <div style="width:33%;background:#10B981">Won</div>
+            </div>
+            <div style="margin-top:16px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span>Total Pipeline</span><strong>$587,000</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span>Avg Deal Size</span><strong>$39,130</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span>Win Rate</span><strong style="color:#10B981">34%</strong></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Recent Orders</h3></div>
+            <table>
+              <tr><td>#SO-1041</td><td>Acme Corp</td><td>$8,200</td><td><span class="badge badge-green">Paid</span></td></tr>
+              <tr><td>#SO-1040</td><td>TechVista</td><td>$3,400</td><td><span class="badge badge-blue">Sent</span></td></tr>
+              <tr><td>#SO-1039</td><td>GlobalTrade</td><td>$12,600</td><td><span class="badge badge-green">Paid</span></td></tr>
+              <tr><td>#SO-1038</td><td>Pinnacle</td><td>$2,100</td><td><span class="badge badge-amber">Pending</span></td></tr>
+              <tr><td>#SO-1037</td><td>BlueWave</td><td>$6,800</td><td><span class="badge badge-red">Overdue</span></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header"><h3>Tasks Due This Week</h3></div>
+            <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div class="priority-dot" style="background:#EF4444"></div><div style="flex:1;font-size:13px">Follow up with Acme Corp on proposal</div><span class="badge badge-red">High</span></div>
+            <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div class="priority-dot" style="background:#F59E0B"></div><div style="flex:1;font-size:13px">Review Q3 financial report</div><span class="badge badge-amber">Medium</span></div>
+            <div class="check-item"><div class="check-box checked" onclick="this.classList.toggle('checked')"></div><div class="priority-dot" style="background:#10B981"></div><div style="flex:1;font-size:13px">Send onboarding docs to TechVista</div><span class="badge badge-green">Low</span></div>
+            <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div class="priority-dot" style="background:#EF4444"></div><div style="flex:1;font-size:13px">Update inventory counts for Q4</div><span class="badge badge-red">High</span></div>
+            <div class="check-item"><div class="check-box" onclick="this.classList.toggle('checked')"></div><div class="priority-dot" style="background:#F59E0B"></div><div style="flex:1;font-size:13px">Schedule demo for Pinnacle Systems</div><span class="badge badge-amber">Medium</span></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Inventory Alerts</h3></div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Widget Alpha</span><span style="color:#EF4444;font-weight:600">12 units left</span></div>
+              <div class="progress progress-red"><div class="progress-fill" style="width:12%"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Widget Beta</span><span style="color:#F59E0B;font-weight:600">28 units left</span></div>
+              <div class="progress progress-amber"><div class="progress-fill" style="width:28%"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Widget Pro</span><span style="color:#10B981;font-weight:600">156 units</span></div>
+              <div class="progress progress-green"><div class="progress-fill" style="width:78%"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Widget Enterprise</span><span style="color:#EF4444;font-weight:600">5 units left</span></div>
+              <div class="progress progress-red"><div class="progress-fill" style="width:5%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Service Package Basic</span><span style="color:#10B981;font-weight:600">Unlimited</span></div>
+              <div class="progress progress-green"><div class="progress-fill" style="width:100%"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ CONTACTS ════ -->
+      <div class="page" id="page-contacts">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Contacts</h2><div class="sub">Manage your business contacts</div></div>
+          <button class="btn btn-primary">+ Add Contact</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" style="background:var(--primary);color:#fff;border-color:var(--primary)">All (156)</button>
+          <button class="btn btn-outline btn-sm">Active (132)</button>
+          <button class="btn btn-outline btn-sm">Inactive (24)</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table id="contactsTable">
+            <thead><tr><th onclick="sortTable('contactsTable',0)">Name</th><th onclick="sortTable('contactsTable',1)">Email</th><th onclick="sortTable('contactsTable',2)">Phone</th><th onclick="sortTable('contactsTable',3)">Company</th><th onclick="sortTable('contactsTable',4)">Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Sarah Chen</strong></td><td>sarah.chen@acme.com</td><td>+1 (555) 123-4567</td><td>Acme Corp</td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>James Rodriguez</strong></td><td>j.rodriguez@techvista.com</td><td>+1 (555) 234-5678</td><td>TechVista Solutions</td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Priya Sharma</strong></td><td>p.sharma@globaltrade.com</td><td>+1 (555) 345-6789</td><td>GlobalTrade Inc</td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Michael O'Brien</strong></td><td>m.obrien@pinnacle.com</td><td>+1 (555) 456-7890</td><td>Pinnacle Systems</td><td><span class="badge badge-amber">Inactive</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Emily Watson</strong></td><td>e.watson@bluewave.com</td><td>+1 (555) 567-8901</td><td>BlueWave Logistics</td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>David Kim</strong></td><td>d.kim@quantum.com</td><td>+1 (555) 678-9012</td><td>Quantum Analytics</td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Lisa Anderson</strong></td><td>l.anderson@solarpeak.com</td><td>+1 (555) 789-0123</td><td>SolarPeak Energy</td><td><span class="badge badge-amber">Inactive</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Robert Taylor</strong></td><td>r.taylor@atlas.com</td><td>+1 (555) 890-1234</td><td>Atlas Manufacturing</td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-size:13px;color:var(--muted)">
+          <span>Showing 1-8 of 156 contacts</span>
+          <div style="display:flex;gap:4px"><button class="btn btn-sm btn-outline" disabled>← Prev</button><button class="btn btn-sm btn-primary">1</button><button class="btn btn-sm btn-outline">2</button><button class="btn btn-sm btn-outline">3</button><button class="btn btn-sm btn-outline">Next →</button></div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ LEADS ════ -->
+      <div class="page" id="page-leads">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Leads</h2><div class="sub">Track and manage your sales pipeline</div></div>
+          <button class="btn btn-primary">+ Add Lead</button>
+        </div>
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>New</h4><span>12</span></div>
+            <div class="kanban-card"><div class="title">Acme Corp</div><div style="font-size:12px;color:var(--muted)">Sarah Chen · CEO</div><div class="meta"><span>$85,000</span><span class="badge badge-blue">Website</span></div></div>
+            <div class="kanban-card"><div class="title">NovaTech Industries</div><div style="font-size:12px;color:var(--muted)">Contact TBD</div><div class="meta"><span>$24,000</span><span class="badge badge-gray">Cold Call</span></div></div>
+            <div class="kanban-card"><div class="title">Meridian Consulting</div><div style="font-size:12px;color:var(--muted)">Contact TBD</div><div class="meta"><span>$15,000</span><span class="badge badge-purple">LinkedIn</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>Contacted</h4><span>8</span></div>
+            <div class="kanban-card"><div class="title">GlobalTrade Inc</div><div style="font-size:12px;color:var(--muted)">Priya Sharma · COO</div><div class="meta"><span>$67,500</span><span class="badge badge-green">Referral</span></div></div>
+            <div class="kanban-card"><div class="title">Atlas Manufacturing</div><div style="font-size:12px;color:var(--muted)">Robert Taylor · Ops</div><div class="meta"><span>$42,000</span><span class="badge badge-blue">Website</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>Qualified</h4><span>5</span></div>
+            <div class="kanban-card"><div class="title">Pinnacle Systems</div><div style="font-size:12px;color:var(--muted)">Michael O'Brien · IT Dir</div><div class="meta"><span>$45,000</span><span class="badge badge-green">Referral</span></div></div>
+            <div class="kanban-card"><div class="title">SolarPeak Energy</div><div style="font-size:12px;color:var(--muted)">Lisa Anderson · Mgr</div><div class="meta"><span>$38,000</span><span class="badge badge-gray">Trade Show</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>Proposal</h4><span>4</span></div>
+            <div class="kanban-card"><div class="title">TechVista Solutions</div><div style="font-size:12px;color:var(--muted)">James Rodriguez · CFO</div><div class="meta"><span>$89,000</span><span class="badge badge-blue">Website</span></div></div>
+            <div class="kanban-card"><div class="title">Quantum Analytics</div><div style="font-size:12px;color:var(--muted)">David Kim · VP Sales</div><div class="meta"><span>$56,000</span><span class="badge badge-purple">LinkedIn</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>Won</h4><span>3</span></div>
+            <div class="kanban-card" style="border-left:3px solid #10B981"><div class="title">BlueWave Logistics</div><div style="font-size:12px;color:var(--muted)">Emily Watson · Procurement</div><div class="meta"><span>$125,000</span><span class="badge badge-green">Referral</span></div></div>
+          </div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ INVOICES ════ -->
+      <div class="page" id="page-invoices">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Invoices</h2><div class="sub">Manage billing and track payments</div></div>
+          <button class="btn btn-primary">+ Create Invoice</button>
+        </div>
+        <div class="tabs">
+          <div class="tab active" onclick="filterTab(this,'inv')">All (10)</div>
+          <div class="tab" onclick="filterTab(this,'inv')">Draft (2)</div>
+          <div class="tab" onclick="filterTab(this,'inv')">Sent (3)</div>
+          <div class="tab" onclick="filterTab(this,'inv')">Paid (4)</div>
+          <div class="tab" onclick="filterTab(this,'inv')">Overdue (1)</div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Invoice #</th><th>Customer</th><th>Date</th><th>Due Date</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>INV-1001</strong></td><td>Acme Corp</td><td>2026-08-01</td><td>2026-08-31</td><td>$24,800</td><td><span class="badge badge-green">Paid</span></td></tr>
+              <tr><td><strong>INV-1002</strong></td><td>TechVista Solutions</td><td>2026-08-05</td><td>2026-09-04</td><td>$12,400</td><td><span class="badge badge-blue">Sent</span></td></tr>
+              <tr><td><strong>INV-1003</strong></td><td>GlobalTrade Inc</td><td>2026-08-10</td><td>2026-09-09</td><td>$8,600</td><td><span class="badge badge-green">Paid</span></td></tr>
+              <tr><td><strong>INV-1004</strong></td><td>Pinnacle Systems</td><td>2026-08-12</td><td>2026-09-11</td><td>$45,000</td><td><span class="badge badge-blue">Sent</span></td></tr>
+              <tr><td><strong>INV-1005</strong></td><td>BlueWave Logistics</td><td>2026-08-15</td><td>2026-09-14</td><td>$3,200</td><td><span class="badge badge-gray">Draft</span></td></tr>
+              <tr><td><strong>INV-1006</strong></td><td>Quantum Analytics</td><td>2026-08-18</td><td>2026-09-17</td><td>$18,900</td><td><span class="badge badge-green">Paid</span></td></tr>
+              <tr><td><strong>INV-1007</strong></td><td>SolarPeak Energy</td><td>2026-08-20</td><td>2026-09-19</td><td>$6,400</td><td><span class="badge badge-gray">Draft</span></td></tr>
+              <tr><td><strong>INV-1008</strong></td><td>Atlas Manufacturing</td><td>2026-08-22</td><td>2026-09-21</td><td>$9,300</td><td><span class="badge badge-blue">Sent</span></td></tr>
+              <tr><td><strong>INV-1009</strong></td><td>Meridian Consulting</td><td>2026-07-15</td><td>2026-08-14</td><td>$4,200</td><td><span class="badge badge-red">Overdue</span></td></tr>
+              <tr><td><strong>INV-1010</strong></td><td>NovaTech Industries</td><td>2026-08-24</td><td>2026-09-23</td><td>$14,700</td><td><span class="badge badge-green">Paid</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:12px;font-size:13px;font-weight:600">Total: $147,500</div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ QUOTATIONS ════ -->
+      <div class="page" id="page-quotations">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Quotations</h2><div class="sub">Create and send price quotes</div></div>
+          <button class="btn btn-primary">+ Create Quotation</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Quote #</th><th>Customer</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>QT-2001</strong></td><td>Acme Corp</td><td>2026-08-20</td><td>$125,000</td><td><span class="badge badge-green">Accepted</span></td></tr>
+              <tr><td><strong>QT-2002</strong></td><td>TechVista Solutions</td><td>2026-08-22</td><td>$89,000</td><td><span class="badge badge-blue">Sent</span></td></tr>
+              <tr><td><strong>QT-2003</strong></td><td>GlobalTrade Inc</td><td>2026-08-23</td><td>$67,500</td><td><span class="badge badge-amber">Draft</span></td></tr>
+              <tr><td><strong>QT-2004</strong></td><td>Pinnacle Systems</td><td>2026-08-24</td><td>$45,000</td><td><span class="badge badge-blue">Sent</span></td></tr>
+              <tr><td><strong>QT-2005</strong></td><td>BlueWave Logistics</td><td>2026-08-25</td><td>$32,000</td><td><span class="badge badge-amber">Draft</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ COMPANIES ════ -->
+      <div class="page" id="page-companies">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Companies</h2><div class="sub">Your business accounts and organizations</div></div>
+          <button class="btn btn-primary">+ Add Company</button>
+        </div>
+        <div class="grid grid-3">
+          <div class="card" style="text-align:center;padding:32px 24px"><div style="width:48px;height:48px;border-radius:12px;background:#EEF2FF;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px">🏢</div><h4>Acme Corporation</h4><div style="font-size:12px;color:var(--muted);margin:4px 0 8px">Technology · 250 employees</div><div style="display:flex;justify-content:center;gap:8px"><span class="badge badge-green">Active</span><span class="badge badge-blue">3 contacts</span></div></div>
+          <div class="card" style="text-align:center;padding:32px 24px"><div style="width:48px;height:48px;border-radius:12px;background:#ECFDF5;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px">🏢</div><h4>TechVista Solutions</h4><div style="font-size:12px;color:var(--muted);margin:4px 0 8px">IT Services · 120 employees</div><div style="display:flex;justify-content:center;gap:8px"><span class="badge badge-green">Active</span><span class="badge badge-blue">2 contacts</span></div></div>
+          <div class="card" style="text-align:center;padding:32px 24px"><div style="width:48px;height:48px;border-radius:12px;background:#FFFBEB;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px">🏢</div><h4>GlobalTrade Inc</h4><div style="font-size:12px;color:var(--muted);margin:4px 0 8px">Logistics · 500 employees</div><div style="display:flex;justify-content:center;gap:8px"><span class="badge badge-green">Active</span><span class="badge badge-blue">4 contacts</span></div></div>
+          <div class="card" style="text-align:center;padding:32px 24px"><div style="width:48px;height:48px;border-radius:12px;background:#F5F3FF;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px">🏢</div><h4>Pinnacle Systems</h4><div style="font-size:12px;color:var(--muted);margin:4px 0 8px">Manufacturing · 80 employees</div><div style="display:flex;justify-content:center;gap:8px"><span class="badge badge-amber">Prospect</span><span class="badge badge-blue">1 contact</span></div></div>
+          <div class="card" style="text-align:center;padding:32px 24px"><div style="width:48px;height:48px;border-radius:12px;background:#FEF2F2;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px">🏢</div><h4>BlueWave Logistics</h4><div style="font-size:12px;color:var(--muted);margin:4px 0 8px">Supply Chain · 200 employees</div><div style="display:flex;justify-content:center;gap:8px"><span class="badge badge-green">Active</span><span class="badge badge-blue">2 contacts</span></div></div>
+          <div class="card" style="text-align:center;padding:32px 24px"><div style="width:48px;height:48px;border-radius:12px;background:#ECFDF5;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px">🏢</div><h4>Quantum Analytics</h4><div style="font-size:12px;color:var(--muted);margin:4px 0 8px">Data Analytics · 60 employees</div><div style="display:flex;justify-content:center;gap:8px"><span class="badge badge-green">Active</span><span class="badge badge-blue">2 contacts</span></div></div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ OPPORTUNITIES ════ -->
+      <div class="page" id="page-opportunities">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Opportunities</h2><div class="sub">Track sales opportunities through your pipeline</div></div>
+          <button class="btn btn-primary">+ Add Opportunity</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Opportunity</th><th>Company</th><th>Value</th><th>Stage</th><th>Probability</th><th>Close Date</th></tr></thead>
+            <tbody>
+              <tr><td><strong>ERP Migration Project</strong></td><td>Acme Corp</td><td>$125,000</td><td><span class="badge badge-green">Won</span></td><td>100%</td><td>2026-08-20</td></tr>
+              <tr><td><strong>CRM Implementation</strong></td><td>TechVista Solutions</td><td>$89,000</td><td><span class="badge badge-blue">Proposal</span></td><td>65%</td><td>2026-09-15</td></tr>
+              <tr><td><strong>Supply Chain Module</strong></td><td>GlobalTrade Inc</td><td>$67,500</td><td><span class="badge badge-amber">Negotiation</span></td><td>50%</td><td>2026-09-30</td></tr>
+              <tr><td><strong>Inventory Upgrade</strong></td><td>Pinnacle Systems</td><td>$45,000</td><td><span class="badge badge-blue">Proposal</span></td><td>40%</td><td>2026-10-15</td></tr>
+              <tr><td><strong>Logistics Module</strong></td><td>BlueWave Logistics</td><td>$32,000</td><td><span class="badge badge-gray">Prospecting</span></td><td>20%</td><td>2026-11-01</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ SALES ORDERS ════ -->
+      <div class="page" id="page-sales-orders">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Sales Orders</h2><div class="sub">Track customer orders and fulfillment</div></div>
+          <button class="btn btn-primary">+ Create Order</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Order #</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>#SO-1041</strong></td><td>Acme Corp</td><td>2026-08-25</td><td>$8,200</td><td><span class="badge badge-green">Paid</span></td></tr>
+              <tr><td><strong>#SO-1040</strong></td><td>TechVista Solutions</td><td>2026-08-24</td><td>$3,400</td><td><span class="badge badge-blue">Processing</span></td></tr>
+              <tr><td><strong>#SO-1039</strong></td><td>GlobalTrade Inc</td><td>2026-08-23</td><td>$12,600</td><td><span class="badge badge-green">Paid</span></td></tr>
+              <tr><td><strong>#SO-1038</strong></td><td>Pinnacle Systems</td><td>2026-08-22</td><td>$2,100</td><td><span class="badge badge-amber">Pending</span></td></tr>
+              <tr><td><strong>#SO-1037</strong></td><td>BlueWave Logistics</td><td>2026-08-20</td><td>$6,800</td><td><span class="badge badge-red">Overdue</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ PRODUCTS ════ -->
+      <div class="page" id="page-products">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Products</h2><div class="sub">Manage your product catalog</div></div>
+          <button class="btn btn-primary">+ Add Product</button>
+        </div>
+        <div class="grid grid-3">
+          <div class="card"><h4>Widget Alpha</h4><div style="color:var(--muted);font-size:12px;margin:4px 0">SKU: WA-001 · Standard</div><div style="font-size:20px;font-weight:700;color:var(--primary)">$49.99</div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:12px"><span>Stock: 120</span><span class="badge badge-green">In Stock</span></div></div>
+          <div class="card"><h4>Widget Beta</h4><div style="color:var(--muted);font-size:12px;margin:4px 0">SKU: WB-002 · Standard</div><div style="font-size:20px;font-weight:700;color:var(--primary)">$89.99</div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:12px"><span>Stock: 28</span><span class="badge badge-amber">Low Stock</span></div></div>
+          <div class="card"><h4>Widget Pro</h4><div style="color:var(--muted);font-size:12px;margin:4px 0">SKU: WP-003 · Premium</div><div style="font-size:20px;font-weight:700;color:var(--primary)">$149.99</div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:12px"><span>Stock: 156</span><span class="badge badge-green">In Stock</span></div></div>
+          <div class="card"><h4>Widget Enterprise</h4><div style="color:var(--muted);font-size:12px;margin:4px 0">SKU: WE-004 · Enterprise</div><div style="font-size:20px;font-weight:700;color:var(--primary)">$299.99</div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:12px"><span>Stock: 5</span><span class="badge badge-red">Low Stock</span></div></div>
+          <div class="card"><h4>Service Package Basic</h4><div style="color:var(--muted);font-size:12px;margin:4px 0">SKU: SPB-005 · Service</div><div style="font-size:20px;font-weight:700;color:var(--primary)">$500.00</div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:12px"><span>Unlimited</span><span class="badge badge-green">Available</span></div></div>
+          <div class="card"><h4>Service Package Premium</h4><div style="color:var(--muted);font-size:12px;margin:4px 0">SKU: SPP-006 · Service</div><div style="font-size:20px;font-weight:700;color:var(--primary)">$1,500.00</div><div style="margin-top:8px;display:flex;justify-content:space-between;font-size:12px"><span>Unlimited</span><span class="badge badge-green">Available</span></div></div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ PURCHASE ORDERS ════ -->
+      <div class="page" id="page-purchase-orders">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Purchase Orders</h2><div class="sub">Manage supplier orders and procurement</div></div>
+          <button class="btn btn-primary">+ Create Purchase Order</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>PO #</th><th>Supplier</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>PO-3001</strong></td><td>Widget Factory Co.</td><td>2026-08-25</td><td>$12,400</td><td><span class="badge badge-amber">Pending</span></td></tr>
+              <tr><td><strong>PO-3002</strong></td><td>TechParts Ltd.</td><td>2026-08-22</td><td>$8,600</td><td><span class="badge badge-green">Received</span></td></tr>
+              <tr><td><strong>PO-3003</strong></td><td>Premium Supply Inc.</td><td>2026-08-20</td><td>$24,000</td><td><span class="badge badge-blue">Approved</span></td></tr>
+              <tr><td><strong>PO-3004</strong></td><td>Widget Factory Co.</td><td>2026-08-18</td><td>$6,200</td><td><span class="badge badge-green">Received</span></td></tr>
+              <tr><td><strong>PO-3005</strong></td><td>Global Parts LLC</td><td>2026-08-15</td><td>$18,900</td><td><span class="badge badge-green">Received</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ RFQs ════ -->
+      <div class="page" id="page-rfqs">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Request for Quotations</h2><div class="sub">Send RFQs to suppliers and track responses</div></div>
+          <button class="btn btn-primary">+ Create RFQ</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>RFQ #</th><th>Supplier</th><th>Items</th><th>Date Sent</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>RFQ-5001</strong></td><td>Widget Factory Co.</td><td>Widget Alpha (x200)</td><td>2026-08-24</td><td><span class="badge badge-blue">Response Received</span></td></tr>
+              <tr><td><strong>RFQ-5002</strong></td><td>Premium Supply Inc.</td><td>Widget Pro (x100)</td><td>2026-08-22</td><td><span class="badge badge-amber">Awaiting Response</span></td></tr>
+              <tr><td><strong>RFQ-5003</strong></td><td>Global Parts LLC</td><td>Widget Enterprise (x50)</td><td>2026-08-20</td><td><span class="badge badge-green">Accepted</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ WAREHOUSES ════ -->
+      <div class="page" id="page-warehouses">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Warehouses</h2><div class="sub">Manage storage locations and inventory</div></div>
+          <button class="btn btn-primary">+ Add Warehouse</button>
+        </div>
+        <div class="grid grid-3">
+          <div class="card"><h4>Main Warehouse</h4><div style="color:var(--muted);font-size:12px;margin:4px 0 12px">📍 New York, NY · 50,000 sq ft</div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Capacity Used</span><strong>72%</strong></div><div class="progress progress-blue"><div class="progress-fill" style="width:72%"></div></div><div style="margin-top:12px;display:flex;gap:8px"><span class="badge badge-green">1,240 items</span><span class="badge badge-blue">Active</span></div></div>
+          <div class="card"><h4>West Coast Hub</h4><div style="color:var(--muted);font-size:12px;margin:4px 0 12px">📍 Los Angeles, CA · 35,000 sq ft</div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Capacity Used</span><strong>45%</strong></div><div class="progress progress-green"><div class="progress-fill" style="width:45%"></div></div><div style="margin-top:12px;display:flex;gap:8px"><span class="badge badge-green">680 items</span><span class="badge badge-blue">Active</span></div></div>
+          <div class="card"><h4>Central Distribution</h4><div style="color:var(--muted);font-size:12px;margin:4px 0 12px">📍 Dallas, TX · 25,000 sq ft</div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Capacity Used</span><strong>88%</strong></div><div class="progress progress-red"><div class="progress-fill" style="width:88%"></div></div><div style="margin-top:12px;display:flex;gap:8px"><span class="badge badge-amber">940 items</span><span class="badge badge-amber">Near Capacity</span></div></div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ ACCOUNTS ════ -->
+      <div class="page" id="page-accounts">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Accounts</h2><div class="sub">Chart of accounts and financial overview</div></div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Account</th><th>Type</th><th>Balance</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1000 — Cash</strong></td><td>Asset</td><td>$84,200</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>1100 — Accounts Receivable</strong></td><td>Asset</td><td>$42,300</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>1200 — Inventory</strong></td><td>Asset</td><td>$128,000</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>2000 — Accounts Payable</strong></td><td>Liability</td><td>$36,100</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>3000 — Revenue</strong></td><td>Equity</td><td>$284,520</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>4000 — COGS</strong></td><td>Expense</td><td>$109,600</td><td><span class="badge badge-green">Active</span></td></tr>
+              <tr><td><strong>5000 — Operating Expenses</strong></td><td>Expense</td><td>$52,400</td><td><span class="badge badge-green">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ JOURNAL ENTRIES ════ -->
+      <div class="page" id="page-journal">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Journal Entries</h2><div class="sub">Record accounting journal entries</div></div>
+          <button class="btn btn-primary">+ New Entry</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Entry #</th><th>Date</th><th>Description</th><th>Debit</th><th>Credit</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>JE-1001</strong></td><td>2026-08-25</td><td>Revenue recognition — Acme Corp</td><td>$24,800</td><td>$24,800</td><td><span class="badge badge-green">Posted</span></td></tr>
+              <tr><td><strong>JE-1002</strong></td><td>2026-08-24</td><td>Inventory adjustment — Widget Pro</td><td>$7,500</td><td>$7,500</td><td><span class="badge badge-green">Posted</span></td></tr>
+              <tr><td><strong>JE-1003</strong></td><td>2026-08-23</td><td>Payroll processing — August</td><td>$32,400</td><td>$32,400</td><td><span class="badge badge-green">Posted</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ SHIPMENTS ════ -->
+      <div class="page" id="page-shipments">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Shipments</h2><div class="sub">Track outgoing and incoming shipments</div></div>
+          <button class="btn btn-primary">+ Create Shipment</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Shipment #</th><th>Order</th><th>Destination</th><th>Carrier</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><strong>SHP-8001</strong></td><td>#SO-1041</td><td>New York, NY</td><td>FedEx</td><td><span class="badge badge-green">Delivered</span></td></tr>
+              <tr><td><strong>SHP-8002</strong></td><td>#SO-1040</td><td>Los Angeles, CA</td><td>UPS</td><td><span class="badge badge-blue">In Transit</span></td></tr>
+              <tr><td><strong>SHP-8003</strong></td><td>#SO-1039</td><td>Chicago, IL</td><td>DHL</td><td><span class="badge badge-amber">Processing</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ CONTAINERS ════ -->
+      <div class="page" id="page-containers">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Containers</h2><div class="sub">Manage international shipping containers</div></div>
+          <button class="btn btn-primary">+ Add Container</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Container #</th><th>Origin</th><th>Destination</th><th>Status</th><th>ETA</th></tr></thead>
+            <tbody>
+              <tr><td><strong>CONT-2001</strong></td><td>Shanghai, CN</td><td>Los Angeles, CA</td><td><span class="badge badge-blue">In Transit</span></td><td>2026-09-10</td></tr>
+              <tr><td><strong>CONT-2002</strong></td><td>Hamburg, DE</td><td>New York, NY</td><td><span class="badge badge-green">Delivered</span></td><td>2026-08-22</td></tr>
+              <tr><td><strong>CONT-2003</strong></td><td>Shenzhen, CN</td><td>Dallas, TX</td><td><span class="badge badge-amber">Loading</span></td><td>2026-09-25</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ TICKETS ════ -->
+      <div class="page" id="page-tickets">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Support Tickets</h2><div class="sub">Manage customer support requests</div></div>
+          <button class="btn btn-primary">+ New Ticket</button>
+        </div>
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>Open</h4><span>8</span></div>
+            <div class="kanban-card"><div class="title">Login issue after password reset</div><div style="font-size:12px;color:var(--muted)">Customer: Acme Corp</div><div class="meta"><span>TICK-101</span><span class="badge badge-red">High</span></div></div>
+            <div class="kanban-card"><div class="title">API rate limit error on export</div><div style="font-size:12px;color:var(--muted)">Customer: TechVista</div><div class="meta"><span>TICK-102</span><span class="badge badge-amber">Medium</span></div></div>
+            <div class="kanban-card"><div class="title">Dashboard widget not loading</div><div style="font-size:12px;color:var(--muted)">Customer: GlobalTrade</div><div class="meta"><span>TICK-103</span><span class="badge badge-red">High</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>In Progress</h4><span>5</span></div>
+            <div class="kanban-card"><div class="title">Export CSV not working</div><div style="font-size:12px;color:var(--muted)">Customer: Pinnacle</div><div class="meta"><span>TICK-104</span><span class="badge badge-amber">Medium</span></div></div>
+            <div class="kanban-card"><div class="title">Request: Bulk import feature</div><div style="font-size:12px;color:var(--muted)">Customer: BlueWave</div><div class="meta"><span>TICK-105</span><span class="badge badge-gray">Low</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>Resolved</h4><span>12</span></div>
+            <div class="kanban-card"><div class="title">PDF report generation fix</div><div style="font-size:12px;color:var(--muted)">Customer: Quantum</div><div class="meta"><span>TICK-106</span><span class="badge badge-green">Done</span></div></div>
+            <div class="kanban-card"><div class="title">Email notification delay</div><div style="font-size:12px;color:var(--muted)">Customer: SolarPeak</div><div class="meta"><span>TICK-107</span><span class="badge badge-green">Done</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header"><h4>Closed</h4><span>6</span></div>
+            <div class="kanban-card"><div class="title">Permission denied on admin page</div><div style="font-size:12px;color:var(--muted)">Customer: Atlas</div><div class="meta"><span>TICK-108</span><span class="badge badge-gray">Closed</span></div></div>
+          </div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ FAQ ════ -->
+      <div class="page" id="page-faq">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px">Frequently Asked Questions</h2>
+        <div class="card" style="margin-bottom:12px;cursor:pointer" onclick="this.querySelector('.faq-ans').style.display=this.querySelector('.faq-ans').style.display==='block'?'none':'block'">
+          <h4 style="margin-bottom:4px">How do I get started with VentureX?</h4>
+          <div class="faq-ans" style="display:none;font-size:13px;color:var(--muted);margin-top:8px">After purchasing, follow the Installation Guide in the documentation folder. The setup wizard will guide you through database configuration, admin account creation, and initial company setup. The entire process takes about 10 minutes.</div>
+        </div>
+        <div class="card" style="margin-bottom:12px;cursor:pointer" onclick="this.querySelector('.faq-ans').style.display=this.querySelector('.faq-ans').style.display==='block'?'none':'block'">
+          <h4 style="margin-bottom:4px">What server requirements are needed?</h4>
+          <div class="faq-ans" style="display:none;font-size:13px;color:var(--muted);margin-top:8px">PHP 8.1+, MySQL 5.7+ or SQLite, Composer, Node.js 18+ for building assets. Works on shared hosting, VPS, Docker, or any PHP-compatible server.</div>
+        </div>
+        <div class="card" style="margin-bottom:12px;cursor:pointer" onclick="this.querySelector('.faq-ans').style.display=this.querySelector('.faq-ans').style.display==='block'?'none':'block'">
+          <h4 style="margin-bottom:4px">Can I customize the AI providers?</h4>
+          <div class="faq-ans" style="display:none;font-size:13px;color:var(--muted);margin-top:8px">Yes. VentureX supports NVIDIA Nemotron, Google Gemini, OpenAI GPT, Claude, and Ollama. You can switch providers anytime from the AI Settings panel. All data processing respects your configured privacy rules.</div>
+        </div>
+        <div class="card" style="margin-bottom:12px;cursor:pointer" onclick="this.querySelector('.faq-ans').style.display=this.querySelector('.faq-ans').style.display==='block'?'none':'block'">
+          <h4 style="margin-bottom:4px">Is there a money-back guarantee?</h4>
+          <div class="faq-ans" style="display:none;font-size:13px;color:var(--muted);margin-top:8px">Yes. We offer a 30-day money-back guarantee. If you're not satisfied, contact support@venturexerp.com for a full refund.</div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ AI COPILOT ════ -->
+      <div class="page" id="page-ai">
+        <div class="ai-layout">
+          <div class="ai-chat">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px"><span style="font-size:18px">🤖</span><div><strong>AI Copilot</strong><div style="font-size:11px;color:var(--muted)">Powered by NVIDIA Nemotron (local)</div></div><span class="badge badge-green" style="margin-left:auto">Online</span></div>
+            <div class="ai-messages">
+              <div class="ai-msg user"><div class="ai-msg-avatar">DA</div><div class="ai-msg-bubble">Show me Q3 revenue summary</div></div>
+              <div class="ai-msg ai"><div class="ai-msg-avatar">🤖</div><div class="ai-msg-bubble">Q3 2026 revenue totalled <strong>$89,420</strong> across 47 invoices.<br><br>Top customer: <strong>Acme Corp</strong> ($23,100)<br>Gross margin: <strong>62%</strong><br>Revenue growth vs Q2: <strong>+18.3%</strong><br><br>📊 [Revenue breakdown chart would appear here]</div></div>
+              <div class="ai-msg user"><div class="ai-msg-avatar">DA</div><div class="ai-msg-bubble">Which supplier has the best pricing for Widget X?</div></div>
+              <div class="ai-msg ai"><div class="ai-msg-avatar">🤖</div><div class="ai-msg-bubble">Based on the last 5 purchase orders, <strong>Supplier B</strong> offers the best unit price at <strong>$4.20/unit</strong> vs Supplier A at $4.85/unit.<br><br>I recommend requesting a new RFQ to negotiate further. Want me to draft one?</div></div>
+            </div>
+            <div class="ai-input"><input type="text" placeholder="Ask AI about your business data..."><button>Send</button></div>
+          </div>
+          <div class="ai-sidebar">
+            <div class="card">
+              <h4 style="margin-bottom:12px">💡 AI Insights</h4>
+              <div class="insight-item"><span class="insight-icon">📈</span><div class="insight-text">Revenue is trending <strong>15% higher</strong> than last quarter</div></div>
+              <div class="insight-item"><span class="insight-icon">⚠️</span><div class="insight-text"><strong>3 invoices</strong> are overdue by more than 30 days</div></div>
+              <div class="insight-item"><span class="insight-icon">🏆</span><div class="insight-text">Top product: <strong>Widget Enterprise</strong> (32% of revenue)</div></div>
+            </div>
+            <div class="card">
+              <h4 style="margin-bottom:12px">🔌 AI Providers</h4>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <label style="display:flex;justify-content:space-between;font-size:13px;align-items:center"><span>NVIDIA Nemotron</span><span style="background:#10B981;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600">Active</span></label>
+                <label style="display:flex;justify-content:space-between;font-size:13px;align-items:center"><span>Google Gemini</span><span style="background:var(--border);color:var(--muted);padding:2px 8px;border-radius:10px;font-size:11px">Off</span></label>
+                <label style="display:flex;justify-content:space-between;font-size:13px;align-items:center"><span>OpenAI GPT</span><span style="background:var(--border);color:var(--muted);padding:2px 8px;border-radius:10px;font-size:11px">Off</span></label>
+                <label style="display:flex;justify-content:space-between;font-size:13px;align-items:center"><span>Claude</span><span style="background:var(--border);color:var(--muted);padding:2px 8px;border-radius:10px;font-size:11px">Off</span></label>
+              </div>
+            </div>
+            <div class="card">
+              <h4 style="margin-bottom:8px">📊 Usage This Month</h4>
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span>Queries used</span><strong>47 / 200</strong></div>
+              <div class="progress progress-blue"><div class="progress-fill" style="width:23.5%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ USERS ════ -->
+      <div class="page" id="page-users">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Users</h2><div class="sub">Manage user accounts and permissions</div></div>
+          <button class="btn btn-primary">+ Add User</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Demo Admin</strong></td><td>demo_admin@example.com</td><td><span class="badge badge-purple">Super Admin</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Demo Manager</strong></td><td>demo_manager@example.com</td><td><span class="badge badge-blue">CEO</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Demo Sales</strong></td><td>demo_sales@example.com</td><td><span class="badge badge-amber">Sales Manager</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>John Warehouse</strong></td><td>john@warehouse.com</td><td><span class="badge badge-gray">Warehouse Staff</span></td><td><span class="badge badge-green">Active</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+              <tr><td><strong>Jane Support</strong></td><td>jane@support.com</td><td><span class="badge badge-green">Support Agent</span></td><td><span class="badge badge-amber">Inactive</span></td><td><button class="btn btn-sm btn-outline">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ SECURITY ════ -->
+      <div class="page" id="page-security">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <div><h2 style="font-size:20px;font-weight:700">Security & Audit Logs</h2><div class="sub">Track user activity and system events</div></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+          <input type="date" style="width:160px" value="2026-08-01">
+          <span style="line-height:36px">to</span>
+          <input type="date" style="width:160px" value="2026-08-25">
+          <select style="width:180px"><option>All Events</option><option>Login</option><option>Create</option><option>Update</option><option>Delete</option><option>Export</option></select>
+          <select style="width:160px"><option>All Users</option><option>demo_admin</option><option>demo_manager</option><option>demo_sales</option></select>
+          <button class="btn btn-primary">Filter</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table>
+            <thead><tr><th>Timestamp</th><th>User</th><th>Action</th><th>IP Address</th><th>Details</th></tr></thead>
+            <tbody>
+              <tr><td>2026-08-25 09:42:15</td><td><strong>demo_admin</strong></td><td>Login successful</td><td>192.168.1.42</td><td><span class="badge badge-green">Success</span></td></tr>
+              <tr><td>2026-08-25 09:45:03</td><td><strong>demo_admin</strong></td><td>Created invoice #1043</td><td>192.168.1.42</td><td>Amount: $8,200</td></tr>
+              <tr><td>2026-08-25 10:12:41</td><td><strong>demo_sales</strong></td><td>Updated lead #892 status</td><td>10.0.0.15</td><td>Qualified → Proposal</td></tr>
+              <tr><td>2026-08-25 10:30:00</td><td><strong>system</strong></td><td>Backup completed</td><td>localhost</td><td><span class="badge badge-green">Success</span></td></tr>
+              <tr><td>2026-08-25 11:05:22</td><td><strong>demo_manager</strong></td><td>Approved PO #3001</td><td>192.168.1.55</td><td>Amount: $12,400</td></tr>
+              <tr><td>2026-08-25 11:30:00</td><td><strong>demo_admin</strong></td><td>Exported contacts CSV</td><td>192.168.1.42</td><td>156 records exported</td></tr>
+              <tr><td>2026-08-25 12:15:44</td><td><strong>demo_sales</strong></td><td>Created quotation #2005</td><td>10.0.0.15</td><td>Customer: BlueWave</td></tr>
+              <tr><td>2026-08-25 13:00:00</td><td><strong>system</strong></td><td>Inventory sync completed</td><td>localhost</td><td><span class="badge badge-green">Success</span></td></tr>
+              <tr><td>2026-08-25 14:20:18</td><td><strong>demo_admin</strong></td><td>Updated user role</td><td>192.168.1.42</td><td>jane@support.com → Support Agent</td></tr>
+              <tr><td>2026-08-25 14:45:33</td><td><strong>demo_manager</strong></td><td>Generated Q3 report</td><td>192.168.1.55</td><td>PDF exported, 12 pages</td></tr>
+              <tr><td>2026-08-25 15:10:07</td><td><strong>demo_sales</strong></td><td>Deleted draft lead #901</td><td>10.0.0.15</td><td><span class="badge badge-red">Deleted</span></td></tr>
+              <tr><td>2026-08-25 15:30:00</td><td><strong>system</strong></td><td>Cleanup of expired sessions</td><td>localhost</td><td>14 sessions removed</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ SETTINGS ════ -->
+      <div class="page" id="page-settings">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px">Settings</h2>
+        <div class="settings-tabs">
+          <div class="settings-tab active" onclick="switchSettingsTab(this,0)">General</div>
+          <div class="settings-tab" onclick="switchSettingsTab(this,1)">Security</div>
+          <div class="settings-tab" onclick="switchSettingsTab(this,2)">Notifications</div>
+          <div class="settings-tab" onclick="switchSettingsTab(this,3)">API Keys</div>
+        </div>
+        <div class="settings-panel active">
+          <div class="card">
+            <h3 style="margin-bottom:16px">General Settings</h3>
+            <div class="grid grid-2" style="gap:16px">
+              <div class="form-group"><label>Application Name</label><input type="text" value="VentureX ERP & CRM"></div>
+              <div class="form-group"><label>Company Name</label><input type="text" value="Your Company LLC"></div>
+              <div class="form-group"><label>Currency</label><select><option>USD — US Dollar</option><option>EUR — Euro</option><option>GBP — British Pound</option></select></div>
+              <div class="form-group"><label>Timezone</label><select><option>America/New_York (EST)</option><option>America/Los_Angeles (PST)</option><option>Europe/London (GMT)</option></select></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:16px">Save Changes</button>
+          </div>
+        </div>
+        <div class="settings-panel" style="display:none">
+          <div class="card"><h3 style="margin-bottom:16px">Security Settings</h3><div class="form-group" style="max-width:400px"><label>Two-Factor Authentication</label><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span style="font-size:13px">Enable 2FA for all users</span><span style="background:#10B981;color:#fff;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:600">Enabled</span></div></div><div class="form-group" style="max-width:400px"><label>Session Timeout</label><select><option>30 minutes</option><option>1 hour</option><option>4 hours</option></select></div></div>
+        </div>
+        <div class="settings-panel" style="display:none">
+          <div class="card"><h3 style="margin-bottom:16px">Notification Settings</h3><div style="display:flex;flex-direction:column;gap:12px"><label style="display:flex;justify-content:space-between;font-size:13px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><span>Email notifications for new leads</span><span style="background:#10B981;color:#fff;padding:3px 10px;border-radius:10px;font-size:11px">On</span></label><label style="display:flex;justify-content:space-between;font-size:13px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><span>Invoice payment alerts</span><span style="background:#10B981;color:#fff;padding:3px 10px;border-radius:10px;font-size:11px">On</span></label><label style="display:flex;justify-content:space-between;font-size:13px;align-items:center;padding:8px 0"><span>Weekly summary report</span><span style="background:var(--border);color:var(--muted);padding:3px 10px;border-radius:10px;font-size:11px">Off</span></label></div></div>
+        </div>
+        <div class="settings-panel" style="display:none">
+          <div class="card"><h3 style="margin-bottom:16px">API Keys</h3><div class="form-group"><label>Public Key</label><input type="text" value="vx_pub_a1b2c3d4e5f6g7h8i9j0" readonly style="background:var(--hover)"></div><div class="form-group"><label>Secret Key</label><input type="password" value="vx_secret_xxxxxxxxxxxxx" readonly style="background:var(--hover)"></div><button class="btn btn-outline">Regenerate Keys</button></div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+      <!-- ════ ANALYTICS ════ -->
+      <div class="page" id="page-analytics">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px">Analytics</h2>
+        <div class="grid grid-4" style="margin-bottom:24px">
+          <div class="stat-card"><div class="stat-icon purple">📊</div><div><div class="stat-value">12,847</div><div class="stat-label">Page Views (30d)</div></div></div>
+          <div class="stat-card"><div class="stat-icon green">📈</div><div><div class="stat-value">3.2%</div><div class="stat-label">Conversion Rate</div></div></div>
+          <div class="stat-card"><div class="stat-icon blue">⏱️</div><div><div class="stat-value">4:32</div><div class="stat-label">Avg Session Duration</div></div></div>
+          <div class="stat-card"><div class="stat-icon amber">🔁</div><div><div class="stat-value">28%</div><div class="stat-label">Return Users</div></div></div>
+        </div>
+        <div class="card"><h3 style="margin-bottom:16px">Lead Sources Breakdown</h3>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Website</span><strong>38%</strong></div><div class="progress progress-blue"><div class="progress-fill" style="width:38%"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Referrals</span><strong>27%</strong></div><div class="progress progress-green"><div class="progress-fill" style="width:27%"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>LinkedIn</span><strong>18%</strong></div><div class="progress progress-blue"><div class="progress-fill" style="width:18%"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Cold Calls</span><strong>12%</strong></div><div class="progress progress-amber"><div class="progress-fill" style="width:12%"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>Trade Shows</span><strong>5%</strong></div><div class="progress progress-green"><div class="progress-fill" style="width:5%"></div></div></div>
+          </div>
+        </div>
+        <div class="page-footer">Powered by VentureX ERP & CRM v1.0.0 · Demo Mode — This is a preview, no data is saved</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Revenue bar chart
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const values=[15,18,22,19,25,28,24,30,27,32,29,35];
+const chart=document.getElementById('revenueChart');
+const max=Math.max(...values);
+months.forEach((m,i)=>{
+  const col=document.createElement('div');
+  col.className='bar-col';
+  col.innerHTML=`<div class="bar" style="height:${(values[i]/max)*100}%"></div><div class="bar-label">${m}</div>`;
+  chart.appendChild(col);
+});
+
+// Login
+function doLogin(btn){
+  const sp=btn.querySelector('.spinner');
+  const txt=btn.querySelector('span');
+  sp.style.display='block';txt.style.display='none';
+  setTimeout(()=>{sp.style.display='none';txt.style.display='inline';document.getElementById('loginPage').classList.add('hidden');document.getElementById('appLayout').classList.add('active')},1000);
+}
+function loginAs(role,name){
+  document.getElementById('loginEmail').value='demo_'+role.toLowerCase()+'@example.com';
+  document.querySelector('.login-card .btn-primary').click();
+  setTimeout(()=>{document.getElementById('sidebarName').textContent=name;document.getElementById('sidebarRole').textContent=role;document.getElementById('userMenuName').textContent=name;document.getElementById('userMenuAvatar').textContent=name.split(' ').map(w=>w[0]).join('');document.getElementById('sidebarAvatar').textContent=name.split(' ').map(w=>w[0]).join('')},1050);
+}
+function doLogout(){
+  document.getElementById('appLayout').classList.remove('active');
+  document.getElementById('loginPage').classList.remove('hidden');
+  document.getElementById('sidebarName').textContent='Demo Admin';
+  document.getElementById('sidebarRole').textContent='Super Admin';
+  document.getElementById('userMenuName').textContent='Demo Admin';
+  document.getElementById('userMenuAvatar').textContent='DA';
+  document.getElementById('sidebarAvatar').textContent='DA';
+  document.getElementById('loginEmail').value='demo_admin@example.com';
+}
+
+// Navigation
+function goPage(el){
+  const page=el.dataset.page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('breadcrumbPage').textContent=el.querySelector('span:not(.icon):not(.badge)').textContent;
+  closeMobileSidebar();
+  closeDropdowns();
+  document.querySelector('.content').scrollTop=0;
+}
+
+// Theme
+function toggleTheme(){
+  const d=document.documentElement;
+  const btn=document.querySelector('.theme-toggle');
+  if(d.getAttribute('data-theme')==='dark'){d.removeAttribute('data-theme');btn.textContent='🌙'}
+  else{d.setAttribute('data-theme','dark');btn.textContent='☀️'}
+  localStorage.setItem('theme',d.getAttribute('data-theme')||'light');
+}
+if(localStorage.getItem('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');document.querySelector('.theme-toggle').textContent='☀️'}
+
+// Dropdowns
+function toggleUserMenu(e){e.stopPropagation();const d=document.getElementById('userDropdown');d.classList.toggle('show');document.getElementById('notifDropdown').classList.remove('show')}
+function toggleNotif(e){e.stopPropagation();const d=document.getElementById('notifDropdown');d.classList.toggle('show');document.getElementById('userDropdown').classList.remove('show')}
+function closeDropdowns(){document.getElementById('userDropdown').classList.remove('show');document.getElementById('notifDropdown').classList.remove('show')}
+document.addEventListener('click',closeDropdowns);
+
+// Mobile sidebar
+function toggleMobileSidebar(){document.getElementById('sidebar').classList.toggle('mobile-open');document.getElementById('sidebarOverlay').classList.toggle('show')}
+function closeMobileSidebar(){document.getElementById('sidebar').classList.remove('mobile-open');document.getElementById('sidebarOverlay').classList.remove('show')}
+
+// Tabs
+function filterTab(tab){tab.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active')}
+
+// Settings tabs
+function switchSettingsTab(tab,idx){
+  tab.parentElement.querySelectorAll('.settings-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');
+  document.querySelectorAll('.settings-panel').forEach((p,i)=>p.style.display=i===idx?'block':'none');
+}
+
+// Table sort
+function sortTable(id,col){
+  const table=document.getElementById(id);
+  const rows=Array.from(table.tBodies[0].rows);
+  const asc=!table.dataset.sortDir||table.dataset.sortDir==='desc';
+  table.dataset.sortDir=asc?'asc':'desc';
+  rows.sort((a,b)=>{const A=a.cells[col].textContent.trim(),B=b.cells[col].textContent.trim();return asc?A.localeCompare(B):B.localeCompare(A)});
+  rows.forEach(r=>table.tBodies[0].appendChild(r));
+}
+</script>
+</body>
+</html>
