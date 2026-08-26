@@ -15,7 +15,7 @@ class ForceHttps
             return $next($request);
         }
 
-        if (! $request->isSecure() && ! $request->is('up') && ! $request->is('paypal/webhook')) {
+        if (! $request->isSecure() && ! $request->is('up')) {
             return redirect()->secure($request->getRequestUri());
         }
 
