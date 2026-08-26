@@ -227,7 +227,7 @@ return [
     */
     'providers' => [
         // Disabled — swift-ai.p.rapidapi.com is unreliable/unavailable.
-        // Re-enable only with a verified RapidAPI subscription.
+        // Re-enable only with a valid RapidAPI key.
         'swift' => [
             'base_url' => env('SWIFT_AI_ENDPOINT', 'https://swift-ai.p.rapidapi.com/chat/completions'),
             'host' => env('SWIFT_AI_HOST', 'swift-ai.p.rapidapi.com'),

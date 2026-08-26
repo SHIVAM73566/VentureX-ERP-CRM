@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Support;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Company;
-use App\Models\CustomerInstallation;
-use App\Models\CustomerLicense;
 use App\Models\ErrorReport;
 use App\Models\ProductUpdate;
 use App\Models\SupportTicket;
@@ -24,13 +22,10 @@ class AdminControlCenter extends Controller
 
         $stats = [
             'total_customers' => Company::count(),
-            'active_licenses' => CustomerLicense::where('status', 'active')->count(),
             'open_tickets' => SupportTicket::where('status', 'open')->count(),
             'total_tickets' => SupportTicket::count(),
             'new_errors' => ErrorReport::where('status', 'new')->count(),
             'total_errors' => ErrorReport::count(),
-            'active_installations' => CustomerInstallation::where('status', 'active')->count(),
-            'total_installations' => CustomerInstallation::count(),
             'announcements' => SystemAnnouncement::where('is_active', true)->count(),
         ];
 
@@ -54,11 +49,6 @@ class AdminControlCenter extends Controller
         $companies = Company::withCount('users')
             ->get()
             ->map(function ($company) {
-                $company->license_count = CustomerLicense::where('company_id', $company->id)->count();
-                $company->active_license = CustomerLicense::where('company_id', $company->id)
-                    ->where('status', 'active')
-                    ->first();
-                $company->installation_count = CustomerInstallation::where('company_id', $company->id)->count();
                 $company->ticket_count = SupportTicket::where('company_id', $company->id)->count();
                 $company->open_ticket_count = SupportTicket::where('company_id', $company->id)
                     ->where('status', 'open')
@@ -78,17 +68,8 @@ class AdminControlCenter extends Controller
             abort(403, 'Unauthorized access to company data.');
         }
 
-        $company->load(['users', 'licenses', 'installations']);
-
+        $company->load('users');
         $company->loadCount('users');
-
-        $licenses = CustomerLicense::where('company_id', $company->id)
-            ->latest()
-            ->get();
-
-        $installations = CustomerInstallation::where('company_id', $company->id)
-            ->latest()
-            ->get();
 
         $tickets = SupportTicket::where('company_id', $company->id)
             ->with('user', 'assignee')
@@ -100,7 +81,7 @@ class AdminControlCenter extends Controller
             ->paginate(15);
 
         return view('admin.control-center.customer', compact(
-            'company', 'licenses', 'installations', 'tickets', 'errors'
+            'company', 'tickets', 'errors'
         ));
     }
 
@@ -124,8 +105,6 @@ class AdminControlCenter extends Controller
             'message' => ['required', 'string', 'max:10000'],
             'type' => ['required', 'string', 'in:'.implode(',', array_keys(SystemAnnouncement::TYPES))],
             'target' => ['required', 'string', 'in:'.implode(',', array_keys(SystemAnnouncement::TARGETS))],
-            'target_tiers' => ['nullable', 'array'],
-            'target_tiers.*' => ['string'],
             'target_companies' => ['nullable', 'array'],
             'target_companies.*' => ['integer', 'exists:companies,id'],
             'published_at' => ['nullable', 'date'],

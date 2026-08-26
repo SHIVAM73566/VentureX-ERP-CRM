@@ -4,27 +4,6 @@
 
 A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS.
 
-## Purchase Full Source Code
-
-Get the complete source code with documentation, video tutorials, and support:
-
-| Tier | Price | Features |
-|------|-------|----------|
-| **Single** | $89.99 | Limited features, AI included, 5-day free AI trial |
-| **Professional** | $150.22 | Full business features, priority support |
-| **Enterprise** | $350 | Full updates for company/big business, dedicated support |
-
-> **Enterprise Discount:** Use code `SAVE29` for $29 off!
-
-[![Gumroad](https://img.shields.io/badge/Buy%20on-Gumroad-orange)](https://gumroad.com/l/venturex-erp)
-[![Payhip](https://img.shields.io/badge/Buy%20on-Payhip-blue)](https://payhip.com/b/venturex-erp)
-
-## Deploy with GitHub Action
-
-Deploy to your server in one click:
-
-[![GitHub Action](https://img.shields.io/badge/GitHub%20Action-Deploy%20Now-blue)](https://github.com/marketplace/actions/venturex-erp-crm-deploy)
-
 ## Features
 
 ### Core Modules
@@ -171,7 +150,6 @@ VentureX ERP & CRM/
 - **Database:** MySQL 8.0+, MariaDB 10.6+
 - **Build:** Vite 8.x
 - **Server:** Apache 2.4+, Nginx 1.24+
-- **Payment:** Payoneer (manual), PayPal
 - **AI:** NVIDIA Nemotron, RapidAPI, Local Intelligence
 
 ## License

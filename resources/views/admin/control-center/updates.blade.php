@@ -15,7 +15,7 @@
 
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm text-ink-500">Manage product versions and update notifications sent to customer installations.</p>
+                <p class="text-sm text-ink-500">Manage product versions and release notes.</p>
             </div>
             <button @click="showForm = !showForm" class="btn-primary">
                 <span x-show="!showForm">New Update</span>

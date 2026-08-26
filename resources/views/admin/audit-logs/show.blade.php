@@ -3,7 +3,7 @@
     :breadcrumbs="[['label' => 'Admin', 'url' => route('admin.audit-logs.index')], ['label' => 'Audit Logs', 'url' => route('admin.audit-logs.index')], ['label' => '#'.$log->id]]">
 
     @php
-        $sensitiveKeys = ['password','password_hash','two_factor_secret','two_factor_recovery_codes','remember_token','api_token','license_key','secret','token','credit_card','ssn','aadhaar','pan','email','phone','mobile','tax_id'];
+        $sensitiveKeys = ['password','password_hash','two_factor_secret','two_factor_recovery_codes','remember_token','api_token','secret','token','credit_card','ssn','aadhaar','pan','email','phone','mobile','tax_id'];
 
         function redactAuditData(array $data, array $sensitiveKeys): array {
             foreach ($data as $key => $value) {

@@ -127,31 +127,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | License Key
-    |--------------------------------------------------------------------------
-    |
-    | Your VentureX ERP & CRM license key. This validates your purchase and enables
-    | updates. Get your key from the purchase confirmation email.
-    | Reference: VentureX-ERP-2026-01483863236
-    |
-    */
-
-    'license_key' => env('LICENSE_KEY', ''),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Purchase URL
-    |--------------------------------------------------------------------------
-    |
-    | The URL where customers can purchase or renew their license.
-    | Update this with your marketplace item URL after listing.
-    |
-    */
-
-    'purchase_url' => env('APP_PURCHASE_URL', ''),
-
-    /*
-    |--------------------------------------------------------------------------
     | Debug Blacklist (Whoops Safety Net)
     |--------------------------------------------------------------------------
     |
@@ -178,7 +153,6 @@ return [
             'WHATSAPP_API_KEY',
             'GOOGLE_CLIENT_SECRET',
             'MICROSOFT_CLIENT_SECRET',
-            'LICENSE_KEY',
         ],
         '_SERVER' => [
             'APP_KEY',

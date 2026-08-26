@@ -75,7 +75,6 @@ class AuditLogger
         'two_factor_recovery_codes',
         'remember_token',
         'api_token',
-        'license_key',
         'secret',
         'token',
         'credit_card',

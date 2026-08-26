@@ -32,18 +32,6 @@
 
             <div class="stat-card">
                 <div class="flex items-center gap-3">
-                    <span class="stat-icon bg-emerald-50 text-emerald-600">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['badge'] }}"/></svg>
-                    </span>
-                    <div>
-                        <p class="text-2xl font-bold text-ink-900">{{ $stats['active_licenses'] ?? 0 }}</p>
-                        <p class="text-xs text-ink-500">Active Licenses</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="flex items-center gap-3">
                     <span class="stat-icon bg-blue-50 text-blue-600">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['ticket'] }}"/></svg>
                     </span>
@@ -62,18 +50,6 @@
                     <div>
                         <p class="text-2xl font-bold text-ink-900">{{ $stats['new_errors'] ?? 0 }}</p>
                         <p class="text-xs text-ink-500">New Errors</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="flex items-center gap-3">
-                    <span class="stat-icon bg-violet-50 text-violet-600">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['box'] }}"/></svg>
-                    </span>
-                    <div>
-                        <p class="text-2xl font-bold text-ink-900">{{ $stats['active_installations'] ?? 0 }}</p>
-                        <p class="text-xs text-ink-500">Active Installations</p>
                     </div>
                 </div>
             </div>

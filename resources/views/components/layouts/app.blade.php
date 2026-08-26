@@ -55,7 +55,7 @@
         'AI Center' => [
             ['label' => 'AI Assistant', 'icon' => 'spark', 'route' => 'ai.assistant', 'active' => request()->routeIs('ai.assistant')],
             ['label' => 'Business Copilot', 'icon' => 'cpu', 'route' => 'ai.copilot', 'active' => request()->routeIs('ai.copilot'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
-            ['label' => 'AI Insights', 'icon' => 'bolt', 'route' => 'ai.usage-plan.index', 'active' => request()->routeIs('ai.usage-plan.*')],
+            ['label' => 'AI Insights', 'icon' => 'bolt', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage*')],
             ['label' => 'AI Usage', 'icon' => 'chart', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
             ['label' => 'AI Skills', 'icon' => 'cpu', 'route' => 'admin.ai-skills.index', 'active' => request()->routeIs('admin.ai-skills.*')],
             ['label' => 'Procurement AI', 'icon' => 'scan', 'route' => 'ai.procurement', 'active' => request()->routeIs('ai.procurement*')],
@@ -69,7 +69,6 @@
             ['label' => 'FAQ', 'icon' => 'search', 'route' => 'support.faq', 'active' => request()->routeIs('support.faq')],
             ['label' => 'Contact Support', 'icon' => 'mail', 'route' => 'support.contact', 'active' => request()->routeIs('support.contact')],
             ['label' => 'Report Error', 'icon' => 'warning', 'route' => 'support.report-error', 'active' => request()->routeIs('support.report-error')],
-            ['label' => 'Pricing', 'icon' => 'credit', 'route' => 'pricing', 'active' => request()->routeIs('pricing*')],
         ],
         'Administration' => [
             ['label' => 'Companies', 'icon' => 'building', 'route' => 'admin.companies.index', 'active' => request()->routeIs('admin.companies.*'), 'visible' => $user?->hasRole('super_admin')],

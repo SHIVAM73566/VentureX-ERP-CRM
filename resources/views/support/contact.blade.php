@@ -37,7 +37,6 @@
                         class="w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-700 focus:border-navy-500 focus:outline-none focus:ring-2 focus:ring-navy-500/20">
                         <option value="">Select a category...</option>
                         <option value="general" {{ old('category') === 'general' ? 'selected' : '' }}>General Inquiry</option>
-                        <option value="billing" {{ old('category') === 'billing' ? 'selected' : '' }}>Billing</option>
                         <option value="technical" {{ old('category') === 'technical' ? 'selected' : '' }}>Technical Support</option>
                         <option value="other" {{ old('category') === 'other' ? 'selected' : '' }}>Other</option>
                     </select>
@@ -85,8 +84,7 @@
                         <h3 class="font-semibold text-ink-800">Email Us</h3>
                         <p class="mt-1 text-sm text-ink-500">General support & questions:</p>
                         <p class="text-sm font-medium text-navy-600">support@venturexerp.com</p>
-                        <p class="mt-2 text-sm text-ink-500">Sales & licensing inquiries:</p>
-                        <p class="text-sm font-medium text-navy-600">sales@venturexerp.com</p>
+
                     </div>
                 </div>
             </div>

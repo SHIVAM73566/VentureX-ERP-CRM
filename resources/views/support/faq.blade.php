@@ -41,7 +41,7 @@
                     <svg :class="open === 3 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <div x-show="open === 3" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    Yes, we offer a 14-day free trial with full access to all modules. No credit card required. You can also self-host the Community Edition which is free and open source.
+                    This is a self-hosted application. Purchase the source code, install it on your own server, and start using it immediately.
                 </div>
             </div>
 
@@ -61,7 +61,7 @@
                     <svg :class="open === 5 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <div x-show="open === 5" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    We offer email support, a comprehensive knowledge base, FAQ section, and in-app AI assistant. Priority support is available for Enterprise plan customers with guaranteed response times.
+                    We offer email support, a comprehensive knowledge base, FAQ section, and in-app AI assistant.                     We offer email support, a comprehensive knowledge base, FAQ section, and in-app AI assistant.
                 </div>
             </div>
 
@@ -196,37 +196,37 @@
             </div>
         </div>
 
-        {{-- Billing --}}
+        {{-- Licensing --}}
         <div x-data="{ open: null }" class="card space-y-1">
-            <h2 class="mb-3 text-lg font-bold text-ink-900">Billing</h2>
+            <h2 class="mb-3 text-lg font-bold text-ink-900">Licensing</h2>
 
             <div class="rounded-lg border border-ink-200">
                 <button @click="open === 1 ? open = null : open = 1" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-ink-800 hover:bg-ink-50">
-                    What pricing plans are available?
+                    What does the license include?
                     <svg :class="open === 1 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <div x-show="open === 1" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    We offer three plans: Starter (up to 5 users), Professional (up to 25 users), and Enterprise (unlimited users with priority support). Self-hosted Community Edition is free.
+                    Your purchase includes the full source code, documentation, video tutorials, and email support. You can self-host on your own server with unlimited users.
                 </div>
             </div>
 
             <div class="rounded-lg border border-ink-200">
                 <button @click="open === 2 ? open = null : open = 2" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-ink-800 hover:bg-ink-50">
-                    Can I change my plan at any time?
+                    Can I use it on multiple domains?
                     <svg :class="open === 2 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <div x-show="open === 2" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    Yes, you can upgrade or downgrade your plan at any time. Upgrades take effect immediately with prorated billing. Downgrades take effect at the start of your next billing cycle.
+                    Yes, since you self-host the application, you can deploy it on any server you own. There are no domain restrictions.
                 </div>
             </div>
 
             <div class="rounded-lg border border-ink-200">
                 <button @click="open === 3 ? open = null : open = 3" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-ink-800 hover:bg-ink-50">
-                    What payment methods do you accept?
+                    Do I get free updates?
                     <svg :class="open === 3 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <div x-show="open === 3" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    We accept all major credit cards, wire transfers, and PayPal. Enterprise customers can also pay via invoice with NET-30 terms.
+                    Yes, all updates are free. Pull the latest code from GitHub and run the migration to update your installation.
                 </div>
             </div>
 
@@ -236,17 +236,7 @@
                     <svg :class="open === 4 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
                 <div x-show="open === 4" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    Yes, we offer a 30-day money-back guarantee on all plans. If you are not satisfied, contact our billing team for a full refund.
-                </div>
-            </div>
-
-            <div class="rounded-lg border border-ink-200">
-                <button @click="open === 5 ? open = null : open = 5" class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-ink-800 hover:bg-ink-50">
-                    Are there discounts for annual billing?
-                    <svg :class="open === 5 ? 'rotate-90' : ''" class="h-4 w-4 shrink-0 text-ink-400 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </button>
-                <div x-show="open === 5" x-collapse class="px-4 pb-3 text-sm text-ink-600">
-                    Yes, annual billing saves you 20% compared to monthly billing. Contact our sales team for custom pricing on Enterprise plans with 50+ users.
+                    Yes, we offer a 30-day money-back guarantee. If you are not satisfied, contact our support team for a full refund.
                 </div>
             </div>
         </div>

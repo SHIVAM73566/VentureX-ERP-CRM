@@ -74,7 +74,7 @@ class AiGateway
                 $msg = 'Your AI quota has been exhausted. ';
                 $msg .= "Daily remaining: {$dailyRemaining} (resets in {$resetsDaily}). ";
                 $msg .= "Weekly remaining: {$weeklyRemaining} (resets in {$resetsWeekly}). ";
-                $msg .= 'Upgrade your plan at '.url('/ai/plan');
+                $msg .= 'Contact your administrator to increase your quota.';
                 throw new AiException($msg);
             }
         }

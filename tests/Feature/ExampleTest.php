@@ -11,11 +11,11 @@ class ExampleTest extends TestCase
     /**
      * A basic test example.
      */
-    public function test_root_serves_landing_page(): void
+    public function test_root_redirects_to_login(): void
     {
         $response = $this->get('/');
 
-        $response->assertOk()->assertSee('VentureX ERP & CRM');
+        $response->assertRedirect(route('login'));
     }
 
     public function test_authenticated_user_is_redirected_from_root(): void

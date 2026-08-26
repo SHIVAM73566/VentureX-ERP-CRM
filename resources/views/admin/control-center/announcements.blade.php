@@ -57,10 +57,7 @@
                     <div>
                         <label for="target_audience" class="label">Target Audience</label>
                         <select id="target_audience" name="target_audience" class="input" required>
-                            <option value="all">All Customers</option>
-                            <option value="enterprise">Enterprise Only</option>
-                            <option value="professional">Professional & Up</option>
-                            <option value="trial">Trial Users</option>
+                            <option value="all">All Users</option>
                         </select>
                     </div>
                     <div>

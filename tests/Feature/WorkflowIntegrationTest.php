@@ -2621,11 +2621,10 @@ class WorkflowIntegrationTest extends TestCase
     // 27. LANDING PAGE
     // =========================================================================
 
-    public function test_landing_page_renders(): void
+    public function test_landing_page_redirects_to_login(): void
     {
         $response = $this->get('/');
-        $response->assertOk();
-        $response->assertSee('VentureX ERP & CRM', false);
+        $response->assertRedirect(route('login'));
     }
 
     // =========================================================================

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
-    'title', 'message', 'type', 'target', 'target_tiers', 'target_companies',
+    'title', 'message', 'type', 'target', 'target_companies',
     'is_active', 'published_at', 'expires_at', 'created_by',
 ])]
 class SystemAnnouncement extends Model
@@ -21,14 +21,12 @@ class SystemAnnouncement extends Model
 
     public const TARGETS = [
         'all' => 'All',
-        'specific_tiers' => 'Specific Tiers',
         'specific_companies' => 'Specific Companies',
     ];
 
     protected function casts(): array
     {
         return [
-            'target_tiers' => 'array',
             'target_companies' => 'array',
             'is_active' => 'boolean',
             'published_at' => 'datetime',

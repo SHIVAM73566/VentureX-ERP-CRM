@@ -23,7 +23,6 @@ use App\Http\Controllers\Ai\SupportAssistantController;
 use App\Http\Controllers\Ai\DeepAnalysisController;
 use App\Http\Controllers\Ai\ExecutiveController;
 use App\Http\Controllers\Ai\ProcurementAiController;
-use App\Http\Controllers\Ai\UsagePlanController;
 use App\Http\Controllers\Auth\DataDeletionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -47,12 +46,10 @@ use App\Http\Controllers\Finance\ReceivablesController;
 use App\Http\Controllers\Inventory\ProductController;
 use App\Http\Controllers\Inventory\StockMovementController;
 use App\Http\Controllers\Inventory\WarehouseController;
-use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Logistics\ContainerController;
 use App\Http\Controllers\Logistics\LandedCostController;
 use App\Http\Controllers\Logistics\ShipmentController;
 use App\Http\Controllers\PagesController;
-use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\Procurement\PurchaseOrderController;
 use App\Http\Controllers\Procurement\PurchaseRequisitionController;
 use App\Http\Controllers\Procurement\RfqController;
@@ -70,11 +67,12 @@ use App\Http\Controllers\Support\ErrorReportController;
 use App\Http\Controllers\Support\HelpCenterController;
 use App\Http\Controllers\Support\SupportReplyController;
 use App\Http\Controllers\Support\SupportTicketController;
-use App\Services\LicenseManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [LandingController::class, 'index']);
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 Route::get('/about', [PagesController::class, 'about'])->name('pages.about');
 
 Route::middleware('guest')->group(function () {
@@ -341,9 +339,6 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
 
     Route::get('ai/usage', [AiUsageController::class, 'index'])->name('ai.usage');
     Route::get('ai/quota', [AiUsageController::class, 'quota'])->name('ai.quota');
-    Route::get('ai/plan', [UsagePlanController::class, 'index'])->name('ai.usage-plan.index');
-    Route::get('ai/plan/status', [UsagePlanController::class, 'apiStatus'])->name('ai.usage-plan.status');
-
     Route::post('ai/insights/generate', [AiInsightsController::class, 'generate'])->middleware('throttle:ai')->name('ai.insights.generate');
 
     Route::prefix('ai/actions')->middleware('throttle:ai')->group(function () {
@@ -375,25 +370,6 @@ Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/sec
     Route::get('/events', [SecurityController::class, 'events'])->name('events');
     Route::post('/lockdown', [SecurityController::class, 'lockdown'])->middleware('step_up')->name('lockdown');
     Route::post('/block-ip', [SecurityController::class, 'blockIp'])->name('block-ip');
-    Route::get('/license', function () {
-        $license = LicenseManager::getLicenseInfo();
-
-        return view('admin.security.license', compact('license'));
-    })->name('license');
-    Route::post('/license', function (Request $request) {
-        $key = $request->input('license_key', '');
-        if (strlen($key) < 10) {
-            return back()->with('error', 'Please enter a valid license key.');
-        }
-        $result = LicenseManager::validateKey($key);
-        if ($result['valid']) {
-            config(['app.license_key' => $key]);
-
-            return back()->with('success', 'License key accepted. Tier: '.($result['tier'] ?? 'standard'));
-        }
-
-        return back()->with('error', 'License validation failed: '.($result['error'] ?? 'Unknown error'));
-    })->middleware('throttle:5,1')->name('license.activate');
 });
 
 // ============================================================
@@ -467,24 +443,4 @@ Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/imp
     Route::delete('/templates/{template}', [ImportController::class, 'templateDestroy'])->name('templates.destroy');
 });
 
-// Pricing & License Purchase Routes (Payoneer)
-Route::get('pricing', [\App\Http\Controllers\PricingController::class, 'index'])->name('pricing');
-Route::post('pricing/checkout', [\App\Http\Controllers\PricingController::class, 'checkout'])->name('pricing.checkout');
-Route::get('pricing/success', [\App\Http\Controllers\PricingController::class, 'success'])->name('pricing.success');
-Route::get('pricing/cancel', [\App\Http\Controllers\PricingController::class, 'cancel'])->name('pricing.cancel');
-Route::post('pricing/webhook', [\App\Http\Controllers\PricingController::class, 'webhook'])->middleware('throttle:60,1')->name('pricing.webhook');
 
-// PayPal Payment Routes
-Route::middleware(['auth'])->prefix('payment')->name('payment.')->group(function () {
-    Route::get('/', [PayPalController::class, 'index'])->name('index');
-    Route::get('/send', [PayPalController::class, 'sendPayment'])->name('send');
-    Route::post('/create-order', [PayPalController::class, 'createOrder'])->middleware('throttle:10,1')->name('create-order');
-    Route::post('/create-custom-order', [PayPalController::class, 'createCustomOrder'])->middleware('throttle:10,1')->name('create-custom-order');
-    Route::post('/capture', [PayPalController::class, 'captureOrder'])->middleware('throttle:10,1')->name('capture');
-    Route::get('/success', [PayPalController::class, 'success'])->name('success');
-    Route::get('/cancel', [PayPalController::class, 'cancel'])->name('cancel');
-    Route::get('/history', [PayPalController::class, 'history'])->name('history');
-});
-
-// PayPal webhook — no auth middleware (PayPal servers call this)
-Route::post('/paypal/webhook', [PayPalController::class, 'webhook'])->middleware('throttle:60,1')->name('paypal.webhook');
