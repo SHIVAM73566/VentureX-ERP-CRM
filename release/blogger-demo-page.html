@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VentureX ERP & CRM — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#4F46E5;--secondary:#7C3AED;--success:#10B981;--bg:#0F172A;--card:#1E293B;--text:#F1F5F9;--muted:#94A3B8;--border:#334155;--gradient:linear-gradient(135deg,#4F46E5,#7C3AED)}
+body{font-family:'Inter',-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;background:linear-gradient(180deg,#0F172A 0%,#1E1B4B 50%,#0F172A 100%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(79,70,229,.15),transparent 70%);top:-200px;right:-100px}
+.hero::after{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(124,58,237,.1),transparent 70%);bottom:-200px;left:-100px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(79,70,229,.15);border:1px solid rgba(79,70,229,.3);padding:6px 16px;border-radius:20px;font-size:13px;font-weight:500;margin-bottom:24px;color:#A5B4FC}
+.hero-badge .dot{width:8px;height:8px;background:#10B981;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(36px,6vw,64px);font-weight:800;line-height:1.1;margin-bottom:16px;max-width:800px}
+.hero h1 .gradient{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:600px;margin-bottom:32px}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{padding:14px 32px;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--gradient);color:#fff;box-shadow:0 4px 20px rgba(79,70,229,.4)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(79,70,229,.5)}
+.btn-outline{background:transparent;color:var(--text);border:2px solid var(--border)}
+.btn-outline:hover{border-color:var(--primary);color:#A5B4FC}
+
+.stats-bar{display:flex;gap:40px;justify-content:center;margin-top:60px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:32px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:13px;color:var(--muted);margin-top:4px}
+
+.section{padding:80px 20px;max-width:1200px;margin:0 auto}
+.section-title{text-align:center;margin-bottom:48px}
+.section-title h2{font-size:clamp(28px,4vw,40px);font-weight:800;margin-bottom:12px}
+.section-title p{color:var(--muted);font-size:16px;max-width:600px;margin:0 auto}
+
+.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.module{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .3s}
+.module:hover{transform:translateY(-4px);border-color:var(--primary);box-shadow:0 8px 30px rgba(79,70,229,.15)}
+.module-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+.module h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.module p{font-size:14px;color:var(--muted);line-height:1.6}
+
+.screenshots{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:20px}
+.screenshot{border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:all .3s;cursor:pointer;position:relative}
+.screenshot:hover{transform:scale(1.02);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.screenshot img{width:100%;display:block;transition:transform .3s}
+.screenshot:hover img{transform:scale(1.05)}
+.screenshot-overlay{position:absolute;inset:0;background:linear-gradient(transparent 50%,rgba(0,0,0,.7));opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:16px}
+.screenshot:hover .screenshot-overlay{opacity:1}
+.screenshot-overlay span{color:#fff;font-size:14px;font-weight:600}
+
+.pricing-card{background:var(--card);border:2px solid var(--primary);border-radius:20px;padding:40px;text-align:center;max-width:500px;margin:0 auto;position:relative}
+.pricing-card::before{content:'BEST VALUE';position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--gradient);color:#fff;padding:4px 20px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.05em}
+.pricing-amount{font-size:56px;font-weight:800;margin:20px 0 8px}
+.pricing-amount span{font-size:18px;color:var(--muted);font-weight:500}
+.pricing-features{list-style:none;text-align:left;margin:24px 0;display:flex;flex-direction:column;gap:12px}
+.pricing-features li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.pricing-features li::before{content:'✓';color:#10B981;font-weight:700;font-size:16px}
+
+.tech-stack{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.tech-tag{background:rgba(79,70,229,.1);border:1px solid rgba(79,70,229,.2);padding:6px 16px;border-radius:8px;font-size:13px;font-weight:500;color:#A5B4FC}
+
+.cta{text-align:center;padding:80px 20px;background:linear-gradient(180deg,var(--bg),#1E1B4B)}
+.cta h2{font-size:clamp(28px,4vw,40px);font-weight:800;margin-bottom:16px}
+.cta p{color:var(--muted);font-size:16px;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto}
+
+footer{text-align:center;padding:32px 20px;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
+footer a{color:var(--primary);text-decoration:none}
+
+@media(max-width:768px){
+  .stats-bar{gap:24px}
+  .modules{grid-template-columns:1fr}
+  .screenshots{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span> v1.0.0 — Now Available</div>
+  <h1><span class="gradient">VentureX</span> ERP & CRM</h1>
+  <p>AI-powered business operating system. Full source code. Self-hosted. One-time purchase. Unlimited users.</p>
+  <div class="hero-buttons">
+    <a href="https://shivamverse418.gumroad.com/l/arrgpcw" class="btn btn-primary">Buy Now — $89.99</a>
+    <a href="#demo" class="btn btn-outline">View Screenshots</a>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Business Modules</div></div>
+    <div class="stat"><div class="stat-num">339</div><div class="stat-label">PHPUnit Tests</div></div>
+    <div class="stat"><div class="stat-num">249</div><div class="stat-label">PHP Files</div></div>
+    <div class="stat"><div class="stat-num">157</div><div class="stat-label">Blade Views</div></div>
+  </div>
+</div>
+
+<!-- MODULES -->
+<div class="section">
+  <div class="section-title">
+    <h2>8 Complete Business Modules</h2>
+    <p>Everything you need to run your business in one self-hosted platform</p>
+  </div>
+  <div class="modules">
+    <div class="module">
+      <div class="module-icon" style="background:rgba(79,70,229,.15);color:#818CF8">📊</div>
+      <h3>CRM</h3>
+      <p>Lead pipeline, contact management, opportunity tracking, activity timeline, and AI-powered lead scoring.</p>
+    </div>
+    <div class="module">
+      <div class="module-icon" style="background:rgba(16,185,129,.15);color:#34D399">💰</div>
+      <h3>Sales</h3>
+      <p>Quotations, sales orders, order pipeline, fulfillment tracking, and automated approval workflows.</p>
+    </div>
+    <div class="module">
+      <div class="module-icon" style="background:rgba(245,158,11,.15);color:#FBBF24">📦</div>
+      <h3>Inventory</h3>
+      <p>Multi-warehouse stock, reorder alerts, lot tracking, SKU management, and real-time stock levels.</p>
+    </div>
+    <div class="module">
+      <div class="module-icon" style="background:rgba(239,68,68,.15);color:#F87171">🛒</div>
+      <h3>Procurement</h3>
+      <p>Purchase orders, supplier management, RFQ workflows, landed cost tracking, and approval chains.</p>
+    </div>
+    <div class="module">
+      <div class="module-icon" style="background:rgba(124,58,237,.15);color:#A78BFA">💳</div>
+      <h3>Finance</h3>
+      <p>Invoicing, payment tracking, chart of accounts, journal entries, and automated bank reconciliation.</p>
+    </div>
+    <div class="module">
+      <div class="module-icon" style="background:rgba(6,182,212,.15);color:#22D3EE">🚚</div>
+      <h3>Logistics</h3>
+      <p>Shipment tracking, delivery management, route optimization, carrier integration, and proof of delivery.</p>
+    </div>
+    <div class="module">
+      <div class="module-icon" style="background:rgba(236,72,153,.15);color:#F472B6">🎧</div>
+      <h3>Support</h3>
+      <p>Ticket system, knowledge base, SLA management, customer portal, and AI-powered response drafts.</p>
+    </div>
+    <div class="module">
+      <div class="module-icon" style="background:rgba(99,102,241,.15);color:#818CF8">⚙️</div>
+      <h3>Admin</h3>
+      <p>User roles, audit logs, system settings, import/export center, and AI copilot configuration.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="section" id="demo">
+  <div class="section-title">
+    <h2>Product Screenshots</h2>
+    <p>See the full dashboard in action</p>
+  </div>
+  <div class="screenshots">
+    <div class="screenshot">
+      <img src="https://blogger.googleusercontent.com/img/YOUR_SCREENSHOT_URL_1" alt="Dashboard" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22><rect fill=%22%231E293B%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 fill=%22%2364748B%22 font-size=%2220%22 text-anchor=%22middle%22>Dashboard Screenshot</text></svg>'">
+      <div class="screenshot-overlay"><span>Main Dashboard</span></div>
+    </div>
+    <div class="screenshot">
+      <img src="https://blogger.googleusercontent.com/img/YOUR_SCREENSHOT_URL_2" alt="CRM" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22><rect fill=%22%231E293B%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 fill=%22%2364748B%22 font-size=%2220%22 text-anchor=%22middle%22>CRM Pipeline</text></svg>'">
+      <div class="screenshot-overlay"><span>CRM Lead Pipeline</span></div>
+    </div>
+    <div class="screenshot">
+      <img src="https://blogger.googleusercontent.com/img/YOUR_SCREENSHOT_URL_3" alt="Finance" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22><rect fill=%22%231E293B%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 fill=%22%2364748B%22 font-size=%2220%22 text-anchor=%22middle%22>Finance Dashboard</text></svg>'">
+      <div class="screenshot-overlay"><span>Finance Dashboard</span></div>
+    </div>
+    <div class="screenshot">
+      <img src="https://blogger.googleusercontent.com/img/YOUR_SCREENSHOT_URL_4" alt="AI Assistant" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22><rect fill=%22%231E293B%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 fill=%22%2364748B%22 font-size=%2220%22 text-anchor=%22middle%22>AI Support Assistant</text></svg>'">
+      <div class="screenshot-overlay"><span>AI Support Assistant</span></div>
+    </div>
+    <div class="screenshot">
+      <img src="https://blogger.googleusercontent.com/img/YOUR_SCREENSHOT_URL_5" alt="Invoices" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22><rect fill=%22%231E293B%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 fill=%22%2364748B%22 font-size=%2220%22 text-anchor=%22middle%22>Invoicing</text></svg>'">
+      <div class="screenshot-overlay"><span>Invoicing System</span></div>
+    </div>
+    <div class="screenshot">
+      <img src="https://blogger.googleusercontent.com/img/YOUR_SCREENSHOT_URL_6" alt="Inventory" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 800 450%22><rect fill=%22%231E293B%22 width=%22800%22 height=%22450%22/><text x=%22400%22 y=%22225%22 fill=%22%2364748B%22 font-size=%2220%22 text-anchor=%22middle%22>Inventory Management</text></svg>'">
+      <div class="screenshot-overlay"><span>Inventory Management</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="section">
+  <div class="section-title">
+    <h2>One-Time Purchase</h2>
+    <p>No subscriptions. No monthly fees. You own it forever.</p>
+  </div>
+  <div class="pricing-card">
+    <h3>VentureX ERP & CRM</h3>
+    <div class="pricing-amount">$89.99 <span>one-time</span></div>
+    <p style="color:var(--muted);font-size:14px">Full source code • Unlimited users • Self-hosted</p>
+    <ul class="pricing-features">
+      <li>8 Complete Business Modules</li>
+      <li>AI Copilot (5 Providers)</li>
+      <li>157 Blade Views with Dark Mode</li>
+      <li>REST API with Rate Limiting</li>
+      <li>Docker & Docker Compose Configs</li>
+      <li>339 PHPUnit Tests (0 Failures)</li>
+      <li>Import/Export Center (CSV/XLSX)</li>
+      <li>Complete Documentation</li>
+      <li>Commercial License (Unlimited Domains)</li>
+      <li>Lifetime Free Updates</li>
+    </ul>
+    <a href="https://shivamverse418.gumroad.com/l/arrgpcw" class="btn btn-primary" style="width:100%;justify-content:center">Buy Now — $89.99</a>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="section" style="text-align:center">
+  <div class="section-title">
+    <h2>Built with Modern Tech</h2>
+  </div>
+  <div class="tech-stack">
+    <span class="tech-tag">Laravel 13</span>
+    <span class="tech-tag">PHP 8.4</span>
+    <span class="tech-tag">MySQL 8.0</span>
+    <span class="tech-tag">Bootstrap 5</span>
+    <span class="tech-tag">jQuery</span>
+    <span class="tech-tag">Blade Templates</span>
+    <span class="tech-tag">Vite</span>
+    <span class="tech-tag">Docker</span>
+    <span class="tech-tag">REST API</span>
+    <span class="tech-tag">PHPUnit 12</span>
+    <span class="tech-tag">5 AI Providers</span>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>Ready to Transform Your Business?</h2>
+  <p>Join businesses that replaced expensive SaaS subscriptions with a single self-hosted purchase.</p>
+  <a href="https://shivamverse418.gumroad.com/l/arrgpcw" class="btn btn-primary">Get VentureX ERP & CRM — $89.99</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>VentureX ERP & CRM v1.0.0 • Built with Laravel 13 • <a href="https://github.com/SHIVAM73566/VentureX-ERP-CRM">GitHub</a> • <a href="https://venturexerp.blogspot.com">Blog</a></p>
+  <p style="margin-top:8px">© 2026 VentureX. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
