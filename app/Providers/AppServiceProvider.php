@@ -30,6 +30,7 @@ use App\Models\Shipment;
 use App\Models\StockMovement;
 use App\Models\Supplier;
 use App\Models\SupplierOffer;
+use App\Models\SupportTicket;
 use App\Models\User;
 use App\Models\Warehouse;
 use App\Policies\AccountPolicy;
@@ -61,6 +62,7 @@ use App\Policies\ShipmentPolicy;
 use App\Policies\StockMovementPolicy;
 use App\Policies\SupplierOfferPolicy;
 use App\Policies\SupplierPolicy;
+use App\Policies\SupportTicketPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\WarehousePolicy;
 use App\Services\SettingService;
@@ -119,5 +121,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(AiRun::class, AiRunPolicy::class);
         Gate::policy(ExportRequest::class, ExportRequestPolicy::class);
         Gate::policy(ApprovalRequest::class, ApprovalRequestPolicy::class);
+        Gate::policy(SupportTicket::class, SupportTicketPolicy::class);
     }
 }

@@ -494,61 +494,91 @@ VentureX ERP & CRM exposes a RESTful API for external integrations.
 
 #### Authentication
 
+All REST endpoints require a Personal Access Token. Create one from within the dashboard (Profile → API Tokens) or via the token endpoint:
+
 ```bash
-# Obtain an API token
-POST /api/auth/token
+# Create an API token
+POST /api/tokens
+Authorization: Bearer your-authenticated-session-token
 Content-Type: application/json
 
 {
-  "email": "admin@yourdomain.com",
-  "password": "your-admin-password"
+  "name": "my-integration",
+  "expires_at": "2027-12-31T23:59:59Z"
 }
 ```
+
+Token abilities default to a read-only set (`customers.read`, `products.read`, `invoices.read`). A full list of allowed abilities can be passed explicitly:
+
+```json
+{
+  "name": "sales-sync",
+  "abilities": ["customers.read", "customers.write", "sales.read", "sales.write"]
+}
+```
+
+Allowed ability values: `customers.read|write`, `contacts.read|write`, `leads.read|write`, `opportunities.read|write`, `quotations.read|write`, `sales.read|write`, `invoices.read|write`, `payments.read|write`, `products.read|write`, `warehouses.read|write`, `stock.read|write`, `suppliers.read|write`, `purchase.read|write`, `accounts.read|write`, `journal.read|write`, `ai.read|write`, `tickets.read|write`.
+
+> **Security note:** API access is also gated by the authenticated user's role permissions. A token cannot grant access to modules the owning user is not permitted to use.
 
 #### Using the Token
 
 ```bash
-GET /api/customers
-Authorization: Bearer your-api-token-here
+# List existing tokens
+GET /api/tokens
+Authorization: Bearer your-token-here
+Accept: application/json
+
+# Use the token against an endpoint
+GET /api/crm/customers
+Authorization: Bearer your-token-here
 Accept: application/json
 ```
 
 #### Available Endpoints
 
-| Method  | Endpoint                    | Description                |
-|---------|-----------------------------|----------------------------|
-| GET     | /api/customers              | List customers             |
-| POST    | /api/customers              | Create customer            |
-| GET     | /api/customers/{id}         | Get customer details       |
-| PUT     | /api/customers/{id}         | Update customer            |
-| GET     | /api/contacts               | List contacts              |
-| POST    | /api/contacts               | Create contact             |
-| GET     | /api/leads                  | List leads                 |
-| POST    | /api/leads                  | Create lead                |
-| GET     | /api/opportunities          | List opportunities         |
-| GET     | /api/quotations             | List quotations            |
-| POST    | /api/quotations             | Create quotation           |
-| GET     | /api/orders                 | List sales orders          |
-| GET     | /api/invoices               | List invoices              |
-| GET     | /api/products               | List products              |
-| GET     | /api/stock                  | List stock levels          |
+All endpoints live under version-stable namespaces:
+
+| Method  | Endpoint                                    | Description                |
+|---------|---------------------------------------------|----------------------------|
+| GET/POST/PUT/DELETE | `/api/crm/customers`        | CRM customers             |
+| GET/POST/PUT/DELETE | `/api/crm/contacts`         | CRM contacts              |
+| GET/POST/PUT/DELETE | `/api/crm/leads`            | CRM leads                 |
+| GET/POST/PUT/DELETE | `/api/crm/opportunities`    | CRM opportunities         |
+| GET/POST/PUT/DELETE | `/api/sales/quotations`     | Sales quotations          |
+| GET/POST/PUT/DELETE | `/api/sales/orders`         | Sales orders              |
+| GET/POST/PUT/DELETE | `/api/sales/invoices`       | Sales invoices            |
+| GET/POST/PUT/DELETE | `/api/sales/payments`       | Sales payments            |
+| GET/POST/PUT/DELETE | `/api/inventory/products`   | Inventory products        |
+| GET/POST/PUT/DELETE | `/api/inventory/warehouses` | Inventory warehouses      |
+| GET/POST/PUT/DELETE | `/api/inventory/stock-movements` | Stock movements       |
+| GET/POST/PUT/DELETE | `/api/procurement/suppliers`| Procurement suppliers     |
+| GET/POST/PUT/DELETE | `/api/procurement/purchase-orders` | Purchase orders      |
+| GET/POST/PUT/DELETE | `/api/finance/accounts`     | Chart of accounts         |
+| GET/POST/PUT/DELETE | `/api/finance/journal-entries` | Journal entries        |
+| GET/POST/PUT/DELETE | `/api/support/tickets`      | Support tickets           |
+| GET/POST           | `/api/ai/conversations`     | AI conversations          |
+| GET                | `/api/ai/insights`          | ERP AI insights           |
 
 #### Pagination
 
 ```bash
-GET /api/customers?page=2&per_page=25
+GET /api/crm/customers?page=2&per_page=25
 ```
 
 Response:
 
 ```json
 {
+  "success": true,
   "data": [...],
-  "meta": {
+  "pagination": {
     "current_page": 2,
     "last_page": 10,
     "per_page": 25,
-    "total": 250
+    "total": 250,
+    "from": 26,
+    "to": 50
   }
 }
 ```
@@ -556,8 +586,11 @@ Response:
 #### Filtering and Sorting
 
 ```bash
-GET /api/customers?status=active&sort=name&order=asc&search=acme
+# Search and filter driven per-endpoint (example)
+GET /api/crm/customers?status=active&q=acme&per_page=25
 ```
+
+`q` performs a free-text search across name/email/phone (per-endpoint). `status` and other filters are documented per endpoint's accepted values. Responses are always returned in the `data` key along with a `pagination` object when paginated.
 
 ---
 

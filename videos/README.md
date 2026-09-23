@@ -53,5 +53,5 @@ Open `players/index.html` in your browser to browse all videos, scripts, and sub
 ## Platform
 
 - **Product:** VentureX ERP & CRM v1.0.0
-- **Stack:** Laravel 13 / PHP 8.3 / MySQL 8 / Tailwind CSS 4 / Vite 8
+- **Stack:** Laravel 13 / PHP 8.4+ / MySQL 8 / Tailwind CSS 4 / Vite 8
 - **Codester Reference:** VentureX-ERP-2026-01483863236

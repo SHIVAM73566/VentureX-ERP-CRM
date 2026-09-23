@@ -10,6 +10,8 @@ class PurchaseOrderController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', PurchaseOrder::class);
+
         $query = PurchaseOrder::ofCompany()
             ->with('supplier')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -24,9 +26,11 @@ class PurchaseOrderController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', PurchaseOrder::class);
+
         $validated = $request->validate([
-            'supplier_id' => 'required|exists:suppliers,id',
-            'rfq_id' => 'nullable|exists:rfqs,id',
+            'supplier_id' => ['required', $this->companyExists('suppliers')],
+            'rfq_id' => ['nullable', $this->companyExists('rfqs')],
             'order_date' => 'nullable|date',
             'expected_date' => 'nullable|date|after_or_equal:order_date',
             'subtotal' => 'nullable|numeric|min:0',
@@ -50,6 +54,8 @@ class PurchaseOrderController extends ApiController
 
     public function show(PurchaseOrder $purchaseOrder): JsonResponse
     {
+        $this->authorize('view', $purchaseOrder);
+
         if ($purchaseOrder->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -59,12 +65,14 @@ class PurchaseOrderController extends ApiController
 
     public function update(Request $request, PurchaseOrder $purchaseOrder): JsonResponse
     {
+        $this->authorize('update', $purchaseOrder);
+
         if ($purchaseOrder->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
 
         $validated = $request->validate([
-            'supplier_id' => 'sometimes|exists:suppliers,id',
+            'supplier_id' => ['sometimes', $this->companyExists('suppliers')],
             'status' => 'nullable|string|in:draft,pending,approved,ordered,partially_received,received,cancelled',
             'payment_status' => 'nullable|string|in:unpaid,partial,paid',
             'order_date' => 'nullable|date',
@@ -85,6 +93,8 @@ class PurchaseOrderController extends ApiController
 
     public function destroy(PurchaseOrder $purchaseOrder): JsonResponse
     {
+        $this->authorize('delete', $purchaseOrder);
+
         if ($purchaseOrder->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

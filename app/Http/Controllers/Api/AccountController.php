@@ -10,6 +10,8 @@ class AccountController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Account::class);
+
         $query = Account::ofCompany()
             ->with('parent')
             ->when($request->filled('type'), fn ($q) => $q->where('type', $request->string('type')))
@@ -21,11 +23,13 @@ class AccountController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Account::class);
+
         $validated = $request->validate([
             'code' => 'required|string|max:20|unique:chart_of_accounts,code',
             'name' => 'required|string|max:255',
             'type' => 'required|string|in:asset,liability,equity,income,expense',
-            'parent_id' => 'nullable|exists:chart_of_accounts,id',
+            'parent_id' => ['nullable', $this->companyExists('chart_of_accounts')],
             'is_active' => 'nullable|boolean',
             'description' => 'nullable|string',
         ]);
@@ -40,6 +44,8 @@ class AccountController extends ApiController
 
     public function show(Account $account): JsonResponse
     {
+        $this->authorize('view', $account);
+
         if ($account->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -51,6 +57,8 @@ class AccountController extends ApiController
 
     public function update(Request $request, Account $account): JsonResponse
     {
+        $this->authorize('update', $account);
+
         if ($account->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -58,7 +66,7 @@ class AccountController extends ApiController
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'type' => 'sometimes|string|in:asset,liability,equity,income,expense',
-            'parent_id' => 'nullable|exists:chart_of_accounts,id',
+            'parent_id' => ['nullable', $this->companyExists('chart_of_accounts')],
             'is_active' => 'nullable|boolean',
             'description' => 'nullable|string',
         ]);
@@ -70,6 +78,8 @@ class AccountController extends ApiController
 
     public function destroy(Account $account): JsonResponse
     {
+        $this->authorize('delete', $account);
+
         if ($account->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

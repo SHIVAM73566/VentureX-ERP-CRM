@@ -10,6 +10,8 @@ class PaymentController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Payment::class);
+
         $query = Payment::ofCompany()
             ->with('customer', 'invoice')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -25,9 +27,11 @@ class PaymentController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Payment::class);
+
         $validated = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
-            'invoice_id' => 'nullable|exists:invoices,id',
+            'customer_id' => ['required', $this->companyExists('customers')],
+            'invoice_id' => ['nullable', $this->companyExists('invoices')],
             'payment_date' => 'nullable|date',
             'amount' => 'required|numeric|min:0.01',
             'method' => 'required|string|in:cash,bank,cheque,card,upi,other',
@@ -47,6 +51,8 @@ class PaymentController extends ApiController
 
     public function show(Payment $payment): JsonResponse
     {
+        $this->authorize('view', $payment);
+
         if ($payment->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -56,6 +62,8 @@ class PaymentController extends ApiController
 
     public function update(Request $request, Payment $payment): JsonResponse
     {
+        $this->authorize('update', $payment);
+
         if ($payment->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -75,6 +83,8 @@ class PaymentController extends ApiController
 
     public function destroy(Payment $payment): JsonResponse
     {
+        $this->authorize('delete', $payment);
+
         if ($payment->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

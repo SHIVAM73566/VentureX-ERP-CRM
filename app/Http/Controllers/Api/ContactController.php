@@ -10,6 +10,8 @@ class ContactController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Contact::class);
+
         $query = Contact::ofCompany()
             ->with('customer')
             ->when($request->filled('customer_id'), fn ($q) => $q->where('customer_id', $request->integer('customer_id')))
@@ -28,8 +30,10 @@ class ContactController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Contact::class);
+
         $validated = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
+            'customer_id' => ['required', $this->companyExists('customers')],
             'first_name' => 'required|string|max:100',
             'last_name' => 'nullable|string|max:100',
             'title' => 'nullable|string|max:100',
@@ -50,6 +54,8 @@ class ContactController extends ApiController
 
     public function show(Contact $contact): JsonResponse
     {
+        $this->authorize('view', $contact);
+
         if ($contact->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -59,6 +65,8 @@ class ContactController extends ApiController
 
     public function update(Request $request, Contact $contact): JsonResponse
     {
+        $this->authorize('update', $contact);
+
         if ($contact->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -81,6 +89,8 @@ class ContactController extends ApiController
 
     public function destroy(Contact $contact): JsonResponse
     {
+        $this->authorize('delete', $contact);
+
         if ($contact->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

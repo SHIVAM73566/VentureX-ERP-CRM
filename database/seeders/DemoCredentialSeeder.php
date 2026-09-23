@@ -17,33 +17,37 @@ use Illuminate\Support\Facades\Hash;
  */
 class DemoCredentialSeeder extends Seeder
 {
-    protected array $demoUsers = [
-        [
-            'email' => 'demo_admin@example.com',
-            'password' => 'Demo_Admin_2026!',
-            'name' => 'Demo Administrator',
-            'role' => 'super_admin',
-            'warning' => 'Demo credentials — change before production use',
-        ],
-        [
-            'email' => 'demo_manager@example.com',
-            'password' => 'Demo_Manager_2026!',
-            'name' => 'Demo Manager',
-            'role' => 'ceo',
-            'warning' => 'Demo credentials — change before production use',
-        ],
-        [
-            'email' => 'demo_sales@example.com',
-            'password' => 'Demo_Sales_2026!',
-            'name' => 'Demo Sales User',
-            'role' => 'sales_manager',
-            'warning' => 'Demo credentials — change before production use',
-        ],
-    ];
-
     public function run(): void
     {
-        $this->command->warn('⚠️  SECURITY NOTICE: Creating DEMO accounts with KNOWN passwords.');
+        if (app()->environment('production') && ! $this->command->option('force')) {
+            $this->command->warn('Skipping DemoCredentialSeeder: known credentials are not created in production.');
+            $this->command->warn('Re-run with --force only if you explicitly want demo accounts (not recommended).');
+
+            return;
+        }
+
+        $demoUsers = [
+            [
+                'email' => env('DEMO_ADMIN_EMAIL', 'demo_admin@example.com'),
+                'password' => env('DEMO_ADMIN_PASSWORD', 'Demo_Admin_2026!'),
+                'name' => 'Demo Administrator',
+                'role' => 'super_admin',
+            ],
+            [
+                'email' => env('DEMO_MANAGER_EMAIL', 'demo_manager@example.com'),
+                'password' => env('DEMO_MANAGER_PASSWORD', 'Demo_Manager_2026!'),
+                'name' => 'Demo Manager',
+                'role' => 'ceo',
+            ],
+            [
+                'email' => env('DEMO_SALES_EMAIL', 'demo_sales@example.com'),
+                'password' => env('DEMO_SALES_PASSWORD', 'Demo_Sales_2026!'),
+                'name' => 'Demo Sales User',
+                'role' => 'sales_manager',
+            ],
+        ];
+
+        $this->command->warn('SECURITY NOTICE: Creating DEMO accounts with KNOWN passwords.');
         $this->command->warn('    These credentials are for TESTING ONLY.');
         $this->command->warn('    Change all passwords before production use.');
         $this->command->newLine();
@@ -57,7 +61,7 @@ class DemoCredentialSeeder extends Seeder
             ]
         );
 
-        foreach ($this->demoUsers as $userData) {
+        foreach ($demoUsers as $userData) {
             $user = User::firstOrCreate(
                 ['email' => $userData['email']],
                 [
@@ -71,27 +75,24 @@ class DemoCredentialSeeder extends Seeder
 
             if ($user->wasRecentlyCreated) {
                 $user->assignRole($userData['role']);
-                $this->command->info("  ✅ Created: {$userData['email']}");
-                $this->command->info("     Password: {$userData['password']}");
-                $this->command->warn("     ⚠️  {$userData['warning']}");
+                $this->command->info("Created: {$userData['email']}");
             } else {
                 if (! $user->hasRole($userData['role'])) {
                     $user->syncRoles($userData['role']);
                 }
-                $this->command->info("  ⏭️  Already exists: {$userData['email']}");
+                $this->command->info("Already exists: {$userData['email']}");
             }
         }
 
         $this->command->newLine();
-        $this->command->warn('📋 Demo Credentials Summary:');
+        $this->command->warn('Demo Credentials Summary:');
         $this->command->newLine();
 
-        foreach ($this->demoUsers as $userData) {
-            $this->command->info("  Email:    {$userData['email']}");
-            $this->command->info("  Password: {$userData['password']}");
-            $this->command->newLine();
+        foreach ($demoUsers as $userData) {
+            $this->command->info("Email:    {$userData['email']}");
+            $this->command->info("Password: {$userData['password']}");
         }
 
-        $this->command->warn('🔒 IMPORTANT: Change these passwords before deploying to production!');
+        $this->command->warn('IMPORTANT: Change these passwords before deploying to production!');
     }
 }

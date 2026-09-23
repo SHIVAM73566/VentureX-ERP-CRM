@@ -10,6 +10,8 @@ class ProductController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Product::class);
+
         $query = Product::ofCompany()
             ->with('unit', 'supplier', 'taxRate')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -28,6 +30,8 @@ class ProductController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Product::class);
+
         $validated = $request->validate([
             'sku' => 'required|string|max:50|unique:products,sku,NULL,company_id,' . $this->companyId(),
             'name' => 'required|string|max:255',
@@ -38,7 +42,7 @@ class ProductController extends ApiController
             'selling_price' => 'nullable|numeric|min:0',
             'tax_rate_id' => 'nullable|exists:tax_rates,id',
             'reorder_level' => 'nullable|numeric|min:0',
-            'supplier_id' => 'nullable|exists:suppliers,id',
+            'supplier_id' => ['nullable', $this->companyExists('suppliers')],
             'status' => 'nullable|string|in:active,inactive',
             'notes' => 'nullable|string',
         ]);
@@ -54,6 +58,8 @@ class ProductController extends ApiController
 
     public function show(Product $product): JsonResponse
     {
+        $this->authorize('view', $product);
+
         if ($product->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -66,6 +72,8 @@ class ProductController extends ApiController
 
     public function update(Request $request, Product $product): JsonResponse
     {
+        $this->authorize('update', $product);
+
         if ($product->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -79,7 +87,7 @@ class ProductController extends ApiController
             'selling_price' => 'nullable|numeric|min:0',
             'tax_rate_id' => 'nullable|exists:tax_rates,id',
             'reorder_level' => 'nullable|numeric|min:0',
-            'supplier_id' => 'nullable|exists:suppliers,id',
+            'supplier_id' => ['nullable', $this->companyExists('suppliers')],
             'status' => 'nullable|string|in:active,inactive',
             'notes' => 'nullable|string',
         ]);
@@ -91,6 +99,8 @@ class ProductController extends ApiController
 
     public function destroy(Product $product): JsonResponse
     {
+        $this->authorize('delete', $product);
+
         if ($product->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

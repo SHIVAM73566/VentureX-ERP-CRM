@@ -10,6 +10,8 @@ class SupplierController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Supplier::class);
+
         $query = Supplier::ofCompany()
             ->with('country')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -28,6 +30,8 @@ class SupplierController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Supplier::class);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'supplier_code' => 'nullable|string|max:50|unique:suppliers,supplier_code',
@@ -57,6 +61,8 @@ class SupplierController extends ApiController
 
     public function show(Supplier $supplier): JsonResponse
     {
+        $this->authorize('view', $supplier);
+
         if ($supplier->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -66,6 +72,8 @@ class SupplierController extends ApiController
 
     public function update(Request $request, Supplier $supplier): JsonResponse
     {
+        $this->authorize('update', $supplier);
+
         if ($supplier->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -95,6 +103,8 @@ class SupplierController extends ApiController
 
     public function destroy(Supplier $supplier): JsonResponse
     {
+        $this->authorize('delete', $supplier);
+
         if ($supplier->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

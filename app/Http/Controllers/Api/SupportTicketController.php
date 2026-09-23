@@ -10,6 +10,8 @@ class SupportTicketController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', SupportTicket::class);
+
         $query = SupportTicket::ofCompany()
             ->with('assignee')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -28,6 +30,8 @@ class SupportTicketController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', SupportTicket::class);
+
         $validated = $request->validate([
             'subject' => 'required|string|max:255',
             'description' => 'required|string',
@@ -49,6 +53,8 @@ class SupportTicketController extends ApiController
 
     public function show(SupportTicket $supportTicket): JsonResponse
     {
+        $this->authorize('view', $supportTicket);
+
         if ($supportTicket->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -58,6 +64,8 @@ class SupportTicketController extends ApiController
 
     public function update(Request $request, SupportTicket $supportTicket): JsonResponse
     {
+        $this->authorize('update', $supportTicket);
+
         if ($supportTicket->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -81,6 +89,8 @@ class SupportTicketController extends ApiController
 
     public function destroy(SupportTicket $supportTicket): JsonResponse
     {
+        $this->authorize('delete', $supportTicket);
+
         if ($supportTicket->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

@@ -6,7 +6,7 @@ Complete, step-by-step instructions for installing VentureX ERP & CRM on any env
 
 ---
 
-> **ðŸ“¸ Screenshot Note:** This guide references screenshots in the `images/` folder. Available screenshots are SVG files showing key installation steps.
+> **Screenshot Note:** This guide references screenshots in the `images/` folder. Available screenshots are SVG files showing key installation steps.
 
 ---
 
@@ -46,7 +46,7 @@ Open **http://localhost:8000** and log in with demo credentials:
 
 > —¸ **Security Notice**: Change these credentials before production use.
 
-> ðŸ“¸ **Screenshot:** Login screen after installation.
+> **Screenshot:** Login screen after installation.
 
 ---
 
@@ -56,7 +56,7 @@ Before installing, make sure you have these installed on your computer:
 
 | Software | What It Does | Download |
 |----------|-------------|----------|
-| **PHP 8.3+** | Runs the application | https://windows.php.net/download/ |
+| **PHP 8.4+** | Runs the application | https://windows.php.net/download/ |
 | **MySQL 8.0+** | Stores your data | https://dev.mysql.com/downloads/mysql/ |
 | **Composer** | Installs PHP packages | https://getcomposer.org/download/ |
 | **Node.js 20+** | Builds frontend assets | https://nodejs.org/ |
@@ -69,7 +69,7 @@ Open your terminal (Command Prompt or PowerShell) and run these commands one by 
 ```bash
 php -v
 ```
-You should see something like `PHP 8.3.x` or higher.
+You should see something like `PHP 8.4.x` or higher.
 
 ```bash
 mysql --version
@@ -86,7 +86,7 @@ node -v
 ```
 You should see `v20.x.x` or higher.
 
-> ðŸ“¸ **Screenshot:** Terminal showing all version numbers.
+> **Screenshot:** Terminal showing all version numbers.
 
 ### Required PHP Extensions
 
@@ -118,7 +118,7 @@ This is the simplest way to install VentureX ERP & CRM on your own Windows, Mac,
 1. Unzip the `VentureX-ERP-UPLOAD.zip` file
 2. Move the extracted folder to your projects folder (e.g., `C:\projects\VentureX-ERP` or `~/projects/VentureX-ERP`)
 
-> ðŸ“¸ **Screenshot:** `images/step-01-extract.svg` — The extracted folder structure showing all files.
+> **Screenshot:** `images/step-01-extract.svg` — The extracted folder structure showing all files.
 
 ### Step 2 — Install PHP Dependencies
 
@@ -131,7 +131,7 @@ composer install
 
 This installs all the PHP packages the app needs. Wait for it to finish (takes 1-2 minutes).
 
-> ðŸ“¸ **Screenshot:** `images/step-02-composer.svg` — Composer installing packages (green checkmarks).
+> **Screenshot:** `images/step-02-composer.svg` — Composer installing packages (green checkmarks).
 
 ### Step 3 — Set Up Environment File
 
@@ -142,7 +142,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-> ðŸ“¸ **Screenshot:** `images/step-03-configure.svg` — Terminal showing "Application key set successfully."
+> **Screenshot:** `images/step-03-configure.svg` — Terminal showing "Application key set successfully."
 
 ### Step 4 — Create Your Database
 
@@ -162,7 +162,7 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-> ðŸ“¸ **Screenshot:** MySQL terminal showing "Query OK" messages.
+> **Screenshot:** MySQL terminal showing "Query OK" messages.
 
 ### Step 5 — Configure Database Connection
 
@@ -177,7 +177,7 @@ DB_USERNAME=VENTUREX_ERP_user
 DB_PASSWORD=your_password_here
 ```
 
-> ðŸ“¸ **Screenshot:** The .env file with database settings highlighted.
+> **Screenshot:** The .env file with database settings highlighted.
 
 ### Step 6 — Run Migrations (Creates All Tables)
 
@@ -189,7 +189,7 @@ This creates all the database tables and fills them with default data including 
 
 Type `yes` when asked about running pending migrations.
 
-> ðŸ“¸ **Screenshot:** `images/step-04-migrate.svg` — Terminal showing all migrations running successfully.
+> **Screenshot:** `images/step-04-migrate.svg` — Terminal showing all migrations running successfully.
 
 ### Step 7 — Install JavaScript Dependencies & Build
 
@@ -198,7 +198,7 @@ npm install
 npm run build
 ```
 
-> ðŸ“¸ **Screenshot:** npm installing packages and building assets.
+> **Screenshot:** npm installing packages and building assets.
 
 ### Step 8 — Start the Application
 
@@ -208,7 +208,7 @@ php artisan serve
 
 The server starts at **http://localhost:8000**.
 
-> ðŸ“¸ **Screenshot:** Terminal showing "Server running on http://127.0.0.1:8000".
+> **Screenshot:** Terminal showing "Server running on http://127.0.0.1:8000".
 
 ### Step 9 — Open in Browser & Log In
 
@@ -223,7 +223,7 @@ The server starts at **http://localhost:8000**.
 
 4. Click **Login**
 
-> ðŸ“¸ **Screenshot:** The main dashboard after logging in.
+> **Screenshot:** The main dashboard after logging in.
 
 ### Step 10 — Change Admin Password
 
@@ -231,7 +231,7 @@ The server starts at **http://localhost:8000**.
 2. Change the default password to something secure
 3. Update the admin email to your real email
 
-> ðŸ“¸ **Screenshot:** Password change screen.
+> **Screenshot:** Password change screen.
 
 ---
 
@@ -251,14 +251,14 @@ ssh root@your_server_ip
 apt update && apt upgrade -y
 ```
 
-### Step 3 — Install PHP 8.3
+### Step 3 — Install PHP 8.4
 
 ```bash
 apt install -y software-properties-common
 add-apt-repository -y ppa:ondrej/php
 apt update
-apt install -y php8.3 php8.3-cli php8.3-fpm php8.3-mbstring php8.3-xml php8.3-curl \
-  php8.3-zip php8.3-bcmath php8.3-gd php8.3-mysql php8.3-intl php8.3-redis php8.3-opcache
+apt install -y php8.4 php8.4-cli php8.4-fpm php8.4-mbstring php8.4-xml php8.4-curl \
+  php8.4-zip php8.4-bcmath php8.4-gd php8.4-mysql php8.4-intl php8.4-redis php8.4-opcache
 ```
 
 ### Step 4 — Install MySQL 8.0
@@ -382,7 +382,7 @@ server {
     error_page 404 /index.php;
 
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
@@ -436,7 +436,7 @@ Add:
 
 Open **https://yourdomain.com** and log in with the default credentials.
 
-> ðŸ“¸ **Screenshot:** Dashboard running on your live domain.
+> **Screenshot:** Dashboard running on your live domain.
 
 ---
 
@@ -463,7 +463,7 @@ Edit `.env` with your hosting database details (you'll create the database in St
 3. Navigate to `public_html/` (or your subdomain directory)
 4. Upload the entire `VentureX-ERP` folder contents
 
-> ðŸ“¸ **Screenshot:** cPanel File Manager showing uploaded files.
+> **Screenshot:** cPanel File Manager showing uploaded files.
 
 ### Step 3 — Create Database in cPanel
 
@@ -472,7 +472,7 @@ Edit `.env` with your hosting database details (you'll create the database in St
 3. Create database user with a strong password
 4. Add user to database with **All Privileges**
 
-> ðŸ“¸ **Screenshot:** cPanel database creation screen.
+> **Screenshot:** cPanel database creation screen.
 
 ### Step 4 — Configure .env
 
@@ -506,7 +506,7 @@ If SSH is NOT available:
 3. Select your database
 4. Click **Import** •’ Upload `database.sql`
 
-> ðŸ“¸ **Screenshot:** phpMyAdmin import screen.
+> **Screenshot:** phpMyAdmin import screen.
 
 ### Step 7 — Configure Document Root
 
@@ -529,7 +529,7 @@ Open **https://yourdomain.com** and log in.
 Create a `Dockerfile` in the project root:
 
 ```dockerfile
-FROM php:8.3-cli
+FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y \
     git unzip libpng-dev libjpeg-dev libfreetype6-dev \
@@ -611,7 +611,7 @@ docker compose exec app php artisan serve --host=0.0.0.0 --port=8000
 
 Open **http://localhost:8000**.
 
-> ðŸ“¸ **Screenshot:** Docker containers running successfully.
+> **Screenshot:** Docker containers running successfully.
 
 ---
 
@@ -667,7 +667,7 @@ npm install && npm run build
 
 Herd automatically assigns a `.test` domain. Open **http://VentureX-ERP.test** in your browser.
 
-> ðŸ“¸ **Screenshot:** Dashboard running via Laravel Herd.
+> **Screenshot:** Dashboard running via Laravel Herd.
 
 ---
 
@@ -720,7 +720,7 @@ Herd automatically assigns a `.test` domain. Open **http://VentureX-ERP.test** i
 | **"No application encryption key"** | `.env` missing APP_KEY | Run `php artisan key:generate` |
 | **"Connection refused"** | MySQL not running | Start MySQL: `systemctl start mysql` |
 | **"Access denied for user"** | Wrong credentials | Verify username/password in `.env` |
-| **"Could not find driver"** | Missing PHP extension | Install `php8.3-mysql` extension |
+| **"Could not find driver"** | Missing PHP extension | Install `php8.4-mysql` extension |
 | **Permission denied on storage/** | Wrong file permissions | Run `chmod -R 775 storage bootstrap/cache` |
 | **Blank white screen** | PHP error | Check `storage/logs/laravel.log` |
 | **500 error in production** | Debug mode on | Set `APP_DEBUG=false` in `.env` |

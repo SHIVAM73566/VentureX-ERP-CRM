@@ -44,6 +44,7 @@ class PermissionSeeder extends Seeder
             'projects',
             'workflows',
             'exports',
+            'tickets',
         ];
 
         $permissions = [];

@@ -17,6 +17,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('audit_logs', function (Blueprint $table) {
+            $table->dropIndex(['created_at']);
             $table->dropColumn('correlation_id');
         });
     }

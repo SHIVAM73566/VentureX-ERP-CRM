@@ -57,7 +57,7 @@
 
                     <div>
                         <label for="password" class="label">Password</label>
-                        <input id="password" type="password" name="password" required autocomplete="current-password" placeholder="—¢—¢—¢—¢—¢—¢—¢—¢" class="input">
+                        <input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••" class="input">
                     </div>
 
                     <div class="flex items-center justify-between">

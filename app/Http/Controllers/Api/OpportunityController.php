@@ -10,6 +10,8 @@ class OpportunityController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Opportunity::class);
+
         $query = Opportunity::ofCompany()
             ->with('customer', 'lead', 'assignedTo')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -24,10 +26,12 @@ class OpportunityController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Opportunity::class);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'customer_id' => 'required|exists:customers,id',
-            'lead_id' => 'nullable|exists:leads,id',
+            'customer_id' => ['required', $this->companyExists('customers')],
+            'lead_id' => ['nullable', $this->companyExists('leads')],
             'expected_value' => 'nullable|numeric|min:0',
             'currency_code' => 'nullable|string|size:3',
             'stage' => 'nullable|string|in:qualification,needs_analysis,proposal,negotiation,won,lost',
@@ -50,6 +54,8 @@ class OpportunityController extends ApiController
 
     public function show(Opportunity $opportunity): JsonResponse
     {
+        $this->authorize('view', $opportunity);
+
         if ($opportunity->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -59,6 +65,8 @@ class OpportunityController extends ApiController
 
     public function update(Request $request, Opportunity $opportunity): JsonResponse
     {
+        $this->authorize('update', $opportunity);
+
         if ($opportunity->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -82,6 +90,8 @@ class OpportunityController extends ApiController
 
     public function destroy(Opportunity $opportunity): JsonResponse
     {
+        $this->authorize('delete', $opportunity);
+
         if ($opportunity->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

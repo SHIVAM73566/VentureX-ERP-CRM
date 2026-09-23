@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['user_id', 'password'])]
 class PasswordHistory extends Model
 {
+    protected $table = 'password_history';
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

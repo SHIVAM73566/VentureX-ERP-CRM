@@ -10,6 +10,8 @@ class StockMovementController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', StockMovement::class);
+
         $query = StockMovement::ofCompany()
             ->with('product', 'warehouse')
             ->when($request->filled('product_id'), fn ($q) => $q->where('product_id', $request->integer('product_id')))
@@ -22,9 +24,11 @@ class StockMovementController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', StockMovement::class);
+
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'warehouse_id' => 'required|exists:warehouses,id',
+            'product_id' => ['required', $this->companyExists('products')],
+            'warehouse_id' => ['required', $this->companyExists('warehouses')],
             'type' => 'required|string|in:in,out,transfer,adjustment',
             'quantity' => 'required|numeric|min:0.01',
             'unit_cost' => 'nullable|numeric|min:0',
@@ -42,6 +46,8 @@ class StockMovementController extends ApiController
 
     public function show(StockMovement $stockMovement): JsonResponse
     {
+        $this->authorize('view', $stockMovement);
+
         if ($stockMovement->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -51,6 +57,8 @@ class StockMovementController extends ApiController
 
     public function destroy(StockMovement $stockMovement): JsonResponse
     {
+        $this->authorize('delete', $stockMovement);
+
         if ($stockMovement->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

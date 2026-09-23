@@ -10,6 +10,8 @@ class WarehouseController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Warehouse::class);
+
         $query = Warehouse::ofCompany()
             ->with('manager')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -27,6 +29,8 @@ class WarehouseController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Warehouse::class);
+
         $validated = $request->validate([
             'code' => 'required|string|max:20|unique:warehouses,code',
             'name' => 'required|string|max:255',
@@ -47,6 +51,8 @@ class WarehouseController extends ApiController
 
     public function show(Warehouse $warehouse): JsonResponse
     {
+        $this->authorize('view', $warehouse);
+
         if ($warehouse->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -56,6 +62,8 @@ class WarehouseController extends ApiController
 
     public function update(Request $request, Warehouse $warehouse): JsonResponse
     {
+        $this->authorize('update', $warehouse);
+
         if ($warehouse->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -76,6 +84,8 @@ class WarehouseController extends ApiController
 
     public function destroy(Warehouse $warehouse): JsonResponse
     {
+        $this->authorize('delete', $warehouse);
+
         if ($warehouse->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

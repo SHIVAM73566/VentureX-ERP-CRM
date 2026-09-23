@@ -10,6 +10,8 @@ class JournalEntryController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', JournalEntry::class);
+
         $query = JournalEntry::ofCompany()
             ->with('lines')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -25,11 +27,13 @@ class JournalEntryController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', JournalEntry::class);
+
         $validated = $request->validate([
             'date' => 'required|date',
             'description' => 'nullable|string|max:500',
             'lines' => 'required|array|min:2',
-            'lines.*.account_id' => 'required|exists:chart_of_accounts,id',
+            'lines.*.account_id' => ['required', $this->companyExists('chart_of_accounts')],
             'lines.*.debit' => 'nullable|numeric|min:0',
             'lines.*.credit' => 'nullable|numeric|min:0',
             'lines.*.description' => 'nullable|string|max:255',
@@ -59,6 +63,8 @@ class JournalEntryController extends ApiController
 
     public function show(JournalEntry $journalEntry): JsonResponse
     {
+        $this->authorize('view', $journalEntry);
+
         if ($journalEntry->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -68,6 +74,8 @@ class JournalEntryController extends ApiController
 
     public function update(Request $request, JournalEntry $journalEntry): JsonResponse
     {
+        $this->authorize('update', $journalEntry);
+
         if ($journalEntry->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -89,6 +97,8 @@ class JournalEntryController extends ApiController
 
     public function destroy(JournalEntry $journalEntry): JsonResponse
     {
+        $this->authorize('delete', $journalEntry);
+
         if ($journalEntry->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

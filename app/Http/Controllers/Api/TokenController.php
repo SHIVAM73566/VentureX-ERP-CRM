@@ -4,10 +4,34 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 
 class TokenController extends ApiController
 {
+    /**
+     * Abilities an API token may carry. Each maps to module read/write scope.
+     */
+    public const ALLOWED_ABILITIES = [
+        'customers.read', 'customers.write',
+        'contacts.read', 'contacts.write',
+        'leads.read', 'leads.write',
+        'opportunities.read', 'opportunities.write',
+        'quotations.read', 'quotations.write',
+        'sales.read', 'sales.write',
+        'invoices.read', 'invoices.write',
+        'payments.read', 'payments.write',
+        'products.read', 'products.write',
+        'warehouses.read', 'warehouses.write',
+        'stock.read', 'stock.write',
+        'suppliers.read', 'suppliers.write',
+        'purchase.read', 'purchase.write',
+        'accounts.read', 'accounts.write',
+        'journal.read', 'journal.write',
+        'ai.read', 'ai.write',
+        'tickets.read', 'tickets.write',
+    ];
+
     public function index(Request $request): JsonResponse
     {
         $tokens = $request->user()->tokens->map(fn ($token) => [
@@ -26,13 +50,15 @@ class TokenController extends ApiController
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'abilities' => 'nullable|array',
-            'abilities.*' => 'string',
+            'abilities.*' => ['string', Rule::in(self::ALLOWED_ABILITIES)],
             'expires_at' => 'nullable|date|after:now',
         ]);
 
+        $abilities = $validated['abilities'] ?? ['customers.read', 'products.read', 'invoices.read'];
+
         $token = $request->user()->createToken(
             $validated['name'],
-            $validated['abilities'] ?? ['*'],
+            $abilities,
             $validated['expires_at'] ?? null
         );
 

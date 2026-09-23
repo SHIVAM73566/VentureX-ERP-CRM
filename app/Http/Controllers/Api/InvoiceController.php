@@ -10,6 +10,8 @@ class InvoiceController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', Invoice::class);
+
         $query = Invoice::ofCompany()
             ->with('customer', 'salesOrder')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -24,9 +26,11 @@ class InvoiceController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', Invoice::class);
+
         $validated = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
-            'sales_order_id' => 'nullable|exists:sales_orders,id',
+            'customer_id' => ['required', $this->companyExists('customers')],
+            'sales_order_id' => ['nullable', $this->companyExists('sales_orders')],
             'issue_date' => 'nullable|date',
             'due_date' => 'nullable|date|after_or_equal:issue_date',
             'subtotal' => 'nullable|numeric|min:0',
@@ -48,6 +52,8 @@ class InvoiceController extends ApiController
 
     public function show(Invoice $invoice): JsonResponse
     {
+        $this->authorize('view', $invoice);
+
         if ($invoice->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -57,12 +63,14 @@ class InvoiceController extends ApiController
 
     public function update(Request $request, Invoice $invoice): JsonResponse
     {
+        $this->authorize('update', $invoice);
+
         if ($invoice->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
 
         $validated = $request->validate([
-            'customer_id' => 'sometimes|exists:customers,id',
+            'customer_id' => ['sometimes', $this->companyExists('customers')],
             'status' => 'nullable|string|in:draft,sent,partial,paid,overdue,cancelled',
             'issue_date' => 'nullable|date',
             'due_date' => 'nullable|date',
@@ -81,6 +89,8 @@ class InvoiceController extends ApiController
 
     public function destroy(Invoice $invoice): JsonResponse
     {
+        $this->authorize('delete', $invoice);
+
         if ($invoice->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }

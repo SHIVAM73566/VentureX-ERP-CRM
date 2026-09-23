@@ -23,7 +23,7 @@ class RoleSeeder extends Seeder
             'company_admin' => [
                 'label' => 'Company Admin',
                 'permissions' => array_merge(
-                    $this->forModules(['dashboard', 'customers', 'contacts', 'leads', 'opportunities', 'activities', 'branches', 'departments', 'suppliers', 'supplier_offers', 'documents', 'sales', 'purchase', 'inventory', 'finance', 'logistics', 'hr', 'projects', 'reports', 'automation', 'workflows', 'ai_skills']),
+                    $this->forModules(['dashboard', 'customers', 'contacts', 'leads', 'opportunities', 'activities', 'branches', 'departments', 'suppliers', 'supplier_offers', 'documents', 'sales', 'purchase', 'inventory', 'finance', 'logistics', 'hr', 'projects', 'reports', 'automation', 'workflows', 'ai_skills', 'tickets']),
                     ['settings.configure', 'users.manage', 'audit.view', 'reports.view', 'ai.chat', 'ai.configure', 'ai.skills_manage', 'approvals.review', 'approvals.approve']
                 ),
             ],
@@ -57,6 +57,7 @@ class RoleSeeder extends Seeder
                     $this->editable('opportunities', ['view', 'create', 'edit', 'export', 'approve']),
                     $this->editable('activities', ['view', 'create', 'edit']),
                     $this->editable('sales', ['view', 'create', 'edit', 'approve', 'export']),
+                    $this->editable('tickets', ['view', 'create', 'edit']),
                     $this->viewOnly(['dashboard', 'reports', 'documents']),
                 ),
             ],
@@ -68,6 +69,7 @@ class RoleSeeder extends Seeder
                     $this->editable('leads', ['view', 'create', 'edit']),
                     $this->editable('opportunities', ['view', 'create', 'edit']),
                     $this->editable('activities', ['view', 'create', 'edit']),
+                    $this->editable('tickets', ['view', 'create', 'edit']),
                     $this->viewOnly(['dashboard', 'sales']),
                 ),
             ],
@@ -89,6 +91,7 @@ class RoleSeeder extends Seeder
                     $this->editable('supplier_offers', ['view', 'create', 'edit', 'export', 'import']),
                     $this->editable('purchase', ['view', 'create', 'edit', 'export']),
                     $this->editable('documents', ['view', 'create', 'edit']),
+                    $this->editable('tickets', ['view', 'create', 'edit']),
                     $this->viewOnly(['dashboard', 'inventory', 'logistics']),
                 ),
             ],
@@ -98,6 +101,7 @@ class RoleSeeder extends Seeder
                     $this->editable('inventory', ['view', 'create', 'edit', 'export', 'import']),
                     $this->editable('suppliers', ['view']),
                     $this->editable('documents', ['view', 'create']),
+                    $this->editable('tickets', ['view', 'create', 'edit']),
                     $this->viewOnly(['dashboard', 'purchase', 'sales']),
                 ),
             ],
@@ -114,6 +118,7 @@ class RoleSeeder extends Seeder
                     $this->editable('finance', ['view', 'create', 'edit', 'approve', 'export']),
                     $this->editable('purchase', ['view', 'create', 'edit', 'approve']),
                     $this->editable('sales', ['view', 'create', 'edit', 'approve']),
+                    $this->editable('tickets', ['view', 'create', 'edit']),
                     $this->viewOnly(['dashboard', 'customers', 'suppliers', 'reports', 'audit_logs']),
                 ),
             ],
@@ -129,12 +134,16 @@ class RoleSeeder extends Seeder
                 'permissions' => array_merge(
                     $this->editable('hr', ['view', 'create', 'edit', 'export', 'import', 'approve']),
                     $this->editable('documents', ['view', 'create', 'edit']),
+                    $this->editable('tickets', ['view', 'create', 'edit']),
                     $this->viewOnly(['dashboard', 'users', 'departments']),
                 ),
             ],
             'employee' => [
                 'label' => 'Employee',
-                'permissions' => $this->viewOnly(['dashboard', 'hr', 'documents', 'projects', 'activities']),
+                'permissions' => array_merge(
+                    $this->viewOnly(['dashboard', 'hr', 'documents', 'projects', 'activities']),
+                    $this->editable('tickets', ['view', 'create', 'edit']),
+                ),
             ],
             'viewer' => [
                 'label' => 'Viewer',

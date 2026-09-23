@@ -10,6 +10,8 @@ class SalesOrderController extends ApiController
 {
     public function index(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', SalesOrder::class);
+
         $query = SalesOrder::ofCompany()
             ->with('customer')
             ->when($request->filled('q'), function ($q) use ($request) {
@@ -24,9 +26,11 @@ class SalesOrderController extends ApiController
 
     public function store(Request $request): JsonResponse
     {
+        $this->authorize('create', SalesOrder::class);
+
         $validated = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
-            'quotation_id' => 'nullable|exists:quotations,id',
+            'customer_id' => ['required', $this->companyExists('customers')],
+            'quotation_id' => ['nullable', $this->companyExists('quotations')],
             'order_date' => 'nullable|date',
             'delivery_date' => 'nullable|date|after_or_equal:order_date',
             'subtotal' => 'nullable|numeric|min:0',
@@ -49,6 +53,8 @@ class SalesOrderController extends ApiController
 
     public function show(SalesOrder $salesOrder): JsonResponse
     {
+        $this->authorize('view', $salesOrder);
+
         if ($salesOrder->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
@@ -58,12 +64,14 @@ class SalesOrderController extends ApiController
 
     public function update(Request $request, SalesOrder $salesOrder): JsonResponse
     {
+        $this->authorize('update', $salesOrder);
+
         if ($salesOrder->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
 
         $validated = $request->validate([
-            'customer_id' => 'sometimes|exists:customers,id',
+            'customer_id' => ['sometimes', $this->companyExists('customers')],
             'status' => 'nullable|string|in:draft,confirmed,processing,shipped,completed,cancelled',
             'payment_status' => 'nullable|string|in:unpaid,partial,paid',
             'order_date' => 'nullable|date',
@@ -83,6 +91,8 @@ class SalesOrderController extends ApiController
 
     public function destroy(SalesOrder $salesOrder): JsonResponse
     {
+        $this->authorize('delete', $salesOrder);
+
         if ($salesOrder->company_id !== $this->companyId()) {
             return $this->errorResponse('Not found', 404);
         }
