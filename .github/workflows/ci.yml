@@ -78,5 +78,7 @@ jobs:
       - name: Surface failing test names as annotations
         if: failure()
         run: |
+          echo "::error::=== LARAVEL LOG EXCEPTIONS ==="
+          grep -E 'ERROR|Exception|not found|\.blade\.php|SQLSTATE' storage/logs/laravel.log 2>/dev/null | tail -9 | sed 's/^/::error::/'
           echo "::error::=== PHPUNIT FAILURES ==="
-          grep -nE '^[0-9]+\) |\bException\b|not found|View \[|SQLSTATE|function' /tmp/phpunit.log | sed 's/^/::error::/' | tail -9
+          awk '/^[0-9]+\) /{hdr=$0; H=NR; n=0} H && NR>=H && n<8 {print; n++} NR>H && /^-+$/{H=0}' /tmp/phpunit.log | sed 's/^/::error::/' | grep -vE '::error::#7|registerBladeEngine' | tail -9
