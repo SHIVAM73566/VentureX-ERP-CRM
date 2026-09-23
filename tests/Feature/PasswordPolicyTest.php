@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Company;
 use App\Models\PasswordHistory;
 use App\Models\User;
 use App\Services\PasswordPolicyService;
@@ -15,7 +16,9 @@ class PasswordPolicyTest extends TestCase
 
     public function test_password_history_table_is_singular_and_reuse_detection_works(): void
     {
-        $user = User::factory()->create();
+        $company = Company::create(['name' => 'Password Policy Test Co', 'is_active' => true, 'currency_code' => 'USD']);
+
+        $user = User::factory()->create(['company_id' => $company->id]);
 
         PasswordPolicyService::remember($user, Hash::make('OldPass_2026!'));
         PasswordPolicyService::remember($user, Hash::make('NewerPass_2026!'));
