@@ -79,4 +79,4 @@ jobs:
         if: failure()
         run: |
           echo "::error::=== PHPUNIT FAILURES ==="
-          grep -nE '^ +[0-9]+\) |Failed asserting|^Expected |not found' /tmp/phpunit.log | sed 's/^/::error::/' | tail -8
+          grep -nE '^[0-9]+\) |\bException\b|not found|View \[|SQLSTATE|function' /tmp/phpunit.log | sed 's/^/::error::/' | tail -9
