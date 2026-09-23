@@ -25,12 +25,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: mbstring, xml, bcmath, pdo_sqlite, sqlite3, gd, fileinfo
+          extensions: mbstring, xml, bcmath, pdo_sqlite, sqlite3, gd, fileinfo, intl, zip, curl
 
-      - name: Setup Node 20
+      - name: Setup Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Validate composer.json
