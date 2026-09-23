@@ -71,4 +71,12 @@ jobs:
         run: php artisan key:generate --force
 
       - name: Run test suite
-        run: vendor/bin/phpunit --no-coverage
+        run: |
+          set -o pipefail
+          vendor/bin/phpunit --no-coverage 2>&1 | tee /tmp/phpunit.log
+
+      - name: Surface failing tests as annotations
+        if: failure()
+        run: |
+          echo "::error::=========== PHPUNIT FAILURE DETAILS ==========="
+          cat /tmp/phpunit.log | sed 's/^/::error::/' | tail -200
