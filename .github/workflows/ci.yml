@@ -75,8 +75,8 @@ jobs:
           set -o pipefail
           vendor/bin/phpunit --no-coverage 2>&1 | tee /tmp/phpunit.log
 
-      - name: Surface failing tests as annotations
+      - name: Surface failing test names as annotations
         if: failure()
         run: |
-          echo "::error::=========== PHPUNIT FAILURE DETAILS ==========="
-          cat /tmp/phpunit.log | sed 's/^/::error::/' | tail -200
+          echo "::error::=== PHPUNIT FAILURES ==="
+          grep -nE '^ +[0-9]+\) |Failed asserting|^Expected |not found' /tmp/phpunit.log | sed 's/^/::error::/' | tail -8
