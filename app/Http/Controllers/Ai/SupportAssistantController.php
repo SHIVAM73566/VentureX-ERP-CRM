@@ -9,7 +9,6 @@ use App\Services\Ai\AiGateway;
 use App\Services\CompanyContext;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class SupportAssistantController extends Controller
@@ -145,7 +144,7 @@ class SupportAssistantController extends Controller
             ."- **Admin**: Users, roles, settings, security\n"
             ."- **Reports & Analytics**: Data export, import, dashboards\n\n"
             ."[STEP]\nPlease describe your question in more detail, or navigate to the relevant module from the sidebar.\n"
-            ."[TIP] AI-powered responses require a connected AI provider. Ask an administrator or open **AI Settings** (".route('admin.ai-providers.setup').") to connect one — no .env editing required.";
+            .'[TIP] AI-powered responses require a connected AI provider. Ask an administrator or open **AI Settings** ('.route('admin.ai-providers.setup').') to connect one — no .env editing required.';
     }
 
     protected function buildSystemPrompt($user, $company): string

@@ -33,7 +33,7 @@ class ProductController extends ApiController
         $this->authorize('create', Product::class);
 
         $validated = $request->validate([
-            'sku' => 'required|string|max:50|unique:products,sku,NULL,company_id,' . $this->companyId(),
+            'sku' => 'required|string|max:50|unique:products,sku,NULL,company_id,'.$this->companyId(),
             'name' => 'required|string|max:255',
             'category' => 'nullable|string|max:100',
             'description' => 'nullable|string',

@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\AiConversation;
 use App\Models\AiMessage;
+use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\Lead;
+use App\Models\Product;
+use App\Models\SupportTicket;
 use App\Services\Ai\AiException;
 use App\Services\Ai\AiGateway;
 use App\Services\Ai\AiLocalIntelligence;
@@ -16,6 +21,7 @@ class AiController extends ApiController
         protected AiGateway $gateway,
         protected AiLocalIntelligence $local,
     ) {}
+
     public function conversations(Request $request): JsonResponse
     {
         $query = AiConversation::query()
@@ -149,11 +155,11 @@ class AiController extends ApiController
         $user = auth()->user();
 
         $data = [
-            'total_customers' => \App\Models\Customer::where('company_id', $user->company_id)->count(),
-            'total_leads' => \App\Models\Lead::where('company_id', $user->company_id)->count(),
-            'total_invoices' => \App\Models\Invoice::where('company_id', $user->company_id)->count(),
-            'total_products' => \App\Models\Product::where('company_id', $user->company_id)->count(),
-            'open_tickets' => \App\Models\SupportTicket::where('company_id', $user->company_id)->where('status', 'open')->count(),
+            'total_customers' => Customer::where('company_id', $user->company_id)->count(),
+            'total_leads' => Lead::where('company_id', $user->company_id)->count(),
+            'total_invoices' => Invoice::where('company_id', $user->company_id)->count(),
+            'total_products' => Product::where('company_id', $user->company_id)->count(),
+            'open_tickets' => SupportTicket::where('company_id', $user->company_id)->where('status', 'open')->count(),
         ];
 
         return $this->successResponse($data, 'Insights retrieved');

@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EnsureAiSecurity
 {
@@ -49,8 +51,8 @@ class EnsureAiSecurity
             $response->headers->set('X-Ai-Security', 'enforced');
 
             $scannable = method_exists($response, 'getContent')
-                && ! $response instanceof \Symfony\Component\HttpFoundation\BinaryFileResponse
-                && ! $response instanceof \Symfony\Component\HttpFoundation\StreamedResponse;
+                && ! $response instanceof BinaryFileResponse
+                && ! $response instanceof StreamedResponse;
             $content = $scannable ? $response->getContent() : null;
             if (is_string($content) && $content !== '') {
                 $redacted = preg_replace(

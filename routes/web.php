@@ -1,18 +1,18 @@
 <?php
 
-use App\Http\Controllers\Admin\AiQuotaController;
 use App\Http\Controllers\Admin\AiProviderController;
+use App\Http\Controllers\Admin\AiQuotaController;
 use App\Http\Controllers\Admin\AiSkillController;
 use App\Http\Controllers\Admin\ApprovalController;
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\ExportController;
-use App\Http\Controllers\Admin\SystemHealthController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SystemHealthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Ai\AiActionController;
 use App\Http\Controllers\Ai\AiAssistantController;
@@ -20,10 +20,10 @@ use App\Http\Controllers\Ai\AiDocumentReaderController;
 use App\Http\Controllers\Ai\AiInsightsController;
 use App\Http\Controllers\Ai\AiUsageController;
 use App\Http\Controllers\Ai\CopilotController;
-use App\Http\Controllers\Ai\SupportAssistantController;
 use App\Http\Controllers\Ai\DeepAnalysisController;
 use App\Http\Controllers\Ai\ExecutiveController;
 use App\Http\Controllers\Ai\ProcurementAiController;
+use App\Http\Controllers\Ai\SupportAssistantController;
 use App\Http\Controllers\Auth\DataDeletionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -68,7 +68,6 @@ use App\Http\Controllers\Support\ErrorReportController;
 use App\Http\Controllers\Support\HelpCenterController;
 use App\Http\Controllers\Support\SupportReplyController;
 use App\Http\Controllers\Support\SupportTicketController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -457,5 +456,3 @@ Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/imp
     Route::post('/templates', [ImportController::class, 'templateStore'])->name('templates.store');
     Route::delete('/templates/{template}', [ImportController::class, 'templateDestroy'])->name('templates.destroy');
 });
-
-

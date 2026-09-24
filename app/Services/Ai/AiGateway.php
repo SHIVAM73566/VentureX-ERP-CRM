@@ -204,7 +204,7 @@ class AiGateway
                 errorCategory: $errorCategory,
                 errorMessage: $errorMessage,
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::warning('Failed to record AI usage event', ['error' => $e->getMessage()]);
         }
     }

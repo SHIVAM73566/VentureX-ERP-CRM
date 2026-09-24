@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Company;
-use App\Models\PasswordHistory;
 use App\Models\User;
 use App\Services\PasswordPolicyService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

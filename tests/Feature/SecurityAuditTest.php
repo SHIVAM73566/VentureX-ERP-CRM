@@ -11,10 +11,16 @@ use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\StepUpAuth;
 use App\Models\User;
 use App\Services\LoginThrottle;
+use Database\Seeders\CompanySeeder;
+use Database\Seeders\DemoDataSeeder;
+use Database\Seeders\MasterDataSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class SecurityAuditTest extends TestCase
@@ -26,18 +32,18 @@ class SecurityAuditTest extends TestCase
         $this->withoutMiddleware(EnsureTwoFactor::class);
 
         if (! User::where('email', 'admin@jainmetal.example')->exists()) {
-            app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
 
             $this->seed([
-                \Database\Seeders\PermissionSeeder::class,
-                \Database\Seeders\RoleSeeder::class,
-                \Database\Seeders\MasterDataSeeder::class,
-                \Database\Seeders\CompanySeeder::class,
-                \Database\Seeders\DemoDataSeeder::class,
+                PermissionSeeder::class,
+                RoleSeeder::class,
+                MasterDataSeeder::class,
+                CompanySeeder::class,
+                DemoDataSeeder::class,
             ]);
 
             User::where('email', 'admin@jainmetal.example')->update([
-                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'password' => Hash::make('password'),
             ]);
         }
     }

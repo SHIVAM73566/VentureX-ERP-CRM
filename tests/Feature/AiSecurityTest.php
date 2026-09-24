@@ -15,9 +15,16 @@ use App\Models\User;
 use App\Services\Ai\AiLocalIntelligence;
 use App\Services\Ai\AiQuotaService;
 use App\Services\Ai\AiUsageMonitor;
+use Database\Seeders\CompanySeeder;
+use Database\Seeders\DemoDataSeeder;
+use Database\Seeders\MasterDataSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class AiSecurityTest extends TestCase
@@ -29,18 +36,18 @@ class AiSecurityTest extends TestCase
         $this->withoutMiddleware(EnsureTwoFactor::class);
 
         if (! User::where('email', 'admin@jainmetal.example')->exists()) {
-            app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
 
             $this->seed([
-                \Database\Seeders\PermissionSeeder::class,
-                \Database\Seeders\RoleSeeder::class,
-                \Database\Seeders\MasterDataSeeder::class,
-                \Database\Seeders\CompanySeeder::class,
-                \Database\Seeders\DemoDataSeeder::class,
+                PermissionSeeder::class,
+                RoleSeeder::class,
+                MasterDataSeeder::class,
+                CompanySeeder::class,
+                DemoDataSeeder::class,
             ]);
 
             User::where('email', 'admin@jainmetal.example')->update([
-                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'password' => Hash::make('password'),
             ]);
         }
     }

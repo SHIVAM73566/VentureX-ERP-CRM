@@ -15,8 +15,6 @@ class AiUsageService
     /**
      * Record a single usage event. Failures are swallowed so usage tracking can
      * never break an AI request or the ERP.
-     *
-     * @return void
      */
     public function record(
         string $provider,

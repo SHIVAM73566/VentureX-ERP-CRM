@@ -4,7 +4,6 @@ namespace App\Services\Ai;
 
 use App\Models\AiProvider;
 use App\Services\CompanyContext;
-use Throwable;
 
 /**
  * Enforces usage limits BEFORE a request reaches a provider.

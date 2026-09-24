@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Schedule;
@@ -72,7 +71,7 @@ class SystemHealthController extends Controller
             'Tests primary database connectivity with a ping query',
             fn () => [
                 'value' => DB::connection()->getPdo()->getAttribute(\PDO::ATTR_SERVER_VERSION),
-                'detail' => DB::connection()->getConfig('driver') . ' @ ' . DB::connection()->getConfig('host'),
+                'detail' => DB::connection()->getConfig('driver').' @ '.DB::connection()->getConfig('host'),
             ],
         );
 
@@ -87,7 +86,7 @@ class SystemHealthController extends Controller
             function () {
                 DB::connection()->select('SELECT 1');
                 DB::connection()->getPdo()->exec('CREATE TEMPORARY TABLE _health_test (id INT)');
-                DB::connection()->getPdo()->exec("INSERT INTO _health_test VALUES (1)");
+                DB::connection()->getPdo()->exec('INSERT INTO _health_test VALUES (1)');
                 DB::connection()->select('SELECT * FROM _health_test');
             },
         );
@@ -98,10 +97,10 @@ class SystemHealthController extends Controller
             'Verifies cache store is configured and responding',
             fn () => [
                 'value' => config('cache.default'),
-                'detail' => 'Read/write ' . config('cache.default') . ' cache',
+                'detail' => 'Read/write '.config('cache.default').' cache',
             ],
             function () {
-                $key = '_health_' . uniqid();
+                $key = '_health_'.uniqid();
                 Cache::put($key, 'ok', 10);
                 $val = Cache::get($key);
                 Cache::forget($key);
@@ -117,7 +116,7 @@ class SystemHealthController extends Controller
             'Checks the queue connection is set and responsive',
             fn () => [
                 'value' => config('queue.default'),
-                'detail' => 'Queue connection: ' . config('queue.default'),
+                'detail' => 'Queue connection: '.config('queue.default'),
             ],
             function () {
                 $driver = config('queue.default');
@@ -134,7 +133,7 @@ class SystemHealthController extends Controller
             'Tests Redis server connectivity if used as cache/queue driver',
             fn () => [
                 'value' => 'Connected',
-                'detail' => config('database.redis.default.host', 'N/A') . ':' . config('database.redis.default.port', 6379),
+                'detail' => config('database.redis.default.host', 'N/A').':'.config('database.redis.default.port', 6379),
             ],
             function () {
                 if (config('cache.default') !== 'redis' && config('queue.default') !== 'redis') {
@@ -153,7 +152,7 @@ class SystemHealthController extends Controller
             'Confirms the application encryption key is set',
             fn () => [
                 'value' => 'Set',
-                'detail' => 'Length: ' . strlen(config('app.key')) . ' chars',
+                'detail' => 'Length: '.strlen(config('app.key')).' chars',
             ],
             function () {
                 if (empty(config('app.key'))) {
@@ -178,7 +177,7 @@ class SystemHealthController extends Controller
             'Checks if the application enforces HTTPS',
             fn () => [
                 'value' => URL::forceScheme('https') !== null ? 'Enforced' : 'Not enforced',
-                'detail' => 'FORCE_HTTPS: ' . (config('app.force_https') ? 'true' : 'false'),
+                'detail' => 'FORCE_HTTPS: '.(config('app.force_https') ? 'true' : 'false'),
             ],
         );
 
@@ -191,7 +190,7 @@ class SystemHealthController extends Controller
                 'detail' => storage_path(),
             ],
             function () {
-                $testFile = storage_path('app/_health_test_' . uniqid() . '.txt');
+                $testFile = storage_path('app/_health_test_'.uniqid().'.txt');
                 File::put($testFile, 'ok');
                 if (! File::exists($testFile)) {
                     throw new \RuntimeException('Cannot write to storage/app/');
@@ -225,7 +224,7 @@ class SystemHealthController extends Controller
             'Validates mail transport configuration',
             fn () => [
                 'value' => config('mail.default'),
-                'detail' => 'From: ' . config('mail.from.address'),
+                'detail' => 'From: '.config('mail.from.address'),
             ],
             function () {
                 $driver = config('mail.default');
@@ -258,7 +257,7 @@ class SystemHealthController extends Controller
             'Checks if Node.js and npm are available for frontend builds',
             fn () => [
                 'value' => trim(shell_exec('node --version 2>&1') ?: 'Not found'),
-                'detail' => 'npm: ' . trim(shell_exec('npm --version 2>&1') ?: 'Not found'),
+                'detail' => 'npm: '.trim(shell_exec('npm --version 2>&1') ?: 'Not found'),
             ],
         );
 
@@ -298,7 +297,7 @@ class SystemHealthController extends Controller
             'Confirms session driver is configured properly',
             fn () => [
                 'value' => config('session.driver'),
-                'detail' => 'Lifetime: ' . config('session.lifetime') . ' min',
+                'detail' => 'Lifetime: '.config('session.lifetime').' min',
             ],
         );
 
@@ -308,7 +307,7 @@ class SystemHealthController extends Controller
             'Verifies the logging channel is set and directory exists',
             fn () => [
                 'value' => config('logging.default'),
-                'detail' => 'Channels: ' . implode(', ', array_keys(config('logging.channels', []))),
+                'detail' => 'Channels: '.implode(', ', array_keys(config('logging.channels', []))),
             ],
         );
 
@@ -317,7 +316,7 @@ class SystemHealthController extends Controller
             'database',
             'Checks all expected tables exist in the database',
             fn () => [
-                'value' => DB::select('SHOW TABLES') ? count(DB::select('SHOW TABLES')) . ' tables' : '0 tables',
+                'value' => DB::select('SHOW TABLES') ? count(DB::select('SHOW TABLES')).' tables' : '0 tables',
                 'detail' => 'Schema integrity check',
             ],
             function () {
@@ -334,7 +333,7 @@ class SystemHealthController extends Controller
             'queue',
             'Checks if any queue workers are currently running',
             fn () => [
-                'value' => $this->getQueueWorkerCount() . ' workers',
+                'value' => $this->getQueueWorkerCount().' workers',
                 'detail' => 'php artisan queue:work',
             ],
         );
@@ -353,7 +352,7 @@ class SystemHealthController extends Controller
                 }
                 $env = File::get(base_path('.env'));
                 foreach (['APP_KEY', 'DB_CONNECTION', 'DB_HOST'] as $key) {
-                    if (! str_contains($env, $key . '=')) {
+                    if (! str_contains($env, $key.'=')) {
                         throw new \RuntimeException("Missing {$key} in .env");
                     }
                 }
@@ -381,7 +380,7 @@ class SystemHealthController extends Controller
             function () {
                 $response = Http::timeout(5)->get('https://api.github.com');
                 if ($response->failed()) {
-                    throw new \RuntimeException('Outbound HTTP failed: ' . $response->status());
+                    throw new \RuntimeException('Outbound HTTP failed: '.$response->status());
                 }
             },
         );

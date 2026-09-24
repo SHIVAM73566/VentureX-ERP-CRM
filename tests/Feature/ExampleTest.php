@@ -4,6 +4,10 @@ namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Database\Seeders\CompanySeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -22,12 +26,12 @@ class ExampleTest extends TestCase
     {
         $user = User::first();
         if (! $user) {
-            app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
 
             $this->seed([
-                \Database\Seeders\PermissionSeeder::class,
-                \Database\Seeders\RoleSeeder::class,
-                \Database\Seeders\CompanySeeder::class,
+                PermissionSeeder::class,
+                RoleSeeder::class,
+                CompanySeeder::class,
             ]);
 
             $user = User::first();

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Installer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\InstallerGuard;
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
@@ -357,8 +359,8 @@ class InstallerController extends Controller
                 $value = '"'.$value.'"';
             }
 
-            if (preg_match("/^" . preg_quote($envKey, '/') . "=.*/m", $envContent)) {
-                $envContent = preg_replace("/^" . preg_quote($envKey, '/') . "=.*/m", "{$envKey}={$value}", $envContent);
+            if (preg_match('/^'.preg_quote($envKey, '/').'=.*/m', $envContent)) {
+                $envContent = preg_replace('/^'.preg_quote($envKey, '/').'=.*/m', "{$envKey}={$value}", $envContent);
             } else {
                 $envContent .= "\n{$envKey}={$value}";
             }
@@ -376,7 +378,7 @@ class InstallerController extends Controller
             throw new RuntimeException('Admin data not found in session. Please go back and try again.');
         }
 
-        $existingUser = \App\Models\User::where('email', $admin['admin_email'])->first();
+        $existingUser = User::where('email', $admin['admin_email'])->first();
 
         if ($existingUser) {
             $existingUser->update(['password' => Hash::make($password)]);
@@ -384,7 +386,7 @@ class InstallerController extends Controller
             return;
         }
 
-        $company = \App\Models\Company::firstOrCreate(
+        $company = Company::firstOrCreate(
             ['name' => $admin['admin_name']."'s Company"],
             [
                 'legal_name' => $admin['admin_name']."'s Company",
@@ -393,7 +395,7 @@ class InstallerController extends Controller
             ]
         );
 
-        $user = \App\Models\User::create([
+        $user = User::create([
             'name' => $admin['admin_name'],
             'email' => $admin['admin_email'],
             'password' => Hash::make($password),

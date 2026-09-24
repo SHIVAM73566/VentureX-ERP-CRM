@@ -129,14 +129,14 @@ class AiDocumentReaderController extends Controller
             // Local fallback: return what we can extract from the document
             $localAnalysis = "**Document Analysis (Local Mode)**\n\n"
                 ."Document: {$document->original_name}\n"
-                ."Type: ".($document->mime_type ?? 'unknown')."\n"
-                ."Size: ".number_format((int) ($document->file_size ?? 0))." bytes\n"
+                .'Type: '.($document->mime_type ?? 'unknown')."\n"
+                .'Size: '.number_format((int) ($document->file_size ?? 0))." bytes\n"
                 ."Content preview (first 500 chars):\n\n"
                 .substr($text, 0, 500)."\n\n"
                 ."---\n"
-                ."[NOTE] AI-powered deep analysis requires an AI provider. "
-                ."Connect one in **AI Settings** (".route('admin.ai-providers.setup').") — no .env editing or config:clear needed.\n"
-                ."For now, the raw document text is shown above for manual review.";
+                .'[NOTE] AI-powered deep analysis requires an AI provider. '
+                .'Connect one in **AI Settings** ('.route('admin.ai-providers.setup').") — no .env editing or config:clear needed.\n"
+                .'For now, the raw document text is shown above for manual review.';
 
             $run->update([
                 'status' => 'completed',

@@ -1,4 +1,6 @@
-<?php if (!defined('ABSPATH')) exit; ?>
+<?php if (! defined('ABSPATH')) {
+    exit;
+} ?>
 <div class="venturex-lead-form">
     <form id="venturex-lead-form" method="post">
         <p>

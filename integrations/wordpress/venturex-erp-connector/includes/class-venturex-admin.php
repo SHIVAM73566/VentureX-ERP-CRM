@@ -1,40 +1,46 @@
 <?php
-if (!defined('ABSPATH')) exit;
+if (! defined('ABSPATH')) {
+    exit;
+}
 
-class VentureX_Admin {
-
-    public function __construct() {
-        add_action('admin_menu', array($this, 'addMenu'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueue'));
-        add_action('wp_ajax_venturex_test_connection', array($this, 'ajaxTestConnection'));
-        add_action('wp_ajax_venturex_save_settings', array($this, 'ajaxSaveSettings'));
+class VentureX_Admin
+{
+    public function __construct()
+    {
+        add_action('admin_menu', [$this, 'addMenu']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue']);
+        add_action('wp_ajax_venturex_test_connection', [$this, 'ajaxTestConnection']);
+        add_action('wp_ajax_venturex_save_settings', [$this, 'ajaxSaveSettings']);
     }
 
-    public function addMenu() {
+    public function addMenu()
+    {
         add_options_page(
             'VentureX ERP',
             'VentureX ERP',
             'manage_options',
             'venturex-erp',
-            array($this, 'renderPage')
+            [$this, 'renderPage']
         );
     }
 
-    public function enqueue($hook) {
+    public function enqueue($hook)
+    {
         if ($hook !== 'settings_page_venturex-erp') {
             return;
         }
-        wp_enqueue_style('venturex-admin', VENTUREX_PLUGIN_URL . 'assets/admin.css', array(), VENTUREX_VERSION);
-        wp_enqueue_script('venturex-admin', VENTUREX_PLUGIN_URL . 'assets/admin.js', array('jquery'), VENTUREX_VERSION, true);
-        wp_localize_script('venturex-admin', 'venturexAjax', array(
-            'url'   => admin_url('admin-ajax.php'),
+        wp_enqueue_style('venturex-admin', VENTUREX_PLUGIN_URL.'assets/admin.css', [], VENTUREX_VERSION);
+        wp_enqueue_script('venturex-admin', VENTUREX_PLUGIN_URL.'assets/admin.js', ['jquery'], VENTUREX_VERSION, true);
+        wp_localize_script('venturex-admin', 'venturexAjax', [
+            'url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('venturex_admin_nonce'),
-        ));
+        ]);
     }
 
-    public function renderPage() {
+    public function renderPage()
+    {
         $api_url = get_option('venturex_api_url', '');
-        $status  = get_option('venturex_connection_status', 'disconnected');
+        $status = get_option('venturex_connection_status', 'disconnected');
         ?>
         <div class="wrap">
             <h1>VentureX ERP &amp; CRM Settings</h1>
@@ -89,14 +95,15 @@ class VentureX_Admin {
         <?php
     }
 
-    public function ajaxTestConnection() {
+    public function ajaxTestConnection()
+    {
         check_ajax_referer('venturex_admin_nonce', 'nonce');
 
-        if (!current_user_can('manage_options')) {
+        if (! current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
         }
 
-        $api = new VentureX_API();
+        $api = new VentureX_API;
         $result = $api->testConnection();
 
         if (is_wp_error($result)) {
@@ -108,10 +115,11 @@ class VentureX_Admin {
         wp_send_json_success('Connection successful');
     }
 
-    public function ajaxSaveSettings() {
+    public function ajaxSaveSettings()
+    {
         check_ajax_referer('venturex_admin_nonce', 'nonce');
 
-        if (!current_user_can('manage_options')) {
+        if (! current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
         }
 
@@ -120,7 +128,7 @@ class VentureX_Admin {
 
         update_option('venturex_api_url', $url);
 
-        if (!empty($token)) {
+        if (! empty($token)) {
             update_option('venturex_api_token', venturex_encrypt($token));
         }
 

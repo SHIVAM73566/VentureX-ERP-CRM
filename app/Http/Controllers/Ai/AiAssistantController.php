@@ -14,7 +14,6 @@ use App\Services\AuditLogger;
 use App\Services\CompanyContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class AiAssistantController extends Controller
@@ -118,6 +117,7 @@ class AiAssistantController extends Controller
                 'finished_at' => now(),
             ]);
             $conversation->touch();
+
             return response()->json([
                 'message' => $assistantMessage,
                 'run' => $run,
@@ -194,9 +194,9 @@ class AiAssistantController extends Controller
             $fallbackContent = $localAnswer
                 ? "AI analysis is not currently configured. Here is the answer from your ERP data:\n\n".$localAnswer
                 : "AI analysis is not available right now. Your ERP system is running normally.\n\n"
-                    ."To enable AI features, connect an AI provider in **AI Settings** (".route('admin.ai-providers.setup')."). "
+                    .'To enable AI features, connect an AI provider in **AI Settings** ('.route('admin.ai-providers.setup').'). '
                     ."No .env editing or config:clear is needed — ask an administrator if you cannot access the admin area.\n\n"
-                    ."You can still use all ERP modules — CRM, Sales, Inventory, Procurement, Finance, and Logistics — without AI.";
+                    .'You can still use all ERP modules — CRM, Sales, Inventory, Procurement, Finance, and Logistics — without AI.';
 
             $assistantMessage = AiMessage::create([
                 'conversation_id' => $conversation->id,

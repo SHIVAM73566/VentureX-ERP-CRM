@@ -4,6 +4,7 @@ namespace App\Services\Ai;
 
 use App\Models\AiProvider;
 use App\Services\CompanyContext;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Config;
 
 /**
@@ -87,12 +88,12 @@ class AiProviderManager
     /**
      * Providers the current company has stored (regardless of env).
      */
-    public function storedProviders(?int $companyId = null): \Illuminate\Database\Eloquent\Collection
+    public function storedProviders(?int $companyId = null): Collection
     {
         $companyId ??= CompanyContext::id();
 
         if ($companyId === null) {
-            return new \Illuminate\Database\Eloquent\Collection;
+            return new Collection;
         }
 
         return AiProvider::query()->where('company_id', $companyId)->get()->keyBy('provider');
