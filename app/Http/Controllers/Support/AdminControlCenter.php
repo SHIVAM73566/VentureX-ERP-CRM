@@ -42,20 +42,25 @@ class AdminControlCenter extends Controller
         return view('admin.control-center.index', compact('stats', 'activities'));
     }
 
-    public function customers(): View
+    public function customers(Request $request): View
     {
         $this->authorize('viewAny', SupportTicket::class);
 
         $companies = Company::withCount('users')
-            ->get()
-            ->map(function ($company) {
-                $company->ticket_count = SupportTicket::where('company_id', $company->id)->count();
-                $company->open_ticket_count = SupportTicket::where('company_id', $company->id)
-                    ->where('status', 'open')
-                    ->count();
+            ->when($request->filled('q'), function ($query) use ($request) {
+                $query->where('name', 'like', '%'.$request->query('q').'%');
+            })
+            ->paginate(15)
+            ->withQueryString();
 
-                return $company;
-            });
+        $companies->getCollection()->transform(function (Company $company) {
+            $company->ticket_count = SupportTicket::where('company_id', $company->id)->count();
+            $company->open_ticket_count = SupportTicket::where('company_id', $company->id)
+                ->where('status', 'open')
+                ->count();
+
+            return $company;
+        });
 
         return view('admin.control-center.customers', compact('companies'));
     }

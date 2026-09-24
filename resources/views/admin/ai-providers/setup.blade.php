@@ -127,22 +127,22 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-sm text-gray-700 dark:text-gray-300">Per-user daily limit</label>
-                                <input type="number" name="per_user_daily_limit" value="{{ $existing->per_user_daily_limit }}" min="0" placeholder="unlimited"
+                                <input type="number" name="per_user_daily_limit" value="{{ $existing?->per_user_daily_limit }}" min="0" placeholder="unlimited"
                                        class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-700 dark:text-gray-300">Per-user monthly limit</label>
-                                <input type="number" name="per_user_monthly_limit" value="{{ $existing->per_user_monthly_limit }}" min="0" placeholder="unlimited"
+                                <input type="number" name="per_user_monthly_limit" value="{{ $existing?->per_user_monthly_limit }}" min="0" placeholder="unlimited"
                                        class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-700 dark:text-gray-300">Org daily limit</label>
-                                <input type="number" name="org_daily_limit" value="{{ $existing->org_daily_limit }}" min="0" placeholder="unlimited"
+                                <input type="number" name="org_daily_limit" value="{{ $existing?->org_daily_limit }}" min="0" placeholder="unlimited"
                                        class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                             </div>
                             <div>
                                 <label class="block text-sm text-gray-700 dark:text-gray-300">Org monthly limit</label>
-                                <input type="number" name="org_monthly_limit" value="{{ $existing->org_monthly_limit }}" min="0" placeholder="unlimited"
+                                <input type="number" name="org_monthly_limit" value="{{ $existing?->org_monthly_limit }}" min="0" placeholder="unlimited"
                                        class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm bg-white dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                             </div>
                         </div>

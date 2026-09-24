@@ -43,6 +43,22 @@ document.addEventListener('alpine:init', () => {
             document.body.style.overflow = this.open ? 'hidden' : '';
         },
         init() {
+            const nav = this.$refs.nav;
+            if (nav) {
+                try {
+                    const saved = parseInt(sessionStorage.getItem('sidebar-scroll') || '0', 10);
+                    if (!Number.isNaN(saved) && saved > 0) {
+                        nav.scrollTop = saved;
+                    }
+                } catch (e) {}
+                this.$refs.nav.querySelector('a[aria-current="page"]')?.scrollIntoView({ block: 'nearest' });
+                nav.addEventListener('scroll', () => {
+                    try {
+                        sessionStorage.setItem('sidebar-scroll', String(nav.scrollTop));
+                    } catch (e) {}
+                }, { passive: true });
+            }
+
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && this.open) {
                     this.closeDrawer();
