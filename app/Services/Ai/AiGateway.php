@@ -27,6 +27,9 @@ class AiGateway
         protected AiRouter $router,
         protected AiUsageMonitor $usage,
         protected AiQuotaService $quota,
+        protected AiProviderManager $providers,
+        protected AiUsageService $usageService,
+        protected AiRateLimitService $rateLimit,
     ) {}
 
     public function isEnabled(): bool
@@ -47,8 +50,10 @@ class AiGateway
      */
     public function chat(string $system, string $user, array $options = []): array
     {
+        $this->providers->syncForCurrentContext();
+
         if (! $this->isEnabled()) {
-            throw new AiException('AI is not configured. Set a provider API key in the environment. See documentation/AI-SETUP.md for details.');
+            throw new AiException('AI analysis is not available right now. Ask your administrator to connect an AI provider in Settings.');
         }
 
         $task = (string) ($options['task'] ?? 'general_assistant');
@@ -98,6 +103,7 @@ class AiGateway
         $primary = $resolved['provider'];
 
         $this->assertRateLimit($primary);
+        $this->rateLimit->assert($primary);
 
         // Deduplicate concurrent identical requests. Some cache drivers (e.g.
         // file) do not support atomic locks; degrade to no deduplication then.
@@ -145,6 +151,11 @@ class AiGateway
             if (config('ai.quota.enabled', true)) {
                 $this->quota->record(auth()->id());
             }
+
+            // Atomically persist usage metadata (never prompts/responses) for the
+            // admin dashboard + quotas. Failures are swallowed so a logger hiccup
+            // can never break an AI request or the ERP.
+            $this->recordUsage($task, 'success', $result, $primary, $system, $user, $temperature, $maxTokens, $context, null);
 
             $result = $this->callWithFallback($task, $resolved, $system, $user, $temperature, $maxTokens, $providerOverride);
 

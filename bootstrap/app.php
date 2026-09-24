@@ -2,9 +2,11 @@
 
 use App\Http\Middleware\ApiProtection;
 use App\Http\Middleware\EmergencyLockdown;
+use App\Http\Middleware\EnsureAiSecurity;
 use App\Http\Middleware\EnsureTwoFactor;
 use App\Http\Middleware\ForceHttps;
 use App\Http\Middleware\InstallerGuard;
+use App\Http\Middleware\LoadAiProviders;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetCompanyContext;
 use App\Http\Middleware\StepUpAuth;
@@ -14,6 +16,8 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
+
+require_once __DIR__.'/../app/Support/helpers.php';
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -31,7 +35,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             InstallerGuard::class,
             SetCompanyContext::class,
+            LoadAiProviders::class,
             SecurityHeaders::class,
+            EnsureAiSecurity::class,
         ]);
 
         $middleware->prepend([

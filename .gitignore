@@ -44,3 +44,4 @@ storage/logs/*
 .env.testing
 /release
 /storage/.installed
+.env.bak*

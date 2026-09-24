@@ -117,7 +117,8 @@ class AiController extends ApiController
             return $this->successResponse(['user' => $message, 'assistant' => $response], 'Message sent');
         } catch (AiException $e) {
             $fallbackContent = "AI analysis is unavailable right now. Your ERP system is running normally.\n\n"
-                .'To enable AI features, add an AI provider API key to the environment. See documentation/AI-SETUP.md.';
+                .'To enable AI features, connect an AI provider in the admin **AI Settings** page ('.route('admin.ai-providers.setup').'). '
+                .'No .env editing or config:clear is required.';
 
             $response = AiMessage::create([
                 'conversation_id' => $conversation->id,

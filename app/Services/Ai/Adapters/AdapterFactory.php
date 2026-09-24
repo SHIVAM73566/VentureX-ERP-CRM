@@ -7,6 +7,8 @@ use RuntimeException;
 class AdapterFactory
 {
     protected const REGISTRY = [
+        GeminiProvider::class,
+        NvidiaProvider::class,
         ClaudeProvider::class,
         OpenAiCompatibleAdapter::class,
     ];

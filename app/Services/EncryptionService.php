@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Crypto;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * Data Encryption Service for VentureX ERP & CRM
@@ -17,7 +17,7 @@ class EncryptionService
      */
     public static function encrypt(string $data): string
     {
-        return Crypto::encrypt($data);
+        return Crypt::encryptString($data);
     }
 
     /**
@@ -25,7 +25,7 @@ class EncryptionService
      */
     public static function decrypt(string $encryptedData): string
     {
-        return Crypto::decrypt($encryptedData);
+        return Crypt::decryptString($encryptedData);
     }
 
     /**

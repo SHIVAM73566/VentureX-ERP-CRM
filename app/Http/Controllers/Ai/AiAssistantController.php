@@ -194,7 +194,8 @@ class AiAssistantController extends Controller
             $fallbackContent = $localAnswer
                 ? "AI analysis is not currently configured. Here is the answer from your ERP data:\n\n".$localAnswer
                 : "AI analysis is not available right now. Your ERP system is running normally.\n\n"
-                    ."To enable AI features, add an AI provider API key to your .env file, then run: php artisan config:clear.\n\n"
+                    ."To enable AI features, connect an AI provider in **AI Settings** (".route('admin.ai-providers.setup')."). "
+                    ."No .env editing or config:clear is needed — ask an administrator if you cannot access the admin area.\n\n"
                     ."You can still use all ERP modules — CRM, Sales, Inventory, Procurement, Finance, and Logistics — without AI.";
 
             $assistantMessage = AiMessage::create([

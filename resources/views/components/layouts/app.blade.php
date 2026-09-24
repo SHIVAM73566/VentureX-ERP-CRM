@@ -58,6 +58,8 @@
             ['label' => 'AI Insights', 'icon' => 'bolt', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage*')],
             ['label' => 'AI Usage', 'icon' => 'chart', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
             ['label' => 'AI Skills', 'icon' => 'cpu', 'route' => 'admin.ai-skills.index', 'active' => request()->routeIs('admin.ai-skills.*')],
+            ['label' => 'AI Providers', 'icon' => 'cpu', 'route' => 'admin.ai-providers.index', 'active' => request()->routeIs('admin.ai-providers.index') || request()->routeIs('admin.ai-providers.setup'), 'visible' => $user?->hasRole('super_admin')],
+            ['label' => 'AI Security', 'icon' => 'shield', 'route' => 'admin.ai-providers.security', 'active' => request()->routeIs('admin.ai-providers.security'), 'visible' => $user?->hasRole('super_admin')],
             ['label' => 'Procurement AI', 'icon' => 'scan', 'route' => 'ai.procurement', 'active' => request()->routeIs('ai.procurement*')],
             ['label' => 'Support Assistant', 'icon' => 'chat', 'route' => 'ai.support-assistant', 'active' => request()->routeIs('ai.support-assistant')],
         ],

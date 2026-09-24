@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AiQuotaController;
+use App\Http\Controllers\Admin\AiProviderController;
 use App\Http\Controllers\Admin\AiSkillController;
 use App\Http\Controllers\Admin\ApprovalController;
 use App\Http\Controllers\Admin\AuditLogController;
@@ -322,6 +323,20 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
 
         Route::get('ai-quotas', [AiQuotaController::class, 'index'])->name('ai-quotas.index');
         Route::put('ai-quotas', [AiQuotaController::class, 'update'])->name('ai-quotas.update');
+
+        Route::prefix('ai-providers')->name('ai-providers.')->group(function () {
+            Route::get('/', [AiProviderController::class, 'index'])->name('index');
+            Route::get('setup', [AiProviderController::class, 'setup'])->name('setup');
+            Route::post('setup/dismiss', [AiProviderController::class, 'dismissSetup'])->name('setup.dismiss');
+            Route::get('security', [AiProviderController::class, 'security'])->name('security');
+            Route::post('/', [AiProviderController::class, 'store'])->name('store');
+            Route::put('{provider}', [AiProviderController::class, 'update'])->name('update');
+            Route::delete('{provider}', [AiProviderController::class, 'destroy'])->name('destroy');
+            Route::post('{provider}/test', [AiProviderController::class, 'test'])->name('test');
+            Route::post('{provider}/rotate', [AiProviderController::class, 'rotate'])->name('rotate');
+            Route::post('{provider}/enable', [AiProviderController::class, 'enable'])->name('enable');
+            Route::post('{provider}/disable', [AiProviderController::class, 'disable'])->name('disable');
+        });
 
         Route::get('system-health', [SystemHealthController::class, 'index'])->name('system-health.index');
     });

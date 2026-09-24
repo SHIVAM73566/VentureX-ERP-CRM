@@ -29,6 +29,13 @@ return [
     'default_provider' => env('AI_DEFAULT_PROVIDER', 'nvidia'),
 
     /*
+    | Optional: when set (AI_DOCS_PASSWORD), the AI configuration and
+    | documentation pages are protected behind an HTTP Basic prompt using
+    | this password. Leave empty to keep the pages open to signed-in admins.
+    */
+    'docs_password' => env('AI_DOCS_PASSWORD'),
+
+    /*
     | How long AI-derived static insights stay cached (seconds).
     */
     'cache_ttl' => (int) (env('AI_CACHE_TTL_HOURS', 24) * 3600),
@@ -55,6 +62,7 @@ return [
     'rate_limit' => [
         'max_per_user_per_hour' => (int) env('AI_RATE_MAX_USER_PER_HOUR', 60),
         'max_per_user_per_day' => (int) env('AI_RATE_MAX_USER_PER_DAY', 200),
+        'max_per_user_per_month' => (int) env('AI_RATE_MAX_USER_PER_MONTH', 2000),
         'max_per_company_per_hour' => (int) env('AI_RATE_MAX_COMPANY_PER_HOUR', 300),
     ],
 
@@ -238,12 +246,12 @@ return [
             'enabled' => false,
         ],
         'gemini' => [
-            'base_url' => env('GEMINI_AI_ENDPOINT', 'https://gemini-3-5-flash.p.rapidapi.com/chat/completions'),
-            'host' => env('GEMINI_AI_HOST', 'gemini-3-5-flash.p.rapidapi.com'),
-            'path' => env('GEMINI_AI_PATH', '/chat/completions'),
-            'model' => env('GEMINI_AI_MODEL', 'gemini-3.5-flash'),
-            'api_key' => env('RAPIDAPI_KEY', ''),
-            'auth_mode' => 'rapidapi',
+            'base_url' => env('GEMINI_AI_ENDPOINT', 'https://generativelanguage.googleapis.com'),
+            'host' => 'generativelanguage.googleapis.com',
+            'path' => '/v1beta/models/{model}:generateContent',
+            'model' => env('GEMINI_AI_MODEL', 'gemini-2.5-flash'),
+            'api_key' => env('GEMINI_API_KEY', ''),
+            'auth_mode' => 'google',
         ],
         'deepseek' => [
             'base_url' => env('DEEPSEEK_AI_ENDPOINT', 'https://deepseek-v31.p.rapidapi.com/'),
@@ -302,5 +310,45 @@ return [
         'openai' => [2.5, 10.0],
         'anthropic' => [3.0, 15.0],
         'claude' => [3.0, 15.0],
+    ],
+
+    /*
+    | Providers admins can connect from the settings UI. Each entry drives the
+    | connection form (model suggestions + purpose) without any .env editing.
+    | Onboarding order matters — the first provider card is highlighted.
+    */
+    'ui_providers' => [
+        'gemini' => [
+            'label' => 'Google Gemini',
+            'description' => "Google's fast, strong-reasoning model. Great for complex analysis, summaries and document understanding.",
+            'key_help' => 'Paste your Google AI Studio API key (starts with "AIza").',
+            'default_model' => 'gemini-2.5-flash',
+            'models' => ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash', 'gemini-1.5-flash'],
+            'docs_url' => 'https://aistudio.google.com/app/apikey',
+        ],
+        'nvidia' => [
+            'label' => 'NVIDIA NIM',
+            'description' => "NVIDIA's hosted model catalogue (built for code, reasoning and fast general answers).",
+            'key_help' => 'Paste your NVIDIA API key (starts with "nvapi-").',
+            'default_model' => 'nvidia/llama-3.3-nemotron-super-49b-v1.5',
+            'models' => ['nvidia/llama-3.3-nemotron-super-49b-v1.5', 'nvidia/llama-3.1-nemotron-ultra-253b-v1.0', 'meta/llama-3.1-8b-instruct'],
+            'docs_url' => 'https://org.ngc.nvidia.com/setup/api-key',
+        ],
+        'openai' => [
+            'label' => 'OpenAI',
+            'description' => 'GPT model catalogue. Flexible general-purpose generation.',
+            'key_help' => 'Paste your OpenAI API key (starts with "sk-").',
+            'default_model' => 'gpt-4o',
+            'models' => ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1', 'gpt-4.1-mini'],
+            'docs_url' => 'https://platform.openai.com/api-keys',
+        ],
+        'anthropic' => [
+            'label' => 'Anthropic Claude',
+            'description' => 'Claude model catalogue for high-value reasoning and analysis.',
+            'key_help' => 'Paste your Anthropic API key (starts with "sk-ant-").',
+            'default_model' => 'claude-sonnet-4-20250514',
+            'models' => ['claude-sonnet-4-20250514', 'claude-opus-4-20250514', 'claude-haiku-4-20250514'],
+            'docs_url' => 'https://console.anthropic.com/settings/keys',
+        ],
     ],
 ];

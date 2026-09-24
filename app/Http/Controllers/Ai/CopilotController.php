@@ -112,8 +112,8 @@ class CopilotController extends Controller
             // Provide a helpful local fallback response
             $localContext = $this->context->receivablesPayables()."\n".$this->context->inventory();
             $fallbackContent = "AI analysis is not available right now. Here is a summary from your ERP data:\n\n"
-                ."To enable AI features, add an AI provider API key to your .env file "
-                ."and run: php artisan config:clear\n\n"
+                ."To enable AI features, connect an AI provider in **AI Settings** (".route('admin.ai-providers.setup')."). "
+                ."No .env editing or config:clear is needed — ask an administrator if you cannot access the admin area.\n\n"
                 ."**Your Current Business Data:**\n".$localContext;
 
             return response()->json([
