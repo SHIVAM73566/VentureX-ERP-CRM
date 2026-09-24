@@ -19,7 +19,9 @@ class ExecutiveController extends AiActionController
 {
     public function review(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $facts = $this->context->executive();
 
@@ -38,7 +40,9 @@ class ExecutiveController extends AiActionController
 
     public function daily(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $facts = $this->context->daily();
 

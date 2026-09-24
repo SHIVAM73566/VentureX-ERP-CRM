@@ -36,7 +36,9 @@ class AiDocumentReaderController extends Controller
 
     public function analyze(Request $request): RedirectResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $this->authorize('create', AiRun::class);
 

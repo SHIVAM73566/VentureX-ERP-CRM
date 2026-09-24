@@ -47,7 +47,9 @@ class AiAssistantController extends Controller
 
     public function send(Request $request)
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $this->authorize('create', AiRun::class);
 

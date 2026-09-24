@@ -26,7 +26,9 @@ class SupportAssistantController extends Controller
 
     public function ask(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
         $this->authorize('create', AiRun::class);
 
         $data = $request->validate([

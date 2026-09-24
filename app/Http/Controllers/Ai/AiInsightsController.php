@@ -19,7 +19,9 @@ class AiInsightsController extends Controller
 
     public function generate(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $this->authorize('viewAny', AiRun::class);
 

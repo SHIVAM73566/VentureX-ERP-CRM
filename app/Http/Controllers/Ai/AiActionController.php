@@ -35,7 +35,9 @@ class AiActionController extends Controller
 
     public function customerSummary(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $data = $request->validate(['customer_id' => ['required', 'integer']]);
         $customer = Customer::ofCompany()->findOrFail($data['customer_id']);
@@ -54,7 +56,9 @@ class AiActionController extends Controller
 
     public function leadEmail(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $data = $request->validate(['lead_id' => ['required', 'integer']]);
         $lead = Lead::ofCompany()->findOrFail($data['lead_id']);
@@ -74,7 +78,9 @@ class AiActionController extends Controller
 
     public function supplierAnalysis(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $data = $request->validate(['supplier_id' => ['required', 'integer']]);
         $supplier = Supplier::ofCompany()->findOrFail($data['supplier_id']);
@@ -94,7 +100,9 @@ class AiActionController extends Controller
 
     public function invoiceSummary(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $data = $request->validate(['invoice_id' => ['required', 'integer']]);
         $invoice = Invoice::ofCompany()->findOrFail($data['invoice_id']);
@@ -114,7 +122,9 @@ class AiActionController extends Controller
 
     public function inventory(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $data = $request->validate([
             'product_id' => ['nullable', 'integer'],
@@ -145,7 +155,9 @@ class AiActionController extends Controller
 
     public function finance(Request $request): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
 
         $data = $request->validate(['question' => ['required', 'string', 'max:2000']]);
 
@@ -227,7 +239,9 @@ class AiActionController extends Controller
      */
     protected function respondWithLocalFallback(Request $request, string $task, string $context, string $facts, callable $call): JsonResponse
     {
-        ini_set('max_execution_time', '180');
+        if (app()->environment('testing') === false) {
+            ini_set('max_execution_time', '180');
+        }
         $this->authorize('viewAny', AiRun::class);
 
         $run = AiRun::create([
