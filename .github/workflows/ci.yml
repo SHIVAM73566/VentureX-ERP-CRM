@@ -65,7 +65,10 @@ jobs:
         run: npm ci && npm run build
 
       - name: Setup environment
-        run: cp .env.example .env
+        run: |
+          cp .env.example .env
+          mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
+          touch storage/.installed
 
       - name: Generate application key
         run: php artisan key:generate --force
@@ -73,4 +76,38 @@ jobs:
       - name: Run test suite
         run: |
           set -o pipefail
-          vendor/bin/phpunit --no-coverage 2>&1 | tee /tmp/phpunit.log
+          vendor/bin/phpunit --no-coverage --colors=never --log-junit /tmp/junit.xml 2>&1 | tee /tmp/phpunit.log
+
+      - name: Capture Laravel log on failure
+        if: failure()
+        run: |
+          echo "::group::Laravel log (tail 200)"
+          if [ -f storage/logs/laravel.log ]; then tail -200 storage/logs/laravel.log; else echo "No storage/logs/laravel.log"; fi
+          echo "::endgroup::"
+
+      - name: Annotate failing tests
+        if: failure()
+        run: |
+          php -r '
+            $file = "/tmp/junit.xml";
+            if (!is_file($file)) { fwrite(STDERR, "No JUnit XML found\n"); exit(0); }
+            $xml = new SimpleXMLElement(file_get_contents($file));
+            $count = 0;
+            foreach ($xml->testsuite as $suite) {
+              foreach ($suite->testcase as $tc) {
+                $fail = null;
+                foreach (["failure", "error"] as $tag) {
+                  if (isset($tc->$tag)) { $fail = $tc->$tag; break; }
+                }
+                if ($fail === null) { continue; }
+                $src = isset($tc->attributes()["file"]) ? (string) $tc->attributes()["file"] : "tests";
+                $line = isset($tc->attributes()["line"]) ? (string) $tc->attributes()["line"] : "1";
+                $name = isset($tc->attributes()["name"]) ? (string) $tc->attributes()["name"] : "test";
+                $msg = trim(preg_replace("/\s+/", " ", (string) $fail));
+                $short = mb_substr($msg, 0, 900);
+                echo "::error file={$src},line={$line}::{$name}: {$short}\n";
+                $count++;
+              }
+            }
+            echo "Annotated {$count} failing test(s)\n";
+          '

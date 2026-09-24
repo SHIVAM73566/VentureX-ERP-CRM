@@ -9,6 +9,7 @@ use App\Http\Controllers\Ai\DeepAnalysisController;
 use App\Http\Controllers\Ai\ExecutiveController;
 use App\Http\Middleware\EnsureTwoFactor;
 use App\Models\AiRun;
+use App\Models\Customer;
 use App\Models\Supplier;
 use App\Models\User;
 use App\Services\Ai\AiLocalIntelligence;
@@ -28,7 +29,19 @@ class AiSecurityTest extends TestCase
         $this->withoutMiddleware(EnsureTwoFactor::class);
 
         if (! User::where('email', 'admin@jainmetal.example')->exists()) {
-            $this->markTestSkipped('Demo data not seeded. Run: php artisan db:seed');
+            app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+            $this->seed([
+                \Database\Seeders\PermissionSeeder::class,
+                \Database\Seeders\RoleSeeder::class,
+                \Database\Seeders\MasterDataSeeder::class,
+                \Database\Seeders\CompanySeeder::class,
+                \Database\Seeders\DemoDataSeeder::class,
+            ]);
+
+            User::where('email', 'admin@jainmetal.example')->update([
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            ]);
         }
     }
 
@@ -338,16 +351,20 @@ class AiSecurityTest extends TestCase
     {
         config(['ai.providers.swift.api_key' => 'secret-key']);
 
-        Http::fake(['*' => Http::response(['error' => 'fail'], 500)]);
+        Http::fake(fn () => throw new ConnectionException('cURL error 28'));
+
+        $customer = Customer::query()->first();
+        if (! $customer) {
+            $this->markTestSkipped('No customer rows available for the AI run test.');
+        }
 
         $this->authAdmin()
-            ->postJson('/ai/actions/customer-summary', ['customer_id' => 1]);
+            ->postJson('/ai/actions/customer-summary', ['customer_id' => $customer->id]);
 
-        $run = AiRun::where('status', 'failed')->latest()->first();
-        if ($run) {
-            $runJson = json_encode($run->toArray());
-            $this->assertStringNotContainsString('secret-key', $runJson);
-        }
+        $run = AiRun::query()->latest('id')->first();
+        $this->assertNotNull($run, 'Expected an AiRun for the customer summary action.');
+        $runJson = json_encode($run->toArray());
+        $this->assertStringNotContainsString('secret-key', $runJson);
     }
 
     // =========================================================================

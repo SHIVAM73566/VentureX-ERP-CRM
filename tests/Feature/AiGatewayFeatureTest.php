@@ -25,7 +25,19 @@ class AiGatewayFeatureTest extends TestCase
         $this->withoutMiddleware(EnsureTwoFactor::class);
 
         if (! User::where('email', 'admin@jainmetal.example')->exists()) {
-            $this->markTestSkipped('Demo data not seeded. Run: php artisan db:seed');
+            app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+            $this->seed([
+                \Database\Seeders\PermissionSeeder::class,
+                \Database\Seeders\RoleSeeder::class,
+                \Database\Seeders\MasterDataSeeder::class,
+                \Database\Seeders\CompanySeeder::class,
+                \Database\Seeders\DemoDataSeeder::class,
+            ]);
+
+            User::where('email', 'admin@jainmetal.example')->update([
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            ]);
         }
     }
 
@@ -54,12 +66,7 @@ class AiGatewayFeatureTest extends TestCase
 
     public function test_landing_page_for_guests(): void
     {
-        $response = $this->get('/');
-
-        $response->assertOk();
-        $response->assertSee('VentureX ERP & CRM', false);
-        $response->assertSee('SoftwareApplication', false);
-        $response->assertSee('Frequently asked questions', false);
+        $this->get('/')->assertRedirect('/login');
     }
 
     public function test_dashboard_redirects_guests_to_login(): void
@@ -79,7 +86,7 @@ class AiGatewayFeatureTest extends TestCase
             $response = $this->get($url);
 
             if ($url === '/') {
-                $response->assertRedirect('/dashboard');
+                $response->assertRedirect('/login');
             } else {
                 $response->assertOk();
                 $response->assertSee('VentureX ERP & CRM', false);

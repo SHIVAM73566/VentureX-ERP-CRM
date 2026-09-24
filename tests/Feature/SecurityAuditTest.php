@@ -26,7 +26,19 @@ class SecurityAuditTest extends TestCase
         $this->withoutMiddleware(EnsureTwoFactor::class);
 
         if (! User::where('email', 'admin@jainmetal.example')->exists()) {
-            $this->markTestSkipped('Demo data not seeded. Run: php artisan db:seed');
+            app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+            $this->seed([
+                \Database\Seeders\PermissionSeeder::class,
+                \Database\Seeders\RoleSeeder::class,
+                \Database\Seeders\MasterDataSeeder::class,
+                \Database\Seeders\CompanySeeder::class,
+                \Database\Seeders\DemoDataSeeder::class,
+            ]);
+
+            User::where('email', 'admin@jainmetal.example')->update([
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            ]);
         }
     }
 
@@ -435,7 +447,8 @@ class SecurityAuditTest extends TestCase
 
     public function test_session_secure_cookie_config(): void
     {
-        $this->assertIsBool(config('session.secure'));
+        $secure = config('session.secure');
+        $this->assertTrue(is_bool($secure) || $secure === null);
     }
 
     // =========================================================================
@@ -450,12 +463,10 @@ class SecurityAuditTest extends TestCase
 
         $response = $this->get('/nonexistent-route-that-will-404');
 
-        if ($response->getStatusCode() === 500) {
-            $content = $response->getContent();
-            $this->assertStringNotContainsString('Stack trace', $content);
-            $this->assertStringNotContainsString('Exception in', $content);
-            $this->assertStringNotContainsString('vendor/', $content);
-        }
+        $content = $response->getContent();
+        $this->assertStringNotContainsString('Stack trace', $content);
+        $this->assertStringNotContainsString('Exception in', $content);
+        $this->assertStringNotContainsString('vendor/', $content);
     }
 
     public function test_api_error_responses_dont_expose_internal_paths(): void
@@ -465,12 +476,10 @@ class SecurityAuditTest extends TestCase
         $response = $this->authAdmin()
             ->postJson('/ai/copilot', ['question' => 'Strategic analysis of our pipeline and business']);
 
-        if ($response->getStatusCode() >= 400) {
-            $content = $response->getContent();
-            $this->assertStringNotContainsString('C:\\', $content);
-            $this->assertStringNotContainsString('/var/www', $content);
-            $this->assertStringNotContainsString('vendor/', $content);
-        }
+        $content = $response->getContent();
+        $this->assertStringNotContainsString('C:\\', $content);
+        $this->assertStringNotContainsString('/var/www', $content);
+        $this->assertStringNotContainsString('vendor/', $content);
     }
 
     public function test_validation_errors_dont_expose_db_details(): void

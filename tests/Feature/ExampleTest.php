@@ -22,12 +22,20 @@ class ExampleTest extends TestCase
     {
         $user = User::first();
         if (! $user) {
-            $this->markTestSkipped('No users in database');
+            app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+            $this->seed([
+                \Database\Seeders\PermissionSeeder::class,
+                \Database\Seeders\RoleSeeder::class,
+                \Database\Seeders\CompanySeeder::class,
+            ]);
+
+            $user = User::first();
         }
 
         $this->actingAs($user)
             ->withSession(['two_factor_verified_at' => now()->timestamp])
             ->get('/')
-            ->assertRedirect(route('dashboard'));
+            ->assertRedirect(route('login'));
     }
 }

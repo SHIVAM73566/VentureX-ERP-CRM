@@ -24,6 +24,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate static demo
+        run: |
+          test -f docs/index.html && echo "docs/index.html OK"
+          test -f docs/.nojekyll && echo "docs/.nojekyll OK"
+          if grep -rE '(src|href)="/(assets|css|js|images)/' docs; then
+            echo "::error::docs contains absolute asset paths that will break on GitHub Pages"
+            exit 1
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

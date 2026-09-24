@@ -152,12 +152,12 @@ class AiGateway
                 $this->quota->record(auth()->id());
             }
 
+            $result = $this->callWithFallback($task, $resolved, $system, $user, $temperature, $maxTokens, $providerOverride);
+
             // Atomically persist usage metadata (never prompts/responses) for the
             // admin dashboard + quotas. Failures are swallowed so a logger hiccup
             // can never break an AI request or the ERP.
-            $this->recordUsage($task, 'success', $result, $primary, $system, $user, $temperature, $maxTokens, $context, null);
-
-            $result = $this->callWithFallback($task, $resolved, $system, $user, $temperature, $maxTokens, $providerOverride);
+            $this->recordUsage('success', $primary, $task, $result, $system, $user, $temperature, $maxTokens, $context, null);
 
             $payload = [
                 'content' => $result['content'],
@@ -185,6 +185,27 @@ class AiGateway
                     // The lock expires on its own; nothing else to do.
                 }
             }
+        }
+    }
+
+    protected function recordUsage(string $status, string $provider, string $task, array $result, string $system, string $user, float $temperature, int $maxTokens, string $context, ?string $errorCategory = null, ?string $errorMessage = null): void
+    {
+        try {
+            $this->usageService->record(
+                provider: $provider,
+                status: $status,
+                task: $task,
+                requestType: 'chat',
+                model: $result['model'] ?? null,
+                latencyMs: $result['latency_ms'] ?? null,
+                promptTokens: $result['prompt_tokens'] ?? null,
+                completionTokens: $result['completion_tokens'] ?? null,
+                cost: $result['cost'] ?? null,
+                errorCategory: $errorCategory,
+                errorMessage: $errorMessage,
+            );
+        } catch (\Throwable $e) {
+            Log::warning('Failed to record AI usage event', ['error' => $e->getMessage()]);
         }
     }
 

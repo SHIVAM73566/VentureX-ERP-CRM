@@ -33,6 +33,21 @@ class Customer extends Model
         return $this->hasMany(Contact::class);
     }
 
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function salesOrders(): HasMany
+    {
+        return $this->hasMany(SalesOrder::class);
+    }
+
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class);
+    }
+
     public function opportunities(): HasMany
     {
         return $this->hasMany(Opportunity::class);
