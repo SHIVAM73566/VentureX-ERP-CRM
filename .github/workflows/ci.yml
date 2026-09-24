@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       DB_CONNECTION: sqlite
@@ -19,16 +19,16 @@ jobs:
       APP_DEBUG: "true"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup PHP 8.4
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          extensions: mbstring, xml, bcmath, pdo_sqlite, sqlite3, gd, fileinfo, intl, zip, curl
+          extensions: mbstring, xml, bcmath, pdo_sqlite, sqlite3, gd, fileinfo, intl, zip, curl, dom, simplexml
 
       - name: Setup Node 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '22'
           cache: 'npm'
@@ -41,7 +41,7 @@ jobs:
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -55,7 +55,7 @@ jobs:
         run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
 
       - name: Cache npm dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.npm-cache.outputs.dir }}
           key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
@@ -76,7 +76,7 @@ jobs:
       - name: Run test suite
         run: |
           set -o pipefail
-          vendor/bin/phpunit --no-coverage --colors=never --log-junit /tmp/junit.xml 2>&1 | tee /tmp/phpunit.log
+          php -d memory_limit=-1 vendor/bin/phpunit --no-coverage --colors=never --log-junit /tmp/junit.xml 2>&1 | tee /tmp/phpunit.log
 
       - name: Capture Laravel log on failure
         if: failure()
@@ -87,27 +87,4 @@ jobs:
 
       - name: Annotate failing tests
         if: failure()
-        run: |
-          php -r '
-            $file = "/tmp/junit.xml";
-            if (!is_file($file)) { fwrite(STDERR, "No JUnit XML found\n"); exit(0); }
-            $xml = new SimpleXMLElement(file_get_contents($file));
-            $count = 0;
-            foreach ($xml->testsuite as $suite) {
-              foreach ($suite->testcase as $tc) {
-                $fail = null;
-                foreach (["failure", "error"] as $tag) {
-                  if (isset($tc->$tag)) { $fail = $tc->$tag; break; }
-                }
-                if ($fail === null) { continue; }
-                $src = isset($tc->attributes()["file"]) ? (string) $tc->attributes()["file"] : "tests";
-                $line = isset($tc->attributes()["line"]) ? (string) $tc->attributes()["line"] : "1";
-                $name = isset($tc->attributes()["name"]) ? (string) $tc->attributes()["name"] : "test";
-                $msg = trim(preg_replace("/\s+/", " ", (string) $fail));
-                $short = mb_substr($msg, 0, 900);
-                echo "::error file={$src},line={$line}::{$name}: {$short}\n";
-                $count++;
-              }
-            }
-            echo "Annotated {$count} failing test(s)\n";
-          '
+        run: php .github/annotate-failures.php
