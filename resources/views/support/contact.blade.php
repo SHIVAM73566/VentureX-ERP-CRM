@@ -83,7 +83,8 @@
                     <div>
                         <h3 class="font-semibold text-ink-800">Email Us</h3>
                         <p class="mt-1 text-sm text-ink-500">General support & questions:</p>
-                        <p class="text-sm font-medium text-navy-600">support@venturexerp.com</p>
+                        <p class="text-sm font-medium text-navy-600">chaturvedishivam179@gmail.com</p>
+                        <p class="text-sm font-medium text-navy-600">ocoronews@gmail.com</p>
 
                     </div>
                 </div>

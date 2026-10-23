@@ -346,7 +346,7 @@ When API support is added:
 
 If you discover a security vulnerability:
 
-1. Email: security@venturexerp.com
+1. Email: chaturvedishivam179@gmail.com or ocoronews@gmail.com
 2. Include description and reproduction steps
 3. Allow reasonable time for response
 4. Do not publicly disclose until fix is available

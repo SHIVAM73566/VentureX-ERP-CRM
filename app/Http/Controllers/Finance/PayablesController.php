@@ -20,8 +20,10 @@ class PayablesController extends Controller
             ->whereRaw('total > paid_amount')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
-                $q->where('po_number', 'like', "%{$search}%")
-                    ->orWhereHas('supplier', fn ($s) => $s->where('name', 'like', "%{$search}%"));
+                $q->where(function ($inner) use ($search) {
+                    $inner->where('po_number', 'like', "%{$search}%")
+                        ->orWhereHas('supplier', fn ($s) => $s->where('name', 'like', "%{$search}%"));
+                });
             })
             ->orderBy('expected_date')
             ->paginate(15)

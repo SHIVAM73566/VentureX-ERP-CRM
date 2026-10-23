@@ -492,5 +492,5 @@ sudo systemctl status redis
 1. Check application logs: `storage/logs/laravel.log`
 2. Enable debug mode temporarily for detailed errors
 3. Search existing issues on GitHub
-4. Contact support: support@venturexerp.com
+4. Contact support: chaturvedishivam179@gmail.com or ocoronews@gmail.com
 5. Include error messages, logs, and environment details when reporting issues

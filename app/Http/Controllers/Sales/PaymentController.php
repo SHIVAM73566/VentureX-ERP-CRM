@@ -118,7 +118,10 @@ class PaymentController extends Controller
         return view('sales.payments.form', [
             'payment' => $payment,
             'customers' => Customer::ofCompany()->orderBy('name')->get(),
-            'invoices' => Invoice::ofCompany()->whereIn('status', ['sent', 'partial', 'overdue'])->orWhere('id', $payment->invoice_id)->orderByDesc('id')->get(),
+            'invoices' => Invoice::ofCompany()
+                ->where(fn ($q) => $q->whereIn('status', ['sent', 'partial', 'overdue'])
+                    ->orWhere('id', $payment->invoice_id))
+                ->orderByDesc('id')->get(),
         ]);
     }
 

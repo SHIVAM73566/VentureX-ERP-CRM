@@ -13,6 +13,7 @@ use App\Models\Contact;
 use App\Models\Container;
 use App\Models\Customer;
 use App\Models\Document;
+use App\Models\ErrorReport;
 use App\Models\ExportRequest;
 use App\Models\Invoice;
 use App\Models\JournalEntry;
@@ -44,6 +45,7 @@ use App\Policies\ContactPolicy;
 use App\Policies\ContainerPolicy;
 use App\Policies\CustomerPolicy;
 use App\Policies\DocumentPolicy;
+use App\Policies\ErrorReportPolicy;
 use App\Policies\ExportRequestPolicy;
 use App\Policies\InvoicePolicy;
 use App\Policies\JournalEntryPolicy;
@@ -122,5 +124,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ExportRequest::class, ExportRequestPolicy::class);
         Gate::policy(ApprovalRequest::class, ApprovalRequestPolicy::class);
         Gate::policy(SupportTicket::class, SupportTicketPolicy::class);
+        Gate::policy(ErrorReport::class, ErrorReportPolicy::class);
     }
 }

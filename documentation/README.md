@@ -147,7 +147,7 @@ Configure your preferred provider in Settings > AI Configuration.
 
 ## ðŸ†˜ Support
 
-- **Email:** support@venturexerp.com
+- **Email:** chaturvedishivam179@gmail.com, ocoronews@gmail.com
 - **Documentation:** This folder
 - **Video Tutorials:** Available on YouTube
 - **Community Forum:** [GitHub Discussions](https://github.com/SHIVAM73566/VentureX-ERP-CRM/discussions)

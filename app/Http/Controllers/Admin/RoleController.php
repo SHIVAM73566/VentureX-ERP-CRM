@@ -16,7 +16,7 @@ class RoleController extends Controller
     {
         $this->authorize('viewAny', Role::class);
 
-        return view('admin.roles.index', ['roles' => Role::withCount('permissions', 'users')->paginate(10)]);
+        return view('admin.roles.index', ['roles' => Role::withCount('permissions', 'users')->orderBy('name')->paginate(10)]);
     }
 
     public function create(): View

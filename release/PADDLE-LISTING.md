@@ -12,7 +12,7 @@ Paddle is Merchant of Record (like Lemon Squeezy) — they handle tax/VAT global
 Paddle reviews:
 - Business identity documents (ID/passport works for individuals)
 - Website/product page (your GitHub repo + Gumroad page both work)
-- Support process (email support@venturexerp.com)
+- Support process (email chaturvedishivam179@gmail.com / ocoronews@gmail.com)
 Verification takes 3-7 business days. You can build products while waiting.
 
 ## STEP 3: CREATE PRODUCT (Catalog → Products → New)
@@ -53,7 +53,7 @@ File: Upload C:\MY_ERP\release\VentureX-ERP-CRM-v1.0.0-Gumroad.zip as fulfillmen
 
 ## STEP 4: REFUND POLICY (paste into checkout settings)
 ```
-5-day money-back guarantee. If AI/API features were used, refunds are prorated by usage. Technical issues unresolved within 48 hours get a full refund. Contact support@venturexerp.com.
+5-day money-back guarantee. If AI/API features were used, refunds are prorated by usage. Technical issues unresolved within 48 hours get a full refund. Contact chaturvedishivam179@gmail.com / ocoronews@gmail.com.
 ```
 
 ## STEP 5: APPROVAL TIPS (High Acceptance Rate)

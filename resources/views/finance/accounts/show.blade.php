@@ -50,9 +50,14 @@
                     <tbody>
                         @forelse ($account->lines as $line)
                             <tr>
-                                <td><a href="{{ route('finance.journals.show', $line->journalEntry) }}" class="font-medium text-navy-600 hover:text-navy-500">{{ $line->journalEntry->entry_number }}</a></td>
-                                <td>{{ $line->journalEntry->date?->format('d M Y') }}</td>
-                                <td>{{ $line->description ?? $line->journalEntry->description ?? '—' }}</td>
+                                @if ($line->journalEntry)
+                                    <td><a href="{{ route('finance.journals.show', $line->journalEntry) }}" class="font-medium text-navy-600 hover:text-navy-500">{{ $line->journalEntry->entry_number }}</a></td>
+                                    <td>{{ $line->journalEntry->date?->format('d M Y') }}</td>
+                                @else
+                                    <td class="text-ink-400">Deleted entry</td>
+                                    <td class="text-ink-400">—</td>
+                                @endif
+                                <td>{{ $line->description ?? $line->journalEntry?->description ?? '—' }}</td>
                                 <td class="text-right text-emerald-600">{{ $line->debit > 0 ? number_format((float) $line->debit, 2) : '—' }}</td>
                                 <td class="text-right text-red-600">{{ $line->credit > 0 ? number_format((float) $line->credit, 2) : '—' }}</td>
                             </tr>

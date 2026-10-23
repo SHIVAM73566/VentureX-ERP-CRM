@@ -16,8 +16,10 @@ class PaymentController extends ApiController
             ->with('customer', 'invoice')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
-                $q->where('payment_number', 'like', "%{$search}%")
-                    ->orWhere('reference', 'like', "%{$search}%");
+                $q->where(function ($inner) use ($search) {
+                    $inner->where('payment_number', 'like', "%{$search}%")
+                        ->orWhere('reference', 'like', "%{$search}%");
+                });
             })
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
             ->latest();

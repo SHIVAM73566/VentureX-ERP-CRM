@@ -193,7 +193,7 @@ You cannot:
 
 SUPPORT
 
-- Email: support@venturexerp.com
+- Email: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 - Documentation included
 - Video tutorials included
 - GitHub Issues for bug reports

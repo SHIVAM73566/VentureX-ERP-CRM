@@ -45,3 +45,9 @@ storage/logs/*
 /release
 /storage/.installed
 .env.bak*
+
+# Local SQLite databases
+*.sqlite
+*.sqlite3
+/storage/*.sqlite*
+

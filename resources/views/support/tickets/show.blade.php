@@ -63,14 +63,14 @@
             <h3 class="text-sm font-bold text-ink-700">Conversation</h3>
 
             @forelse ($ticket->replies->filter(fn ($r) => !$r->is_internal) as $reply)
-                @php $isAdmin = $reply->user->hasRole('super_admin') || $reply->user->hasRole('admin'); @endphp
+                @php $isAdmin = $reply->user?->hasRole('super_admin') || $reply->user?->hasRole('admin'); @endphp
                 <div class="flex {{ $isAdmin ? 'justify-start' : 'justify-end' }}">
                     <div class="max-w-[80%] {{ $isAdmin ? 'bg-ink-100' : 'bg-navy-600 text-white' }} rounded-2xl px-5 py-3.5">
                         <div class="flex items-center gap-2">
                             @if ($isAdmin)
                                 <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy-600 text-[10px] font-bold text-white">S</div>
                             @endif
-                            <span class="text-xs font-semibold {{ $isAdmin ? 'text-ink-600' : 'text-navy-200' }}">{{ $reply->user->displayName() ?? 'Support' }}</span>
+                            <span class="text-xs font-semibold {{ $isAdmin ? 'text-ink-600' : 'text-navy-200' }}">{{ $reply->user?->displayName() ?? 'Support' }}</span>
                             <span class="text-xs {{ $isAdmin ? 'text-ink-400' : 'text-navy-300' }}">{{ $reply->created_at?->diffForHumans() ?? '' }}</span>
                         </div>
                         <p class="mt-2 text-sm {{ $isAdmin ? 'text-ink-700' : 'text-white' }}">{!! nl2br(e($reply->message)) !!}</p>

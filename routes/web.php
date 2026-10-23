@@ -384,6 +384,7 @@ Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/sec
     Route::get('/events', [SecurityController::class, 'events'])->name('events');
     Route::post('/lockdown', [SecurityController::class, 'lockdown'])->middleware('step_up')->name('lockdown');
     Route::post('/block-ip', [SecurityController::class, 'blockIp'])->name('block-ip');
+    Route::post('/unblock-ip', [SecurityController::class, 'unblockIp'])->name('unblock-ip');
 });
 
 // ============================================================

@@ -42,7 +42,7 @@
                         <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-ink-400">Create Purchase Order</h3>
                         <form method="POST" action="{{ route('procurement.rfqs.create-order', $rfq) }}" class="space-y-3">
                             @csrf
-                            <x-form.select label="Award Supplier" name="supplier_id" :options="$rfq->responses->mapWithKeys(fn ($r) => [$r->supplier_id => $r->supplier->name])" required />
+                            <x-form.select label="Award Supplier" name="supplier_id" :options="$rfq->responses->mapWithKeys(fn ($r) => [$r->supplier_id => $r->supplier?->name ?? 'Unknown supplier'])" required />
                             <x-form.input label="PO Number (optional)" name="po_number" placeholder="Leave blank to auto-generate" />
                             <button type="submit" class="btn-accent w-full">Award &amp; Create Order</button>
                         </form>

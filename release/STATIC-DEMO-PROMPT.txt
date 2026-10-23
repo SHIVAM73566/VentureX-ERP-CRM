@@ -51,7 +51,7 @@ Content:
 - "Remember me" checkbox
 - "Forgot password?" link (gray, right-aligned)
 - Primary button: "Sign In" (indigo gradient background, full width, rounded-lg)
-- Footer text: "Don't have an account? Contact support@venturexerp.com"
+- Footer text: "Don't have an account? Contact chaturvedishivam179@gmail.com / ocoronews@gmail.com"
 
 INTERACTION:
 - Default pre-filled: email = "demo_admin@example.com", password = "••••••••"

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToCompany;
+use App\Services\CompanyContext;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,8 +60,10 @@ class ErrorReport extends Model
         return $this->belongsTo(SupportTicket::class, 'ticket_id');
     }
 
-    public static function generateErrorHash(string $message, string $file = '', int $line = 0): string
+    public static function generateErrorHash(string $message, string $file = '', int $line = 0, ?int $companyId = null): string
     {
-        return hash('sha256', "{$message}:{$file}:{$line}");
+        $companyId ??= CompanyContext::id();
+
+        return hash('sha256', "{$companyId}:{$message}:{$file}:{$line}");
     }
 }

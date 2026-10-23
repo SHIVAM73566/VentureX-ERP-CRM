@@ -48,8 +48,11 @@ class ApiKeyVault extends Model
 
     /**
      * Retrieve decrypted key — only used in server-side code
+     *
+     * Named getApiKey() rather than getKey() because Eloquent's Model::getKey()
+     * is a non-static instance method and cannot be overridden by a static one.
      */
-    public static function getKey(string $name, ?int $companyId = null): ?string
+    public static function getApiKey(string $name, ?int $companyId = null): ?string
     {
         $vault = static::where('name', $name)
             ->where('company_id', $companyId ?? company_id())

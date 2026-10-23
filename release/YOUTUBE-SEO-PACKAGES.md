@@ -27,7 +27,7 @@ https://github.com/SHIVAM73566/VentureX-ERP-CRM
 What you get: 92 controllers, REST API, Docker files, WordPress plugin, 23 docs, video tutorials, web installer wizard. Laravel 13 + PHP 8.3.
 
 💬 Questions? Comment below — I reply to everyone.
-📧 support@venturexerp.com
+📧 chaturvedishivam179@gmail.com / ocoronews@gmail.com
 
 TAGS:
 erp software, crm software, ai copilot, laravel tutorial, business management software, erp demo, crm demo 2026, ai business tools, inventory management system, accounting software, php erp script, open source erp, saas alternative, sales pipeline, kanban crm, laravel project, ai for business, small business software, venturex, erp with ai

@@ -24,13 +24,13 @@ LICENSE
 Commercial license: unlimited domains, rebranding allowed, client projects allowed. Source code redistribution not permitted.
 
 SUPPORT
-support@venturexerp.com - documentation and video tutorials included.
+chaturvedishivam179@gmail.com / ocoronews@gmail.com - documentation and video tutorials included.
 
 PRICING TIERS
 Single $89.99 | Professional $150.22 | Enterprise $350.00 (code SAVE29 saves $29)
 
 REFUND POLICY (SHORT VERSION FOR ANY PLATFORM)
-5-Day Money-Back Guarantee. Full refund if AI features unused; refunds prorated by API usage when AI features were consumed. Technical issues unresolved within 48 hours always fully refunded. Products shared or redistributed are not refundable. Contact support@venturexerp.com.
+5-Day Money-Back Guarantee. Full refund if AI features unused; refunds prorated by API usage when AI features were consumed. Technical issues unresolved within 48 hours always fully refunded. Products shared or redistributed are not refundable. Contact chaturvedishivam179@gmail.com / ocoronews@gmail.com.
 
 TECH FACTS FOR DUE DILIGENCE
 - 339 PHPUnit tests passing, 464 assertions, 0 failures

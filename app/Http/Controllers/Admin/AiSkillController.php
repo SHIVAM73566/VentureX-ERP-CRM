@@ -18,8 +18,10 @@ class AiSkillController extends Controller
         $skills = AiSkill::ofCompany()
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('slug', 'like', "%{$search}%");
+                $q->where(function ($inner) use ($search) {
+                    $inner->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%");
+                });
             })
             ->orderBy('name')
             ->paginate(15)

@@ -772,7 +772,7 @@ When setting up your marketplace listing, take these screenshots from a running 
 
 ## Need Help?
 
-If you need installation help, contact us at **support@venturexerp.com**
+If you need installation help, contact us at **chaturvedishivam179@gmail.com** or **ocoronews@gmail.com**
 
 We also offer paid installation services for $49 — includes full server setup, database configuration, SSL, and optimization.
 

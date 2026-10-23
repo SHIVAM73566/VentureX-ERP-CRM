@@ -31,7 +31,7 @@ Two ways:
 
 REQUIREMENTS: PHP 8.3+, MySQL 5.7+, Apache/Nginx. Shared hosting works.
 
-FREE PRE-SALES SUPPORT: support@venturexerp.com
+FREE PRE-SALES SUPPORT: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 Installation help included - just reply here after purchase.
 
 Best regards,
@@ -45,4 +45,4 @@ Yes - $89 = complete full source code, fully open, no obfuscation.
 Login: upload files -> visit /yourdomain.com/install -> wizard creates
 your admin account in 5 minutes (shared hosting OK).
 Demo logins included: demo_admin@example.com / Demo_Admin_2026!
-Full docs + videos inside. Questions welcome: support@venturexerp.com
+Full docs + videos inside. Questions welcome: chaturvedishivam179@gmail.com / ocoronews@gmail.com

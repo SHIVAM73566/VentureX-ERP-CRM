@@ -58,6 +58,50 @@
         </div>
 
         <div class="card">
+            <h2 class="text-lg font-bold text-ink-900">Blocked IP addresses</h2>
+            <p class="mb-4 text-sm text-ink-500">Blocked IPs are rejected by the API protection middleware. Blocks expire automatically after 30 days.</p>
+
+            <form method="POST" action="{{ route('security.block-ip') }}" class="mb-5 flex flex-wrap items-end gap-3">
+                @csrf
+                <div>
+                    <label for="block-ip-address" class="mb-1 block text-sm text-ink-700">IP address</label>
+                    <input id="block-ip-address" name="ip" type="text" required placeholder="203.0.113.10" class="input max-w-xs">
+                </div>
+                <div>
+                    <label for="block-ip-reason" class="mb-1 block text-sm text-ink-700">Reason</label>
+                    <input id="block-ip-reason" name="reason" type="text" maxlength="255" placeholder="Brute force attempts" class="input max-w-md">
+                </div>
+                <button type="submit" class="btn-danger">Block IP</button>
+            </form>
+
+            <div class="divide-y divide-ink-100">
+                @forelse ($blockedIps as $blocked)
+                    <div class="flex items-center justify-between gap-3 py-2.5">
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-medium text-ink-800">{{ $blocked['ip'] }}</p>
+                            <p class="text-xs text-ink-400">
+                                {{ $blocked['reason'] ?? 'Manual block' }}
+                                @if (! empty($blocked['blocked_by_name']))
+                                    · by {{ $blocked['blocked_by_name'] }}
+                                @endif
+                                @if (! empty($blocked['expires_at']))
+                                    · expires {{ \Illuminate\Support\Carbon::parse($blocked['expires_at'])->diffForHumans() }}
+                                @endif
+                            </p>
+                        </div>
+                        <form method="POST" action="{{ route('security.unblock-ip') }}" onsubmit="return confirm('Unblock {{ $blocked['ip'] }}?')">
+                            @csrf
+                            <input type="hidden" name="ip" value="{{ $blocked['ip'] }}">
+                            <button type="submit" class="btn-secondary">Unblock</button>
+                        </form>
+                    </div>
+                @empty
+                    <p class="py-6 text-center text-sm text-ink-400">No IP addresses are currently blocked.</p>
+                @endforelse
+            </div>
+        </div>
+
+        <div class="card">
             <h2 class="mb-4 text-lg font-bold text-ink-900">Security checkpoints</h2>
             <div class="divide-y divide-ink-100">
                 @foreach ($score['checkpoints'] as $checkpoint)

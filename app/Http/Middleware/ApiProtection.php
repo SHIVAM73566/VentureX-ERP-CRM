@@ -109,21 +109,114 @@ class ApiProtection
      */
     private function isBlockedIp(string $ip): bool
     {
-        $blockedIps = cache()->get('blocked_ips', []);
+        return self::isIpBlocked($ip);
+    }
 
-        return in_array($ip, $blockedIps);
+    /**
+     * Determine whether an IP address is currently blocked.
+     *
+     * The per-IP entry is authoritative because it carries its own expiry.
+     * The legacy "blocked_ips" list is still honoured for backwards compatibility.
+     */
+    public static function isIpBlocked(string $ip): bool
+    {
+        if (cache()->has(self::blockedIpKey($ip))) {
+            return true;
+        }
+
+        return in_array($ip, cache()->get('blocked_ips', []), true);
     }
 
     /**
      * Block an IP address
      */
-    public static function blockIp(string $ip, int $minutes = 60): void
+    public static function blockIp(string $ip, int $minutes = 60, array $meta = []): void
     {
+        $expiresAt = now()->addMinutes($minutes);
+
+        cache()->put(self::blockedIpKey($ip), array_merge([
+            'ip' => $ip,
+            'reason' => 'Manual block',
+            'blocked_by' => null,
+            'blocked_at' => now()->toIso8601String(),
+            'expires_at' => $expiresAt->toIso8601String(),
+        ], $meta), $expiresAt);
+
         $blockedIps = cache()->get('blocked_ips', []);
-        if (! in_array($ip, $blockedIps)) {
+        if (! in_array($ip, $blockedIps, true)) {
             $blockedIps[] = $ip;
-            cache()->put('blocked_ips', $blockedIps, now()->addMinutes($minutes));
+            cache()->put('blocked_ips', $blockedIps, $expiresAt);
         }
+
+        self::registerBlockedIp(array_merge([
+            'ip' => $ip,
+            'reason' => 'Manual block',
+            'blocked_by' => null,
+            'blocked_at' => now()->toIso8601String(),
+            'expires_at' => $expiresAt->toIso8601String(),
+        ], $meta));
+    }
+
+    /**
+     * Release an IP address block.
+     */
+    public static function unblockIp(string $ip): void
+    {
+        cache()->forget(self::blockedIpKey($ip));
+
+        $blockedIps = array_values(array_filter(
+            cache()->get('blocked_ips', []),
+            fn ($blocked) => $blocked !== $ip
+        ));
+        cache()->put('blocked_ips', $blockedIps, now()->addDays(365));
+
+        $registry = cache()->get(self::blockedIpRegistryKey(), []);
+        unset($registry[$ip]);
+        cache()->forever(self::blockedIpRegistryKey(), $registry);
+    }
+
+    /**
+     * List every IP address that is currently blocked, newest first.
+     */
+    public static function blockedIps(): array
+    {
+        $registry = cache()->get(self::blockedIpRegistryKey(), []);
+        $active = [];
+
+        foreach ($registry as $ip => $entry) {
+            if (! cache()->has(self::blockedIpKey($ip))) {
+                unset($registry[$ip]);
+
+                continue;
+            }
+
+            $active[] = $entry;
+        }
+
+        if (count($registry) !== count(cache()->get(self::blockedIpRegistryKey(), []))) {
+            cache()->forever(self::blockedIpRegistryKey(), $registry);
+        }
+
+        usort($active, fn ($a, $b) => strcmp($b['blocked_at'] ?? '', $a['blocked_at'] ?? ''));
+
+        return $active;
+    }
+
+    protected static function blockedIpKey(string $ip): string
+    {
+        return 'security:blocked_ip:'.$ip;
+    }
+
+    protected static function blockedIpRegistryKey(): string
+    {
+        return 'security:blocked_ips';
+    }
+
+    protected static function registerBlockedIp(array $entry): void
+    {
+        $registry = cache()->get(self::blockedIpRegistryKey(), []);
+        $registry[$entry['ip']] = $entry;
+        cache()->forever(self::blockedIpRegistryKey(), $registry);
     }
 
     /**

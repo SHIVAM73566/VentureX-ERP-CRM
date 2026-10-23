@@ -50,6 +50,7 @@ class AdminControlCenter extends Controller
             ->when($request->filled('q'), function ($query) use ($request) {
                 $query->where('name', 'like', '%'.$request->query('q').'%');
             })
+            ->orderBy('name')
             ->paginate(15)
             ->withQueryString();
 

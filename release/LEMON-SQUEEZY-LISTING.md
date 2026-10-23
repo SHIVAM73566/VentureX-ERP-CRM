@@ -346,7 +346,7 @@ You cannot:
 # SECTION 17: SUPPORT INFORMATION
 # ============================================================
 
-Email: support@venturexerp.com
+Email: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 Documentation: Included in /documentation/ folder
 GitHub Issues: https://github.com/SHIVAM73566/VentureX-ERP-CRM/issues
 Response Time: Within 24 hours

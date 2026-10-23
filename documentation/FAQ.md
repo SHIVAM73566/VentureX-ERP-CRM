@@ -169,4 +169,4 @@ Enable OPcache in PHP, configure Redis for caching and sessions, run `php artisa
 - Review [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues
 - Check the project's GitHub Issues page for known bugs
 - Contact your system administrator
-- Email support at support@venturexerp.com
+- Email support at chaturvedishivam179@gmail.com or ocoronews@gmail.com

@@ -97,7 +97,7 @@ VentureX ERP & CRM comes with a 5-day money-back guarantee.
 - Refunds prorated by API usage when AI features consumed.
 - Technical issues unresolved within 48 hours: always fully refunded.
 - Products redistributed or shared are not refundable.
-Requests: support@venturexerp.com
+Requests: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 ```
 Link it in footer + checkout page.
 

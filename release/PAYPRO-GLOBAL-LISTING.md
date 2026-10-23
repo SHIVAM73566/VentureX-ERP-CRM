@@ -8,7 +8,7 @@
 ## STEP 2: APPROVAL CHECKLIST
 PayPro Global reviews:
 - Product ownership (link GitHub repo + Gumroad live page as proof)
-- Support readiness (support@venturexerp.com)
+- Support readiness (chaturvedishivam179@gmail.com / ocoronews@gmail.com)
 - Refund policy defined (below)
 Approval: usually 1-3 business days.
 
@@ -42,7 +42,7 @@ REQUIREMENTS: PHP 8.3+, MySQL 5.7+ (or MariaDB 10.6+), Apache or Nginx.
 
 LICENSE: Commercial license - unlimited domains, rebranding allowed, client projects allowed. Redistribution of source code not permitted.
 
-SUPPORT: support@venturexerp.com
+SUPPORT: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 ```
 
 ### _ Pricing
@@ -63,7 +63,7 @@ Download attempts limit: 5 | Link expiry: 30 days
 
 ## STEP 4: REFUND POLICY (paste in product settings)
 ```
-5-Day Money-Back Guarantee. Full refund if AI features were not used; refunds prorated according to API usage when AI features were consumed. Technical issues we cannot resolve within 48 hours are always fully refunded. Contact: support@venturexerp.com
+5-Day Money-Back Guarantee. Full refund if AI features were not used; refunds prorated according to API usage when AI features were consumed. Technical issues we cannot resolve within 48 hours are always fully refunded. Contact: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 ```
 
 ## CATEGORY & ATTRIBUTES

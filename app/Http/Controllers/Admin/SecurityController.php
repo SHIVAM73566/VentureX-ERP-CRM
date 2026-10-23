@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\ApiProtection;
 use App\Models\SecurityEvent;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
@@ -38,6 +39,7 @@ class SecurityController extends Controller
             'alerts' => $alerts,
             'lockdown' => SecurityStateService::lockdownEnabled(),
             'recentEvents' => $recentEvents,
+            'blockedIps' => ApiProtection::blockedIps(),
         ]);
     }
 
@@ -68,14 +70,15 @@ class SecurityController extends Controller
             'reason' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $cacheKey = 'security:blocked_ip:'.$data['ip'];
-        cache()->put($cacheKey, [
-            'blocked_by' => auth()->id(),
-            'reason' => $data['reason'] ?? 'Manual block',
-            'blocked_at' => now()->toIso8601String(),
-        ], now()->addDays(30));
+        $reason = $data['reason'] ?? 'Manual block';
 
-        AuditLogger::log('ip_blocked', 'security', null, null, ['ip' => $data['ip'], 'reason' => $data['reason']]);
+        ApiProtection::blockIp($data['ip'], 60 * 24 * 30, [
+            'reason' => $reason,
+            'blocked_by' => auth()->id(),
+            'blocked_by_name' => auth()->user()?->name,
+        ]);
+
+        AuditLogger::log('ip_blocked', 'security', null, null, ['ip' => $data['ip'], 'reason' => $reason]);
         SecurityEventService::record(
             'security',
             'ip_blocked',
@@ -83,10 +86,34 @@ class SecurityController extends Controller
             'high',
             null,
             null,
-            ['ip' => $data['ip'], 'reason' => $data['reason']]
+            ['ip' => $data['ip'], 'reason' => $reason]
         );
 
         return back()->with('success', "IP {$data['ip']} has been blocked for 30 days.");
+    }
+
+    public function unblockIp(Request $request): RedirectResponse
+    {
+        $this->authorize('configure');
+
+        $data = $request->validate([
+            'ip' => ['required', 'ip'],
+        ]);
+
+        ApiProtection::unblockIp($data['ip']);
+
+        AuditLogger::log('ip_unblocked', 'security', null, null, ['ip' => $data['ip']]);
+        SecurityEventService::record(
+            'security',
+            'ip_unblocked',
+            "IP {$data['ip']} unblocked by ".auth()->user()->name,
+            'medium',
+            null,
+            null,
+            ['ip' => $data['ip']]
+        );
+
+        return back()->with('success', "IP {$data['ip']} has been unblocked.");
     }
 
     public function lockdown(Request $request): RedirectResponse

@@ -55,7 +55,7 @@ REQUIREMENTS
 A VentureX license (one-time purchase) running on your own server. Free 5-day trial of the full ERP included with every license.
 
 SUPPORT
-Email support@venturexerp.com - we respond within 12 hours.
+Email chaturvedishivam179@gmail.com / ocoronews@gmail.com - we respond within 12 hours.
 ```
 
 ### _ Screenshots required by Shopify (1600x900 px each, min 3)
@@ -88,6 +88,6 @@ Secondary: Inventory and syncing
 ## PHASE 3: APPROVAL REQUIREMENTS (Shopify strict checklist)
 1. GDPR webhooks mandatory: customers/data_request, customers/redact, shop/redact - implement before submit
 2. App must work on test store end-to-end (they test install->use->uninstall)
-3. Support link must be live (support@venturexerp.com + docs URL)
+3. Support link must be live (chaturvedishivam179@gmail.com / ocoronews@gmail.com + docs URL)
 4. No upsells inside admin without clear labeling
 5. Review time: 5-10 business days; common rejections are broken uninstall and missing GDPR hooks - double-check those

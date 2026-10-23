@@ -97,7 +97,7 @@ class HelpCenterController extends Controller
         $validated['first_seen_at'] = now();
         $validated['last_seen_at'] = now();
 
-        $existing = ErrorReport::where('error_hash', $validated['error_hash'])->first();
+        $existing = ErrorReport::ofCompany()->where('error_hash', $validated['error_hash'])->first();
 
         if ($existing) {
             $existing->update([

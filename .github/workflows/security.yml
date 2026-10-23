@@ -1,0 +1,50 @@
+name: Security Audit
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Every Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Dependency & secret audit
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, bcmath, pdo_sqlite, sqlite3, gd, fileinfo, intl, zip, curl, dom, simplexml
+
+      - name: Install PHP dependencies
+        run: composer install --no-progress --no-interaction --prefer-dist
+
+      - name: Audit Composer dependencies
+        # Findings are reported in the job log. Kept non-blocking so a newly
+        # disclosed advisory in a transitive dependency does not turn the
+        # default branch red without a code change.
+        continue-on-error: true
+        run: composer audit --locked --format=summary
+
+      - name: Scan tracked files for committed secrets
+        continue-on-error: true
+        run: |
+          echo "Scanning for common secret patterns in tracked files..."
+          if git grep -nIE '(AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|sk-[A-Za-z0-9]{32,}|ghp_[A-Za-z0-9]{36}|xox[baprs]-[A-Za-z0-9-]{10,})' -- \
+              ':!*.md' ':!*.lock' ':!vendor' ':!node_modules' ':!public/build'; then
+            echo "::warning::Potential secret patterns found in tracked files (review the output above)."
+          else
+            echo "No obvious secret patterns found."
+          fi
+
+      - name: Verify composer.json is valid
+        run: composer validate --no-check-publish

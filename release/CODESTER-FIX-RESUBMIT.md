@@ -93,7 +93,7 @@ Please re-review the item. Happy to adjust anything else needed.
 
 Best regards,
 Shivam
-support@venturexerp.com
+chaturvedishivam179@gmail.com / ocoronews@gmail.com
 
 =====================================================
 STEP 5 — RESUBMIT CHECKLIST (tick before submitting)

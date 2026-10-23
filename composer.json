@@ -4,7 +4,7 @@
     "type": "project",
     "description": "VentureX ERP & CRM - AI-Powered CRM & ERP Business Operating System with multi-tenant architecture, real-time analytics, and intelligent automation.",
     "keywords": ["erp", "crm", "ai", "business-operations", "laravel", "management-system"],
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "Shivam Chaturvedi",

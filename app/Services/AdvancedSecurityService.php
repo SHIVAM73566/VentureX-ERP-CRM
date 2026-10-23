@@ -42,7 +42,7 @@ class AdvancedSecurityService
      */
     public static function getApiKey(string $name): ?string
     {
-        return ApiKeyVault::getKey($name);
+        return ApiKeyVault::getApiKey($name);
     }
 
     /**

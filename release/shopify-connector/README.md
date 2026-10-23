@@ -77,7 +77,7 @@ Icon:      1200x1200 px square crop of VentureX logo on indigo gradient
 Screens:   1600x900 px each, minimum 3 (use screenshots from
            C:/MY_ERP/screenshots/Product demo/, resized)
 Listing text: copy from SHOPIFY-APP-STORE-LISTING.md
-Support:   support@venturexerp.com  (must answer during review window)
+Support:   chaturvedishivam179@gmail.com / ocoronews@gmail.com  (must answer during review window)
 Privacy:   host a simple privacy policy page (Blogger page works)
 
 =====================================================

@@ -78,7 +78,7 @@ class UserController extends Controller
 
         // SECURITY: Only super_admin can assign super_admin role
         if (! $isSuper) {
-            $superAdminRole = \App\Models\Role::where('name', 'super_admin')->first();
+            $superAdminRole = Role::where('name', 'super_admin')->first();
             if ($superAdminRole && in_array($superAdminRole->id, $data['roles'])) {
                 abort(403, 'Only super administrators can assign the super_admin role.');
             }
@@ -155,7 +155,7 @@ class UserController extends Controller
             $user->syncRoles($data['roles']);
         } else {
             // Non-super_admin: only sync non-privileged roles
-            $superAdminRoleId = \App\Models\Role::where('name', 'super_admin')->first()?->id;
+            $superAdminRoleId = Role::where('name', 'super_admin')->first()?->id;
             $safeRoles = array_filter($data['roles'], fn ($id) => $id != $superAdminRoleId);
             $user->syncRoles($safeRoles);
         }

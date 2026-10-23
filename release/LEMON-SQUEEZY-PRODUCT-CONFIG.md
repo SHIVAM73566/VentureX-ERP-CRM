@@ -52,7 +52,7 @@ Your purchase includes the complete source code with a Commercial License. You c
 No activation needed. Download, extract, and start using immediately.
 
 License Type: Commercial (Lifetime)
-Support: support@venturexerp.com
+Support: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 Documentation: Included in /documentation/ folder
 
 
@@ -88,7 +88,7 @@ Your purchase is complete. Here's what to do next:
 
 The 6-step installation wizard will guide you through the rest.
 
-Need help? Email support@venturexerp.com or check the included documentation.
+Need help? Email chaturvedishivam179@gmail.com / ocoronews@gmail.com or check the included documentation.
 
 ## Button Text:
 Download Now
@@ -198,7 +198,7 @@ NEED HELP?
 -----------
 
 Documentation: Included in /documentation/ folder
-Email: support@venturexerp.com
+Email: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 GitHub: https://github.com/SHIVAM73566/VentureX-ERP-CRM/issues
 
 Response time: Within 24 hours
@@ -211,7 +211,7 @@ Build better businesses.
 
 — The VentureX Team
 
-support@venturexerp.com
+chaturvedishivam179@gmail.com / ocoronews@gmail.com
 
 ---
 

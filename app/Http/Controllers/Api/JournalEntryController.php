@@ -16,8 +16,10 @@ class JournalEntryController extends ApiController
             ->with('lines')
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
-                $q->where('entry_number', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
+                $q->where(function ($inner) use ($search) {
+                    $inner->where('entry_number', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
             })
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
             ->latest();

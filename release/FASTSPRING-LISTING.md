@@ -39,7 +39,7 @@ Install in 5 minutes via web installer wizard - no command line needed.
 
 Commercial license: unlimited domains, rebranding allowed, client projects allowed.
 Requirements: PHP 8.3+, MySQL 5.7+, Apache/Nginx. Optional: Node.js 20+ for assets.
-Support: support@venturexerp.com
+Support: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 ```
 
 ### _ Pricing
@@ -71,7 +71,7 @@ Main: Dashboard of desktop.png
 5-Day Money-Back Guarantee.
 Full refund if AI features unused; prorated by API usage otherwise.
 Unresolvable technical issues refunded fully within 48h commitment.
-Email: support@venturexerp.com
+Email: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 ```
 
 ## CATEGORY & ATTRIBUTES

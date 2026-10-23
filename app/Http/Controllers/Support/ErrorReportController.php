@@ -55,7 +55,7 @@ class ErrorReportController extends Controller
             $sanitized['line'] ?? 0
         );
 
-        $existing = ErrorReport::where('error_hash', $errorHash)->first();
+        $existing = ErrorReport::ofCompany()->where('error_hash', $errorHash)->first();
 
         if ($existing) {
             $existing->update([

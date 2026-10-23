@@ -17,7 +17,7 @@ class CompanyController extends Controller
     {
         $this->authorize('viewAny', Company::class);
 
-        return view('admin.companies.index', ['companies' => Company::withCount('users')->paginate(10)]);
+        return view('admin.companies.index', ['companies' => Company::withCount('users')->orderBy('name')->paginate(10)]);
     }
 
     public function create(): View

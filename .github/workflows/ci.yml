@@ -74,6 +74,12 @@ jobs:
       - name: Generate application key
         run: php artisan key:generate --force
 
+      - name: Check code style (Pint)
+        run: vendor/bin/pint --test
+
+      - name: Boot the application and verify routes
+        run: php artisan route:list --json > /dev/null
+
       - name: Run test suite
         run: |
           set -o pipefail

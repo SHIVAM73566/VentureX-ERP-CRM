@@ -154,11 +154,11 @@ VentureX ERP & CRM/
 
 ## License
 
-This project is licensed under a Commercial License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 
-- Email: support@venturexerp.com
+- Email: chaturvedishivam179@gmail.com, ocoronews@gmail.com
 - Documentation: /documentation/
 - Issues: GitHub Issues
 

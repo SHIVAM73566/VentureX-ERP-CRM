@@ -19,8 +19,10 @@ class ReceivablesController extends Controller
             ->whereNotIn('status', ['paid', 'cancelled'])
             ->when($request->filled('q'), function ($q) use ($request) {
                 $search = $request->string('q');
-                $q->whereHas('customer', fn ($c) => $c->where('name', 'like', "%{$search}%"))
-                    ->orWhere('invoice_number', 'like', "%{$search}%");
+                $q->where(function ($inner) use ($search) {
+                    $inner->whereHas('customer', fn ($c) => $c->where('name', 'like', "%{$search}%"))
+                        ->orWhere('invoice_number', 'like', "%{$search}%");
+                });
             })
             ->when($request->filled('aging'), function ($q) use ($request) {
                 $days = (int) $request->string('aging');
