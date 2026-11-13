@@ -43,7 +43,7 @@
     <div class="flex items-start justify-between">
         <div>
             <p class="text-xs font-semibold uppercase tracking-wide text-ink-400 dark:text-ink-500">{{ $label }}</p>
-            <p class="mt-1.5 text-2xl font-bold text-ink-900 dark:text-ink-50">{{ $value }}</p>
+            <p class="mt-1.5 truncate text-2xl font-bold tabular-nums text-ink-900 dark:text-ink-50" title="{{ $value }}">{{ $value }}</p>
             @if ($sub)
                 <p class="mt-0.5 text-xs text-ink-400 dark:text-ink-500">{{ $sub }}</p>
             @endif

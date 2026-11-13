@@ -23,19 +23,19 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                 <p class="text-sm text-gray-500 dark:text-gray-400">Total Requests (7d)</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ number_format($usageStats['requests']) }}</p>
+                <p class="truncate text-2xl font-bold tabular-nums text-gray-900 dark:text-white" title="{{ number_format($usageStats['requests']) }}">{{ number_format($usageStats['requests']) }}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                 <p class="text-sm text-gray-500 dark:text-gray-400">Cache Hit Rate</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $usageStats['cache_hit_rate'] }}%</p>
+                <p class="truncate text-2xl font-bold tabular-nums text-gray-900 dark:text-white">{{ $usageStats['cache_hit_rate'] }}%</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                 <p class="text-sm text-gray-500 dark:text-gray-400">API Calls (7d)</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ number_format($usageStats['api_calls']) }}</p>
+                <p class="truncate text-2xl font-bold tabular-nums text-gray-900 dark:text-white" title="{{ number_format($usageStats['api_calls']) }}">{{ number_format($usageStats['api_calls']) }}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
                 <p class="text-sm text-gray-500 dark:text-gray-400">Estimated Cost</p>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">${{ number_format($usageStats['estimated_cost'], 2) }}</p>
+                <p class="truncate text-2xl font-bold tabular-nums text-gray-900 dark:text-white" title="${{ number_format($usageStats['estimated_cost'], 2) }}">${{ number_format($usageStats['estimated_cost'], 2) }}</p>
             </div>
         </div>
 
@@ -46,35 +46,35 @@
                 <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Role Quotas</h2>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-50 dark:bg-gray-900">
+                        <thead class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Daily Limit</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Weekly Limit</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase sm:px-6">Role</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase sm:px-6">Daily Limit</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase sm:px-6">Weekly Limit</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase sm:px-6">Status</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach($quotas as $role => $quota)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                    <td class="px-4 py-4 text-sm font-medium text-gray-900 dark:text-white whitespace-nowrap sm:px-6">
                                         {{ ucwords(str_replace('_', ' ', $role)) }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 py-4 sm:px-6">
                                         <input type="number" name="quotas[{{ $role }}][daily]"
                                                value="{{ $quota['daily'] }}"
                                                min="0" max="9999"
-                                               class="w-24 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                               class="w-20 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm tabular-nums focus:border-blue-500 focus:ring-blue-500 sm:w-24 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 py-4 sm:px-6">
                                         <input type="number" name="quotas[{{ $role }}][weekly]"
                                                value="{{ $quota['weekly'] }}"
                                                min="0" max="9999"
-                                               class="w-24 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                               class="w-20 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm tabular-nums focus:border-blue-500 focus:ring-blue-500 sm:w-24 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                                     </td>
-                                    <td class="px-6 py-4 text-sm">
+                                    <td class="whitespace-nowrap px-4 py-4 text-sm sm:px-6">
                                         @if($quota['overridden'])
                                             <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                                 Custom

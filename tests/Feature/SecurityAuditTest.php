@@ -630,7 +630,7 @@ class SecurityAuditTest extends TestCase
 
     public function test_two_factor_middleware_exists(): void
     {
-        $middleware = new EnsureTwoFactor;
+        $middleware = $this->app->make(EnsureTwoFactor::class);
         $this->assertNotNull($middleware);
     }
 

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             AiSkillSeeder::class,
             ComprehensiveDemoSeeder::class,
             DemoCredentialSeeder::class,
+            RagPipelineSeeder::class,
         ]);
     }
 }

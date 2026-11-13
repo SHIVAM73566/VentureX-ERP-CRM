@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PurchaseOrderController;
 use App\Http\Controllers\Api\QuotationController;
+use App\Http\Controllers\Api\RagController;
 use App\Http\Controllers\Api\SalesOrderController;
 use App\Http\Controllers\Api\StockMovementController;
 use App\Http\Controllers\Api\SupplierController;
@@ -81,6 +82,14 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->name('api.')->group(functio
         Route::get('/conversations/{conversation}', [AiController::class, 'showConversation'])->name('conversations.show');
         Route::post('/conversations/{conversation}/messages', [AiController::class, 'sendMessage'])->name('conversations.messages');
         Route::get('/insights', [AiController::class, 'insights'])->name('insights');
+
+        // Enterprise RAG pipelines (80 modular retrieval pipelines).
+        Route::prefix('rag')->name('rag.')->group(function () {
+            Route::get('/pipelines', [RagController::class, 'pipelines'])->name('pipelines');
+            Route::get('/stats', [RagController::class, 'stats'])->name('stats');
+            Route::post('/query', [RagController::class, 'query'])->name('query');
+            Route::post('/sync', [RagController::class, 'sync'])->name('sync');
+        });
     });
 
     // ─── Support ───────────────────────────────────────────────────────

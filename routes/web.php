@@ -23,6 +23,7 @@ use App\Http\Controllers\Ai\CopilotController;
 use App\Http\Controllers\Ai\DeepAnalysisController;
 use App\Http\Controllers\Ai\ExecutiveController;
 use App\Http\Controllers\Ai\ProcurementAiController;
+use App\Http\Controllers\Ai\RagController;
 use App\Http\Controllers\Ai\SupportAssistantController;
 use App\Http\Controllers\Auth\DataDeletionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -350,6 +351,12 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
 
     Route::get('ai/copilot', [CopilotController::class, 'index'])->name('ai.copilot');
     Route::post('ai/copilot', [CopilotController::class, 'ask'])->middleware('throttle:ai')->name('ai.copilot.ask');
+
+    // Enterprise RAG pipelines (80 modular retrieval pipelines).
+    Route::get('ai/rag', [RagController::class, 'index'])->name('ai.rag');
+    Route::post('ai/rag/query', [RagController::class, 'query'])->middleware('throttle:ai')->name('ai.rag.query');
+    Route::post('ai/rag/sync', [RagController::class, 'sync'])->middleware('throttle:ai')->name('ai.rag.sync');
+    Route::get('ai/rag/{pipeline}', [RagController::class, 'pipeline'])->name('ai.rag.pipeline');
 
     Route::get('ai/usage', [AiUsageController::class, 'index'])->name('ai.usage');
     Route::get('ai/quota', [AiUsageController::class, 'quota'])->name('ai.quota');

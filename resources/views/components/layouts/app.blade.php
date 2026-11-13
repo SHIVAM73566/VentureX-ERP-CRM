@@ -55,6 +55,7 @@
         'AI Center' => [
             ['label' => 'AI Assistant', 'icon' => 'spark', 'route' => 'ai.assistant', 'active' => request()->routeIs('ai.assistant')],
             ['label' => 'Business Copilot', 'icon' => 'cpu', 'route' => 'ai.copilot', 'active' => request()->routeIs('ai.copilot'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
+            ['label' => 'Enterprise RAG', 'icon' => 'layers', 'route' => 'ai.rag', 'active' => request()->routeIs('ai.rag*'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
             ['label' => 'AI Insights', 'icon' => 'bolt', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage*')],
             ['label' => 'AI Usage', 'icon' => 'chart', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
             ['label' => 'AI Skills', 'icon' => 'cpu', 'route' => 'admin.ai-skills.index', 'active' => request()->routeIs('admin.ai-skills.*')],

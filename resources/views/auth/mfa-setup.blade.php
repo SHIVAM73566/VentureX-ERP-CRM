@@ -13,6 +13,10 @@
         <div class="w-full max-w-xl overflow-hidden rounded-2xl border border-ink-200 bg-white p-8 shadow-xl sm:p-10">
             <h1 class="text-lg font-bold text-ink-900">Two-Factor Authentication</h1>
 
+            @if (session('error'))
+                <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">{{ session('error') }}</div>
+            @endif
+
             @if ($enabled)
                 <p class="mt-2 text-sm text-ink-500">Two-factor authentication is <span class="font-semibold text-emerald-600">enabled</span> on your account.</p>
                 <form method="POST" action="{{ route('mfa.verify') }}" class="mt-6">

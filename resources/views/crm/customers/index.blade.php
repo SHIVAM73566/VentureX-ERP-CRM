@@ -23,14 +23,14 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead>
                     <tr>
                         <th>Customer</th>
                         <th>Contact</th>
-                        <th>Contacts</th>
-                        <th>Opportunities</th>
+                        <th class="text-right">Contacts</th>
+                        <th class="text-right">Opportunities</th>
                         <th>Status</th>
                         <th></th>
                     </tr>
@@ -39,12 +39,12 @@
                     @forelse ($customers as $customer)
                         <tr>
                             <td>
-                                <p class="font-semibold text-ink-800 dark:text-ink-100">{{ $customer->name }}</p>
+                                <p class="max-w-[16rem] truncate font-semibold text-ink-800 dark:text-ink-100" title="{{ $customer->name }}">{{ $customer->name }}</p>
                                 <p class="text-xs text-ink-400 dark:text-ink-500">{{ $customer->tax_id ? 'VAT: '.$customer->tax_id : '—' }}</p>
                             </td>
-                            <td class="text-sm text-ink-600 dark:text-ink-400">{{ $customer->email ?? $customer->phone ?? '—' }}</td>
-                            <td>{{ $customer->contacts_count }}</td>
-                            <td>{{ $customer->opportunities_count }}</td>
+                            <td class="cell-truncate text-sm text-ink-600 dark:text-ink-400" title="{{ $customer->email ?? $customer->phone }}">{{ $customer->email ?? $customer->phone ?? '—' }}</td>
+                            <td class="num">{{ $customer->contacts_count }}</td>
+                            <td class="num">{{ $customer->opportunities_count }}</td>
                             <td>
                                 <span class="{{ $customer->status === 'active' ? 'badge-green' : 'badge-gray' }}">{{ ucfirst($customer->status) }}</span>
                             </td>

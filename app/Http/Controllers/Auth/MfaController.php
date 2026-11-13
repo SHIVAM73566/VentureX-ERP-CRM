@@ -19,6 +19,18 @@ class MfaController extends Controller
     {
         $user = $request->user();
 
+        // If an enrolment exists but its secret cannot be decrypted (for
+        // example after an APP_KEY rotation) reset it so the user can enrol
+        // again instead of being stuck on a verification screen forever.
+        if ($user->hasMfa() && $this->totp->secretFor($user) === null) {
+            $this->totp->disable($user);
+            $request->session()->forget(['two_factor_verified_at', 'mfa_setup_secret']);
+
+            AuditLogger::log('mfa_secret_reset', 'auth', $user, null, [
+                'reason' => 'stored_secret_undecryptable',
+            ]);
+        }
+
         if ($user->hasMfa()) {
             return view('auth.mfa-setup', [
                 'enabled' => true,
@@ -83,6 +95,20 @@ class MfaController extends Controller
     {
         $user = $request->user();
 
+        // Broken enrolment: reset and let the user enrol again.
+        if ($user->hasMfa() && $this->totp->secretFor($user) === null) {
+            $this->totp->disable($user);
+            $request->session()->forget('two_factor_verified_at');
+
+            AuditLogger::log('mfa_secret_reset', 'auth', $user, null, [
+                'reason' => 'stored_secret_undecryptable',
+            ]);
+
+            return $user->hasMandatoryMfaRole()
+                ? redirect()->route('mfa.setup')->with('error', 'Your authenticator enrolment was reset. Please enrol again.')
+                : redirect()->intended(route('dashboard'));
+        }
+
         if ($user->hasMfa() && $request->session()->get('two_factor_verified_at')) {
             return redirect()->route('dashboard');
         }
@@ -107,10 +133,28 @@ class MfaController extends Controller
         $code = trim((string) $request->string('code'));
         $secret = $this->totp->secretFor($user);
 
-        $valid = $secret && $this->totp->verify($code, $secret);
+        $valid = $secret !== null && $this->totp->verify($code, $secret);
+
+        // Recovery codes remain valid even if the TOTP secret is corrupt.
         $valid = $valid || $this->totp->consumeRecoveryCode($user, $code);
 
         if (! $valid) {
+            if ($secret === null) {
+                // Nothing can ever verify against an undecryptable secret.
+                // Reset safely so the account is not permanently locked out.
+                $this->totp->disable($user);
+                $request->session()->forget('two_factor_verified_at');
+
+                AuditLogger::log('mfa_secret_reset', 'auth', $user, null, [
+                    'reason' => 'stored_secret_undecryptable',
+                ]);
+
+                return redirect()->route('mfa.setup')->with(
+                    'error',
+                    'Your authenticator enrolment could not be verified and was reset. Please enrol again.',
+                );
+            }
+
             AuditLogger::log('mfa_failed', 'auth');
             SecurityEventService::record('auth', 'mfa_failed', 'Invalid MFA code entered', 'medium', $user);
 

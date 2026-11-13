@@ -30,18 +30,18 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
-                <thead><tr><th>Invoice</th><th>Customer</th><th>Issue Date</th><th>Due Date</th><th>Total</th><th>Outstanding</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Invoice</th><th>Customer</th><th>Issue Date</th><th>Due Date</th><th class="text-right">Total</th><th class="text-right">Outstanding</th><th>Status</th><th></th></tr></thead>
                 <tbody>
                     @forelse ($invoices as $invoice)
                         <tr>
                             <td><p class="font-semibold text-ink-800 dark:text-ink-100">{{ $invoice->invoice_number }}</p><p class="text-xs text-ink-400 dark:text-ink-500">{{ $invoice->created_at?->format('d M Y') }}</p></td>
-                            <td>{{ $invoice->customer?->name ?? '—' }}</td>
+                            <td class="cell-truncate" title="{{ $invoice->customer?->name }}">{{ $invoice->customer?->name ?? '—' }}</td>
                             <td>{{ $invoice->issue_date?->format('d M Y') }}</td>
                             <td>{{ $invoice->due_date?->format('d M Y') ?? '—' }}</td>
-                            <td>{{ number_format((float) $invoice->total, 2) }}</td>
-                            <td class="font-semibold {{ (float) $invoice->outstandingBalance() > 0 ? 'text-red-600' : 'text-emerald-600' }}">{{ number_format((float) $invoice->outstandingBalance(), 2) }}</td>
+                            <td class="num">{{ number_format((float) $invoice->total, 2) }}</td>
+                            <td class="num font-semibold {{ (float) $invoice->outstandingBalance() > 0 ? 'text-red-600' : 'text-emerald-600' }}">{{ number_format((float) $invoice->outstandingBalance(), 2) }}</td>
                             <td>
                                 @php $c = ['draft' => 'gray', 'sent' => 'amber', 'partial' => 'violet', 'paid' => 'green', 'overdue' => 'red', 'cancelled' => 'gray']; @endphp
                                 <span class="badge-{{ $c[$invoice->status] ?? 'gray' }}">{{ \App\Models\Invoice::STATUSES[$invoice->status] ?? $invoice->status }}</span>

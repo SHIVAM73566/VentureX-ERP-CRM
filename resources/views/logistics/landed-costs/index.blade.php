@@ -29,19 +29,19 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Cost Type</th><th>Description</th><th>Shipment</th><th>Container</th><th>Paid To</th><th>Paid At</th><th class="text-right">Amount</th><th></th></tr></thead>
                 <tbody>
                     @forelse ($costs as $cost)
                         <tr>
                             <td><span class="badge-{{ $cost->cost_type === 'freight' ? 'blue' : ($cost->cost_type === 'customs_duty' ? 'amber' : 'gray') }}">{{ \App\Models\LandedCost::COST_TYPES[$cost->cost_type] ?? $cost->cost_type }}</span></td>
-                            <td>{{ $cost->description ?? '—' }}</td>
+                            <td class="cell-truncate" title="{{ $cost->description }}">{{ $cost->description ?? '—' }}</td>
                             <td>@if ($cost->shipment)<a href="{{ route('logistics.shipments.show', $cost->shipment) }}" class="text-navy-600 hover:text-navy-500">{{ $cost->shipment->shipment_number }}</a>@else — @endif</td>
                             <td>{{ $cost->container?->container_number ?? '—' }}</td>
-                            <td>{{ $cost->paid_to ?? '—' }}</td>
+                            <td class="cell-truncate" title="{{ $cost->paid_to }}">{{ $cost->paid_to ?? '—' }}</td>
                             <td>{{ $cost->paid_at?->format('d M Y') ?? '—' }}</td>
-                            <td class="text-right font-semibold text-ink-800">{{ number_format((float) $cost->amount, 2) }} {{ $cost->currency ? strtoupper($cost->currency) : 'INR' }}</td>
+                            <td class="num font-semibold text-ink-800">{{ number_format((float) $cost->amount, 2) }} {{ $cost->currency ? strtoupper($cost->currency) : 'INR' }}</td>
                             <td class="text-right">
                                 @can('update', $cost)
                                     <a href="{{ route('logistics.landed-costs.edit', $cost) }}" class="text-sm font-medium text-navy-600 hover:text-navy-500">Edit</a>

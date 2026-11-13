@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Sign in —" {{ config('app.name', 'VentureX ERP & CRM') }}</title>
+    <title>Sign in — {{ config('app.name', 'VentureX ERP & CRM') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -67,6 +67,18 @@
                         </label>
                         <a href="{{ route('password.request') }}" class="text-sm text-accent-600 hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300">Forgot password?</a>
                     </div>
+
+                    @if (session('error'))
+                        <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-500/10 dark:text-red-400">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if (session('status'))
+                        <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-400">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
                     @if ($errors->any())
                         <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-500/10 dark:text-red-400">

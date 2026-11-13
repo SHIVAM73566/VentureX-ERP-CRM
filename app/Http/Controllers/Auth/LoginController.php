@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\LoginThrottle;
 use App\Services\SecurityEventService;
+use App\Services\TwoFactorAuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +16,10 @@ use Illuminate\View\View;
 
 class LoginController extends Controller
 {
-    public function __construct(protected LoginThrottle $throttle) {}
+    public function __construct(
+        protected LoginThrottle $throttle,
+        protected TwoFactorAuthService $totp,
+    ) {}
 
     public function showLoginForm(): View
     {
@@ -60,6 +65,18 @@ class LoginController extends Controller
             ]);
         }
 
+        // Clear stale second-factor state BEFORE regenerating the session id.
+        // Regenerating first and then forgetting could leave a verification
+        // timestamp created for a previous account attached to the new
+        // session, which is the root cause of the "invalid token" loop on
+        // administrative sign-in. We intentionally do not touch recovery
+        // codes or the stored TOTP secret here.
+        $request->session()->forget([
+            'two_factor_verified_at',
+            'mfa_setup_secret',
+            'mfa_recovery_codes',
+        ]);
+
         $request->session()->regenerate();
         $this->throttle->clear($key);
 
@@ -72,10 +89,46 @@ class LoginController extends Controller
         AuditLogger::log('login', 'auth');
         SecurityEventService::detectImpossibleTravel($user, (string) $request->ip());
 
-        if ($user->hasMfa()) {
+        return $this->redirectAfterLogin($request, $user);
+    }
+
+    /**
+     * Decide where a freshly authenticated user should land.
+     *
+     * - Enrolled users always get the TOTP challenge (even when mandatory
+     *   enforcement is disabled, otherwise opt-in MFA would be bypassable).
+     * - Mandatory roles without enrolment are sent to setup only when
+     *   enforcement is active.
+     * - A stored secret that cannot be decrypted (for example after an
+     *   APP_KEY rotation) is treated as a broken enrolment and reset safely
+     *   so the owner can re-enrol instead of being locked out.
+     */
+    protected function redirectAfterLogin(Request $request, User $user): RedirectResponse
+    {
+        if ($user->hasMfa() && $this->totp->secretFor($user) === null) {
+            $this->totp->disable($user);
             $request->session()->forget('two_factor_verified_at');
 
+            AuditLogger::log('mfa_secret_reset', 'auth', $user, null, [
+                'reason' => 'stored_secret_undecryptable',
+            ]);
+
+            if ((bool) config('security.mfa.enforce', false) && $user->hasMandatoryMfaRole()) {
+                return redirect()->route('mfa.setup')->with(
+                    'error',
+                    'Your authenticator enrolment could not be verified and was reset. Please enrol again.',
+                );
+            }
+
+            return redirect()->intended(route('dashboard'));
+        }
+
+        if ($user->hasMfa()) {
             return redirect()->route('mfa.challenge');
+        }
+
+        if ((bool) config('security.mfa.enforce', false) && $user->hasMandatoryMfaRole()) {
+            return redirect()->route('mfa.setup');
         }
 
         return redirect()->intended(route('dashboard'));
