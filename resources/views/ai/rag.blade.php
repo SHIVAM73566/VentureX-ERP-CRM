@@ -22,6 +22,14 @@
             },
         })" x-init="init()" class="space-y-6">
 
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h2 class="text-lg font-bold text-ink-900 dark:text-ink-50">Enterprise RAG workspace</h2>
+                <p class="text-sm text-ink-500 dark:text-ink-400">80 focused pipelines across 6 domains. Answers come from your own records.</p>
+            </div>
+            <a href="{{ route('ai.rag.tour') }}" class="btn-secondary">Open the pipeline tour →</a>
+        </div>
+
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <div class="card p-5">
                 <p class="text-xs font-semibold uppercase tracking-wide text-ink-400 dark:text-ink-500">Pipelines</p>

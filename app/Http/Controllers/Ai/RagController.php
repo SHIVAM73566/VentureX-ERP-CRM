@@ -60,6 +60,18 @@ class RagController extends Controller
         ]);
     }
 
+    public function tour(): View
+    {
+        $this->authorize('viewAny', AiRun::class);
+
+        return view('ai.rag-tour', [
+            'stats' => $this->rag->stats(),
+            'domains' => $this->rag->domains(),
+            'domainLabels' => RagPipelineRegistry::domainLabels(),
+            'definitions' => RagPipelineRegistry::definitions(),
+        ]);
+    }
+
     public function query(Request $request): JsonResponse
     {
         $this->authorize('viewAny', AiRun::class);

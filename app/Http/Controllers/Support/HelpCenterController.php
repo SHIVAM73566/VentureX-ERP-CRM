@@ -41,6 +41,11 @@ class HelpCenterController extends Controller
         ]);
     }
 
+    public function gettingStarted(): View
+    {
+        return view('support.getting-started');
+    }
+
     public function docs(): View
     {
         return view('support.docs');

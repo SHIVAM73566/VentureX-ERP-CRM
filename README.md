@@ -4,6 +4,60 @@
 
 A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS.
 
+## Introduction
+
+VentureX ERP & CRM gives a company one shared workspace for the entire commercial cycle: a lead becomes a customer, a customer becomes a quotation, a quotation becomes an order, an order moves stock, an invoice becomes a payment, and finance sees the result without re-typing anything. Purchasing, warehouses, shipments and landed costs live in the same system, and an AI layer answers questions from your live records with sources and confidence scores.
+
+It is designed for teams of 5–500 people who have outgrown spreadsheets, shared inboxes and disconnected invoicing tools but do not want a six-month enterprise rollout.
+
+**Who it is for**
+
+- Wholesale distributors and trading companies
+- Manufacturers managing stock, purchasing and sales
+- Service agencies running a pipeline and milestone invoicing
+- Import/export businesses that need true landed cost and margin
+- Owners and finance teams who want one dashboard instead of ten reports
+
+## How to use it (quick examples)
+
+> The same walkthrough is available inside the app at **Getting Started** in the sidebar, with copyable examples and a saved checklist.
+
+### 1. Sell something — lead to payment
+1. Add a **Customer** (Customers → New).
+2. Create a **Quotation** with 10 units of a product (Sales → Quotations).
+3. Mark the deal won and convert it to a **Sales Order**.
+4. Raise an **Invoice** from the order.
+5. Record the **Payment** — receivables update automatically.
+
+*Example:* 10 × Bluetooth Headset @ ₹2,499 → quotation → order → `INV-2026-0042` → paid by UPI → balance ₹0.
+
+### 2. Buy and receive stock — requisition to shelf
+1. Compare **Supplier Offers** and pick a supplier.
+2. Raise a **Purchase Requisition**, approve it, and generate a **Purchase Order**.
+3. Receive the goods against the PO — stock increases in the chosen warehouse.
+4. Allocate freight and duty in **Landed Costs** to see true cost per unit.
+
+*Example:* `PR-2026-0031` → `PO-2026-0114` → 200 units received → landed cost ₹1,890/unit.
+
+### 3. Understand the numbers
+- **Finance → Dashboard** for revenue, receivables and payables.
+- **Finance → Receivables / Payables** for what is owed and overdue.
+- **Inventory → Stock** for reorder alerts and warehouse balances.
+- **Admin → Audit Logs** for a full trail of who changed what.
+
+### 4. Ask AI about your own data
+Open **AI Center → AI Assistant** (or **Enterprise RAG** for sourced answers) and ask:
+
+- “Which customers have overdue invoices this month?”
+- “Show products below reorder level in each warehouse.”
+- “Summarise procurement spend by supplier this quarter.”
+- “What is the landed cost and margin of container CONT-2026-014?”
+
+Every answer is generated from your records, and RAG answers include the source documents, confidence and latency.
+
+### 5. Bring your existing data
+Use **Admin → Import Data** for CSV imports and **Admin → Export Center** for controlled exports. Roles and permissions decide who can import, export or approve.
+
 ## Features
 
 ### Core Modules
@@ -22,6 +76,7 @@ A complete, production-ready AI-powered CRM and ERP business operating system bu
 - AI Support Assistant with built-in knowledge base
 - AI Document Reader for file analysis
 - AI Procurement intelligence
+- **80 enterprise RAG pipelines** across CRM, procurement, inventory, finance, logistics and executive domains, with sources, confidence and latency
 - Rule-based business insights
 - Multi-provider support (NVIDIA, RapidAPI, local fallback)
 
@@ -117,6 +172,8 @@ All AI features work **out-of-the-box without any API keys** using built-in loca
 
 ## Documentation
 
+- [Getting Started & Quick Examples](documentation/GETTING-STARTED.md)
+- [80-Pipeline RAG Guide](documentation/RAG-GUIDE.md)
 - [Installation Guide](documentation/INSTALLATION.md)
 - [User Guide](documentation/USER_GUIDE.md)
 - [Admin Guide](documentation/ADMIN_GUIDE.md)

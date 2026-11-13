@@ -1,5 +1,23 @@
 <x-layouts.app title="Dashboard" :breadcrumbs="[['label' => 'Dashboard']]">
 
+    {{-- First-run onboarding banner --}}
+    <div x-data="{ show: localStorage.getItem('vx-getting-started-banner') !== 'dismissed' }"
+         x-show="show" x-cloak
+         class="mb-5 flex flex-wrap items-center gap-3 rounded-xl border border-navy-200 bg-navy-50 px-4 py-3 dark:border-navy-700 dark:bg-navy-900/40">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-800 text-white">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold text-navy-900 dark:text-navy-100">New here? Take the 10-minute product tour.</p>
+            <p class="text-xs text-navy-700 dark:text-navy-300">See the first 7 steps, copy real examples, and track your onboarding checklist.</p>
+        </div>
+        <a href="{{ route('getting-started') }}" class="btn-primary">Open Getting Started</a>
+        <button type="button" @click="show = false; localStorage.setItem('vx-getting-started-banner', 'dismissed')"
+                class="rounded-lg p-1.5 text-navy-600 hover:bg-navy-100 dark:text-navy-300 dark:hover:bg-navy-800" aria-label="Dismiss">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+
     @php
         $user = auth()->user();
         $icons = [

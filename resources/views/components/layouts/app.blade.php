@@ -9,6 +9,7 @@
     $nav = [
         'Overview' => [
             ['label' => 'Dashboard', 'icon' => 'layout', 'route' => 'dashboard', 'active' => request()->routeIs('dashboard')],
+            ['label' => 'Getting Started', 'icon' => 'play', 'route' => 'getting-started', 'active' => request()->routeIs('getting-started')],
         ],
         'CRM' => [
             ['label' => 'Customers', 'icon' => 'users', 'route' => 'customers.index', 'active' => request()->routeIs('customers.*')],
@@ -144,6 +145,7 @@
         'chat' => 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
         'ticket' => 'M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z',
         'warning' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z',
+        'play' => 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664zM21 12a9 9 0 11-18 0 9 9 0 0118 0z',
     ];
 @endphp
 

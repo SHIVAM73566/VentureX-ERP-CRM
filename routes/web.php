@@ -106,6 +106,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('account/sessions', [SessionController::class, 'index'])->name('sessions.index');
 
+    Route::get('getting-started', [HelpCenterController::class, 'gettingStarted'])->name('getting-started');
+
     // Security Verification (Phone, Selfie, App Lock, Device Trust)
     Route::get('auth/selfie', [SecurityVerificationController::class, 'showSelfieUpload'])->name('selfie.upload');
     Route::post('auth/selfie/upload', [SecurityVerificationController::class, 'uploadSelfie'])->middleware('throttle:upload')->name('selfie.upload.store');
@@ -354,6 +356,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
 
     // Enterprise RAG pipelines (80 modular retrieval pipelines).
     Route::get('ai/rag', [RagController::class, 'index'])->name('ai.rag');
+    Route::get('ai/rag/tour', [RagController::class, 'tour'])->name('ai.rag.tour');
     Route::post('ai/rag/query', [RagController::class, 'query'])->middleware('throttle:ai')->name('ai.rag.query');
     Route::post('ai/rag/sync', [RagController::class, 'sync'])->middleware('throttle:ai')->name('ai.rag.sync');
     Route::get('ai/rag/{pipeline}', [RagController::class, 'pipeline'])->name('ai.rag.pipeline');

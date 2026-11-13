@@ -29,6 +29,18 @@
             </div>
         </div>
 
+        {{-- Getting started --}}
+        <a href="{{ route('getting-started') }}" class="card flex flex-wrap items-center gap-4 border-accent-200 bg-accent-50/60 p-5 transition hover:shadow-md dark:border-accent-800 dark:bg-accent-500/10">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-600 text-white">
+                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="font-semibold text-ink-900 dark:text-ink-50">New to VentureX? Start with the product tour</p>
+                <p class="mt-0.5 text-xs text-ink-600 dark:text-ink-300">Introduction, 7-step quick start, real examples, role guides and an onboarding checklist.</p>
+            </div>
+            <span class="btn-accent">Open Getting Started</span>
+        </a>
+
         {{-- Quick Links Grid --}}
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <a href="{{ route('support.index') }}" class="card group flex flex-col items-center gap-3 py-6 text-center transition hover:shadow-md">
