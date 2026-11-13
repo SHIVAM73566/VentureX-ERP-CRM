@@ -76,6 +76,15 @@ Route::get('/', function () {
 });
 Route::get('/about', [PagesController::class, 'about'])->name('pages.about');
 
+// Uptime and load-balancer probes. Public and dependency-free so monitors
+// never generate 404 noise in the application log.
+Route::get('health', fn () => response()->json([
+    'status' => 'ok',
+    'app' => config('app.name'),
+    'time' => now()->toIso8601String(),
+]))->name('health');
+Route::get('healthz', fn () => response()->json(['status' => 'ok']))->name('healthz');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login')->name('login.attempt');
