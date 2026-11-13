@@ -21,6 +21,8 @@ It is designed for teams of 5–500 people who have outgrown spreadsheets, share
 ## How to use it (quick examples)
 
 > The same walkthrough is available inside the app at **Getting Started** in the sidebar, with copyable examples and a saved checklist.
+>
+> Every page also has a floating **Product guide** (bottom-right) with the full introduction and a searchable catalogue of all **80 RAG pipelines**, plus questions matched to the page you are on.
 
 ### 1. Sell something — lead to payment
 1. Add a **Customer** (Customers → New).
@@ -173,6 +175,7 @@ All AI features work **out-of-the-box without any API keys** using built-in loca
 ## Documentation
 
 - [Getting Started & Quick Examples](documentation/GETTING-STARTED.md)
+- [Product Guide (in-app, every page)](documentation/PRODUCT-GUIDE.md)
 - [80-Pipeline RAG Guide](documentation/RAG-GUIDE.md)
 - [Installation Guide](documentation/INSTALLATION.md)
 - [User Guide](documentation/USER_GUIDE.md)

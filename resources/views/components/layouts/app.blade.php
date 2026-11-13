@@ -330,6 +330,8 @@
         </div>
     </div>
 
+    <x-product-guide />
+
     @stack('scripts')
 </body>
 </html>
