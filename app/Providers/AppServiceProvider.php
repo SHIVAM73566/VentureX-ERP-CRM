@@ -4,23 +4,32 @@ namespace App\Providers;
 
 use App\Models\Account;
 use App\Models\Activity;
+use App\Models\AgentAction;
+use App\Models\AgentRun;
 use App\Models\AiRun;
 use App\Models\AiSkill;
 use App\Models\ApprovalRequest;
+use App\Models\Attendance;
 use App\Models\AuditLog;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Container;
 use App\Models\Customer;
+use App\Models\Department;
 use App\Models\Document;
+use App\Models\Employee;
 use App\Models\ErrorReport;
 use App\Models\ExportRequest;
 use App\Models\Invoice;
 use App\Models\JournalEntry;
 use App\Models\LandedCost;
 use App\Models\Lead;
+use App\Models\LeaveRequest;
+use App\Models\OnboardingTask;
 use App\Models\Opportunity;
 use App\Models\Payment;
+use App\Models\PayrollRun;
+use App\Models\PerformanceReview;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseRequisition;
@@ -36,23 +45,32 @@ use App\Models\User;
 use App\Models\Warehouse;
 use App\Policies\AccountPolicy;
 use App\Policies\ActivityPolicy;
+use App\Policies\AgentActionPolicy;
+use App\Policies\AgentRunPolicy;
 use App\Policies\AiRunPolicy;
 use App\Policies\AiSkillPolicy;
 use App\Policies\ApprovalRequestPolicy;
+use App\Policies\AttendancePolicy;
 use App\Policies\AuditLogPolicy;
 use App\Policies\CompanyPolicy;
 use App\Policies\ContactPolicy;
 use App\Policies\ContainerPolicy;
 use App\Policies\CustomerPolicy;
+use App\Policies\DepartmentPolicy;
 use App\Policies\DocumentPolicy;
+use App\Policies\EmployeePolicy;
 use App\Policies\ErrorReportPolicy;
 use App\Policies\ExportRequestPolicy;
 use App\Policies\InvoicePolicy;
 use App\Policies\JournalEntryPolicy;
 use App\Policies\LandedCostPolicy;
 use App\Policies\LeadPolicy;
+use App\Policies\LeaveRequestPolicy;
+use App\Policies\OnboardingTaskPolicy;
 use App\Policies\OpportunityPolicy;
 use App\Policies\PaymentPolicy;
+use App\Policies\PayrollRunPolicy;
+use App\Policies\PerformanceReviewPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\PurchaseOrderPolicy;
 use App\Policies\PurchaseRequisitionPolicy;
@@ -125,5 +143,18 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ApprovalRequest::class, ApprovalRequestPolicy::class);
         Gate::policy(SupportTicket::class, SupportTicketPolicy::class);
         Gate::policy(ErrorReport::class, ErrorReportPolicy::class);
+
+        // HR suite
+        Gate::policy(Employee::class, EmployeePolicy::class);
+        Gate::policy(Attendance::class, AttendancePolicy::class);
+        Gate::policy(LeaveRequest::class, LeaveRequestPolicy::class);
+        Gate::policy(PayrollRun::class, PayrollRunPolicy::class);
+        Gate::policy(PerformanceReview::class, PerformanceReviewPolicy::class);
+        Gate::policy(OnboardingTask::class, OnboardingTaskPolicy::class);
+        Gate::policy(Department::class, DepartmentPolicy::class);
+
+        // AERO X Agentic Engine
+        Gate::policy(AgentAction::class, AgentActionPolicy::class);
+        Gate::policy(AgentRun::class, AgentRunPolicy::class);
     }
 }

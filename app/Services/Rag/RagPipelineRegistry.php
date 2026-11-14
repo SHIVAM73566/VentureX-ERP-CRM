@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Activity;
 use App\Models\AiUsageLog;
 use App\Models\ApprovalRequest;
+use App\Models\Attendance;
 use App\Models\AuditLog;
 use App\Models\Company;
 use App\Models\Contact;
@@ -14,6 +15,7 @@ use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Document;
+use App\Models\Employee;
 use App\Models\ErrorReport;
 use App\Models\Incoterm;
 use App\Models\Invoice;
@@ -21,8 +23,12 @@ use App\Models\JournalEntry;
 use App\Models\JournalEntryLine;
 use App\Models\LandedCost;
 use App\Models\Lead;
+use App\Models\LeaveRequest;
+use App\Models\OnboardingTask;
 use App\Models\Opportunity;
 use App\Models\Payment;
+use App\Models\PayrollRun;
+use App\Models\PerformanceReview;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseRequisition;
@@ -40,10 +46,10 @@ use App\Models\User;
 use App\Models\Warehouse;
 
 /**
- * Canonical registry of the 80 enterprise RAG pipelines.
+ * Canonical registry of the 84 enterprise RAG pipelines.
  *
  * 15 CRM & Sales + 15 Procurement + 10 Inventory + 15 Finance
- * + 15 Logistics + 10 Executive/Admin = 80 pipelines.
+ * + 15 Logistics + 10 Executive/Admin + 4 Human Resources = 84 pipelines.
  */
 class RagPipelineRegistry
 {
@@ -71,6 +77,9 @@ class RagPipelineRegistry
         }
         foreach (self::executive() as $row) {
             $definitions[] = self::make('executive', $row);
+        }
+        foreach (self::hr() as $row) {
+            $definitions[] = self::make('hr', $row);
         }
 
         return $definitions;
@@ -106,6 +115,7 @@ class RagPipelineRegistry
             'finance' => 'Finance, Invoicing & Ledger Auditing',
             'logistics' => 'Logistics & Customs Clearance',
             'executive' => 'Executive Venture Intelligence & Admin',
+            'hr' => 'Human Resources & Workforce Intelligence',
         ];
     }
 
@@ -257,6 +267,19 @@ class RagPipelineRegistry
             ['risk_register_summary', 'Risk Register Summary', 'Consolidates operational, financial and compliance risks.', [ErrorReport::class, AuditLog::class, Supplier::class, Invoice::class], ['risk', 'register', 'summary']],
             ['operational_efficiency_index', 'Operational Efficiency Index', 'Measures throughput, cycle time and exception rates across modules.', [Invoice::class, PurchaseOrder::class, Shipment::class, StockMovement::class], ['efficiency', 'throughput', 'cycle']],
             ['governance_compliance_digest', 'Governance & Compliance Digest', 'Produces a digest of approvals, audits and compliance exceptions.', [ApprovalRequest::class, AuditLog::class, Document::class, SupportTicket::class], ['governance', 'compliance', 'digest']],
+        ];
+    }
+
+    /**
+     * @return array<int, array<int, mixed>>
+     */
+    protected static function hr(): array
+    {
+        return [
+            ['workforce_headcount_forecast', 'Workforce Headcount Forecast', 'Forecasts headcount, attrition and hiring demand from the employee directory and leave history.', [Employee::class, Department::class, LeaveRequest::class], ['headcount', 'attrition', 'forecast']],
+            ['attendance_pattern_analysis', 'Attendance Pattern Analysis', 'Detects absenteeism, lateness and overtime patterns across teams.', [Attendance::class, Employee::class, Department::class], ['attendance', 'absence', 'overtime']],
+            ['payroll_cost_anomaly', 'Payroll Cost Anomaly Detection', 'Flags unusual payroll movements, overtime spikes and deduction anomalies before approval.', [PayrollRun::class, Employee::class, Attendance::class], ['payroll', 'cost', 'anomaly']],
+            ['onboarding_readiness_digest', 'Onboarding Readiness Digest', 'Summarises onboarding completion, blocked tasks and new-hire readiness for HR review.', [OnboardingTask::class, Employee::class, PerformanceReview::class], ['onboarding', 'readiness', 'new hire']],
         ];
     }
 }

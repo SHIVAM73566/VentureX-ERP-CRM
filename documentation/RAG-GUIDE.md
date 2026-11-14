@@ -1,6 +1,6 @@
-# The 80-Pipeline RAG Guide
+# The 84-Pipeline RAG Guide
 
-How VentureX ERP & CRM answers business questions from live company records — and why 80 focused pipelines beat one generic chatbot.
+How VentureX ERP & CRM answers business questions from live company records - and why 84 focused pipelines beat one generic chatbot.
 
 > In-app version: **AI Center → Enterprise RAG → Open the pipeline tour**.
 
@@ -27,9 +27,9 @@ In VentureX the retrieval step is fully local: records are converted into short 
 
 ---
 
-## 2. Why 80 pipelines instead of one assistant
+## 2. Why 84 pipelines instead of one assistant
 
-| One generic assistant | 80 focused pipelines |
+| One generic assistant | 84 focused pipelines |
 |---|---|
 | Has to guess which table matters | Already knows its domain and source models |
 | Can mix finance and warehouse context | Searches only relevant records |
@@ -37,11 +37,11 @@ In VentureX the retrieval step is fully local: records are converted into short 
 | One prompt for every team | Each team gets a specialist |
 | Broad answers | Precise, repeatable answers |
 
-The general **AI Assistant** still exists for open-ended questions. The 80 pipelines are the specialists that make answers precise and explainable.
+The general **AI Assistant** still exists for open-ended questions. The 84 pipelines are the specialists that make answers precise and explainable.
 
 ---
 
-## 3. The six domains
+## 3. The seven domains
 
 | Domain | Pipelines | Focus |
 |---|---:|---|
@@ -51,7 +51,8 @@ The general **AI Assistant** still exists for open-ended questions. The 80 pipel
 | Finance, Invoicing & Ledger Auditing | 15 | Cash, credit, tax, anomalies, profitability |
 | Logistics & Customs Clearance | 15 | Demurrage, HS codes, freight, compliance |
 | Executive Venture Intelligence & Admin | 10 | Board briefings, KPIs, risk, governance |
-| **Total** | **80** | |
+| Human Resources & Workforce Intelligence | 4 | Headcount, attendance, payroll anomalies, onboarding readiness |
+| **Total** | **84** | |
 
 ---
 
@@ -203,6 +204,22 @@ The general **AI Assistant** still exists for open-ended questions. The 80 pipel
 - Which KPIs moved most against target, and why?
 - What are the top five operational risks right now?
 
+### Human Resources & Workforce Intelligence (4)
+
+| Pipeline | What it answers |
+|---|---|
+| Workforce Headcount Forecast | Forecasts headcount, attrition and hiring demand from the employee directory and leave history. |
+| Attendance Pattern Analysis | Detects absenteeism, lateness and overtime patterns across teams. |
+| Payroll Cost Anomaly Detection | Flags unusual payroll movements, overtime spikes and deduction anomalies before approval. |
+| Onboarding Readiness Digest | Summarises onboarding completion, blocked tasks and new-hire readiness for HR review. |
+
+**Example questions**
+
+- Are we likely to be short-staffed next quarter?
+- Which team has the worst attendance pattern this month?
+- Did any payroll line move unexpectedly compared with last month?
+- Which new hires are still blocked in onboarding?
+
 ---
 
 ## 5. A live enterprise day
@@ -305,7 +322,7 @@ Only if a provider is configured and the pipeline uses AI mode. Retrieval and lo
 No. Embeddings are stored as JSON and compared in PHP.
 
 **How many documents can it hold?**
-The demo dataset indexes 2,709 records across 80 pipelines. The local store scales with your database; index only the pipelines you use for best performance.
+The demo dataset indexes 2,709 records across 84 pipelines. The local store scales with your database; index only the pipelines you use for best performance.
 
 **Why did an answer say “local” instead of using the LLM?**
 Local mode is the safe fallback when no provider is configured or the provider fails. It still answers from retrieved records.

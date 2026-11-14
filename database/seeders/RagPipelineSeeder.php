@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 class RagPipelineSeeder extends Seeder
 {
     /**
-     * Register (or refresh) the 80 canonical enterprise RAG pipelines.
+     * Register (or refresh) the 84 canonical enterprise RAG pipelines.
      * Learned weights and confidence values are preserved on re-run.
      */
     public function run(): void

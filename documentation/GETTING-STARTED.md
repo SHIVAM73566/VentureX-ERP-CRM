@@ -37,8 +37,10 @@ Instead of keeping customers in a spreadsheet, quotes in Word, stock in a regist
 | Inventory | Products, warehouses, stock, reorder alerts | Stock registers + physical counts |
 | Logistics | Shipments, containers, landed cost | Freight forwarder spreadsheets |
 | Finance | Chart of accounts, journals, receivables, payables | Standalone accounting tools |
-| AI Center | Assistant, copilot, document reader, 80+ RAG pipelines | Manual reporting and searching |
-| Support & Admin | Help center, tickets, users, roles, audit logs, exports | Shared inboxes + ad-hoc admin |
+| HR | Employees, attendance, leave, payroll, reviews, onboarding | HR spreadsheets + payroll services |
+| Automation | AERO X Agentic Engine: autonomous, auditable business rules | Manual follow-up lists |
+| AI Center | Assistant, copilot, document reader, 84+ RAG pipelines | Manual reporting and searching |
+| Support & Admin | Help center, tickets, users, roles, branding, audit logs, exports | Shared inboxes + ad-hoc admin |
 
 ---
 

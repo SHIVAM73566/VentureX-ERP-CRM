@@ -46,7 +46,7 @@
                     <p class="text-xs text-navy-100">Connected modules</p>
                 </div>
                 <div class="rounded-xl bg-white/10 px-4 py-3">
-                    <p class="text-2xl font-bold">80+</p>
+                    <p class="text-2xl font-bold">84</p>
                     <p class="text-xs text-navy-100">AI RAG pipelines</p>
                 </div>
                 <div class="rounded-xl bg-white/10 px-4 py-3">
@@ -191,7 +191,7 @@
                 </div>
                 @if ($canUseAi)
                     <a href="{{ route('ai.rag') }}" class="btn-secondary">Open Enterprise RAG</a>
-                    <a href="{{ route('ai.rag.tour') }}" class="btn-secondary">Explore all 80 pipelines</a>
+                    <a href="{{ route('ai.rag.tour') }}" class="btn-secondary">Explore all 84 pipelines</a>
                 @endif
             </div>
 
@@ -249,7 +249,7 @@
                                 ['Inventory', 'Products, warehouses, stock levels and reorder alerts.', 'Stock registers + physical counts', 'inventory.stock.index', 'Stock'],
                                 ['Logistics', 'Shipments, containers and landed cost allocation.', 'Freight forwarder spreadsheets', 'logistics.landed-costs.index', 'Landed Costs'],
                                 ['Finance', 'Chart of accounts, journals, receivables and payables.', 'Standalone accounting tools', 'finance.dashboard', 'Finance'],
-                                ['AI Center', 'Assistant, copilot, document reader and 80+ RAG pipelines.', 'Manual reporting and searching', 'ai.assistant', 'AI Assistant'],
+                                ['AI Center', 'Assistant, copilot, document reader and 84+ RAG pipelines.', 'Manual reporting and searching', 'ai.assistant', 'AI Assistant'],
                                 ['Support & Admin', 'Help center, tickets, users, roles, audit logs and exports.', 'Shared inboxes + ad-hoc admin', 'support.index', 'Help Center'],
                             ];
                         @endphp

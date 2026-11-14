@@ -458,6 +458,53 @@ AI-generated executive summaries.
 
 ---
 
+## HR Module
+
+Open **Human Resources** in the sidebar. Every screen is company-scoped and permission-gated (`hr.view`, `hr.create`, `hr.edit`, `hr.delete`, `hr.approve`).
+
+### HR Dashboard
+
+Headcount, attendance today, pending leave, open onboarding tasks, the latest payroll run and recent performance reviews in one view.
+
+### Employees
+
+Create and maintain the employee directory: number, name, contact details, department, manager, job title, employment type, hire date, salary, currency and status. Creating an employee automatically generates the standard onboarding checklist.
+
+### Attendance
+
+Record daily attendance per employee with status, check-in/check-out, worked hours and overtime. A duplicate record for the same employee and date is rejected.
+
+### Leave
+
+Submit annual, sick, casual, unpaid or statutory leave. The day count is calculated automatically; approvers can approve or reject with notes.
+
+### Payroll
+
+Create a monthly run and VentureX generates one item per active employee with gross pay, configurable tax and social-security deductions, overtime and net pay. Runs stay in draft until approved.
+
+### Performance Reviews
+
+Record goals, competency and overall scores (0–5), review period, strengths, improvements and comments. The overall score is calculated automatically when left blank.
+
+### Onboarding
+
+Each employee gets a standard checklist (documents, IT access, payroll, compliance, orientation). Complete, reopen or seed tasks from the onboarding screen.
+
+---
+
+## Automation Module
+
+**Automation → AERO X Agentic Engine** runs autonomous business rules:
+
+- Draft purchase orders for low-stock products.
+- Flag overdue invoices.
+- Self-assign unowned support tickets.
+- Generate onboarding checklists for recent hires.
+
+Each rule shows its cooldown, confidence, run counts and last run. You can enable/disable a rule, run it now, or run a dry run that reports what would change without writing anything. Every execution is transactional; failures are rolled back and recorded.
+
+---
+
 ## Common Actions Across Modules
 
 ### Searching and Filtering

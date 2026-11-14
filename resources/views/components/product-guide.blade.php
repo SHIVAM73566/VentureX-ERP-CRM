@@ -13,7 +13,7 @@
         Global product guide.
 
         Rendered by the authenticated layout, so the introduction, the full
-        80-pipeline catalogue and page-aware suggestions are available on every
+        84-pipeline catalogue and page-aware suggestions are available on every
         page of VentureX ERP & CRM without a round trip.
     --}}
     <div x-data="{ open: false, tab: 'intro', query: '', domain: 'all', copied: null }"
@@ -31,7 +31,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
             <span>Product guide</span>
-            <span class="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-bold tracking-wide">80+ RAG</span>
+            <span class="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-bold tracking-wide">84+ RAG</span>
         </button>
 
         {{-- Slide-over --}}
@@ -81,7 +81,7 @@
                     <section x-show="tab === 'intro'" class="space-y-5">
                         <div class="overflow-hidden rounded-2xl bg-gradient-to-br from-navy-900 via-navy-800 to-ink-900 px-5 py-6 text-white">
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide">Universal business operating system</span>
-                            <h3 class="mt-3 text-2xl font-bold leading-tight">One login. Every department. 80 AI pipelines.</h3>
+                            <h3 class="mt-3 text-2xl font-bold leading-tight">One login. Every department. 84 AI pipelines.</h3>
                             <p class="mt-2 text-sm leading-relaxed text-navy-100">
                                 VentureX ERP &amp; CRM connects customers, sales, procurement, inventory, finance,
                                 logistics, support and administration in one system. Its {{ count($guideDefinitions) }}
@@ -91,7 +91,10 @@
                             <div class="mt-4 flex flex-wrap gap-2">
                                 <a href="{{ route('getting-started') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-navy-900 transition hover:bg-navy-50">Start the quick tour</a>
                                 <a href="{{ route('ai.rag') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">Open RAG workspace</a>
-                                <a href="{{ route('ai.rag.tour') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">See all 80 pipelines</a>
+                                <a href="{{ route('ai.rag.tour') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">See all 84 pipelines</a>
+                                @if (auth()->user()?->hasRole('super_admin'))
+                                    <a href="{{ route('admin.settings.index', ['tab' => 'ai']) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">Connect NVIDIA API key</a>
+                                @endif
                             </div>
                         </div>
 
@@ -177,7 +180,7 @@
                                 <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Inventory intelligence:</strong> stock movements, warehouse capacity, stockout risk and replenishment planning.</span></li>
                                 <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Finance controls:</strong> chart of accounts, journals, payables, receivables and duplicate-payment detection.</span></li>
                                 <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Logistics &amp; customs:</strong> shipments, containers, demurrage risk and document completeness.</span></li>
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>AI everywhere:</strong> assistant, copilot, document reader, procurement AI, support AI and the 80 RAG pipelines.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>AI everywhere:</strong> assistant, copilot, document reader, procurement AI, support AI and the 84 RAG pipelines.</span></li>
                                 <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Governance:</strong> roles, audit logs, approvals, company scoping, quotas and error tracking.</span></li>
                             </ul>
                         </div>
@@ -196,14 +199,14 @@
                         <div>
                             <h3 class="text-base font-bold text-ink-900 dark:text-ink-50">All {{ count($guideDefinitions) }} RAG pipelines</h3>
                             <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">
-                                Six domains, one searchable catalogue. Search by name, question or keyword, or filter to a
+                                Seven domains, one searchable catalogue. Search by name, question or keyword, or filter to a
                                 domain. Every pipeline is company-scoped and returns its sources, confidence and latency.
                             </p>
                         </div>
 
                         <div>
                             <label for="guide-pipeline-search" class="sr-only">Search RAG pipelines</label>
-                            <input id="guide-pipeline-search" type="search" x-model="query" class="input" placeholder="Search 80 pipelines — churn, landed cost, demurrage, duplicate payment…">
+                            <input id="guide-pipeline-search" type="search" x-model="query" class="input" placeholder="Search 84 pipelines — churn, landed cost, demurrage, duplicate payment…">
                         </div>
 
                         <div class="flex flex-wrap gap-1.5" role="group" aria-label="Filter pipelines by domain">
@@ -251,7 +254,7 @@
                                 Need the full tour? It explains how retrieval works, a live enterprise day, benefits by
                                 company type, governance and the API.
                             </p>
-                            <a href="{{ route('ai.rag.tour') }}" class="mt-2 inline-flex text-xs font-semibold text-accent-700 hover:underline dark:text-accent-400">Open the 80-pipeline tour →</a>
+                            <a href="{{ route('ai.rag.tour') }}" class="mt-2 inline-flex text-xs font-semibold text-accent-700 hover:underline dark:text-accent-400">Open the 84-pipeline tour →</a>
                         </div>
                     </section>
 
@@ -299,7 +302,7 @@
 
                         <div class="flex flex-wrap gap-2">
                             <a href="{{ route('ai.rag', ['domain' => $guideContext['domains'][0] ?? 'crm']) }}" class="btn-primary text-xs">Ask in the RAG workspace</a>
-                            <a href="{{ route('ai.rag.tour') }}" class="btn-secondary text-xs">How the 80 pipelines work</a>
+                            <a href="{{ route('ai.rag.tour') }}" class="btn-secondary text-xs">How the 84 pipelines work</a>
                             <a href="{{ route('getting-started') }}" class="btn-secondary text-xs">Getting Started</a>
                         </div>
                     </section>

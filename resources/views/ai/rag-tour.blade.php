@@ -43,10 +43,10 @@
         {{-- Hero --}}
         <section class="overflow-hidden rounded-2xl bg-gradient-to-br from-ink-900 via-navy-900 to-navy-800 px-6 py-10 text-white sm:px-10">
             <span class="badge bg-white/10 text-white">Enterprise AI tour · 12 minutes</span>
-            <h1 class="mt-4 text-3xl font-bold sm:text-4xl">80 RAG pipelines, one business brain</h1>
+            <h1 class="mt-4 text-3xl font-bold sm:text-4xl">84 RAG pipelines, one business brain</h1>
             <p class="mt-3 max-w-3xl text-base text-navy-100 sm:text-lg">
                 Retrieval-Augmented Generation (RAG) means the AI answers from <strong class="text-white">your records</strong>,
-                not from generic internet knowledge. VentureX ships 80 focused pipelines across six business domains —
+                not from generic internet knowledge. VentureX ships 84 focused pipelines across seven business domains -
                 so a warehouse question searches warehouse data, and a finance question searches the ledger.
             </p>
 
@@ -100,10 +100,10 @@
             </div>
 
             <div class="mt-5 rounded-xl bg-ink-50 p-4 text-sm text-ink-600 dark:bg-ink-800 dark:text-ink-300">
-                <strong class="text-ink-800 dark:text-ink-100">Why 80 pipelines instead of one chatbot?</strong>
+                <strong class="text-ink-800 dark:text-ink-100">Why 84 pipelines instead of one chatbot?</strong>
                 A single assistant has to guess which table matters. A focused pipeline already knows its domain, its source models and its
                 keywords — so retrieval is more precise, answers are easier to audit, and a warehouse user never receives a finance answer
-                built from the wrong records. The assistant still exists for general questions; the 80 pipelines are the specialists.
+                built from the wrong records. The assistant still exists for general questions; the 84 pipelines are the specialists.
             </div>
         </section>
 
@@ -241,7 +241,7 @@
                 <h2 class="text-lg font-bold text-ink-900 dark:text-ink-50">Use it in four steps</h2>
                 <ol class="mt-3 space-y-3 text-sm text-ink-600 dark:text-ink-300">
                     <li><span class="font-semibold text-ink-800 dark:text-ink-100">1. Index.</span> Open the RAG workspace and choose <em>Index all</em>, or index one pipeline. Nightly self-training keeps it fresh.</li>
-                    <li><span class="font-semibold text-ink-800 dark:text-ink-100">2. Pick a pipeline.</span> Choose the domain closest to your question — CRM, procurement, inventory, finance, logistics or executive.</li>
+                    <li><span class="font-semibold text-ink-800 dark:text-ink-100">2. Pick a pipeline.</span> Choose the domain closest to your question - CRM, procurement, inventory, finance, logistics, executive or HR.</li>
                     <li><span class="font-semibold text-ink-800 dark:text-ink-100">3. Ask specifically.</span> Mention the entity, period and metric: “overdue invoices for Bluewave Retail in October”.</li>
                     <li><span class="font-semibold text-ink-800 dark:text-ink-100">4. Act with sources.</span> Read the answer, check the sources and confidence, then make the change in the module.</li>
                 </ol>

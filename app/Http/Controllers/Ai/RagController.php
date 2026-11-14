@@ -20,7 +20,7 @@ use Throwable;
 /**
  * Enterprise RAG workspace.
  *
- * Exposes the 80 registered retrieval-augmented generation pipelines through
+ * Exposes the 84 registered retrieval-augmented generation pipelines through
  * a single dashboard: browse by domain, run a question against a pipeline and
  * (re)index source records. Every pipeline answers locally even without an
  * AI provider configured.

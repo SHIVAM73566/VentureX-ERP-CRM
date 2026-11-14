@@ -47,7 +47,7 @@
                 <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
             <div class="min-w-0 flex-1">
-                <p class="font-semibold text-ink-900 dark:text-ink-50">All 80 RAG pipelines, on every page</p>
+                <p class="font-semibold text-ink-900 dark:text-ink-50">All 84 RAG pipelines, on every page</p>
                 <p class="mt-0.5 text-xs text-ink-600 dark:text-ink-300">Open the floating <strong>Product guide</strong> in the bottom-right corner for the introduction, the full searchable catalogue and questions matched to the page you are on.</p>
             </div>
             <span class="btn-secondary">Open the RAG tour</span>

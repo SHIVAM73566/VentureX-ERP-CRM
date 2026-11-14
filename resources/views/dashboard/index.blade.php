@@ -81,6 +81,135 @@
         </div>
     </div>
 
+    {{-- Executive briefing --}}
+    @if (! empty($briefing))
+        @php
+            $toneMap = [
+                'blue' => 'bg-navy-500',
+                'green' => 'bg-emerald-500',
+                'red' => 'bg-red-500',
+                'amber' => 'bg-amber-500',
+                'violet' => 'bg-violet-500',
+            ];
+        @endphp
+        <div class="mt-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Executive briefing</h2>
+                    <span class="text-xs text-ink-400 dark:text-ink-500">{{ now()->format('l, d M Y') }}</span>
+                </div>
+                <div class="grid gap-3 p-5 sm:grid-cols-2 xl:grid-cols-3">
+                    @foreach ($briefing as $item)
+                        <div class="flex items-start gap-3 rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                            <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full {{ $toneMap[$item['tone']] ?? 'bg-navy-500' }}"></span>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-wide text-ink-400 dark:text-ink-500">{{ $item['label'] }}</p>
+                                <p class="text-sm font-medium text-ink-800 dark:text-ink-100">{{ $item['value'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if (($user->hasPermissionTo('finance.view') || $isExecutive) && ! empty($cashFlow['months']))
+        <div class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-3">
+            <div class="card xl:col-span-2">
+                <div class="card-header">
+                    <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Predictive cash-flow forecast</h2>
+                    <span class="text-xs text-ink-400 dark:text-ink-500">Next 6 months · receivables vs purchase commitments</span>
+                </div>
+                <div class="p-5">
+                    @php
+                        $peak = max(1, collect($cashFlow['months'])->flatMap(fn ($m) => [$m['inflow'], $m['outflow']])->max());
+                    @endphp
+                    <div class="flex h-56 items-end justify-between gap-3">
+                        @foreach ($cashFlow['months'] as $month)
+                            <div class="flex flex-1 flex-col items-center justify-end gap-2">
+                                <div class="flex w-full items-end justify-center gap-1" style="height: 10rem;">
+                                    <div class="w-1/2 rounded-t bg-emerald-400/80 transition-all dark:bg-emerald-500/70" style="height: {{ max(2, round($month['inflow'] / $peak * 100)) }}%" title="Expected inflow {{ number_format($month['inflow'], 0) }}"></div>
+                                    <div class="w-1/2 rounded-t bg-red-400/80 transition-all dark:bg-red-500/70" style="height: {{ max(2, round($month['outflow'] / $peak * 100)) }}%" title="Purchase commitments {{ number_format($month['outflow'], 0) }}"></div>
+                                </div>
+                                <span class="text-xs font-semibold text-ink-600 dark:text-ink-300">{{ $month['label'] }}</span>
+                                <span class="text-[10px] font-semibold {{ $month['net'] >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400' }}">{{ $month['net'] >= 0 ? '+' : '-' }}{{ number_format(abs($month['net']), 0) }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-ink-500 dark:text-ink-400">
+                        <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span> Expected inflow</span>
+                        <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-red-400"></span> Purchase commitments</span>
+                        <span class="ml-auto font-semibold {{ $cashFlow['overdue_total'] > 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400' }}">
+                            {{ $cashFlow['overdue_count'] }} overdue · {{ number_format((float) $cashFlow['overdue_total'], 0) }} outstanding
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            @if ($user->hasPermissionTo('hr.view') || $isExecutive)
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Workforce snapshot</h2>
+                        <a href="{{ route('hr.dashboard') }}" class="text-xs font-medium text-navy-600 hover:text-navy-500 dark:text-navy-400 dark:hover:text-navy-300">Open HR</a>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 p-5">
+                        <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                            <p class="text-2xl font-bold tabular-nums text-ink-900 dark:text-ink-50">{{ $hrSummary['headcount'] }}</p>
+                            <p class="text-xs text-ink-400">Active headcount</p>
+                        </div>
+                        <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                            <p class="text-2xl font-bold tabular-nums text-amber-600 dark:text-amber-400">{{ $hrSummary['pending_leave'] }}</p>
+                            <p class="text-xs text-ink-400">Leave pending</p>
+                        </div>
+                        <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                            <p class="text-2xl font-bold tabular-nums text-violet-600 dark:text-violet-400">{{ $hrSummary['onboarding_open'] }}</p>
+                            <p class="text-xs text-ink-400">Onboarding open</p>
+                        </div>
+                        <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                            <p class="text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">{{ $hrSummary['on_leave'] }}</p>
+                            <p class="text-xs text-ink-400">On leave</p>
+                        </div>
+                        @if ($hrSummary['latest_payroll_status'])
+                            <div class="col-span-2 rounded-lg bg-navy-50 p-3 text-xs text-navy-700 dark:bg-navy-500/10 dark:text-navy-300">
+                                Latest payroll {{ $hrSummary['latest_payroll_period'] }}: {{ number_format((float) $hrSummary['latest_payroll_net'], 2) }} net ·
+                                <span class="font-semibold capitalize">{{ $hrSummary['latest_payroll_status'] }}</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+        </div>
+    @endif
+
+    @if ($user->hasRole('super_admin') || $user->hasPermissionTo('automation.view'))
+        <div class="mt-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">AERO X Agentic Engine</h2>
+                    <a href="{{ route('admin.agentic.index') }}" class="text-xs font-medium text-navy-600 hover:text-navy-500 dark:text-navy-400 dark:hover:text-navy-300">Open control surface</a>
+                </div>
+                <div class="grid gap-3 p-5 sm:grid-cols-2 xl:grid-cols-4">
+                    <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                        <p class="text-2xl font-bold tabular-nums text-ink-900 dark:text-ink-50">{{ $agenticSummary['enabled'] }}<span class="text-sm text-ink-400">/{{ $agenticSummary['rules'] }}</span></p>
+                        <p class="text-xs text-ink-400">Rules enabled</p>
+                    </div>
+                    <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                        <p class="text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">{{ $agenticSummary['runs_today'] }}</p>
+                        <p class="text-xs text-ink-400">Runs today</p>
+                    </div>
+                    <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                        <p class="text-2xl font-bold tabular-nums {{ $agenticSummary['rollbacks'] > 0 ? 'text-red-600 dark:text-red-400' : 'text-ink-900 dark:text-ink-50' }}">{{ $agenticSummary['rollbacks'] }}</p>
+                        <p class="text-xs text-ink-400">Rollbacks (7d)</p>
+                    </div>
+                    <div class="rounded-lg border border-ink-100 p-3 dark:border-ink-800">
+                        <p class="text-2xl font-bold tabular-nums text-violet-600 dark:text-violet-400">{{ number_format((float) $agenticSummary['success_rate'], 1) }}%</p>
+                        <p class="text-xs text-ink-400">Success rate (7d)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @if($isExecutive && $aiQuota)
         <div class="mt-6">
             <div class="card">

@@ -45,9 +45,9 @@ class RagPipelineTest extends TestCase
         $this->admin->assignRole($role);
     }
 
-    public function test_registry_defines_exactly_eighty_pipelines(): void
+    public function test_registry_defines_exactly_eighty_four_pipelines(): void
     {
-        $this->assertSame(80, RagPipelineRegistry::count());
+        $this->assertSame(84, RagPipelineRegistry::count());
 
         $this->assertSame([
             'crm' => 15,
@@ -56,20 +56,21 @@ class RagPipelineTest extends TestCase
             'finance' => 15,
             'logistics' => 15,
             'executive' => 10,
+            'hr' => 4,
         ], RagPipelineRegistry::domainCounts());
     }
 
-    public function test_vector_store_registers_eighty_unique_pipelines(): void
+    public function test_vector_store_registers_eighty_four_unique_pipelines(): void
     {
         $count = app(VectorStoreService::class)->ensurePipelines();
 
-        $this->assertSame(80, $count);
-        $this->assertSame(80, RagPipeline::query()->count());
-        $this->assertSame(80, RagPipeline::query()->distinct()->count('key'));
+        $this->assertSame(84, $count);
+        $this->assertSame(84, RagPipeline::query()->count());
+        $this->assertSame(84, RagPipeline::query()->distinct()->count('key'));
 
         // Re-running must not duplicate rows.
         app(VectorStoreService::class)->ensurePipelines();
-        $this->assertSame(80, RagPipeline::query()->count());
+        $this->assertSame(84, RagPipeline::query()->count());
     }
 
     public function test_embeddings_rank_related_text_higher(): void
@@ -159,6 +160,6 @@ class RagPipelineTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonPath('success', true);
-        $this->assertSame(80, $response->json('data.count'));
+        $this->assertSame(84, $response->json('data.count'));
     }
 }

@@ -10,6 +10,7 @@ use App\Models\QuotationItem;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderItem;
 use App\Services\AuditLogger;
+use App\Services\BrandingService;
 use App\Services\CompanyContext;
 use App\Services\NumberGenerator;
 use Barryvdh\DomPDF\PDF;
@@ -255,7 +256,9 @@ class QuotationController extends Controller
 
         $quotation->load('customer', 'items.product', 'createdBy');
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('sales.quotations.pdf', compact('quotation'))
+        $branding = app(BrandingService::class)->all();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('sales.quotations.pdf', compact('quotation', 'branding'))
             ->setPaper('a4')
             ->setOption('isHtml5ParserEnabled', true)
             ->setOption('isRemoteEnabled', false);

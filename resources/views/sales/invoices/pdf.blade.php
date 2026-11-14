@@ -5,11 +5,15 @@
     <title>Invoice {{ $invoice->invoice_number }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <style>
+        @php($accent = $branding['accent_color'] ?? '#1a365d')
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 12px; color: #333; line-height: 1.5; }
-        .header { display: flex; justify-content: space-between; margin-bottom: 30px; border-bottom: 2px solid #1a365d; padding-bottom: 20px; }
-        .company-name { font-size: 22px; font-weight: bold; color: #1a365d; }
-        .doc-title { font-size: 28px; font-weight: bold; color: #1a365d; text-align: right; }
+        body { font-family: {!! $branding['font_family'] ?? "'Helvetica', 'Arial', sans-serif" !!}; font-size: 12px; color: #333; line-height: 1.5; }
+        .header { display: flex; justify-content: space-between; margin-bottom: 30px; border-bottom: 2px solid {{ $accent }}; padding-bottom: 20px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { max-height: 54px; max-width: 170px; }
+        .company-name { font-size: 22px; font-weight: bold; color: {{ $accent }}; }
+        .company-meta { font-size: 10px; color: #666; margin-top: 4px; line-height: 1.5; }
+        .doc-title { font-size: 28px; font-weight: bold; color: {{ $accent }}; text-align: right; }
         .doc-number { font-size: 14px; color: #666; text-align: right; }
         .status { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-top: 5px; }
         .status-draft { background: #e5e7eb; color: #374151; }
@@ -22,24 +26,44 @@
         .info-label { font-size: 10px; text-transform: uppercase; color: #888; font-weight: bold; letter-spacing: 0.5px; }
         .info-value { font-size: 12px; margin-top: 3px; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th { background: #1a365d; color: #fff; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; }
+        th { background: {{ $accent }}; color: #fff; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; }
         td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
         .text-right { text-align: right; }
         .totals { width: 300px; margin-left: auto; margin-top: 20px; }
         .totals td { padding: 6px 12px; }
-        .totals tr.total-row td { border-top: 2px solid #1a365d; font-weight: bold; font-size: 14px; }
+        .totals tr.total-row td { border-top: 2px solid {{ $accent }}; font-weight: bold; font-size: 14px; }
         .totals tr.paid-row td { color: #065f46; }
         .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; font-size: 10px; color: #888; }
         .notes { margin-top: 20px; padding: 12px; background: #f9fafb; border-radius: 4px; }
         .notes-label { font-weight: bold; font-size: 11px; text-transform: uppercase; color: #555; }
-        .payment-info { margin-top: 15px; padding: 12px; background: #eff6ff; border-radius: 4px; border-left: 3px solid #1a365d; }
+        .payment-info { margin-top: 15px; padding: 12px; background: #eff6ff; border-radius: 4px; border-left: 3px solid {{ $accent }}; }
+        .watermark { position: fixed; top: 34%; left: 8%; width: 84%; text-align: center; font-size: 90px; font-weight: bold; color: rgba(0,0,0,0.055); transform: rotate(-28deg); }
     </style>
 </head>
 <body>
+    @if (! empty($branding['show_watermark']) && filled($branding['watermark_text'] ?? null))
+        <div class="watermark">{{ $branding['watermark_text'] }}</div>
+    @endif
+
     <div class="header">
-        <div>
-            <div class="company-name">VentureX ERP & CRM</div>
-            <div style="font-size: 11px; color: #666; margin-top: 5px;">Universal CRM + ERP Business Operating System</div>
+        <div class="brand">
+            @if (! empty($branding['logo_data_uri']))
+                <img src="{{ $branding['logo_data_uri'] }}" alt="{{ $branding['company_name'] }}" class="brand-logo">
+            @endif
+            <div>
+                <div class="company-name">{{ $branding['company_name'] }}</div>
+                @if (! empty($branding['tagline']))
+                    <div style="font-size: 11px; color: #666; margin-top: 5px;">{{ $branding['tagline'] }}</div>
+                @endif
+                <div class="company-meta">
+                    @if (! empty($branding['address'])){{ $branding['address'] }}<br>@endif
+                    @if (! empty($branding['email'])){{ $branding['email'] }}@endif
+                    @if (! empty($branding['phone'])) &middot; {{ $branding['phone'] }}@endif
+                    @if (! empty($branding['website']))<br>{{ $branding['website'] }}@endif
+                    @if (! empty($branding['tax_id']))<br>{{ $branding['tax_id'] }}@endif
+                    @if (! empty($branding['registration_number'])) &middot; Reg. {{ $branding['registration_number'] }}@endif
+                </div>
+            </div>
         </div>
         <div>
             <div class="doc-title">INVOICE</div>
@@ -149,8 +173,18 @@
     </div>
     @endif
 
+    @if (! empty($branding['invoice_terms']))
+    <div class="notes" style="margin-top: 10px;">
+        <div class="notes-label">Terms &amp; Payment Instructions</div>
+        <div>{{ $branding['invoice_terms'] }}</div>
+    </div>
+    @endif
+
     <div class="footer">
-        Generated by VentureX ERP & CRM &mdash; {{ now()->format('d M Y H:i') }}
+        @if (! empty($branding['invoice_footer']))
+            <div style="margin-bottom: 6px; font-weight: bold; color: #555;">{{ $branding['invoice_footer'] }}</div>
+        @endif
+        {{ $branding['company_name'] }} &mdash; {{ $invoice->invoice_number }} &mdash; Generated {{ now()->format('d M Y H:i') }}
     </div>
 </body>
 </html>

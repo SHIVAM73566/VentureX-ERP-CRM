@@ -8,7 +8,7 @@ three tabs.
 | Tab | What it answers |
 | --- | --- |
 | **Introduction** | What VentureX is, a 60-second start, how companies use it, the easy process and which features work together. |
-| **All 80 RAG pipelines** | The complete, searchable and domain-filtered catalogue of every retrieval-augmented generation pipeline. |
+| **All 84 RAG pipelines** | The complete, searchable and domain-filtered catalogue of every retrieval-augmented generation pipeline. |
 | **This page** | The RAG domains and questions that match the screen the user is currently on. |
 
 Because the guide is rendered by
@@ -24,7 +24,7 @@ Most business software explains itself in a manual that is out of date before
 the first invoice is sent. VentureX explains itself **where the work happens**:
 
 - a new user sees the introduction without leaving the dashboard;
-- an experienced user can search all 80 pipelines from any screen;
+- an experienced user can search all 84 pipelines from any screen;
 - a warehouse user on the stock page gets stock questions, not finance ones;
 - a finance user on receivables gets collection and cash-flow questions;
 - every suggestion is grounded in the company's own records.
@@ -63,11 +63,11 @@ trail and the AI always agree.
 
 ---
 
-## How the 80 RAG pipelines help everywhere
+## How the 84 RAG pipelines help everywhere
 
 Retrieval-Augmented Generation (RAG) means the AI answers from **your records**,
-not from generic internet knowledge. VentureX ships 80 focused pipelines across
-six domains. A warehouse question searches warehouse data; a finance question
+not from generic internet knowledge. VentureX ships 84 focused pipelines across
+seven domains. A warehouse question searches warehouse data; a finance question
 searches the ledger.
 
 How a question is answered:
@@ -101,13 +101,13 @@ matter on that screen:
 | Admin, audit logs, system health | Executive, Finance |
 | Help center, tickets | CRM, Executive |
 | AI workspace and tour | Executive |
-| Getting Started | All six domains |
+| Getting Started | All seven domains |
 
 Unrecognised screens still receive the full catalogue.
 
 ---
 
-## The complete catalogue — all 80 pipelines
+## The complete catalogue — all 84 pipelines
 
 ### CRM & Sales Analytics (15 pipelines)
 
@@ -207,13 +207,75 @@ Unrecognised screens still receive the full catalogue.
 - **Operational Efficiency Index** (`operational_efficiency_index`) — Measures throughput, cycle time and exception rates across modules.
 - **Governance & Compliance Digest** (`governance_compliance_digest`) — Produces a digest of approvals, audits and compliance exceptions.
 
+### Human Resources & Workforce Intelligence (4 pipelines)
+
+- **Workforce Headcount Forecast** (`workforce_headcount_forecast`) — Forecasts headcount, attrition and hiring demand from the employee directory and leave history.
+- **Attendance Pattern Analysis** (`attendance_pattern_analysis`) — Detects absenteeism, lateness and overtime patterns across teams.
+- **Payroll Cost Anomaly Detection** (`payroll_cost_anomaly`) — Flags unusual payroll movements, overtime spikes and deduction anomalies before approval.
+- **Onboarding Readiness Digest** (`onboarding_readiness_digest`) — Summarises onboarding completion, blocked tasks and new-hire readiness for HR review.
+
+---
+
+## The HR suite
+
+VentureX includes a complete HR workspace at **Human Resources** in the sidebar:
+
+- **HR dashboard** — headcount, attendance today, pending leave, open onboarding
+  tasks, latest payroll and recent performance reviews.
+- **Employee directory** — searchable records with department, manager, job
+  title, employment type, salary and status.
+- **Attendance** — daily present/remote/late/absent tracking with worked and
+  overtime hours.
+- **Leave** — request, approve and reject annual, sick, casual, unpaid and
+  statutory leave with automatic day counting.
+- **Payroll** — one-click monthly runs with transparent, configurable tax,
+  social-security and overtime percentages (`config/hr.php`). Runs are
+  regenerated idempotently and must be approved before payment.
+- **Performance reviews** — goals and competency scoring with automatic overall
+  rating.
+- **Onboarding** — a seven-step checklist is generated automatically for every
+  new employee and can be completed, reopened or extended.
+
+Every HR record is company-scoped, permission-gated (`hr.view`, `hr.create`,
+`hr.edit`, `hr.delete`, `hr.approve`) and audit-logged.
+
+---
+
+## AERO X Agentic Engine
+
+The **Automation → AERO X Agentic Engine** control surface runs autonomous,
+auditable business rules:
+
+- Draft purchase orders when products fall to their reorder level.
+- Flag sent and partially paid invoices as overdue.
+- Self-assign unowned support tickets to the least-loaded agent.
+- Generate onboarding checklists for recent hires that have none.
+
+Each rule has a cooldown, confidence score, enable/disable switch and optional
+human-approval gate. Every execution runs inside a database transaction; a
+failure is rolled back and recorded in the run ledger with the captured
+exception, and the rule's confidence is reduced. Runs are scheduled every
+15 minutes and can be triggered manually or as a dry run from the UI.
+
+---
+
+## Invoice branding
+
+**Administration → Settings → Branding & Invoices** decouples every visual
+detail from the code. Upload a logo, choose an accent colour and PDF-safe
+typography, and set the legal name, tax/VAT/GST ID, registration number,
+address, footer, terms and watermark. Values fall back to the company record,
+so a fresh install still produces a complete tax-compliant invoice. The same
+branding is applied to invoice and quotation PDFs and previewed on the invoice
+screen.
+
 ---
 
 ## Using the guide
 
 - **Open it** with the bottom-right **Product guide** button on any page.
 - **Search** the catalogue by pipeline name, keyword or question.
-- **Filter** to one of the six domains.
+- **Filter** to one of the seven domains.
 - **Copy** a suggested question from the *This page* tab and paste it into the
   RAG workspace, or follow the domain chip.
 - **Close** with `Esc`, the backdrop or the close button.
@@ -227,7 +289,8 @@ Keyboard and accessibility: the launcher and close button are real buttons with
 ## Related documentation
 
 - [Getting Started & Quick Examples](GETTING-STARTED.md)
-- [80-Pipeline RAG Guide](RAG-GUIDE.md)
+- [AI API Keys — Secure Setup](AI-API-KEYS.md)
+- [84-Pipeline RAG Guide](RAG-GUIDE.md)
 - [User Guide](USER_GUIDE.md)
 - [Admin Guide](ADMIN_GUIDE.md)
 - [API Documentation](API_DOCUMENTATION.md)
@@ -236,5 +299,5 @@ In the app:
 
 - `/getting-started` — guided quick start
 - `/ai/rag` — RAG workspace
-- `/ai/rag/tour` — 80-pipeline tour
+- `/ai/rag/tour` — 84-pipeline tour
 - `/support` — Help center

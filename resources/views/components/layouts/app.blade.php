@@ -49,6 +49,19 @@
             ['label' => 'Receivables', 'icon' => 'arrow-down', 'route' => 'finance.receivables', 'active' => request()->routeIs('finance.receivables')],
             ['label' => 'Payables', 'icon' => 'arrow-up', 'route' => 'finance.payables', 'active' => request()->routeIs('finance.payables')],
         ],
+        'Human Resources' => [
+            ['label' => 'HR Dashboard', 'icon' => 'briefcase', 'route' => 'hr.dashboard', 'active' => request()->routeIs('hr.dashboard'), 'visible' => $user?->can('viewAny', App\Models\Employee::class)],
+            ['label' => 'Employees', 'icon' => 'users', 'route' => 'hr.employees.index', 'active' => request()->routeIs('hr.employees.*'), 'visible' => $user?->can('viewAny', App\Models\Employee::class)],
+            ['label' => 'Attendance', 'icon' => 'calendar', 'route' => 'hr.attendance.index', 'active' => request()->routeIs('hr.attendance.*'), 'visible' => $user?->can('viewAny', App\Models\Attendance::class)],
+            ['label' => 'Leave', 'icon' => 'request', 'route' => 'hr.leave.index', 'active' => request()->routeIs('hr.leave.*'), 'visible' => $user?->can('viewAny', App\Models\LeaveRequest::class)],
+            ['label' => 'Payroll', 'icon' => 'wallet', 'route' => 'hr.payroll.index', 'active' => request()->routeIs('hr.payroll.*'), 'visible' => $user?->can('viewAny', App\Models\PayrollRun::class)],
+            ['label' => 'Performance', 'icon' => 'chart', 'route' => 'hr.reviews.index', 'active' => request()->routeIs('hr.reviews.*'), 'visible' => $user?->can('viewAny', App\Models\PerformanceReview::class)],
+            ['label' => 'Onboarding', 'icon' => 'badge', 'route' => 'hr.onboarding.index', 'active' => request()->routeIs('hr.onboarding.*'), 'visible' => $user?->can('viewAny', App\Models\OnboardingTask::class)],
+            ['label' => 'Departments', 'icon' => 'building', 'route' => 'hr.departments.index', 'active' => request()->routeIs('hr.departments.*'), 'visible' => $user?->can('viewAny', App\Models\Department::class)],
+        ],
+        'Automation' => [
+            ['label' => 'AERO X Agentic Engine', 'icon' => 'bolt', 'route' => 'admin.agentic.index', 'active' => request()->routeIs('admin.agentic.*'), 'visible' => $user?->hasRole('super_admin') || $user?->can('viewAny', App\Models\AgentAction::class)],
+        ],
         'Documents' => [
             ['label' => 'Document Manager', 'icon' => 'folder', 'route' => 'admin.documents.index', 'active' => request()->routeIs('admin.documents.*'), 'visible' => $user?->can('configure')],
             ['label' => 'AI Document Reader', 'icon' => 'scan', 'route' => 'ai.document-reader', 'active' => request()->routeIs('ai.document-reader*')],

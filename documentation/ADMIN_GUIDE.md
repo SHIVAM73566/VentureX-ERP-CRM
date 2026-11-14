@@ -108,6 +108,8 @@ Module
 - Inventory: products, warehouses, stock_movements
 - Logistics: shipments, containers, landed_costs
 - Finance: finance_dashboard, receivables, payables, accounts, journal_entries
+- HR: hr (view, create, edit, delete, approve, export)
+- Automation: automation (agentic rule visibility and execution)
 - AI: ai_assistant, ai_copilot, deep_analysis, procurement_ai, document_reader, executive_review
 - Admin: companies, users, roles, settings, security, documents, exports, audit_logs, approvals, ai_skills, ai_quotas
 

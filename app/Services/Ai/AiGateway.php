@@ -30,6 +30,7 @@ class AiGateway
         protected AiProviderManager $providers,
         protected AiUsageService $usageService,
         protected AiRateLimitService $rateLimit,
+        protected SuperBrainShield $shield,
     ) {}
 
     public function isEnabled(): bool
@@ -55,6 +56,13 @@ class AiGateway
         if (! $this->isEnabled()) {
             throw new AiException('AI analysis is not available right now. Ask your administrator to connect an AI provider in Settings.');
         }
+
+        // Layer 2: strip secrets/PII and neutralise prompt-injection attempts
+        // before the prompt can reach an external model or the cache.
+        $shielded = $this->shield->sanitizePrompt($system, $user);
+        $system = $shielded['system'];
+        $user = $shielded['user'];
+        $this->shield->recordSanitization($shielded);
 
         $task = (string) ($options['task'] ?? 'general_assistant');
         $providerOverride = isset($options['provider']) && $options['provider'] !== null

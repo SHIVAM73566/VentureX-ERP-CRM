@@ -83,18 +83,18 @@ class ProductGuideTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Product guide', false);
-        $response->assertSee('All 80 RAG pipelines', false);
+        $response->assertSee('All 84 RAG pipelines', false);
         $response->assertSee('This page', false);
     }
 
-    public function test_guide_lists_all_eighty_pipelines_on_a_single_page(): void
+    public function test_guide_lists_all_eighty_four_pipelines_on_a_single_page(): void
     {
         $response = $this->actingAs($this->admin)->get(route('dashboard'));
 
         $response->assertOk();
 
         $definitions = RagPipelineRegistry::definitions();
-        $this->assertCount(80, $definitions);
+        $this->assertCount(84, $definitions);
 
         foreach ($definitions as $pipeline) {
             $response->assertSee($pipeline['name']);
@@ -104,7 +104,7 @@ class ProductGuideTest extends TestCase
             $response->assertSee($label);
         }
 
-        $response->assertSee('80 company-scoped pipelines', false);
+        $response->assertSee('84 company-scoped pipelines', false);
     }
 
     public function test_guide_introduction_explains_the_product_and_process(): void
@@ -112,7 +112,7 @@ class ProductGuideTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('dashboard'));
 
         $response->assertOk();
-        $response->assertSee('One login. Every department. 80 AI pipelines.', false);
+        $response->assertSee('One login. Every department. 84 AI pipelines.', false);
         $response->assertSee('Start in 60 seconds', false);
         $response->assertSee('How companies use VentureX', false);
         $response->assertSee('The easy process', false);
@@ -153,7 +153,7 @@ class ProductGuideTest extends TestCase
         $this->assertSame(['finance'], RagPageGuide::domainsFor(null, 'finance/receivables'));
 
         // Unknown screens still receive the full catalogue.
-        $this->assertCount(6, RagPageGuide::domainsFor(null, 'unknown/screen'));
+        $this->assertCount(7, RagPageGuide::domainsFor(null, 'unknown/screen'));
     }
 
     public function test_page_guide_service_builds_labels_and_questions(): void

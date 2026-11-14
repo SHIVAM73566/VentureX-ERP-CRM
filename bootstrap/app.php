@@ -11,6 +11,7 @@ use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SelfHealing;
 use App\Http\Middleware\SetCompanyContext;
 use App\Http\Middleware\StepUpAuth;
+use App\Http\Middleware\SuperBrainShield;
 use App\Services\SelfHealingService;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -41,6 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
             LoadAiProviders::class,
             SecurityHeaders::class,
             EnsureAiSecurity::class,
+            SuperBrainShield::class,
         ]);
 
         $middleware->prepend([
@@ -57,6 +59,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'two_factor' => EnsureTwoFactor::class,
             'step_up' => StepUpAuth::class,
+            'super_brain' => SuperBrainShield::class,
             'api.protection' => ApiProtection::class,
             'installer' => InstallerGuard::class,
         ]);
@@ -64,6 +67,16 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => route('login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Never round-trip secrets through the session when validation fails.
+        // Without this, a rejected API key would be flashed as old input and
+        // could leak back into the HTML on the next request.
+        $exceptions->dontFlash([
+            'api_key',
+            'current_password',
+            'password',
+            'password_confirmation',
+        ]);
+
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );

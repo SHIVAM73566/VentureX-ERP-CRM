@@ -71,6 +71,14 @@ return [
         'per_minute' => (int) env('SECURITY_AI_PER_MINUTE', 10),
         'per_hour' => (int) env('SECURITY_AI_PER_HOUR', 60),
         'per_day' => (int) env('SECURITY_AI_PER_DAY', 200),
+
+        // AERO X Super Intelligence Brain shield.
+        'shield' => [
+            'enabled' => (bool) env('SUPERBRAIN_SHIELD_ENABLED', true),
+            'per_minute' => (int) env('SUPERBRAIN_AI_PER_MINUTE', 30),
+            'company_per_minute' => (int) env('SUPERBRAIN_AI_COMPANY_PER_MINUTE', 180),
+            'redact_pii' => (bool) env('SUPERBRAIN_REDACT_PII', true),
+        ],
     ],
 
     /*

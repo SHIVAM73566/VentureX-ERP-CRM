@@ -246,10 +246,12 @@ return [
             'enabled' => false,
         ],
         'gemini' => [
-            'base_url' => env('GEMINI_AI_ENDPOINT', 'https://generativelanguage.googleapis.com'),
+            // Official Gemini REST endpoint. Key-only onboarding must never
+            // inherit a legacy RapidAPI host from the environment.
+            'base_url' => 'https://generativelanguage.googleapis.com',
             'host' => 'generativelanguage.googleapis.com',
             'path' => '/v1beta/models/{model}:generateContent',
-            'model' => env('GEMINI_AI_MODEL', 'gemini-2.5-flash'),
+            'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
             'api_key' => env('GEMINI_API_KEY', ''),
             'auth_mode' => 'google',
         ],
@@ -289,12 +291,13 @@ return [
             'auth_mode' => 'bearer',
         ],
         'anthropic' => [
-            'base_url' => 'https://api.anthropic.com/v1/messages',
+            'base_url' => 'https://api.anthropic.com',
             'host' => 'api.anthropic.com',
             'path' => '/v1/messages',
             'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-20250514'),
             'api_key' => env('ANTHROPIC_API_KEY', ''),
-            'auth_mode' => 'bearer',
+            'auth_mode' => 'anthropic',
+            'api_version' => env('ANTHROPIC_API_VERSION', '2023-06-01'),
         ],
     ],
 

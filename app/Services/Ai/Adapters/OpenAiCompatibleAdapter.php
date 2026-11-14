@@ -40,15 +40,30 @@ class OpenAiCompatibleAdapter implements ProviderAdapter
             $url = $baseUrl.$path;
         }
 
-        $body = [
-            'model' => $payload['model'],
-            'temperature' => (float) $payload['temperature'],
-            'max_tokens' => (int) $payload['max_tokens'],
-            'messages' => [
-                ['role' => 'system', 'content' => $payload['system']],
-                ['role' => 'user', 'content' => $payload['user']],
-            ],
-        ];
+        // Anthropic's Messages API uses a different contract: the system
+        // instruction is a top-level field (not a message), auth is x-api-key
+        // plus a version header, and usage is reported as input/output tokens.
+        $isAnthropic = $authMode === 'anthropic' || $provider === 'anthropic';
+
+        $body = $isAnthropic
+            ? [
+                'model' => $payload['model'],
+                'temperature' => (float) $payload['temperature'],
+                'max_tokens' => (int) $payload['max_tokens'],
+                'system' => $payload['system'],
+                'messages' => [
+                    ['role' => 'user', 'content' => $payload['user']],
+                ],
+            ]
+            : [
+                'model' => $payload['model'],
+                'temperature' => (float) $payload['temperature'],
+                'max_tokens' => (int) $payload['max_tokens'],
+                'messages' => [
+                    ['role' => 'system', 'content' => $payload['system']],
+                    ['role' => 'user', 'content' => $payload['user']],
+                ],
+            ];
 
         $started = microtime(true);
 
@@ -59,6 +74,11 @@ class OpenAiCompatibleAdapter implements ProviderAdapter
                 $http = $http->withHeaders([
                     'x-rapidapi-key' => $config['api_key'],
                     'x-rapidapi-host' => $config['host'] ?? parse_url($baseUrl, PHP_URL_HOST),
+                ]);
+            } elseif ($isAnthropic) {
+                $http = $http->withHeaders([
+                    'x-api-key' => $config['api_key'],
+                    'anthropic-version' => $config['api_version'] ?? '2023-06-01',
                 ]);
             } else {
                 $http = $http->withToken($config['api_key']);
@@ -103,8 +123,8 @@ class OpenAiCompatibleAdapter implements ProviderAdapter
                 'provider' => $provider,
                 'model' => $data['model'] ?? $payload['model'],
                 'content' => $content,
-                'prompt_tokens' => (int) ($usage['prompt_tokens'] ?? 0),
-                'completion_tokens' => (int) ($usage['completion_tokens'] ?? 0),
+                'prompt_tokens' => (int) ($usage['prompt_tokens'] ?? $usage['input_tokens'] ?? 0),
+                'completion_tokens' => (int) ($usage['completion_tokens'] ?? $usage['output_tokens'] ?? 0),
                 'latency_ms' => (int) round((microtime(true) - $started) * 1000),
             ];
         } catch (AiException $e) {

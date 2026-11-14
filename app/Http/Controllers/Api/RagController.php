@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Throwable;
 
 /**
- * REST surface for the 80 enterprise RAG pipelines.
+ * REST surface for the 84 enterprise RAG pipelines.
  */
 class RagController extends ApiController
 {

@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgentAction;
+use App\Models\AgentRun;
 use App\Models\Customer;
+use App\Models\Employee;
+use App\Models\Invoice;
 use App\Models\Lead;
+use App\Models\LeaveRequest;
+use App\Models\OnboardingTask;
 use App\Models\Opportunity;
+use App\Models\PayrollRun;
+use App\Models\PurchaseOrder;
 use App\Models\SupplierOffer;
 use App\Services\Ai\AiInsightService;
 use App\Services\Ai\AiQuotaService;
 use App\Services\CompanyContext;
+use App\Services\SettingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -72,11 +81,11 @@ class DashboardController extends Controller
             ['name' => 'Inventory', 'slug' => 'inventory', 'ready' => true, 'icon' => 'box', 'route' => 'inventory.products.index', 'permission' => 'inventory.view'],
             ['name' => 'Finance', 'slug' => 'finance', 'ready' => true, 'icon' => 'wallet', 'route' => 'finance.dashboard', 'permission' => 'finance.view'],
             ['name' => 'Logistics', 'slug' => 'logistics', 'ready' => true, 'icon' => 'ship', 'route' => 'logistics.shipments.index', 'permission' => 'logistics.view'],
-            ['name' => 'HR', 'slug' => 'hr', 'ready' => false, 'icon' => 'badge', 'route' => null, 'permission' => 'hr.view'],
+            ['name' => 'HR', 'slug' => 'hr', 'ready' => true, 'icon' => 'badge', 'route' => 'hr.dashboard', 'permission' => 'hr.view'],
             ['name' => 'Projects', 'slug' => 'projects', 'ready' => false, 'icon' => 'briefcase', 'route' => null, 'permission' => 'projects.view'],
             ['name' => 'Documents', 'slug' => 'documents', 'ready' => true, 'icon' => 'folder', 'route' => 'admin.documents.index', 'permission' => 'documents.view'],
             ['name' => 'AI Center', 'slug' => 'ai', 'ready' => true, 'icon' => 'spark', 'route' => 'ai.copilot', 'permission' => 'ai.chat'],
-            ['name' => 'Automation', 'slug' => 'automation', 'ready' => false, 'icon' => 'bolt', 'route' => null, 'permission' => null],
+            ['name' => 'Automation', 'slug' => 'automation', 'ready' => true, 'icon' => 'bolt', 'route' => 'admin.agentic.index', 'permission' => null],
         ];
 
         $modules = array_filter($allModules, function ($m) use ($user) {
@@ -103,12 +112,194 @@ class DashboardController extends Controller
 
         $quickActions = $this->buildQuickActions($user, $roleNames);
 
+        $cashFlow = $this->cashFlowForecast();
+        $hrSummary = $this->hrSummary();
+        $agenticSummary = $this->agenticSummary();
+        $briefing = $this->buildBriefing($stats, $cashFlow, $hrSummary, $agenticSummary);
+
         return view('dashboard.index', compact(
             'stats', 'leadsByStatus', 'opportunitiesByStage', 'offers',
             'recentCustomers', 'recentLeads', 'recentOffers', 'followUps', 'modules',
             'ruleInsights', 'aiInsights', 'aiEnabled', 'aiQuota', 'isExecutive',
-            'quickActions', 'roleNames'
+            'quickActions', 'roleNames', 'cashFlow', 'hrSummary', 'agenticSummary', 'briefing'
         ));
+    }
+
+    /**
+     * Six-month cash-flow forecast built from outstanding receivables and
+     * open purchase-order commitments. Safe when finance tables are empty.
+     *
+     * @return array{months: array<int, array<string, mixed>>, overdue_total: float, overdue_count: int}
+     */
+    protected function cashFlowForecast(): array
+    {
+        $months = [];
+        $start = now()->startOfMonth();
+
+        try {
+            for ($i = 0; $i < 6; $i++) {
+                $month = $start->copy()->addMonthsNoOverflow($i);
+
+                $inflow = (float) Invoice::ofCompany()
+                    ->whereIn('status', ['sent', 'partial', 'overdue'])
+                    ->whereYear('due_date', $month->year)
+                    ->whereMonth('due_date', $month->month)
+                    ->selectRaw('COALESCE(SUM(total - paid_amount), 0) as balance')
+                    ->value('balance');
+
+                $outflow = (float) PurchaseOrder::ofCompany()
+                    ->whereIn('status', ['approved', 'ordered', 'partially_received'])
+                    ->whereYear('expected_date', $month->year)
+                    ->whereMonth('expected_date', $month->month)
+                    ->selectRaw('COALESCE(SUM(total - paid_amount), 0) as balance')
+                    ->value('balance');
+
+                $months[] = [
+                    'label' => $month->format('M'),
+                    'full' => $month->format('M Y'),
+                    'inflow' => round(max(0, $inflow), 2),
+                    'outflow' => round(max(0, $outflow), 2),
+                    'net' => round($inflow - $outflow, 2),
+                ];
+            }
+
+            $overdueQuery = Invoice::ofCompany()->where('status', 'overdue');
+            $overdueCount = (clone $overdueQuery)->count();
+            $overdueTotal = (float) $overdueQuery
+                ->selectRaw('COALESCE(SUM(total - paid_amount), 0) as balance')
+                ->value('balance');
+        } catch (\Throwable) {
+            $months = [];
+            $overdueCount = 0;
+            $overdueTotal = 0.0;
+        }
+
+        return [
+            'months' => $months,
+            'overdue_total' => round(max(0, $overdueTotal), 2),
+            'overdue_count' => $overdueCount,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function hrSummary(): array
+    {
+        try {
+            $latestPayroll = PayrollRun::ofCompany()->latest('period_end')->first();
+
+            return [
+                'headcount' => Employee::ofCompany()->whereIn('status', ['active', 'probation'])->count(),
+                'on_leave' => Employee::ofCompany()->where('status', 'on_leave')->count(),
+                'pending_leave' => LeaveRequest::ofCompany()->where('status', 'pending')->count(),
+                'onboarding_open' => OnboardingTask::ofCompany()->where('status', '!=', 'completed')->count(),
+                'latest_payroll_net' => $latestPayroll ? (float) $latestPayroll->net_total : 0.0,
+                'latest_payroll_status' => $latestPayroll?->status,
+                'latest_payroll_period' => $latestPayroll?->period_end?->format('M Y'),
+            ];
+        } catch (\Throwable) {
+            return [
+                'headcount' => 0,
+                'on_leave' => 0,
+                'pending_leave' => 0,
+                'onboarding_open' => 0,
+                'latest_payroll_net' => 0.0,
+                'latest_payroll_status' => null,
+                'latest_payroll_period' => null,
+            ];
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function agenticSummary(): array
+    {
+        try {
+            $rules = AgentAction::ofCompany()->count();
+            $enabled = AgentAction::ofCompany()->where('is_enabled', true)->count();
+            $runsToday = AgentRun::ofCompany()->whereDate('created_at', today())->count();
+            $rollbacks = AgentRun::ofCompany()
+                ->whereIn('status', ['rolled_back', 'failed'])
+                ->where('created_at', '>=', now()->subDays(7))
+                ->count();
+            $success = AgentRun::ofCompany()
+                ->where('status', 'success')
+                ->where('created_at', '>=', now()->subDays(7))
+                ->count();
+            $completed = AgentRun::ofCompany()
+                ->whereIn('status', ['success', 'failed', 'rolled_back'])
+                ->where('created_at', '>=', now()->subDays(7))
+                ->count();
+
+            return [
+                'rules' => $rules,
+                'enabled' => $enabled,
+                'runs_today' => $runsToday,
+                'rollbacks' => $rollbacks,
+                'success_rate' => $completed > 0 ? round(($success / $completed) * 100, 1) : 100.0,
+            ];
+        } catch (\Throwable) {
+            return [
+                'rules' => 0,
+                'enabled' => 0,
+                'runs_today' => 0,
+                'rollbacks' => 0,
+                'success_rate' => 100.0,
+            ];
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $stats
+     * @param  array<string, mixed>  $cashFlow
+     * @param  array<string, mixed>  $hr
+     * @param  array<string, mixed>  $agentic
+     * @return array<int, array{label: string, value: string, tone: string}>
+     */
+    protected function buildBriefing(array $stats, array $cashFlow, array $hr, array $agentic): array
+    {
+        $nextMonth = $cashFlow['months'][1] ?? $cashFlow['months'][0] ?? null;
+        $currency = (string) (app(SettingService::class)->get('currency.default') ?: 'USD');
+
+        $briefing = [
+            [
+                'label' => 'Pipeline',
+                'value' => $stats['open_opportunities'].' open opportunities worth '.$currency.' '.number_format((float) $stats['pipeline_value'], 0),
+                'tone' => 'blue',
+            ],
+        ];
+
+        if ($nextMonth) {
+            $briefing[] = [
+                'label' => 'Cash next month',
+                'value' => ($nextMonth['net'] >= 0 ? '+' : '-').$currency.' '.number_format(abs((float) $nextMonth['net']), 0).' net ('.$nextMonth['full'].')',
+                'tone' => $nextMonth['net'] >= 0 ? 'green' : 'red',
+            ];
+        }
+
+        if ($cashFlow['overdue_count'] > 0) {
+            $briefing[] = [
+                'label' => 'Overdue receivables',
+                'value' => $cashFlow['overdue_count'].' invoice(s), '.$currency.' '.number_format((float) $cashFlow['overdue_total'], 0).' outstanding',
+                'tone' => 'amber',
+            ];
+        }
+
+        $briefing[] = [
+            'label' => 'Workforce',
+            'value' => $hr['headcount'].' active employees · '.$hr['pending_leave'].' leave request(s) pending',
+            'tone' => 'violet',
+        ];
+
+        $briefing[] = [
+            'label' => 'Autonomous engine',
+            'value' => $agentic['enabled'].'/'.$agentic['rules'].' rules enabled · '.$agentic['runs_today'].' run(s) today · '.$agentic['rollbacks'].' rollback(s) this week',
+            'tone' => $agentic['rollbacks'] > 0 ? 'amber' : 'green',
+        ];
+
+        return $briefing;
     }
 
     protected function buildQuickActions($user, array $roleNames): array

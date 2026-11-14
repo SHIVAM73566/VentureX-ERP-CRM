@@ -83,7 +83,7 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->name('api.')->group(functio
         Route::post('/conversations/{conversation}/messages', [AiController::class, 'sendMessage'])->name('conversations.messages');
         Route::get('/insights', [AiController::class, 'insights'])->name('insights');
 
-        // Enterprise RAG pipelines (80 modular retrieval pipelines).
+        // Enterprise RAG pipelines (84 modular retrieval pipelines).
         Route::prefix('rag')->name('rag.')->group(function () {
             Route::get('/pipelines', [RagController::class, 'pipelines'])->name('pipelines');
             Route::get('/stats', [RagController::class, 'stats'])->name('stats');

@@ -46,12 +46,12 @@ class RagTourTest extends TestCase
         $this->get(route('ai.rag.tour'))->assertRedirect(route('login'));
     }
 
-    public function test_tour_renders_all_six_domains_and_their_pipelines(): void
+    public function test_tour_renders_all_seven_domains_and_their_pipelines(): void
     {
         $response = $this->actingAs($this->admin)->get(route('ai.rag.tour'));
 
         $response->assertOk();
-        $response->assertSee('80 RAG pipelines, one business brain', false);
+        $response->assertSee('84 RAG pipelines, one business brain', false);
 
         foreach (RagPipelineRegistry::domainLabels() as $label) {
             // Blade escapes "&" in the label, so assert against the escaped form.
@@ -65,6 +65,7 @@ class RagTourTest extends TestCase
         $response->assertSee('Receivables Aging Insight', false);
         $response->assertSee('Container Demurrage Risk', false);
         $response->assertSee('Company Health Scorecard', false);
+        $response->assertSee('Workforce Headcount Forecast', false);
     }
 
     public function test_tour_explains_live_usage_benefits_and_governance(): void

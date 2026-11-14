@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AgenticController;
+use App\Http\Controllers\Admin\AiKeyController;
 use App\Http\Controllers\Admin\AiProviderController;
 use App\Http\Controllers\Admin\AiQuotaController;
 use App\Http\Controllers\Admin\AiSkillController;
@@ -45,6 +47,14 @@ use App\Http\Controllers\Finance\FinanceDashboardController;
 use App\Http\Controllers\Finance\JournalEntryController;
 use App\Http\Controllers\Finance\PayablesController;
 use App\Http\Controllers\Finance\ReceivablesController;
+use App\Http\Controllers\Hr\AttendanceController;
+use App\Http\Controllers\Hr\DepartmentController;
+use App\Http\Controllers\Hr\EmployeeController;
+use App\Http\Controllers\Hr\HrDashboardController;
+use App\Http\Controllers\Hr\LeaveRequestController;
+use App\Http\Controllers\Hr\OnboardingController;
+use App\Http\Controllers\Hr\PayrollController;
+use App\Http\Controllers\Hr\PerformanceReviewController;
 use App\Http\Controllers\Inventory\ProductController;
 use App\Http\Controllers\Inventory\StockMovementController;
 use App\Http\Controllers\Inventory\WarehouseController;
@@ -145,6 +155,10 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::resource('roles', RoleController::class)->except('show');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('settings', [SettingController::class, 'update'])->middleware('step_up')->name('settings.update');
+        Route::post('settings/branding', [SettingController::class, 'updateBranding'])->middleware('step_up')->name('settings.branding');
+        Route::post('settings/ai-keys/{provider}', [AiKeyController::class, 'store'])->middleware('step_up')->name('settings.ai-key.store');
+        Route::post('settings/ai-keys/{provider}/test', [AiKeyController::class, 'test'])->middleware('throttle:ai')->name('settings.ai-key.test');
+        Route::delete('settings/ai-keys/{provider}', [AiKeyController::class, 'destroy'])->middleware('step_up')->name('settings.ai-key.destroy');
         Route::get('documents', [DocumentController::class, 'index'])->name('documents.index');
         Route::post('documents', [DocumentController::class, 'store'])->middleware('throttle:upload')->name('documents.store');
         Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
@@ -319,6 +333,63 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::delete('journals/{entry}', [JournalEntryController::class, 'destroy'])->name('journals.destroy');
     });
 
+    Route::prefix('hr')->name('hr.')->group(function () {
+        Route::get('/', [HrDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('employees', [EmployeeController::class, 'index'])->name('employees.index');
+        Route::get('employees/create', [EmployeeController::class, 'create'])->name('employees.create');
+        Route::post('employees', [EmployeeController::class, 'store'])->name('employees.store');
+        Route::get('employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');
+        Route::get('employees/{employee}/edit', [EmployeeController::class, 'edit'])->name('employees.edit');
+        Route::put('employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
+        Route::delete('employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+
+        Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+        Route::get('attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
+        Route::post('attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+        Route::get('attendance/{attendance}/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
+        Route::put('attendance/{attendance}', [AttendanceController::class, 'update'])->name('attendance.update');
+        Route::delete('attendance/{attendance}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
+
+        Route::get('leave', [LeaveRequestController::class, 'index'])->name('leave.index');
+        Route::get('leave/create', [LeaveRequestController::class, 'create'])->name('leave.create');
+        Route::post('leave', [LeaveRequestController::class, 'store'])->name('leave.store');
+        Route::post('leave/{leave}/approve', [LeaveRequestController::class, 'approve'])->name('leave.approve');
+        Route::post('leave/{leave}/reject', [LeaveRequestController::class, 'reject'])->name('leave.reject');
+        Route::delete('leave/{leave}', [LeaveRequestController::class, 'destroy'])->name('leave.destroy');
+
+        Route::get('payroll', [PayrollController::class, 'index'])->name('payroll.index');
+        Route::get('payroll/create', [PayrollController::class, 'create'])->name('payroll.create');
+        Route::post('payroll', [PayrollController::class, 'store'])->name('payroll.store');
+        Route::get('payroll/{run}', [PayrollController::class, 'show'])->name('payroll.show');
+        Route::post('payroll/{run}/approve', [PayrollController::class, 'approve'])->name('payroll.approve');
+        Route::post('payroll/{run}/paid', [PayrollController::class, 'markPaid'])->name('payroll.paid');
+        Route::post('payroll/{run}/regenerate', [PayrollController::class, 'regenerate'])->name('payroll.regenerate');
+        Route::delete('payroll/{run}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
+
+        Route::get('reviews', [PerformanceReviewController::class, 'index'])->name('reviews.index');
+        Route::get('reviews/create', [PerformanceReviewController::class, 'create'])->name('reviews.create');
+        Route::post('reviews', [PerformanceReviewController::class, 'store'])->name('reviews.store');
+        Route::get('reviews/{review}', [PerformanceReviewController::class, 'show'])->name('reviews.show');
+        Route::get('reviews/{review}/edit', [PerformanceReviewController::class, 'edit'])->name('reviews.edit');
+        Route::put('reviews/{review}', [PerformanceReviewController::class, 'update'])->name('reviews.update');
+        Route::delete('reviews/{review}', [PerformanceReviewController::class, 'destroy'])->name('reviews.destroy');
+
+        Route::get('onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
+        Route::post('onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+        Route::post('onboarding/employees/{employee}/seed', [OnboardingController::class, 'seed'])->name('onboarding.seed');
+        Route::post('onboarding/{task}/complete', [OnboardingController::class, 'complete'])->name('onboarding.complete');
+        Route::post('onboarding/{task}/reopen', [OnboardingController::class, 'reopen'])->name('onboarding.reopen');
+        Route::delete('onboarding/{task}', [OnboardingController::class, 'destroy'])->name('onboarding.destroy');
+
+        Route::get('departments', [DepartmentController::class, 'index'])->name('departments.index');
+        Route::get('departments/create', [DepartmentController::class, 'create'])->name('departments.create');
+        Route::post('departments', [DepartmentController::class, 'store'])->name('departments.store');
+        Route::get('departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
+        Route::put('departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
+        Route::delete('departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+    });
+
     Route::middleware(['role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
         Route::get('audit-logs/{log}', [AuditLogController::class, 'show'])->name('audit-logs.show');
@@ -350,6 +421,13 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         });
 
         Route::get('system-health', [SystemHealthController::class, 'index'])->name('system-health.index');
+
+        Route::prefix('agentic')->name('agentic.')->group(function () {
+            Route::get('/', [AgenticController::class, 'index'])->name('index');
+            Route::post('run', [AgenticController::class, 'runAll'])->name('run');
+            Route::post('{action}/run', [AgenticController::class, 'runOne'])->name('run-one');
+            Route::put('{action}', [AgenticController::class, 'update'])->name('update');
+        });
     });
 
     Route::get('ai/document-reader', [AiDocumentReaderController::class, 'index'])->name('ai.document-reader');
@@ -363,7 +441,7 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
     Route::get('ai/copilot', [CopilotController::class, 'index'])->name('ai.copilot');
     Route::post('ai/copilot', [CopilotController::class, 'ask'])->middleware('throttle:ai')->name('ai.copilot.ask');
 
-    // Enterprise RAG pipelines (80 modular retrieval pipelines).
+    // Enterprise RAG pipelines (84 modular retrieval pipelines).
     Route::get('ai/rag', [RagController::class, 'index'])->name('ai.rag');
     Route::get('ai/rag/tour', [RagController::class, 'tour'])->name('ai.rag.tour');
     Route::post('ai/rag/query', [RagController::class, 'query'])->middleware('throttle:ai')->name('ai.rag.query');

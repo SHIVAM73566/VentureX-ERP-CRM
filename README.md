@@ -22,7 +22,7 @@ It is designed for teams of 5–500 people who have outgrown spreadsheets, share
 
 > The same walkthrough is available inside the app at **Getting Started** in the sidebar, with copyable examples and a saved checklist.
 >
-> Every page also has a floating **Product guide** (bottom-right) with the full introduction and a searchable catalogue of all **80 RAG pipelines**, plus questions matched to the page you are on.
+> Every page also has a floating **Product guide** (bottom-right) with the full introduction and a searchable catalogue of all **84 RAG pipelines**, plus questions matched to the page you are on.
 
 ### 1. Sell something — lead to payment
 1. Add a **Customer** (Customers → New).
@@ -69,8 +69,10 @@ Use **Admin → Import Data** for CSV imports and **Admin → Export Center** fo
 - **Procurement** - Purchase orders, RFQs, suppliers, supplier offers
 - **Finance** - Chart of accounts, journals, AR/AP, dashboards
 - **Logistics** - Shipments, containers, landed costs
+- **HR** - Employee directory, attendance, leave, payroll, performance reviews and automated onboarding
+- **Automation** - AERO X Agentic Engine for autonomous, auditable business rules
 - **Support** - Help center, tickets, documentation, FAQ
-- **Admin** - Users, roles, settings, import/export, audit logs
+- **Admin** - Users, roles, settings, branding, import/export, audit logs
 
 ### AI Features (Work Without API Keys)
 - Natural language chat assistant
@@ -78,9 +80,10 @@ Use **Admin → Import Data** for CSV imports and **Admin → Export Center** fo
 - AI Support Assistant with built-in knowledge base
 - AI Document Reader for file analysis
 - AI Procurement intelligence
-- **80 enterprise RAG pipelines** across CRM, procurement, inventory, finance, logistics and executive domains, with sources, confidence and latency
+- **84 enterprise RAG pipelines** across CRM, procurement, inventory, finance, logistics, executive and HR domains, with sources, confidence and latency
 - Rule-based business insights
-- Multi-provider support (NVIDIA, RapidAPI, local fallback)
+- Key-only onboarding for **NVIDIA NIM, Google Gemini, OpenAI and Anthropic Claude** - paste a key and the endpoint/model are wired server-side
+- **AERO X Super Intelligence Brain** shield: AES-256 encryption at rest, prompt/PII sanitisation, threat detection, rate limiting and audit telemetry
 
 ### Security
 - Multi-Factor Authentication (TOTP)
@@ -89,6 +92,8 @@ Use **Admin → Import Data** for CSV imports and **Admin → Export Center** fo
 - Emergency lockdown mode
 - Complete audit logging
 - Rate limiting and brute force protection
+- Encrypted AI credentials with masked keys and step-up authentication
+- Transactional rollback telemetry for every autonomous action
 
 ## Screenshots
 
@@ -166,17 +171,24 @@ Open http://localhost:8000/install in your browser to run the 6-step installatio
 
 ## AI Configuration (Optional)
 
-All AI features work **out-of-the-box without any API keys** using built-in local intelligence. For enhanced AI capabilities:
+All AI features work **out-of-the-box without any API keys** using built-in local intelligence. For enhanced AI capabilities, connect a provider with a single key:
 
-1. Get a free NVIDIA API key from https://build.nvidia.com
-2. Add `NVIDIA_API_KEY=nvapi-xxx` to your `.env` file
-3. AI features will now use NVIDIA Nemotron for intelligent responses
+1. Get a key from [NVIDIA NIM](https://build.nvidia.com) (`nvapi-...`), [Google AI Studio](https://aistudio.google.com) (`AIza...`), [OpenAI](https://platform.openai.com) (`sk-...`) or [Anthropic](https://console.anthropic.com) (`sk-ant-...`).
+2. Sign in as **Super Admin** → **Administration → Settings → AI Engine**.
+3. Paste the key into the matching provider panel and click **Save & enable key**. There are no Base URL, path or auth-mode fields - endpoints and models come from `config/ai.php` server-side.
+
+Keys are encrypted at rest with AES-256, masked in the UI, fingerprinted, protected by step-up authentication, rate limited, and audit-logged without the secret. Saving any key activates the **AERO X Super Intelligence Brain** shield: prompt/PII sanitisation, threat detection, rate limiting and audit telemetry wrap every model call. You can still use `NVIDIA_API_KEY=nvapi-xxx` in `.env` for immutable deployments. See [AI API Keys — Secure Setup](documentation/AI-API-KEYS.md) for the full security model.
+
+### Invoice branding
+
+Open **Administration → Settings → Branding & Invoices** to upload a logo and set the accent colour, PDF-safe typography, legal name, tax/registration IDs, footer, terms and watermark. Every invoice and quotation PDF uses this branding; values fall back to the company record when unset.
 
 ## Documentation
 
 - [Getting Started & Quick Examples](documentation/GETTING-STARTED.md)
 - [Product Guide (in-app, every page)](documentation/PRODUCT-GUIDE.md)
-- [80-Pipeline RAG Guide](documentation/RAG-GUIDE.md)
+- [AI API Keys — Secure Setup](documentation/AI-API-KEYS.md)
+- [84-Pipeline RAG Guide](documentation/RAG-GUIDE.md)
 - [Installation Guide](documentation/INSTALLATION.md)
 - [User Guide](documentation/USER_GUIDE.md)
 - [Admin Guide](documentation/ADMIN_GUIDE.md)

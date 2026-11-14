@@ -22,3 +22,17 @@ Schedule::job(new SelfTrainingPipeline)
     ->withoutOverlapping()
     ->onOneServer()
     ->name('rag:self-training');
+
+/*
+|--------------------------------------------------------------------------
+| AERO X Agentic Engine
+|--------------------------------------------------------------------------
+| Every 15 minutes the engine evaluates the autonomous business rules
+| (purchase orders for low stock, overdue invoices, ticket assignment and
+| onboarding). Each rule has its own cooldown and runs transactionally.
+*/
+Schedule::command('agents:run')
+    ->everyFifteenMinutes()
+    ->withoutOverlapping()
+    ->onOneServer()
+    ->name('agents:run');

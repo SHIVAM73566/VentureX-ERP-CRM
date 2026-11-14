@@ -136,7 +136,7 @@ class AiProviderAdminFeatureTest extends TestCase
     public function test_viewer_cannot_access_ai_provider_admin(): void
     {
         $this->actingAs($this->viewer)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->get(route('admin.ai-providers.index'))
             ->assertForbidden();
     }
@@ -144,7 +144,7 @@ class AiProviderAdminFeatureTest extends TestCase
     public function test_admin_of_another_company_cannot_access_this_companys_rows(): void
     {
         $this->actingAs($this->otherAdmin)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->get(route('admin.ai-providers.index'))
             ->assertForbidden();
     }
@@ -156,7 +156,7 @@ class AiProviderAdminFeatureTest extends TestCase
     public function test_index_page_loads_and_lists_stored_providers(): void
     {
         $this->actingAs($this->admin)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->get(route('admin.ai-providers.index'))
             ->assertOk()
             ->assertSee('gemini')
@@ -166,7 +166,7 @@ class AiProviderAdminFeatureTest extends TestCase
     public function test_security_page_never_returns_the_plaintext_key(): void
     {
         $this->actingAs($this->admin)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->get(route('admin.ai-providers.security'))
             ->assertOk()
             ->assertDontSee('ai-test-secret');
@@ -179,7 +179,7 @@ class AiProviderAdminFeatureTest extends TestCase
     public function test_api_key_is_encrypted_at_rest_and_never_stored_in_plaintext(): void
     {
         $this->actingAs($this->admin)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->post(route('admin.ai-providers.store'), [
                 'provider' => 'nvidia',
                 'api_key' => 'nv-secret-plaintext',
@@ -196,7 +196,7 @@ class AiProviderAdminFeatureTest extends TestCase
     public function test_rate_limits_are_persisted_per_provider(): void
     {
         $this->actingAs($this->admin)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->post(route('admin.ai-providers.store'), [
                 'provider' => 'gemini',
                 'api_key' => 'k2',
@@ -218,7 +218,7 @@ class AiProviderAdminFeatureTest extends TestCase
     public function test_enable_survives_a_reload_and_key_stays_encrypted_after_disable(): void
     {
         $this->actingAs($this->admin)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->post(route('admin.ai-providers.enable', $this->provider))
             ->assertRedirect();
 
@@ -232,7 +232,7 @@ class AiProviderAdminFeatureTest extends TestCase
         $id = $this->provider->id;
 
         $this->actingAs($this->admin)
-            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->withSession(['two_factor_verified_at' => now()->timestamp, 'step_up_verified_at' => now()->timestamp])
             ->delete(route('admin.ai-providers.destroy', $this->provider));
 
         $this->assertNotNull(AiProvider::withTrashed()->find($id));

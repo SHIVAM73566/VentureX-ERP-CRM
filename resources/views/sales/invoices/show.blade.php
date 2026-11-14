@@ -15,6 +15,24 @@
         @endcan
     </x-slot>
 
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-ink-100 bg-white p-4 dark:border-ink-800 dark:bg-ink-900">
+        <div class="flex items-center gap-3">
+            @if (! empty($branding['logo_url']))
+                <img src="{{ $branding['logo_url'] }}" alt="{{ $branding['company_name'] }}" class="h-11 w-auto max-w-[9rem] object-contain">
+            @else
+                <span class="flex h-11 w-11 items-center justify-center rounded-lg text-sm font-bold text-white" style="background: {{ $branding['accent_color'] }}">{{ \Illuminate\Support\Str::of($branding['company_name'])->substr(0, 2)->upper() }}</span>
+            @endif
+            <div>
+                <p class="text-sm font-bold text-ink-900 dark:text-ink-50">{{ $branding['company_name'] }}</p>
+                <p class="text-xs text-ink-500 dark:text-ink-400">{{ $branding['tagline'] }}</p>
+            </div>
+        </div>
+        <p class="text-xs text-ink-400">
+            Invoice PDF uses your saved branding.
+            <a href="{{ route('admin.settings.index', ['tab' => 'branding']) }}" class="font-medium text-navy-600 hover:underline">Customise</a>
+        </p>
+    </div>
+
     <div class="grid gap-6 lg:grid-cols-3">
         <div class="space-y-6">
             <div class="card">

@@ -3,7 +3,7 @@
 namespace App\Services\Rag;
 
 /**
- * Resolves which of the 80 RAG pipelines are most relevant to the page a
+ * Resolves which of the 84 RAG pipelines are most relevant to the page a
  * user is currently looking at, plus the questions that page usually raises.
  *
  * The product guide is rendered on every authenticated page, so this class

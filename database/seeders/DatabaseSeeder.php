@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             MasterDataSeeder::class,
             CompanySeeder::class,
             DemoDataSeeder::class,
+            HrDemoSeeder::class,
             AiSkillSeeder::class,
             ComprehensiveDemoSeeder::class,
             DemoCredentialSeeder::class,

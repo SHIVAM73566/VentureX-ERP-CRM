@@ -20,7 +20,7 @@ class VectorStoreService
     public function __construct(protected EmbeddingService $embeddings) {}
 
     /**
-     * Seed/refresh the canonical 80 pipeline definitions without destroying
+     * Seed/refresh the canonical 84 pipeline definitions without destroying
      * learned weights or confidence values.
      */
     public function ensurePipelines(): int

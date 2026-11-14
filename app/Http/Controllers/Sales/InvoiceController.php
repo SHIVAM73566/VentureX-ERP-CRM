@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\SalesOrder;
 use App\Services\AuditLogger;
 use App\Services\AutoJournalService;
+use App\Services\BrandingService;
 use App\Services\CompanyContext;
 use App\Services\NumberGenerator;
 use Barryvdh\DomPDF\PDF;
@@ -107,7 +108,9 @@ class InvoiceController extends Controller
 
         $invoice->load('customer', 'salesOrder', 'items.product', 'payments');
 
-        return view('sales.invoices.show', compact('invoice'));
+        $branding = app(BrandingService::class)->all();
+
+        return view('sales.invoices.show', compact('invoice', 'branding'));
     }
 
     public function edit(Invoice $invoice): View
@@ -207,7 +210,9 @@ class InvoiceController extends Controller
 
         $invoice->load('customer', 'salesOrder', 'items.product', 'payments', 'createdBy');
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('sales.invoices.pdf', compact('invoice'))
+        $branding = app(BrandingService::class)->all();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('sales.invoices.pdf', compact('invoice', 'branding'))
             ->setPaper('a4')
             ->setOption('isHtml5ParserEnabled', true)
             ->setOption('isRemoteEnabled', false);
