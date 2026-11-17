@@ -30,7 +30,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead>
                     <tr>

@@ -27,7 +27,7 @@
             @if ($events->isEmpty())
                 <p class="py-8 text-center text-sm text-ink-400">No security events found.</p>
             @else
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead>
                             <tr>

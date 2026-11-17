@@ -33,6 +33,14 @@ class SelfHealing
             }
 
             $status = $this->healing->statusFor($e);
+
+            // A missing route is a normal client error, not a server fault.
+            // Logging every scanner probe floods the error center and logs,
+            // so let Laravel render its standard 404 unless explicitly enabled.
+            if ($status === 404 && ! (bool) config('self-healing.capture_not_found', false)) {
+                throw $e;
+            }
+
             $result = $this->healing->capture($e, $request, $status);
 
             if ($this->healing->mustRethrow($e)) {

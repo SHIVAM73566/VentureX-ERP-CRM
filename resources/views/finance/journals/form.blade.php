@@ -19,7 +19,7 @@
                     <h2 class="text-lg font-bold text-ink-900">Lines</h2>
                     <button type="button" @click="addLine()" class="btn-secondary">+ Add Line</button>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Account *</th><th>Description</th><th class="w-32">Debit</th><th class="w-32">Credit</th><th class="w-10"></th></tr></thead>
                         <tbody>

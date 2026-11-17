@@ -3,7 +3,8 @@
     :breadcrumbs="[['label' => 'Getting Started']]">
 
     @php
-        $canUseAi = auth()->user()?->can('viewAny', App\Models\AiRun::class) ?? false;
+        $navAccess = app(\App\Support\NavigationAccess::class);
+        $canUseAi = $navAccess->can('ai.rag');
         $isOwner = auth()->user()?->hasRole('super_admin') ?? false;
     @endphp
 
@@ -35,7 +36,9 @@
                 </p>
                 <div class="mt-6 flex flex-wrap gap-3">
                     <a href="{{ route('dashboard') }}" class="btn bg-white text-navy-800 hover:bg-navy-50">Open Dashboard</a>
-                    <a href="{{ route('ai.assistant') }}" class="btn border border-white/30 text-white hover:bg-white/10">Try the AI Assistant</a>
+                    @if ($navAccess->can('ai.assistant'))
+                        <a href="{{ route('ai.assistant') }}" class="btn border border-white/30 text-white hover:bg-white/10">Try the AI Assistant</a>
+                    @endif
                     <a href="#quick-start" class="btn border border-white/30 text-white hover:bg-white/10">Jump to quick start</a>
                 </div>
             </div>
@@ -167,7 +170,7 @@
                             <div class="min-w-0 flex-1">
                                 <div class="flex flex-wrap items-center justify-between gap-2">
                                     <h3 class="text-sm font-bold text-ink-900 dark:text-ink-50">{{ $step['title'] }}</h3>
-                                    @if ($step['route'])
+                                    @if ($step['route'] && $navAccess->can($step['route']))
                                         <a href="{{ route($step['route']) }}" class="text-xs font-semibold text-navy-600 hover:underline dark:text-navy-300">{{ $step['link'] }} →</a>
                                     @endif
                                 </div>
@@ -259,7 +262,9 @@
                                 <td class="text-ink-600 dark:text-ink-300">{{ $what }}</td>
                                 <td class="text-ink-500 dark:text-ink-400">{{ $replaces }}</td>
                                 <td class="text-right">
-                                    <a href="{{ route($route) }}" class="text-xs font-semibold text-navy-600 hover:underline dark:text-navy-300">{{ $label }} →</a>
+                                    @if ($navAccess->can($route))
+                                        <a href="{{ route($route) }}" class="text-xs font-semibold text-navy-600 hover:underline dark:text-navy-300">{{ $label }} →</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -326,7 +331,9 @@
                     <div class="rounded-xl border border-ink-200 p-4 dark:border-ink-700">
                         <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">{{ $role }}</p>
                         <p class="mt-1 text-xs text-ink-500 dark:text-ink-400">{{ $task }}</p>
-                        <a href="{{ route($route) }}" class="mt-2 inline-block text-xs font-semibold text-navy-600 hover:underline dark:text-navy-300">{{ $label }} →</a>
+                        @if ($navAccess->can($route))
+                            <a href="{{ route($route) }}" class="mt-2 inline-block text-xs font-semibold text-navy-600 hover:underline dark:text-navy-300">{{ $label }} →</a>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -387,10 +394,12 @@
                 <p class="font-semibold text-ink-800 dark:text-ink-100">FAQ</p>
                 <p class="text-xs text-ink-500 dark:text-ink-400">Common questions answered</p>
             </a>
-            <a href="{{ route('support.tickets.create') }}" class="card flex flex-col items-center gap-2 p-5 text-center transition hover:shadow-md">
-                <p class="font-semibold text-ink-800 dark:text-ink-100">Submit a ticket</p>
-                <p class="text-xs text-ink-500 dark:text-ink-400">Get help from the team</p>
-            </a>
+            @if ($navAccess->can('support.tickets.create'))
+                <a href="{{ route('support.tickets.create') }}" class="card flex flex-col items-center gap-2 p-5 text-center transition hover:shadow-md">
+                    <p class="font-semibold text-ink-800 dark:text-ink-100">Submit a ticket</p>
+                    <p class="text-xs text-ink-500 dark:text-ink-400">Get help from the team</p>
+                </a>
+            @endif
             <a href="{{ route('support.installation') }}" class="card flex flex-col items-center gap-2 p-5 text-center transition hover:shadow-md">
                 <p class="font-semibold text-ink-800 dark:text-ink-100">Installation</p>
                 <p class="text-xs text-ink-500 dark:text-ink-400">Setup and deployment steps</p>

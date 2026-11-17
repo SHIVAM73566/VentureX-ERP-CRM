@@ -172,7 +172,7 @@
                             <form method="POST" action="{{ route('admin.ai-providers.test', $existing->id) }}" class="flex items-center">
                                 @csrf
                                 <button type="submit" class="rounded-lg border border-emerald-300 px-3 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-50 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-900/20">
-                                    Test connection — lightweight config check (no API call)
+                                    Test connection — live API call (1 short completion)
                                 </button>
                             </form>
                         </div>

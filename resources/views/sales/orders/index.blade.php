@@ -30,7 +30,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Order</th><th>Customer</th><th>Order Date</th><th>Total</th><th>Status</th><th>Payment</th><th></th></tr></thead>
                 <tbody>

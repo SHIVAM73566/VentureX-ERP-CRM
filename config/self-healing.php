@@ -19,6 +19,10 @@ return [
     // Render a friendly fallback page/JSON payload outside of debug mode.
     'render_fallback' => (bool) env('SELF_HEALING_RENDER_FALLBACK', true),
 
+    // Ordinary 404s (e.g. scanners probing unknown paths) are client errors,
+    // not application faults. Do not record them as self-healing incidents.
+    'capture_not_found' => (bool) env('SELF_HEALING_CAPTURE_NOT_FOUND', false),
+
     // Deduplicate identical fingerprints for this many seconds.
     'dedupe_seconds' => (int) env('SELF_HEALING_DEDUPE_SECONDS', 60),
 

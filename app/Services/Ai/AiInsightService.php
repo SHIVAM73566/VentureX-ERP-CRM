@@ -46,7 +46,7 @@ class AiInsightService
             ->count();
 
         if ($leadsDue > 0) {
-            $insights[] = $this->make($leadsDue > 3 ? 'critical' : 'high', $leadsDue.' lead'.($leadsDue === 1 ? '' : 's').' need'.($leadsDue === 1 ? 's' : '').' follow-up', route('leads.index'));
+            $insights[] = $this->make($leadsDue > 3 ? 'critical' : 'high', $leadsDue.' lead'.($leadsDue === 1 ? '' : 's').' need'.($leadsDue === 1 ? 's' : '').' follow-up', route('leads.index'), 'leads.index');
         }
 
         $overdue = Invoice::ofCompany($companyId)
@@ -56,7 +56,7 @@ class AiInsightService
             ->count();
 
         if ($overdue > 0) {
-            $insights[] = $this->make('critical', $overdue.' invoice'.($overdue === 1 ? ' is' : 's are').' overdue', route('sales.invoices.index'));
+            $insights[] = $this->make('critical', $overdue.' invoice'.($overdue === 1 ? ' is' : 's are').' overdue', route('sales.invoices.index'), 'sales.invoices.index');
         }
 
         $lowStock = Product::ofCompany($companyId)
@@ -66,7 +66,7 @@ class AiInsightService
             ->count();
 
         if ($lowStock > 0) {
-            $insights[] = $this->make($lowStock > 4 ? 'high' : 'normal', $lowStock.' product'.($lowStock === 1 ? '' : 's').' below reorder level', route('inventory.products.index'));
+            $insights[] = $this->make($lowStock > 4 ? 'high' : 'normal', $lowStock.' product'.($lowStock === 1 ? '' : 's').' below reorder level', route('inventory.products.index'), 'inventory.products.index');
         }
 
         $pendingPOs = PurchaseOrder::ofCompany($companyId)
@@ -74,7 +74,7 @@ class AiInsightService
             ->count();
 
         if ($pendingPOs > 0) {
-            $insights[] = $this->make('high', $pendingPOs.' purchase order'.($pendingPOs === 1 ? '' : 's').' require'.($pendingPOs === 1 ? 's' : '').' attention', route('procurement.orders.index'));
+            $insights[] = $this->make('high', $pendingPOs.' purchase order'.($pendingPOs === 1 ? '' : 's').' require'.($pendingPOs === 1 ? 's' : '').' attention', route('procurement.orders.index'), 'procurement.orders.index');
         }
 
         $openRequisitions = PurchaseRequisition::ofCompany($companyId)
@@ -82,7 +82,7 @@ class AiInsightService
             ->count();
 
         if ($openRequisitions > 0) {
-            $insights[] = $this->make('normal', $openRequisitions.' purchase requisition'.($openRequisitions === 1 ? ' is' : 's are').' open', route('procurement.requisitions.index'));
+            $insights[] = $this->make('normal', $openRequisitions.' purchase requisition'.($openRequisitions === 1 ? ' is' : 's are').' open', route('procurement.requisitions.index'), 'procurement.requisitions.index');
         }
 
         $outstanding = Invoice::ofCompany($companyId)
@@ -91,7 +91,7 @@ class AiInsightService
             ->sum(fn ($i) => (float) $i->outstandingBalance());
 
         if ($outstanding > 0) {
-            $insights[] = $this->make('high', 'Receivables outstanding: '.number_format($outstanding), route('finance.receivables'));
+            $insights[] = $this->make('high', 'Receivables outstanding: '.number_format($outstanding), route('finance.receivables'), 'finance.receivables');
         }
 
         $redOffers = SupplierOffer::ofCompany($companyId)
@@ -99,7 +99,7 @@ class AiInsightService
             ->count();
 
         if ($redOffers > 0) {
-            $insights[] = $this->make('critical', $redOffers.' supplier offer'.($redOffers === 1 ? '' : 's').' flagged red', route('supplier-offers.index'));
+            $insights[] = $this->make('critical', $redOffers.' supplier offer'.($redOffers === 1 ? '' : 's').' flagged red', route('supplier-offers.index'), 'supplier-offers.index');
         }
 
         $openOpportunities = Opportunity::ofCompany($companyId)
@@ -112,9 +112,9 @@ class AiInsightService
             ->count();
 
         if ($wonOpportunities > 0) {
-            $insights[] = $this->make('normal', $wonOpportunities.' opportunity'.($wonOpportunities === 1 ? '' : 'ies').' won in the last 30 days', route('opportunities.index'));
+            $insights[] = $this->make('normal', $wonOpportunities.' opportunity'.($wonOpportunities === 1 ? '' : 'ies').' won in the last 30 days', route('opportunities.index'), 'opportunities.index');
         } elseif ($openOpportunities > 0) {
-            $insights[] = $this->make('normal', $openOpportunities.' open opportunities in your pipeline', route('pipeline.index'));
+            $insights[] = $this->make('normal', $openOpportunities.' open opportunities in your pipeline', route('pipeline.index'), 'pipeline.index');
         }
 
         return $insights;
@@ -183,8 +183,8 @@ class AiInsightService
         return 'ai:'.($companyId ?? CompanyContext::id()).':company-insights';
     }
 
-    protected function make(string $tone, string $text, ?string $url = null): array
+    protected function make(string $tone, string $text, ?string $url = null, ?string $route = null): array
     {
-        return ['tone' => $tone, 'text' => $text, 'url' => $url];
+        return ['tone' => $tone, 'text' => $text, 'url' => $url, 'route' => $route];
     }
 }

@@ -17,7 +17,7 @@
     </div>
 
     <div class="mt-6 card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Container Number</th><th>Size</th><th>Seal Number</th><th>Shipments</th><th>Status</th><th></th></tr></thead>
                 <tbody>

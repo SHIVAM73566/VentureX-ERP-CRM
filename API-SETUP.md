@@ -238,7 +238,7 @@ Default limits vary by plan. Configure custom limits in the admin panel under **
 | Model              | Context Window | Best For                       |
 |--------------------|----------------|--------------------------------|
 | gemini-2.5-pro     | 1M tokens      | Complex analysis, long docs    |
-| gemini-2.5-flash   | 1M tokens      | Fast multimodal tasks          |
+| gemini-3.5-flash-lite | 1M tokens   | Fast, reliable fallback tasks  |
 | gemini-2.0-flash   | 1M tokens      | Balanced speed and quality     |
 
 ### Configuration

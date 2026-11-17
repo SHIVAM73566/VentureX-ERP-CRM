@@ -51,7 +51,7 @@
 
         <div class="card lg:col-span-2">
             <h2 class="mb-3 text-lg font-bold text-ink-900">Line Items</h2>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead><tr><th>Item</th><th class="text-right">Qty</th><th>Unit</th><th class="text-right">Unit Price</th><th class="text-right">Tax</th><th class="text-right">Line Total</th></tr></thead>
                     <tbody>

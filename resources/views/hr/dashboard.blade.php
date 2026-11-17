@@ -73,7 +73,7 @@
                 <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Department distribution</h2>
                 <a href="{{ route('hr.departments.index') }}" class="text-xs font-medium text-navy-600 hover:text-navy-500">Manage</a>
             </div>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead><tr><th>Department</th><th>Code</th><th>Employees</th><th>Status</th></tr></thead>
                     <tbody>
@@ -116,7 +116,7 @@
             <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Recent performance reviews</h2>
             <a href="{{ route('hr.reviews.index') }}" class="text-xs font-medium text-navy-600 hover:text-navy-500">All reviews</a>
         </div>
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Employee</th><th>Period</th><th>Score</th><th>Rating</th><th>Status</th><th>Date</th></tr></thead>
                 <tbody>

@@ -125,7 +125,7 @@ Simple tasks always use low-cost providers. Claude is reserved as a specialist, 
 
 | Provider    | Default Model                                | Best For                    |
 |-------------|----------------------------------------------|-----------------------------|
-| NVIDIA NIM  | nvidia/llama-3.3-nemotron-super-49b-v1.5    | General purpose, fast       |
+| NVIDIA NIM  | nvidia/nemotron-3.5-bolt-e4b    | General purpose, fast       |
 | Swift       | gpt-5 (via RapidAPI)                         | High-quality content        |
 | Gemini      | gemini-3.5-flash (via RapidAPI)              | Fast multimodal tasks       |
 | DeepSeek    | DeepSeek-V3.2 (via RapidAPI)                 | Reasoning, code             |

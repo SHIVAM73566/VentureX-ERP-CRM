@@ -25,7 +25,7 @@
                     <button type="button" @click="addItem()" class="btn-secondary">+ Add Item</button>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead>
                             <tr>

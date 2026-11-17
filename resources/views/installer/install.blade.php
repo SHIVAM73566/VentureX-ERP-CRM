@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
     <meta charset="utf-8">
@@ -75,7 +75,7 @@
                     <div id="error-box" class="mt-4 hidden rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-500/10 dark:text-red-400"></div>
 
                     <div id="success-box" class="mt-6 hidden text-center">
-                        <a href="{{ route('installer.complete') }}" class="btn-accent">Continue to Dashboard •’</a>
+                        <a href="{{ route('installer.complete') }}" class="btn-accent">Continue to Dashboard →</a>
                     </div>
                 </div>
             </div>

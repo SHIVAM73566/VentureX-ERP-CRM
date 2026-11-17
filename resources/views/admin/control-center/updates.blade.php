@@ -76,7 +76,7 @@
                 <span class="text-xs text-ink-400">{{ $updates->count() }} total</span>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead>
                         <tr>

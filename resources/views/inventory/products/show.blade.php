@@ -45,7 +45,7 @@
         <div class="space-y-6 lg:col-span-2">
             <div class="card">
                 <h2 class="mb-3 text-lg font-bold text-ink-900">Stock Movements</h2>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Type</th><th>Qty</th><th>Warehouse</th><th>Unit Cost</th><th>Note</th><th>Date</th></tr></thead>
                         <tbody>

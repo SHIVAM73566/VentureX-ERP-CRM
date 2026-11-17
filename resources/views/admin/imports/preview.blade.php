@@ -45,7 +45,7 @@
 
         <div class="rounded-xl border border-ink-200 bg-white p-6">
             <h2 class="mb-4 text-lg font-semibold text-ink-900">Data Preview (first 50 rows)</h2>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="min-w-full text-sm">
                     <thead class="bg-ink-50">
                         <tr>

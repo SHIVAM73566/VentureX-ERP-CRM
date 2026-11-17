@@ -75,7 +75,7 @@
                     <x-dashboard.stat-card label="Open Opportunities" :value="$stats['open_opportunities']" icon="trending" color="amber" :url="route('opportunities.index')" />
                 @endif
                 @if($user->hasPermissionTo('finance.view') || $isExecutive)
-                    <x-dashboard.stat-card label="Pipeline Value" :value="'₹'.number_format($stats['pipeline_value'])" icon="wallet" color="green" :sub="'Won: ₹'.number_format($stats['won_value'])" />
+                    <x-dashboard.stat-card label="Pipeline Value" :value="$currencySymbol.number_format($stats['pipeline_value'])" icon="wallet" color="green" :sub="'Won: '.$currencySymbol.number_format($stats['won_value'])" />
                 @endif
             </div>
         </div>
@@ -181,7 +181,7 @@
         </div>
     @endif
 
-    @if ($user->hasRole('super_admin') || $user->hasPermissionTo('automation.view'))
+    @if ($user->hasRole('super_admin'))
         <div class="mt-6">
             <div class="card">
                 <div class="card-header">
@@ -286,6 +286,80 @@
         </div>
     </div>
 
+    {{-- Advanced Analytics & Charts --}}
+    @if ($isExecutive || $user->hasPermissionTo('finance.view') || $user->hasPermissionTo('ai.view'))
+    <div class="mt-6" x-data="layoutCustomize">
+        <div class="card">
+            <div class="card-header flex items-center justify-between">
+                <div>
+                    <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Advanced Analytics</h2>
+                    <span class="text-xs text-ink-400 dark:text-ink-500">Real-time charts · Revenue velocity · Pipeline · Inventory · AI quota</span>
+                </div>
+                <button type="button" @click="$dispatch('open-layout-customizer')"
+                        class="btn btn-sm text-xs">Customize layout</button>
+            </div>
+            <div class="p-5">
+                {{-- Row 1: Revenue Velocity + Cash Flow --}}
+                <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                    <div class="card p-5 xl:col-span-2" x-show="visible('revenue')">
+                        <div class="card-header">
+                            <h3 class="text-sm font-bold text-ink-800 dark:text-ink-100">Revenue Velocity</h3>
+                            <span class="text-xs text-ink-400 dark:text-ink-500">Invoiced revenue, last 6 months</span>
+                        </div>
+                        <div class="h-48">
+                            <canvas id="chartRevenue"></canvas>
+                        </div>
+                    </div>
+                    <div class="card p-5 xl:col-span-2" x-show="visible('cashflow')">
+                        <div class="card-header">
+                            <h3 class="text-sm font-bold text-ink-800 dark:text-ink-100">Cash Flow Projection</h3>
+                            <span class="text-xs text-ink-400 dark:text-ink-500">Inflow vs outflow, next 6 months</span>
+                        </div>
+                        <div class="h-48">
+                            <canvas id="chartCashflow"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Row 2: Pipeline Conversion + Inventory Turnover --}}
+                <div class="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                    <div class="card p-5 xl:col-span-2" x-show="visible('pipeline')">
+                        <div class="card-header">
+                            <h3 class="text-sm font-bold text-ink-800 dark:text-ink-100">Pipeline Conversion</h3>
+                            <span class="text-xs text-ink-400 dark:text-ink-500">Won vs open vs lost value</span>
+                        </div>
+                        <div class="flex items-center justify-center h-48">
+                            <canvas id="chartPipeline" class="max-w-md max-h-[240px]"></canvas>
+                        </div>
+                    </div>
+                    <div class="card p-5 xl:col-span-2" x-show="visible('inventory')">
+                        <div class="card-header">
+                            <h3 class="text-sm font-bold text-ink-800 dark:text-ink-100">Inventory Turnover</h3>
+                            <span class="text-xs text-ink-400 dark:text-ink-500">Stock movement velocity (30 days)</span>
+                        </div>
+                        <div class="h-48">
+                            <canvas id="chartInventory"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Row 3: AI Quota Utilization --}}
+                <div class="mt-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                    <div class="card p-5 xl:col-span-4" x-show="visible('aiquota')">
+                        <div class="card-header">
+                            <h3 class="text-sm font-bold text-ink-800 dark:text-ink-100">AI Request Quota Utilization</h3>
+                            <span class="text-xs text-ink-400 dark:text-ink-500">Daily vs weekly quota usage</span>
+                        </div>
+                        <div class="h-40">
+                            <canvas id="chartAiQuota"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @if($user->hasPermissionTo('leads.view') || $isExecutive)
     <div class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div class="card xl:col-span-2">
@@ -343,9 +417,11 @@
         <div class="card">
             <div class="card-header">
                 <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Recent Supplier Offers</h2>
-                <a href="{{ route('supplier-offers.index') }}" class="text-xs font-medium text-navy-600 hover:text-navy-500 dark:text-navy-400 dark:hover:text-navy-300">All offers</a>
+                @if ($navigationAccess->can('supplier-offers.index'))
+                    <a href="{{ route('supplier-offers.index') }}" class="text-xs font-medium text-navy-600 hover:text-navy-500 dark:text-navy-400 dark:hover:text-navy-300">All offers</a>
+                @endif
             </div>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead>
                         <tr>
@@ -429,6 +505,7 @@
     </div>
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
     <script>
         function aiInsights() {
             return {
@@ -473,6 +550,254 @@
                 }
             };
         }
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('layoutCustomize', () => ({
+                open: false,
+                widgets: {!! json_encode([
+                    ['revenue', 'Revenue Velocity', true],
+                    ['cashflow', 'Cash Flow Projection', true],
+                    ['pipeline', 'Pipeline Conversion', true],
+                    ['inventory', 'Inventory Turnover', true],
+                    ['aiquota', 'AI Quota Utilization', true],
+                    ['briefing', 'Executive Briefing', true],
+                    ['aiInsights', 'AI Business Insights', true],
+                ]) !!},
+                theme: 'system',
+                init() {
+                    const saved = localStorage.getItem('vx-layout-widgets');
+                    if (saved) {
+                        try {
+                            const parsed = JSON.parse(saved);
+                            this.widgets = this.widgets.map(w => [w[0], w[1], parsed[w[0]] !== false]);
+                        } catch (e) {}
+                    }
+                    const theme = localStorage.getItem('vx-theme') || 'system';
+                    this.theme = theme;
+                    this.applyTheme();
+                },
+                toggle(widget) {
+                    const found = this.widgets.find(w => w[0] === widget);
+                    if (found) found[2] = !found[2];
+                    localStorage.setItem('vx-layout-widgets', Object.fromEntries(this.widgets.map(w => [w[0], w[2]])));
+                },
+                visible(widget) {
+                    const saved = localStorage.getItem('vx-layout-widgets');
+                    if (saved) {
+                        try { return JSON.parse(saved)[widget] !== false; } catch (e) {}
+                    }
+                    return true;
+                },
+                applyTheme() {
+                    const dark = this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                    document.documentElement.classList.toggle('dark', dark);
+                },
+                save() {
+                    localStorage.setItem('vx-theme', this.theme);
+                    this.applyTheme();
+                    this.open = false;
+                },
+            }));
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const renderCharts = () => {
+                if (typeof Chart === 'undefined') return;
+
+                Chart.defaults.color = '#64748b';
+                Chart.defaults.font.family = '"Instrument Sans", ui-sans-serif, system-ui, sans-serif';
+                Chart.defaults.font.size = 11;
+
+                const revCtx = document.getElementById('chartRevenue');
+                if (revCtx) {
+                    new Chart(revCtx.getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: @json($analytics['revenueVelocity']['labels'] ?? []),
+                            datasets: [{
+                                label: 'Revenue',
+                                data: @json($analytics['revenueVelocity']['data'] ?? []),
+                                borderColor: '#4372ae',
+                                backgroundColor: 'rgba(67, 114, 174, 0.1)',
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 3,
+                                pointHoverRadius: 5,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: { grid: { color: '#e2e8f0' }, ticks: { callback: v => v >= 1000 ? (v/1000).toFixed(1)+'K' : v } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                }
+
+                const cfCtx = document.getElementById('chartCashflow');
+                if (cfCtx) {
+                    new Chart(cfCtx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: @json(collect($cashFlow['months'] ?? [])->pluck('label')->toArray()),
+                            datasets: [{
+                                label: 'Inflow',
+                                data: @json(collect($cashFlow['months'] ?? [])->pluck('inflow')->toArray()),
+                                backgroundColor: '#20a67d',
+                            }, {
+                                label: 'Outflow',
+                                data: @json(collect($cashFlow['months'] ?? [])->pluck('outflow')->toArray()),
+                                backgroundColor: '#ef4444',
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: 'top' } },
+                            scales: {
+                                y: { grid: { color: '#e2e8f0' }, stacked: false, ticks: { callback: v => v >= 1000 ? (v/1000).toFixed(1)+'K' : v } },
+                                x: { grid: { display: false } }
+                            }
+                        }
+                    });
+                }
+
+                const pipeCtx = document.getElementById('chartPipeline');
+                if (pipeCtx) {
+                    new Chart(pipeCtx.getContext('2d'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Won', 'Open', 'Lost'],
+                            datasets: [{
+                                data: [
+                                    @json($analytics['pipelineConversion']['won'] ?? 0),
+                                    @json($analytics['pipelineConversion']['open'] ?? 0),
+                                    @json($analytics['pipelineConversion']['lost'] ?? 0),
+                                ],
+                                backgroundColor: ['#20a67d', '#4372ae', '#ef4444'],
+                                borderWidth: 0,
+                                hoverOffset: 10
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '70%',
+                            plugins: {
+                                legend: { position: 'bottom', labels: { font: { size: 11 } } },
+                                tooltip: { callbacks: { label: ctx => ctx.label + ': ' + new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(ctx.parsed) } }
+                            }
+                        }
+                    });
+                }
+
+                const invCtx = document.getElementById('chartInventory');
+                if (invCtx) {
+                    new Chart(invCtx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: ['Stock In', 'Stock Out'],
+                            datasets: [{
+                                label: 'Units (30 days)',
+                                data: [@json($analytics['inventoryTurnover']['stock_in'] ?? 0), @json($analytics['inventoryTurnover']['stock_out'] ?? 0)],
+                                backgroundColor: ['#20a67d', '#4372ae'],
+                                borderRadius: 4,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: { y: { grid: { color: '#e2e8f0' }, beginAtZero: true } }
+                        }
+                    });
+                }
+
+                const aiCtx = document.getElementById('chartAiQuota');
+                if (aiCtx) {
+                    new Chart(aiCtx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: ['Daily', 'Weekly'],
+                            datasets: [{
+                                label: 'Used',
+                                data: [@json($analytics['aiQuotaTrend']['daily_used'] ?? 0), @json($analytics['aiQuotaTrend']['weekly_used'] ?? 0)],
+                                backgroundColor: '#4372ae',
+                            }, {
+                                label: 'Limit',
+                                data: [@json($analytics['aiQuotaTrend']['daily_limit'] ?? 0), @json($analytics['aiQuotaTrend']['weekly_limit'] ?? 0)],
+                                backgroundColor: '#cbd5e1',
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+                            scales: { y: { grid: { color: '#e2e8f0' }, beginAtZero: true } }
+                        }
+                    });
+                }
+            };
+
+            renderCharts();
+            setTimeout(renderCharts, 300);
+        });
     </script>
     @endpush
+
+    {{-- Layout Customization Drawer --}}
+    <div x-data="layoutCustomize" x-show="open" x-cloak
+         @open-layout-customizer.window="open = true"
+         @click.away="open = false"
+         class="fixed inset-0 z-50">
+        <div x-show="open" x-transition.opacity @click="open = false" class="absolute inset-0 bg-ink-950/60 backdrop-blur-sm"></div>
+        <aside x-show="open"
+               x-transition:enter="transition ease-out duration-300"
+               x-transition:enter-start="translate-x-full opacity-0"
+               x-transition:enter-end="translate-x-0 opacity-100"
+               x-transition:leave="transition ease-in duration-200"
+               x-transition:leave-start="translate-x-0 opacity-100"
+               x-transition:leave-end="translate-x-full opacity-0"
+               class="absolute inset-y-0 right-0 w-full max-w-md flex-col bg-white shadow-2xl dark:bg-ink-900 z-50">
+            <div class="border-b border-ink-200 px-6 py-5 dark:border-ink-800 flex items-center justify-between">
+                <h3 class="text-sm font-bold text-ink-900 dark:text-ink-100">Customize Layout</h3>
+                <button type="button" @click="open = false"
+                        class="rounded-lg p-2 text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-800 dark:text-ink-400">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div>
+                    <h4 class="text-[10px] font-bold uppercase tracking-wider text-ink-400 dark:text-ink-500 mb-3">Theme</h4>
+                    <div class="flex gap-2">
+                        <button @click="theme = 'system'; save()" :class="theme === 'system' ? 'bg-navy-800 text-white' : 'bg-ink-100 text-ink-600 border border-ink-200'" class="flex-1 py-2 rounded-lg text-xs font-semibold transition dark:border-ink-800">System</button>
+                        <button @click="theme = 'light'; save()" :class="theme === 'light' ? 'bg-navy-800 text-white' : 'bg-ink-100 text-ink-600 border border-ink-200'" class="flex-1 py-2 rounded-lg text-xs font-semibold transition dark:border-ink-800">Light</button>
+                        <button @click="theme = 'dark'; save()" :class="theme === 'dark' ? 'bg-navy-800 text-white' : 'bg-ink-100 text-ink-600 border border-ink-200'" class="flex-1 py-2 rounded-lg text-xs font-semibold transition dark:border-ink-800">Dark</button>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-[10px] font-bold uppercase tracking-wider text-ink-400 dark:text-ink-500 mb-3">Dashboard Widgets</h4>
+                    <div class="space-y-2">
+                        <template x-for="widget in widgets" :key="widget[0]">
+                            <div class="flex items-center justify-between p-3 rounded-lg border border-ink-100 hover:border-navy-300/50 dark:border-ink-800 dark:hover:border-navy-500/50">
+                                <div class="flex items-center gap-3">
+                                    <input type="checkbox" x-model="widget[2]" @change="toggle(widget[0])"
+                                            class="rounded text-navy-600 focus:ring-navy-500 dark:text-navy-400">
+                                    <span class="text-sm text-ink-700 dark:text-ink-300" x-text="widget[1]"></span>
+                                </div>
+                                <span x-show="widget[2]" class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">Visible</span>
+                                <span x-show="!widget[2]" class="text-[10px] font-semibold text-ink-400 dark:text-ink-500">Hidden</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-ink-100 dark:border-ink-800">
+                    <p class="text-xs text-ink-500 dark:text-ink-400">Widget visibility and theme are saved to your browser and apply across sessions.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
 </x-layouts.app>

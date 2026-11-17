@@ -12,6 +12,8 @@ use App\Models\Supplier;
 use App\Models\User;
 use App\Services\Ai\AiDecisionEngine;
 use App\Services\Ai\AiRouter;
+use App\Services\CompanyContext;
+use App\Services\SettingService;
 use Database\Seeders\CompanySeeder;
 use Database\Seeders\DemoDataSeeder;
 use Database\Seeders\MasterDataSeeder;
@@ -340,5 +342,36 @@ class AiGatewayFeatureTest extends TestCase
             $this->assertIsArray($routing);
             $this->assertContains('nvidia', $routing['providers'] ?? []);
         }
+    }
+
+    public function test_fallback_provider_uses_its_own_model_not_the_company_default_model(): void
+    {
+        $admin = $this->admin();
+        $this->actingAs($admin);
+        CompanyContext::set($admin->company_id);
+
+        config([
+            'ai.providers.nvidia.api_key' => 'nvidia-test-key',
+            'ai.providers.nvidia.model' => 'nvidia/primary-model',
+            'ai.providers.gemini.api_key' => 'gemini-test-key',
+            'ai.providers.gemini.model' => 'gemini-3.5-flash-lite',
+        ]);
+
+        $settings = app(SettingService::class);
+        $settings->set('ai.provider', 'nvidia', ['company_id' => $admin->company_id]);
+        $settings->set('ai.model', 'nvidia/primary-model', ['company_id' => $admin->company_id]);
+
+        $router = app(AiRouter::class);
+        $router->healthReset('nvidia');
+        $router->healthReset('gemini');
+
+        $resolved = $router->resolve('quick_question', 'gemini');
+
+        $this->assertSame('gemini', $resolved['provider']);
+        $this->assertSame('gemini-3.5-flash-lite', $resolved['model']);
+
+        $primary = $router->resolve('quick_question');
+        $this->assertSame('nvidia', $primary['provider']);
+        $this->assertSame('nvidia/primary-model', $primary['model']);
     }
 }

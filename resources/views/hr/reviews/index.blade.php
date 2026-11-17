@@ -33,7 +33,7 @@
     </form>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Employee</th><th>Period</th><th>Overall</th><th>Goals</th><th>Competency</th><th>Rating</th><th>Status</th><th>Date</th><th></th></tr></thead>
                 <tbody>

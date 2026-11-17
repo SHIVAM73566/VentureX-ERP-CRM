@@ -29,7 +29,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Entry Number</th><th>Date</th><th>Description</th><th>Lines</th><th>Created By</th><th>Status</th><th></th></tr></thead>
                 <tbody>

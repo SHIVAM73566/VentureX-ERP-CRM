@@ -25,7 +25,7 @@ layer. A key only improves answer quality and model choice.
 1. Sign in as a **Super Admin**.
 2. Open **Administration → Settings → AI Engine**.
 3. In the **NVIDIA NIM API Key** panel, paste the key.
-4. Pick a model (the default is `nvidia/llama-3.3-nemotron-super-49b-v1.5`).
+4. Pick a model (the default is `nvidia/nemotron-3.5-bolt-e4b`).
 5. Click **Save & enable key**.
 
 The provider is enabled for your company immediately. The page then shows:
@@ -94,7 +94,7 @@ key through the environment:
 ```dotenv
 AI_PROVIDER=nvidia
 NVIDIA_API_KEY=nvapi-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-NVIDIA_MODEL=nvidia/llama-3.3-nemotron-super-49b-v1.5
+NVIDIA_MODEL=nvidia/nemotron-3.5-bolt-e4b
 NVIDIA_BASE_URL=https://integrate.api.nvidia.com
 ```
 
@@ -110,8 +110,8 @@ The same secure storage engine powers four key-only providers. Open
 
 | Provider | Key prefix | Default model | Endpoint (fixed server-side) |
 | --- | --- | --- | --- |
-| NVIDIA NIM | `nvapi-` | `nvidia/llama-3.3-nemotron-super-49b-v1.5` | NVIDIA integrate API |
-| Google Gemini | `AIza` | `gemini-2.5-flash` | `generativelanguage.googleapis.com` |
+| NVIDIA NIM | `nvapi-` | `nvidia/nemotron-3.5-bolt-e4b` | NVIDIA integrate API |
+| Google Gemini | `AIza` | `gemini-3.5-flash-lite` | `generativelanguage.googleapis.com` |
 | OpenAI | `sk-` (not `sk-ant-`) | `gpt-4.1-mini` | `api.openai.com` |
 | Anthropic Claude | `sk-ant-` | `claude-sonnet-4-5` | native Messages API |
 

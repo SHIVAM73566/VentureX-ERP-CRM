@@ -2,6 +2,10 @@
     :title="'Customer Support Center'"
     :breadcrumbs="[['label' => 'Support Center']]">
 
+    @php
+        $navAccess = app(\App\Support\NavigationAccess::class);
+    @endphp
+
     <div class="mx-auto max-w-5xl space-y-6">
 
         {{-- Hero Section --}}
@@ -18,14 +22,18 @@
             </div>
 
             <div class="mt-4 flex items-center justify-center gap-4">
-                <a href="{{ route('support.tickets.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-navy-700 shadow transition hover:bg-navy-50">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                    Submit a Ticket
-                </a>
-                <a href="{{ route('support.report-error') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
-                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-                    Report a Bug
-                </a>
+                @if ($navAccess->can('support.tickets.create'))
+                    <a href="{{ route('support.tickets.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-navy-700 shadow transition hover:bg-navy-50">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                        Submit a Ticket
+                    </a>
+                @endif
+                @if ($navAccess->can('support.report-error'))
+                    <a href="{{ route('support.report-error') }}" class="inline-flex items-center gap-2 rounded-lg border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                        Report a Bug
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -42,16 +50,18 @@
         </a>
 
         {{-- Product guide --}}
-        <a href="{{ route('ai.rag.tour') }}" class="card flex flex-wrap items-center gap-4 border-navy-200 bg-navy-50/60 p-5 transition hover:shadow-md dark:border-navy-800 dark:bg-navy-500/10">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-navy-800 text-white">
-                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-            </div>
-            <div class="min-w-0 flex-1">
-                <p class="font-semibold text-ink-900 dark:text-ink-50">All 84 RAG pipelines, on every page</p>
-                <p class="mt-0.5 text-xs text-ink-600 dark:text-ink-300">Open the floating <strong>Product guide</strong> in the bottom-right corner for the introduction, the full searchable catalogue and questions matched to the page you are on.</p>
-            </div>
-            <span class="btn-secondary">Open the RAG tour</span>
-        </a>
+        @if ($navAccess->can('ai.rag.tour'))
+            <a href="{{ route('ai.rag.tour') }}" class="card flex flex-wrap items-center gap-4 border-navy-200 bg-navy-50/60 p-5 transition hover:shadow-md dark:border-navy-800 dark:bg-navy-500/10">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-navy-800 text-white">
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <p class="font-semibold text-ink-900 dark:text-ink-50">All 84 RAG pipelines, on every page</p>
+                    <p class="mt-0.5 text-xs text-ink-600 dark:text-ink-300">Open the floating <strong>Product guide</strong> in the bottom-right corner for the introduction, the full searchable catalogue and questions matched to the page you are on.</p>
+                </div>
+                <span class="btn-secondary">Open the RAG tour</span>
+            </a>
+        @endif
 
         {{-- Quick Links Grid --}}
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -138,25 +148,27 @@
 
         {{-- Quick Ticket Status --}}
         <div class="grid gap-4 sm:grid-cols-3">
-            <a href="{{ route('support.tickets.index') }}" class="card flex items-center gap-4 transition hover:shadow-md">
-                <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-navy-50 text-navy-600">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-ink-900">{{ $openTickets ?? 0 }}</p>
-                    <p class="text-xs text-ink-500">Open tickets</p>
-                </div>
-            </a>
+            @if ($navAccess->can('support.tickets.index'))
+                <a href="{{ route('support.tickets.index') }}" class="card flex items-center gap-4 transition hover:shadow-md">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-navy-50 text-navy-600">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-ink-900">{{ $openTickets ?? 0 }}</p>
+                        <p class="text-xs text-ink-500">Open tickets</p>
+                    </div>
+                </a>
 
-            <a href="{{ route('support.tickets.index') }}" class="card flex items-center gap-4 transition hover:shadow-md">
-                <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-                <div>
-                    <p class="text-2xl font-bold text-ink-900">{{ $pendingReplies ?? 0 }}</p>
-                    <p class="text-xs text-ink-500">Awaiting your reply</p>
-                </div>
-            </a>
+                <a href="{{ route('support.tickets.index') }}" class="card flex items-center gap-4 transition hover:shadow-md">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-ink-900">{{ $pendingReplies ?? 0 }}</p>
+                        <p class="text-xs text-ink-500">Awaiting your reply</p>
+                    </div>
+                </a>
+            @endif
 
             <a href="{{ route('support.notifications') }}" class="card flex items-center gap-4 transition hover:shadow-md">
                 <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">

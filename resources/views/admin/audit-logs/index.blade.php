@@ -27,7 +27,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Event</th><th>Module</th><th>Record</th><th>User</th><th>IP</th><th>When</th><th></th></tr></thead>
                 <tbody>

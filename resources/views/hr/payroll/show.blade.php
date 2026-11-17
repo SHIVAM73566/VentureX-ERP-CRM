@@ -38,7 +38,7 @@
             </div>
             <span class="badge-{{ $run->status === 'paid' ? 'green' : ($run->status === 'approved' ? 'blue' : 'amber') }}">{{ \App\Models\PayrollRun::STATUSES[$run->status] ?? $run->status }}</span>
         </div>
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Employee</th><th>Base</th><th>Allowances</th><th>Overtime</th><th>Bonus</th><th>Gross</th><th>Tax</th><th>Social</th><th>Other</th><th>Net</th></tr></thead>
                 <tbody>

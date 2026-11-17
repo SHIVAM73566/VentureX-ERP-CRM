@@ -67,7 +67,7 @@ RAPIDAPI_KEY=
 # NVIDIA NIM (bearer token, direct API)
 NVIDIA_API_KEY=
 NVIDIA_BASE_URL=https://integrate.api.nvidia.com
-NVIDIA_MODEL=nvidia/llama-3.3-nemotron-super-49b-v1.5
+NVIDIA_MODEL=nvidia/nemotron-3.5-bolt-e4b
 
 # OpenAI (bearer token, direct API)
 OPENAI_API_KEY=
@@ -124,7 +124,7 @@ AI_DEDUP_LOCK_TTL=180
    ```
 6. Optional model override:
    ```ini
-   NVIDIA_MODEL=nvidia/llama-3.3-nemotron-super-49b-v1.5
+   NVIDIA_MODEL=nvidia/nemotron-3.5-bolt-e4b
    ```
 
 ### RapidAPI Providers (Swift, Gemini, DeepSeek, Claude)

@@ -44,7 +44,7 @@
 
         <div class="card lg:col-span-2">
             <h2 class="mb-3 text-lg font-bold text-ink-900">Journal Lines</h2>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead><tr><th>Entry</th><th>Date</th><th>Description</th><th class="text-right">Debit</th><th class="text-right">Credit</th></tr></thead>
                     <tbody>

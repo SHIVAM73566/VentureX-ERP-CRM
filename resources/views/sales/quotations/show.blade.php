@@ -43,7 +43,7 @@
         <div class="space-y-6 lg:col-span-2">
             <div class="card">
                 <h2 class="mb-3 text-lg font-bold text-ink-900">Line Items</h2>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Tax</th><th class="text-right">Line Total</th></tr></thead>
                         <tbody>

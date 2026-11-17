@@ -119,6 +119,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
+            // Missing routes are normal client errors. Unless an operator has
+            // explicitly opted in, do not log every scanner/probe 404 as an
+            // application error or render the self-healing fallback page.
+            if ($status === 404 && ! (bool) config('self-healing.capture_not_found', false)) {
+                return null;
+            }
+
             $result = $healing->capture($e, $request, $status);
 
             if ((bool) config('app.debug') || ! (bool) config('self-healing.render_fallback', true)) {

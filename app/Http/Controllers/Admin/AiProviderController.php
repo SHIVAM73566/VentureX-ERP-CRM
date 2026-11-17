@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\AiProvider;
 use App\Models\AiUsageLog;
 use App\Models\AuditLog;
+use App\Services\Ai\Adapters\AdapterFactory;
 use App\Services\Ai\AiCredentialService;
-use App\Services\Ai\AiGateway;
+use App\Services\Ai\AiException;
 use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\AiRateLimitService;
 use App\Services\Ai\AiUsageService;
@@ -17,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Throwable;
 
 class AiProviderController extends Controller
 {
@@ -25,7 +27,6 @@ class AiProviderController extends Controller
         protected AiCredentialService $credentials,
         protected AiUsageService $usage,
         protected AiRateLimitService $rateLimit,
-        protected AiGateway $gateway,
     ) {}
 
     /**
@@ -170,9 +171,10 @@ class AiProviderController extends Controller
     }
 
     /**
-     * Lightweight configuration check — verifies the stored key decrypts and
-     * that the provider is wired into the gateway config. Never makes a real
-     * provider API call; fails soft and surfaces a readable message.
+     * Live connection check. Sends one tiny completion through the real
+     * adapter so retired models and invalid endpoints are detected immediately
+     * instead of appearing as a false "config OK" result. Keys are never
+     * returned to the browser; provider error details are logged redacted.
      */
     public function test(Request $request, AiProvider $provider): RedirectResponse
     {
@@ -191,21 +193,49 @@ class AiProviderController extends Controller
             return back()->with('error', '"'.$provider->provider.'" is stored in the database but not defined in config/ai.php.');
         }
 
-        $gatewayReady = $this->gateway->isEnabled();
-        $routable = in_array($provider->provider, $this->gateway->availableProviders(), true);
+        $model = trim((string) ($provider->model ?: ($cfg['model'] ?? '')));
+        if ($model === '') {
+            return back()->with('error', '"'.$provider->provider.'": no model selected. Choose a current model and save first.');
+        }
 
-        $pieces = [
-            'key decrypts ('.strlen($key).' chars)',
-            'auth mode: '.($provider->auth_mode ?? $cfg['auth_mode'] ?? 'n/a'),
-            'model: '.($provider->model ?? $cfg['model'] ?? 'n/a'),
-            'base_url: '.($provider->base_url ?? $cfg['base_url'] ?? 'n/a'),
-        ];
-        $pieces[] = $routable ? 'gateway: routable' : 'gateway: configured but not routable yet';
-        $pieces[] = $gatewayReady ? 'gateway active' : 'no gateway provider active';
+        try {
+            $started = microtime(true);
+            $result = AdapterFactory::make($provider->provider)->generate($provider->provider, [
+                'system' => 'You are an API connectivity checker.',
+                'user' => 'Reply with exactly OK.',
+                'model' => $model,
+                'temperature' => 0.0,
+                'max_tokens' => 16,
+            ]);
+            $latency = (int) round((microtime(true) - $started) * 1000);
 
-        AuditLogger::log('ai_provider_test', 'ai_providers', $provider, null, ['provider' => $provider->provider, 'result' => 'ok']);
+            AuditLogger::log('ai_provider_test', 'ai_providers', $provider, null, [
+                'provider' => $provider->provider,
+                'model' => $result['model'] ?? $model,
+                'result' => 'ok',
+                'latency_ms' => $latency,
+            ]);
 
-        return back()->with('success', '"'.$provider->provider.'" config check passed — '.implode(', ', $pieces).'.');
+            return back()->with('success', '"'.$provider->provider.'" live test passed with model '.($result['model'] ?? $model).' ('.$latency.' ms).');
+        } catch (AiException $e) {
+            AuditLogger::log('ai_provider_test', 'ai_providers', $provider, null, [
+                'provider' => $provider->provider,
+                'model' => $model,
+                'result' => 'failed',
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', '"'.$provider->provider.'" live test failed: '.$e->getMessage().' Check the selected model; redacted provider details are in the log.');
+        } catch (Throwable $e) {
+            AuditLogger::log('ai_provider_test', 'ai_providers', $provider, null, [
+                'provider' => $provider->provider,
+                'model' => $model,
+                'result' => 'failed',
+                'error' => 'unexpected exception',
+            ]);
+
+            return back()->with('error', '"'.$provider->provider.'" live test failed unexpectedly. Redacted provider details are in the log.');
+        }
     }
 
     /**

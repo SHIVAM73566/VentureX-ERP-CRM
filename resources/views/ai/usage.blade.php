@@ -25,7 +25,7 @@
 
     <div class="mb-6 card">
         <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-ink-400">Provider status & usage (30 days)</h3>
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead>
                     <tr>

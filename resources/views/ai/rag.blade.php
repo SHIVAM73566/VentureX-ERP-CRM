@@ -165,7 +165,7 @@
                         <h2 class="text-sm font-bold uppercase tracking-wide text-ink-400 dark:text-ink-500">Retrieved records</h2>
                         <span class="text-xs text-ink-400" x-text="sources.length + ' sources'"></span>
                     </div>
-                    <div class="overflow-x-auto">
+                    <div class="table-wrap">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -198,7 +198,7 @@
                 <h2 class="text-sm font-bold uppercase tracking-wide text-ink-400 dark:text-ink-500">Recent queries</h2>
                 <span class="text-xs text-ink-400">{{ $recentQueries->count() }} shown</span>
             </div>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead>
                         <tr>

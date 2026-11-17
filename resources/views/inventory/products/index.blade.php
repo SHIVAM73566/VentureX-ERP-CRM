@@ -40,7 +40,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>Unit</th><th>Buy / Sell</th><th>Movements</th><th>Status</th><th></th></tr></thead>
                 <tbody>

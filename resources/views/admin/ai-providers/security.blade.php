@@ -58,7 +58,7 @@
                 <h2 class="text-base font-semibold text-gray-900 dark:text-white">Provider Credentials</h2>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Masked keys only — never stored in .env, decrypted server-side per request.</p>
             </div>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-900">
                         <tr>
@@ -135,7 +135,7 @@
                     <h2 class="text-base font-semibold text-gray-900 dark:text-white">Recent AI Usage</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Latest entries from ai_usage_logs (never stores prompts or keys).</p>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-900">
                             <tr>
@@ -170,7 +170,7 @@
                     <h2 class="text-base font-semibold text-gray-900 dark:text-white">Recent Provider Audit</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Actions taken on AI provider rows (module ai_providers).</p>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-900">
                             <tr>

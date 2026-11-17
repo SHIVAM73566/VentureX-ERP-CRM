@@ -36,7 +36,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>PR Number</th><th>Department</th><th>Requester</th><th>Items</th><th>Priority</th><th>Required</th><th>Status</th><th></th></tr></thead>
                 <tbody>

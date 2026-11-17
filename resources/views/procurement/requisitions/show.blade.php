@@ -42,7 +42,7 @@
 
         <div class="card lg:col-span-2">
             <h2 class="mb-3 text-lg font-bold text-ink-900">Items</h2>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead><tr><th>#</th><th>Product</th><th>Description</th><th class="text-right">Qty</th><th>Unit</th><th>Notes</th></tr></thead>
                     <tbody>

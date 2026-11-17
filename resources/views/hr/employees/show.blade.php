@@ -123,7 +123,7 @@
                         <a href="{{ route('hr.reviews.create', ['employee' => $employee->id]) }}" class="text-xs font-medium text-navy-600 hover:text-navy-500">New review</a>
                     @endcan
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Period</th><th>Score</th><th>Rating</th><th>Status</th><th>Date</th></tr></thead>
                         <tbody>

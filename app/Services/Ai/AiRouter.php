@@ -129,9 +129,16 @@ class AiRouter
 
             $config = (array) (config("ai.providers.{$candidate}") ?? []);
 
+            // A model saved in company settings belongs to the company's chosen
+            // provider. Reusing it for a fallback provider would send, for
+            // example, an NVIDIA model ID to Gemini and cause a 404. Explicit
+            // caller overrides always win; every other candidate uses its own
+            // configured model.
             $resolvedModel = $model !== null && $model !== ''
                 ? $model
-                : ($companyModel !== '' ? $companyModel : null);
+                : ($companyProvider !== '' && $candidate === $companyProvider && $companyModel !== ''
+                    ? $companyModel
+                    : null);
 
             return [
                 'provider' => $candidate,

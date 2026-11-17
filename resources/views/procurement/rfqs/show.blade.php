@@ -54,7 +54,7 @@
         <div class="space-y-6 lg:col-span-2">
             <div class="card">
                 <h2 class="mb-3 text-lg font-bold text-ink-900">Line Items</h2>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>#</th><th>Product</th><th>Description</th><th class="text-right">Qty</th><th>Unit</th></tr></thead>
                         <tbody>
@@ -76,7 +76,7 @@
 
             <div class="card">
                 <h2 class="mb-3 text-lg font-bold text-ink-900">Supplier Responses</h2>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Supplier</th><th class="text-right">Amount</th><th>Delivery</th><th>Valid Until</th><th>Status</th></tr></thead>
                         <tbody>

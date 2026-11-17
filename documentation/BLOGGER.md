@@ -1,5 +1,7 @@
 # Blogger Integration Guide for VentureX ERP & CRM
 
+> **API accuracy notice (v1.3.0):** Examples in this guide use the current `/api` namespace. Submit Blogger forms to `/api/crm/leads`, sync contacts with `/api/crm/contacts`, and create a Sanctum token with `POST /api/tokens` after signing in. There is no `health` API endpoint in this release; use `/api/user` as an authenticated connectivity check. See `API-SETUP.md` and `routes/api.php` for authoritative examples.
+
 ## Important: Blogger Cannot Run PHP/Laravel
 
 Blogger (Blogspot) is Google's free blogging platform. It only supports HTML, CSS, and JavaScript. It cannot execute PHP/Laravel code. However, you can integrate Blogger with VentureX ERP & CRM through the REST API.
@@ -148,7 +150,7 @@ Add this HTML/JavaScript gadget to your Blogger sidebar or page:
 
 <script>
 (function() {
-    const API_URL = 'https://yourdomain.com/api/v1';
+    const API_URL = 'https://yourdomain.com/api';
     const API_TOKEN = 'YOUR_API_TOKEN_HERE';
     
     const form = document.getElementById('contactForm');
@@ -174,7 +176,7 @@ Add this HTML/JavaScript gadget to your Blogger sidebar or page:
         };
         
         try {
-            const response = await fetch(`${API_URL}/leads`, {
+            const response = await fetch(`${API_URL}/crm/leads`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -260,7 +262,7 @@ Add this HTML/JavaScript gadget to your Blogger sidebar or page:
 
 <script>
 (function() {
-    const API_URL = 'https://yourdomain.com/api/v1';
+    const API_URL = 'https://yourdomain.com/api';
     const API_TOKEN = 'YOUR_API_TOKEN_HERE';
     
     const form = document.getElementById('supportForm');
@@ -285,7 +287,7 @@ Add this HTML/JavaScript gadget to your Blogger sidebar or page:
         };
         
         try {
-            const response = await fetch(`${API_URL}/tickets`, {
+            const response = await fetch(`${API_URL}/support/tickets`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -380,7 +382,7 @@ Add this HTML/JavaScript gadget to your Blogger sidebar or page:
 
 <script>
 (function() {
-    const API_URL = 'https://yourdomain.com/api/v1';
+    const API_URL = 'https://yourdomain.com/api';
     const API_TOKEN = 'YOUR_API_TOKEN_HERE';
     
     const form = document.getElementById('inquiryForm');
@@ -408,7 +410,7 @@ Add this HTML/JavaScript gadget to your Blogger sidebar or page:
         };
         
         try {
-            const response = await fetch(`${API_URL}/inquiries`, {
+            const response = await fetch(`${API_URL}/crm/leads`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -467,7 +469,7 @@ async function handleRequest(request) {
     }
     
     // Forward to VentureX API
-    const venturexResponse = await fetch('https://yourdomain.com/api/v1/leads', {
+    const venturexResponse = await fetch('https://yourdomain.com/api/crm/leads', {
         method: request.method,
         headers: {
             'Content-Type': 'application/json',
@@ -539,7 +541,7 @@ Always validate on server side (VentureX):
 ```javascript
 async function testVentureXAPI() {
     try {
-        const response = await fetch('https://yourdomain.com/api/v1/health', {
+        const response = await fetch('https://yourdomain.com/api/user', {
             headers: {
                 'Authorization': 'Bearer YOUR_API_TOKEN'
             }
@@ -572,7 +574,7 @@ const testSubmission = {
 };
 
 // Uncomment to test
-// fetch('https://yourdomain.com/api/v1/leads', {
+// fetch('https://yourdomain.com/api/crm/leads', {
 //     method: 'POST',
 //     headers: {
 //         'Content-Type': 'application/json',

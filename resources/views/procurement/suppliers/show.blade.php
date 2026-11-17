@@ -36,7 +36,7 @@
 
         <div class="card lg:col-span-2">
             <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-ink-400">Offers ({{ $supplier->offers_count }})</h3>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead>
                         <tr><th>Material</th><th>Qty (MT)</th><th>Price/MT</th><th>Status</th><th>Date</th><th></th></tr>

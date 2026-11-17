@@ -48,7 +48,7 @@
                     <div class="card-header">
                         <h3 class="text-sm font-bold text-ink-800">Ticket History ({{ $tickets->total() }})</h3>
                     </div>
-                    <div class="overflow-x-auto">
+                    <div class="table-wrap">
                         <table class="table">
                             <thead>
                                 <tr>

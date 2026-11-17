@@ -109,7 +109,7 @@
             <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Execution ledger</h2>
             <span class="text-xs text-ink-400">Latest 25 runs</span>
         </div>
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Rule</th><th>Status</th><th>Summary</th><th>Duration</th><th>Trigger</th><th>When</th></tr></thead>
                 <tbody>

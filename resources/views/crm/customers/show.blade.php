@@ -41,7 +41,7 @@
         <div class="space-y-6 lg:col-span-2">
             <div class="card">
                 <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-ink-400">Opportunities ({{ $customer->opportunities_count }})</h3>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead>
                             <tr><th>Opportunity</th><th>Stage</th><th>Value</th><th></th></tr>

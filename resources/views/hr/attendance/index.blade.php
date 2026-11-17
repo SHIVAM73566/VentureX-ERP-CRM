@@ -34,7 +34,7 @@
     </form>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Employee</th><th>Date</th><th>Check In</th><th>Check Out</th><th>Worked</th><th>Overtime</th><th>Status</th><th></th></tr></thead>
                 <tbody>

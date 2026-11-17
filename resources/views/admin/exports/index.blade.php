@@ -40,7 +40,7 @@
 
         <div class="card">
             <h2 class="mb-4 text-lg font-bold text-ink-900">Export requests</h2>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="border-b border-ink-200 text-xs uppercase tracking-wide text-ink-400">

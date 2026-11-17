@@ -30,7 +30,7 @@
                     <h2 class="text-lg font-bold text-ink-900">Line Items</h2>
                     <button type="button" @click="addItem()" class="btn-secondary">+ Add Item</button>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Product</th><th>Description</th><th class="w-24">Qty</th><th class="w-20">Unit</th><th class="w-32">Unit Price</th><th class="w-24">Tax %</th><th class="w-32">Line Total</th><th class="w-10"></th></tr></thead>
                         <tbody>

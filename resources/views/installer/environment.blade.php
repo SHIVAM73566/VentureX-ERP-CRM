@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
     <meta charset="utf-8">
@@ -158,7 +158,7 @@
 
                 <div class="flex items-center justify-between pt-2">
                     <a href="{{ route('installer.database') }}" class="btn-secondary">• Back</a>
-                    <button type="submit" class="btn-accent">Save & Continue •’</button>
+                    <button type="submit" class="btn-accent">Save & Continue →</button>
                 </div>
             </form>
         </div>

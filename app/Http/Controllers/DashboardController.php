@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AgentAction;
 use App\Models\AgentRun;
+use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Invoice;
@@ -12,12 +13,14 @@ use App\Models\LeaveRequest;
 use App\Models\OnboardingTask;
 use App\Models\Opportunity;
 use App\Models\PayrollRun;
+use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\SupplierOffer;
 use App\Services\Ai\AiInsightService;
 use App\Services\Ai\AiQuotaService;
 use App\Services\CompanyContext;
 use App\Services\SettingService;
+use App\Support\NavigationAccess;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -30,6 +33,15 @@ class DashboardController extends Controller
         $companyId = CompanyContext::id();
         $user = auth()->user();
         $roleNames = $user->getRoleNames()->toArray();
+
+        $currencyCode = strtoupper((string) (Company::find($companyId)?->currency_code ?: 'USD'));
+        $currencySymbol = match ($currencyCode) {
+            'INR' => '₹',
+            'USD' => '$',
+            'EUR' => '€',
+            'GBP' => '£',
+            default => $currencyCode.' ',
+        };
 
         $stats = [
             'customers' => Customer::ofCompany()->count(),
@@ -83,12 +95,15 @@ class DashboardController extends Controller
             ['name' => 'Logistics', 'slug' => 'logistics', 'ready' => true, 'icon' => 'ship', 'route' => 'logistics.shipments.index', 'permission' => 'logistics.view'],
             ['name' => 'HR', 'slug' => 'hr', 'ready' => true, 'icon' => 'badge', 'route' => 'hr.dashboard', 'permission' => 'hr.view'],
             ['name' => 'Projects', 'slug' => 'projects', 'ready' => false, 'icon' => 'briefcase', 'route' => null, 'permission' => 'projects.view'],
-            ['name' => 'Documents', 'slug' => 'documents', 'ready' => true, 'icon' => 'folder', 'route' => 'admin.documents.index', 'permission' => 'documents.view'],
+            ['name' => 'Documents', 'slug' => 'documents', 'ready' => true, 'icon' => 'folder', 'route' => 'admin.documents.index', 'permission' => 'documents.view', 'role' => 'super_admin'],
             ['name' => 'AI Center', 'slug' => 'ai', 'ready' => true, 'icon' => 'spark', 'route' => 'ai.copilot', 'permission' => 'ai.chat'],
-            ['name' => 'Automation', 'slug' => 'automation', 'ready' => true, 'icon' => 'bolt', 'route' => 'admin.agentic.index', 'permission' => null],
+            ['name' => 'Automation', 'slug' => 'automation', 'ready' => true, 'icon' => 'bolt', 'route' => 'admin.agentic.index', 'permission' => null, 'role' => 'super_admin'],
         ];
 
         $modules = array_filter($allModules, function ($m) use ($user) {
+            if (! empty($m['role']) && ! $user->hasRole($m['role'])) {
+                return false;
+            }
             if (! $m['permission']) {
                 return true;
             }
@@ -100,7 +115,11 @@ class DashboardController extends Controller
         });
 
         $insightService = app(AiInsightService::class);
-        $ruleInsights = $insightService->rules($companyId);
+        $navigationAccess = app(NavigationAccess::class);
+        $ruleInsights = collect($insightService->rules($companyId))
+            ->filter(fn (array $insight) => empty($insight['route']) || $navigationAccess->can($insight['route'], $user))
+            ->values()
+            ->all();
         $aiInsights = $insightService->cachedAi($companyId);
         $aiEnabled = $insightService->gatewayEnabled();
 
@@ -117,11 +136,19 @@ class DashboardController extends Controller
         $agenticSummary = $this->agenticSummary();
         $briefing = $this->buildBriefing($stats, $cashFlow, $hrSummary, $agenticSummary);
 
+        $analytics = [
+            'revenueVelocity' => $this->revenueVelocity(),
+            'pipelineConversion' => $this->pipelineConversion(),
+            'inventoryTurnover' => $this->inventoryTurnover(),
+            'aiQuotaTrend' => $this->aiQuotaTrend(),
+        ];
+
         return view('dashboard.index', compact(
             'stats', 'leadsByStatus', 'opportunitiesByStage', 'offers',
             'recentCustomers', 'recentLeads', 'recentOffers', 'followUps', 'modules',
             'ruleInsights', 'aiInsights', 'aiEnabled', 'aiQuota', 'isExecutive',
-            'quickActions', 'roleNames', 'cashFlow', 'hrSummary', 'agenticSummary', 'briefing'
+            'quickActions', 'roleNames', 'cashFlow', 'hrSummary', 'agenticSummary', 'briefing', 'analytics', 'currencySymbol',
+            'navigationAccess'
         ));
     }
 
@@ -252,6 +279,105 @@ class DashboardController extends Controller
     }
 
     /**
+     * Monthly invoiced revenue (paid + outstanding) over the last 6 months.
+     */
+    protected function revenueVelocity(): array
+    {
+        $months = [];
+        $start = now()->subMonths(5)->startOfMonth();
+        try {
+            for ($i = 0; $i < 6; $i++) {
+                $month = $start->copy()->addMonthsNoOverflow($i);
+                $revenue = (float) Invoice::ofCompany()
+                    ->whereYear('issue_date', $month->year)
+                    ->whereMonth('issue_date', $month->month)
+                    ->whereIn('status', ['sent', 'partial', 'paid', 'overdue'])
+                    ->sum('total');
+                $months[] = [
+                    'label' => $month->format('M Y'),
+                    'short' => $month->format('M'),
+                    'revenue' => round($revenue, 2),
+                ];
+            }
+        } catch (\Throwable) {
+            $months = [];
+        }
+        return ['labels' => array_column($months, 'short'), 'data' => array_column($months, 'revenue')];
+    }
+
+    /**
+     * Pipeline conversion ratios by stage (won vs total by stage family).
+     */
+    protected function pipelineConversion(): array
+    {
+        try {
+            $won = (float) Opportunity::ofCompany()->where('stage', 'won')->sum('expected_value');
+            $open = (float) Opportunity::ofCompany()->whereNotIn('stage', ['won', 'lost'])->sum('expected_value');
+            $lost = (float) Opportunity::ofCompany()->where('stage', 'lost')->sum('expected_value');
+            $total = $won + $open + $lost;
+            $conversionRate = $total > 0 ? round(($won / $total) * 100, 1) : 0;
+            $winRate = ($won + $lost) > 0 ? round(($won / ($won + $lost)) * 100, 1) : 0;
+            return [
+                'won' => round($won, 2),
+                'open' => round($open, 2),
+                'lost' => round($lost, 2),
+                'conversion_rate' => $conversionRate,
+                'win_rate' => $winRate,
+            ];
+        } catch (\Throwable) {
+            return ['won' => 0, 'open' => 0, 'lost' => 0, 'conversion_rate' => 0, 'win_rate' => 0];
+        }
+    }
+
+    /**
+     * Inventory turnover velocity based on stock movements (last 30 days).
+     */
+    protected function inventoryTurnover(): array
+    {
+        try {
+            $stockOut = (float) \App\Models\StockMovement::ofCompany()
+                ->where('type', 'out')
+                ->where('created_at', '>=', now()->subDays(30))
+                ->sum('quantity');
+            $stockIn = (float) \App\Models\StockMovement::ofCompany()
+                ->where('type', 'in')
+                ->where('created_at', '>=', now()->subDays(30))
+                ->sum('quantity');
+            $activeProducts = Product::ofCompany()->where('status', 'active')->count();
+            $lowStock = Product::ofCompany()->where('status', 'active')->get()->filter(fn ($p) => $p->isLowStock())->count();
+            return [
+                'stock_out' => round($stockOut, 2),
+                'stock_in' => round($stockIn, 2),
+                'turnover' => $stockIn > 0 ? round(($stockOut / $stockIn) * 100, 1) : 0,
+                'active_products' => $activeProducts,
+                'low_stock' => $lowStock,
+            ];
+        } catch (\Throwable) {
+            return ['stock_out' => 0, 'stock_in' => 0, 'turnover' => 0, 'active_products' => 0, 'low_stock' => 0];
+        }
+    }
+
+    /**
+     * AI quota utilization trend (daily used vs limit) and current quota.
+     */
+    protected function aiQuotaTrend(): array
+    {
+        try {
+            $quotaService = app(AiQuotaService::class);
+            $quota = $quotaService->check();
+            return [
+                'daily_used' => (int) ($quota['daily_used'] ?? 0),
+                'daily_limit' => (int) ($quota['daily_limit'] ?? 0),
+                'weekly_used' => (int) ($quota['weekly_used'] ?? 0),
+                'weekly_limit' => (int) ($quota['weekly_limit'] ?? 0),
+                'utilization' => $quota['daily_limit'] > 0 ? round(($quota['daily_used'] / $quota['daily_limit']) * 100, 1) : 0,
+            ];
+        } catch (\Throwable) {
+            return ['daily_used' => 0, 'daily_limit' => 0, 'weekly_used' => 0, 'weekly_limit' => 0, 'utilization' => 0];
+        }
+    }
+
+    /**
      * @param  array<string, mixed>  $stats
      * @param  array<string, mixed>  $cashFlow
      * @param  array<string, mixed>  $hr
@@ -289,13 +415,13 @@ class DashboardController extends Controller
 
         $briefing[] = [
             'label' => 'Workforce',
-            'value' => $hr['headcount'].' active employees · '.$hr['pending_leave'].' leave request(s) pending',
+            'value' => $hr['headcount'].' active employees Â· '.$hr['pending_leave'].' leave request(s) pending',
             'tone' => 'violet',
         ];
 
         $briefing[] = [
             'label' => 'Autonomous engine',
-            'value' => $agentic['enabled'].'/'.$agentic['rules'].' rules enabled · '.$agentic['runs_today'].' run(s) today · '.$agentic['rollbacks'].' rollback(s) this week',
+            'value' => $agentic['enabled'].'/'.$agentic['rules'].' rules enabled Â· '.$agentic['runs_today'].' run(s) today Â· '.$agentic['rollbacks'].' rollback(s) this week',
             'tone' => $agentic['rollbacks'] > 0 ? 'amber' : 'green',
         ];
 
@@ -306,7 +432,7 @@ class DashboardController extends Controller
     {
         $actions = [];
 
-        if ($user->hasAnyPermission(['customers.create', 'leads.create'])) {
+        if ($this->safeHasPermission($user, 'customers.create')) {
             $actions[] = ['label' => 'New customer', 'route' => 'customers.create', 'color' => 'blue'];
         }
         if ($this->safeHasPermission($user, 'leads.create')) {
@@ -318,10 +444,8 @@ class DashboardController extends Controller
         if ($this->safeHasPermission($user, 'finance.view')) {
             $actions[] = ['label' => 'Finance dashboard', 'route' => 'finance.dashboard', 'color' => 'green'];
         }
-        if ($this->safeHasPermission($user, 'exports.view') || $user->hasRole('super_admin')) {
+        if ($user->hasRole('super_admin')) {
             $actions[] = ['label' => 'Export center', 'route' => 'admin.exports.index', 'color' => 'gray'];
-        }
-        if ($this->safeHasPermission($user, 'exports.import') || $user->hasRole('super_admin')) {
             $actions[] = ['label' => 'Import data', 'route' => 'admin.imports.index', 'color' => 'gray'];
         }
         if ($this->safeHasPermission($user, 'ai.chat')) {

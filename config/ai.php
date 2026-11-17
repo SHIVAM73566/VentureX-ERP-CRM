@@ -13,7 +13,7 @@ return [
 
     'provider' => env('AI_PROVIDER', 'nvidia'),
 
-    'model' => env('AI_MODEL', 'nvidia/llama-3.3-nemotron-super-49b-v1.5'),
+    'model' => env('AI_MODEL', 'nvidia/nemotron-3.5-bolt-e4b'),
 
     'temperature' => (float) env('AI_TEMPERATURE', 0.4),
 
@@ -251,7 +251,7 @@ return [
             'base_url' => 'https://generativelanguage.googleapis.com',
             'host' => 'generativelanguage.googleapis.com',
             'path' => '/v1beta/models/{model}:generateContent',
-            'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
+            'model' => env('GEMINI_MODEL', 'gemini-3.5-flash-lite'),
             'api_key' => env('GEMINI_API_KEY', ''),
             'auth_mode' => 'google',
         ],
@@ -278,7 +278,7 @@ return [
             'base_url' => env('NVIDIA_BASE_URL', 'https://integrate.api.nvidia.com'),
             'host' => 'integrate.api.nvidia.com',
             'path' => '/v1/chat/completions',
-            'model' => env('NVIDIA_MODEL', 'nvidia/llama-3.3-nemotron-super-49b-v1.5'),
+            'model' => env('NVIDIA_MODEL', 'nvidia/nemotron-3.5-bolt-e4b'),
             'api_key' => env('NVIDIA_API_KEY', ''),
             'auth_mode' => 'bearer',
         ],
@@ -325,16 +325,16 @@ return [
             'label' => 'Google Gemini',
             'description' => "Google's fast, strong-reasoning model. Great for complex analysis, summaries and document understanding.",
             'key_help' => 'Paste your Google AI Studio API key (starts with "AIza").',
-            'default_model' => 'gemini-2.5-flash',
-            'models' => ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash', 'gemini-1.5-flash'],
+            'default_model' => 'gemini-3.5-flash-lite',
+            'models' => ['gemini-3.5-flash-lite', 'gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-flash-latest'],
             'docs_url' => 'https://aistudio.google.com/app/apikey',
         ],
         'nvidia' => [
             'label' => 'NVIDIA NIM',
             'description' => "NVIDIA's hosted model catalogue (built for code, reasoning and fast general answers).",
             'key_help' => 'Paste your NVIDIA API key (starts with "nvapi-").',
-            'default_model' => 'nvidia/llama-3.3-nemotron-super-49b-v1.5',
-            'models' => ['nvidia/llama-3.3-nemotron-super-49b-v1.5', 'nvidia/llama-3.1-nemotron-ultra-253b-v1.0', 'meta/llama-3.1-8b-instruct'],
+            'default_model' => 'nvidia/nemotron-3.5-bolt-e4b',
+            'models' => ['nvidia/nemotron-3.5-bolt-e4b', 'nvidia/nemotron-3.5-lightning-30b-a3b', 'nvidia/nemotron-3.5-super-vl-120b-a12b', 'nvidia/nemotron-3-ultra-550b-a55b', 'openai/gpt-oss-20b'],
             'docs_url' => 'https://org.ngc.nvidia.com/setup/api-key',
         ],
         'openai' => [

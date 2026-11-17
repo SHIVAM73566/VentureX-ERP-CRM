@@ -1,6 +1,6 @@
 <x-layouts.app title="Settings" :breadcrumbs="[['label' => 'Administration'], ['label' => 'Settings']]">
 
-    <div class="mb-4 flex gap-1 rounded-lg bg-ink-100 p-1">
+    <div class="mb-4 flex flex-wrap gap-1 rounded-lg bg-ink-100 p-1">
         <a href="{{ route('admin.settings.index', ['tab' => 'ai']) }}" class="tab {{ $tab === 'ai' ? 'tab-active' : '' }}">AI Engine</a>
         <a href="{{ route('admin.settings.index', ['tab' => 'company']) }}" class="tab {{ $tab === 'company' ? 'tab-active' : '' }}">Company</a>
         <a href="{{ route('admin.settings.index', ['tab' => 'branding']) }}" class="tab {{ $tab === 'branding' ? 'tab-active' : '' }}">Branding &amp; Invoices</a>
@@ -172,7 +172,7 @@
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2">
                         <x-form.select label="Provider" name="settings[ai.provider]" :options="['nvidia' => 'NVIDIA NIM', 'gemini' => 'Google Gemini', 'openai' => 'OpenAI', 'anthropic' => 'Anthropic Claude', 'deepseek' => 'DeepSeek', 'swift' => 'Swift AI']" :value="$settings['ai.provider'] ?? config('ai.default_provider', 'nvidia')" />
-                        <x-form.input label="Model" name="settings[ai.model]" :value="$settings['ai.model'] ?? config('ai.model', 'nvidia/llama-3.3-nemotron-super-49b-v1.5')" />
+                        <x-form.input label="Model" name="settings[ai.model]" :value="$settings['ai.model'] ?? config('ai.model', 'nvidia/nemotron-3.5-bolt-e4b')" />
                         <x-form.input label="Temperature" name="settings[ai.temperature]" type="number" step="0.1" :value="$settings['ai.temperature'] ?? 0.4" />
                         <x-form.input label="Top P" name="settings[ai.top_p]" type="number" step="0.05" :value="$settings['ai.top_p'] ?? 0.9" />
                         <x-form.input label="Max Tokens" name="settings[ai.max_tokens]" type="number" :value="$settings['ai.max_tokens'] ?? 2048" />

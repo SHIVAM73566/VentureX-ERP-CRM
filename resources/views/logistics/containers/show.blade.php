@@ -35,7 +35,7 @@
 
         <div class="card lg:col-span-2">
             <h2 class="mb-3 text-lg font-bold text-ink-900">Shipments</h2>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead><tr><th>Shipment</th><th>Type</th><th>Route</th><th>Status</th></tr></thead>
                     <tbody>

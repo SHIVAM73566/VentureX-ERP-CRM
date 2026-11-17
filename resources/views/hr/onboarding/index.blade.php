@@ -35,7 +35,7 @@
                 <h2 class="text-sm font-bold text-ink-800 dark:text-ink-100">Checklist tasks</h2>
                 <span class="text-xs text-ink-400">{{ $tasks->total() }} task(s)</span>
             </div>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead><tr><th>Task</th><th>Employee</th><th>Category</th><th>Due</th><th>Status</th><th></th></tr></thead>
                     <tbody>

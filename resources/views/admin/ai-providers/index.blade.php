@@ -73,7 +73,7 @@
 
         {{-- Provider cards table --}}
         <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-900">
                         <tr>
@@ -239,7 +239,7 @@
                                         <div class="flex flex-col items-end gap-1.5">
                                             <form method="POST" action="{{ route('admin.ai-providers.test', $p->id) }}">@csrf
                                                 <button type="submit" class="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700">
-                                                    Test connection
+                                                    Test connection (live)
                                                 </button>
                                             </form>
                                             <form method="POST" action="{{ route('admin.ai-providers.rotate', $p->id) }}"

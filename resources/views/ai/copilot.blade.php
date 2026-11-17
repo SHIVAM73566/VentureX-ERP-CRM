@@ -1,6 +1,6 @@
 <x-layouts.app title="Business Copilot" :breadcrumbs="[['label' => 'AI Center'], ['label' => 'Business Copilot']]">
 
-    <div x-data="copilot()" x-init="init()" class="grid gap-6 md:grid-cols-4 lg:grid-cols-4">
+    <div x-data="copilot()" x-init="init()" class="grid gap-6 lg:grid-cols-4">
         <div class="lg:col-span-1 space-y-6">
             <div class="card">
                 <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-ink-400 dark:text-ink-500">Try asking</h3>
@@ -27,7 +27,7 @@
         </div>
 
         <div class="lg:col-span-3">
-            <div class="card flex min-h-0 flex-1 lg:h-[calc(100vh-16rem)] flex-col">
+            <div class="card flex h-[60vh] min-h-0 flex-1 flex-col lg:h-[calc(100vh-16rem)]">
                 <div class="mb-4 border-b border-ink-100 pb-3 dark:border-ink-800">
                     <h2 class="text-lg font-bold text-ink-900 dark:text-ink-50">Business Copilot</h2>
                     <p class="text-sm text-ink-400 dark:text-ink-500">Ask about receivables, overdue invoices, stock levels, suppliers, or your overall business health.</p>

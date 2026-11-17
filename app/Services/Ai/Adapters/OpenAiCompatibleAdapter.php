@@ -16,6 +16,8 @@ use Throwable;
  */
 class OpenAiCompatibleAdapter implements ProviderAdapter
 {
+    use ProviderErrorReporter;
+
     public function generate(string $provider, array $payload): array
     {
         $config = (array) (config("ai.providers.{$provider}") ?? []);
@@ -87,13 +89,11 @@ class OpenAiCompatibleAdapter implements ProviderAdapter
             $response = $http->asJson()->post($url, $body);
 
             if (! $response->successful()) {
-                Log::warning('AI provider returned an error response', [
-                    'provider' => $provider,
-                    'status' => $response->status(),
-                ]);
-
-                throw new AiException(
-                    "AI provider [{$provider}] returned HTTP {$response->status()}."
+                $this->failWithProviderResponse(
+                    'AI provider',
+                    $provider,
+                    $response,
+                    (string) ($config['api_key'] ?? ''),
                 );
             }
 

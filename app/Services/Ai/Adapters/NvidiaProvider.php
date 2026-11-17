@@ -16,6 +16,8 @@ use Throwable;
  */
 class NvidiaProvider implements ProviderAdapter
 {
+    use ProviderErrorReporter;
+
     public function generate(string $provider, array $payload): array
     {
         $config = (array) (config("ai.providers.{$provider}") ?? []);
@@ -34,7 +36,7 @@ class NvidiaProvider implements ProviderAdapter
         }
 
         $body = [
-            'model' => (string) ($payload['model'] ?? $config['model'] ?? 'nvidia/llama-3.3-nemotron-super-49b-v1.5'),
+            'model' => (string) ($payload['model'] ?? $config['model'] ?? 'nvidia/nemotron-3.5-bolt-e4b'),
             'temperature' => (float) $payload['temperature'],
             'max_tokens' => (int) $payload['max_tokens'],
             'messages' => [
@@ -52,12 +54,12 @@ class NvidiaProvider implements ProviderAdapter
                 ->post($url, $body);
 
             if (! $response->successful()) {
-                Log::warning('NVIDIA returned an error response', [
-                    'provider' => $provider,
-                    'status' => $response->status(),
-                ]);
-
-                throw new AiException("AI provider [{$provider}] returned HTTP {$response->status()}.");
+                $this->failWithProviderResponse(
+                    'NVIDIA',
+                    $provider,
+                    $response,
+                    (string) ($config['api_key'] ?? ''),
+                );
             }
 
             $data = $response->json();

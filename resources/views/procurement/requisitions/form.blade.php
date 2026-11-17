@@ -24,7 +24,7 @@
                     <h2 class="text-lg font-bold text-ink-900">Items</h2>
                     <button type="button" @click="addItem()" class="btn-secondary">+ Add Item</button>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead><tr><th>Product</th><th>Description</th><th class="w-28">Qty</th><th class="w-24">Unit</th><th class="w-40">Notes</th><th class="w-10"></th></tr></thead>
                         <tbody>

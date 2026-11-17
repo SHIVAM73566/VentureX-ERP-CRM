@@ -467,7 +467,7 @@ Edit `.env` with your hosting database details (you'll create the database in St
 
 ### Step 3 — Create Database in cPanel
 
-1. Go to **cPanel •’ MySQL Databases**
+1. Go to **cPanel → MySQL Databases**
 2. Create database: `yourcpaneluser_VENTUREX_ERP`
 3. Create database user with a strong password
 4. Add user to database with **All Privileges**
@@ -490,8 +490,8 @@ DB_PASSWORD=your_database_password
 ### Step 5 — Set Permissions
 
 In cPanel File Manager:
-- Right-click `storage/` •’ Permissions •’ **777** (recursive)
-- Right-click `bootstrap/cache/` •’ Permissions •’ **777** (recursive)
+- Right-click `storage/` → Permissions → **777** (recursive)
+- Right-click `bootstrap/cache/` → Permissions → **777** (recursive)
 
 ### Step 6 — Import Database
 
@@ -504,7 +504,7 @@ If SSH is NOT available:
 1. Export database from local: `mysqldump -u root -p VENTUREX_ERP > database.sql`
 2. In cPanel, go to **phpMyAdmin**
 3. Select your database
-4. Click **Import** •’ Upload `database.sql`
+4. Click **Import** → Upload `database.sql`
 
 > **Screenshot:** phpMyAdmin import screen.
 

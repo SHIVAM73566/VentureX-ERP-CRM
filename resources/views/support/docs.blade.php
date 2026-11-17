@@ -155,13 +155,13 @@
                     </ul>
 
                     <h3 class="text-base font-bold text-ink-800">Company Setup</h3>
-                    <p class="text-sm text-ink-600">Navigate to <strong>Administration •’ Companies</strong> to configure your company profile, tax settings, currency, and branding.</p>
+                    <p class="text-sm text-ink-600">Navigate to <strong>Administration → Companies</strong> to configure your company profile, tax settings, currency, and branding.</p>
 
                     <h3 class="text-base font-bold text-ink-800">User Roles & Permissions</h3>
-                    <p class="text-sm text-ink-600">Go to <strong>Administration •’ Roles & Permissions</strong> to define roles and assign granular permissions to each module.</p>
+                    <p class="text-sm text-ink-600">Go to <strong>Administration → Roles & Permissions</strong> to define roles and assign granular permissions to each module.</p>
 
                     <h3 class="text-base font-bold text-ink-800">Notification Settings</h3>
-                    <p class="text-sm text-ink-600">Configure email and in-app notifications under <strong>Administration •’ Settings</strong> to control what alerts are sent and to whom.</p>
+                    <p class="text-sm text-ink-600">Configure email and in-app notifications under <strong>Administration → Settings</strong> to control what alerts are sent and to whom.</p>
                 </div>
 
                 {{-- Modules --}}
@@ -236,7 +236,7 @@
                             <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-600">
                                 <li>Ensure AI API keys are configured in <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs">.env</code></li>
                                 <li>Check API quotas with your AI provider</li>
-                                <li>Review AI usage logs in <strong>AI Center •’ AI Usage</strong></li>
+                                <li>Review AI usage logs in <strong>AI Center → AI Usage</strong></li>
                             </ul>
                         </div>
                     </div>
@@ -248,32 +248,58 @@
                     <p class="text-sm text-ink-600">VentureX ERP & CRM exposes a RESTful API for integration with external systems.</p>
 
                     <h3 class="text-base font-bold text-ink-800">Authentication</h3>
-                    <p class="text-sm text-ink-600">All API requests require a Bearer token. Generate tokens from <strong>Administration •’ Settings •’ API Tokens</strong>.</p>
+                    <p class="text-sm text-ink-600">All API requests require a Bearer token. Generate tokens with <code class="rounded bg-ink-100 px-1.5 py-0.5">POST /api/tokens</code> after signing in (Sanctum), then send the token in the header below.</p>
                     <code class="block rounded-lg bg-ink-900 px-4 py-2 text-xs text-emerald-400">Authorization: Bearer your-api-token-here</code>
 
                     <h3 class="text-base font-bold text-ink-800">Base URL</h3>
-                    <code class="block rounded-lg bg-ink-900 px-4 py-2 text-xs text-emerald-400">{{ url('/api/v1') }}</code>
+                    <code class="block rounded-lg bg-ink-900 px-4 py-2 text-xs text-emerald-400">{{ url('/api') }}</code>
 
                     <h3 class="text-base font-bold text-ink-800">Available Endpoints</h3>
-                    <div class="space-y-1 text-sm">
-                        <div class="flex items-center gap-2">
-                            <span class="rounded bg-emerald-100 px-1.5 py-0.5 text-xs font-bold text-emerald-700">GET</span>
-                            <code class="text-xs text-ink-600">/api/v1/customers</code>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">Tokens &amp; profile</p>
+                            <div class="flex flex-wrap gap-2">
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">GET /api/tokens</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">POST /api/tokens</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">DELETE /api/tokens/{id}</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">GET /api/user</code>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="rounded bg-navy-100 px-1.5 py-0.5 text-xs font-bold text-navy-700">POST</span>
-                            <code class="text-xs text-ink-600">/api/v1/customers</code>
+                        <div>
+                            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">CRM</p>
+                            <div class="flex flex-wrap gap-2">
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/crm/customers</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/crm/contacts</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/crm/leads</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/crm/opportunities</code>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-bold text-amber-700">PUT</span>
-                            <code class="text-xs text-ink-600">/api/v1/customers/{id}</code>
+                        <div>
+                            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">Sales, inventory &amp; procurement</p>
+                            <div class="flex flex-wrap gap-2">
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/sales/quotations</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/sales/orders</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/sales/invoices</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/sales/payments</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/inventory/products</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/inventory/warehouses</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/procurement/suppliers</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/procurement/purchase-orders</code>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="rounded bg-red-100 px-1.5 py-0.5 text-xs font-bold text-red-700">DELETE</span>
-                            <code class="text-xs text-ink-600">/api/v1/customers/{id}</code>
+                        <div>
+                            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-400">Finance, support &amp; AI</p>
+                            <div class="flex flex-wrap gap-2">
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/finance/accounts</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/finance/journal-entries</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/support/tickets</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/ai/insights</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">/api/ai/rag/pipelines</code>
+                                <code class="rounded bg-ink-100 px-1.5 py-0.5 text-xs text-ink-700">POST /api/ai/rag/query</code>
+                            </div>
                         </div>
                     </div>
-                    <p class="text-xs text-ink-400">Full API documentation available at <code class="rounded bg-ink-100 px-1.5 py-0.5">/api/docs</code> (Swagger/OpenAPI).</p>
+                    <p class="text-xs text-ink-400">Each resource supports the standard REST verbs shown in <code class="rounded bg-ink-100 px-1.5 py-0.5">routes/api.php</code>. An OpenAPI/Swagger endpoint is not bundled with this release.</p>
                 </div>
 
             </div>

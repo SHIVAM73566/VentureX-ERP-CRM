@@ -72,6 +72,9 @@ class SelfHealingService
                 'status' => $status,
                 'fingerprint' => $fingerprint,
                 'hot_fix' => $hotFix,
+                'url' => $request->fullUrl(),
+                'method' => $request->method(),
+                'user_agent' => mb_substr((string) $request->userAgent(), 0, 300),
             ]);
         } catch (Throwable) {
             // Ignore.

@@ -22,7 +22,7 @@
 
         <div class="card">
             <h2 class="mb-3 text-lg font-bold text-ink-900 dark:text-ink-50">Top Accounts</h2>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="table">
                     <thead><tr><th>Account</th><th>Code</th><th>Entries</th></tr></thead>
                     <tbody>
@@ -61,7 +61,7 @@
 
     <div class="card mt-6">
         <h2 class="mb-3 text-lg font-bold text-ink-900 dark:text-ink-50">Recent Journal Entries</h2>
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Entry</th><th>Date</th><th>Description</th><th>Created By</th><th>Status</th><th></th></tr></thead>
                 <tbody>

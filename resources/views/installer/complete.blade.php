@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
     <meta charset="utf-8">
@@ -76,7 +76,7 @@
                                     <li>Change the demo credentials (demo_admin@example.com) before production use.</li>
                                     <li>Set APP_DEBUG=false in production.</li>
                                     <li>Configure your mail settings for password resets.</li>
-                                    <li>Set up your AI provider keys in Settings •’ AI Configuration.</li>
+                                    <li>Set up your AI provider keys in Settings → AI Configuration.</li>
                                 </ul>
                             </div>
                         </div>

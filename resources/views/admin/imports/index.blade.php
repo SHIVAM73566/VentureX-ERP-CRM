@@ -21,7 +21,7 @@
             </div>
         @else
             <div class="overflow-hidden rounded-xl border border-ink-200 bg-white">
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                 <table class="min-w-full divide-y divide-ink-200">
                     <thead class="bg-ink-50">
                         <tr>

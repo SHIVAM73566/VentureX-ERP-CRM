@@ -41,7 +41,7 @@
             <div class="border-b border-ink-200 px-6 py-4">
                 <h2 class="text-lg font-semibold text-ink-900">Row Details</h2>
             </div>
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="min-w-full text-sm">
                     <thead class="bg-ink-50">
                         <tr>

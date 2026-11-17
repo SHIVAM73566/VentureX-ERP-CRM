@@ -17,7 +17,7 @@
     </div>
 
     <div class="mt-6 card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Warehouse</th><th>Location</th><th>Manager</th><th>Capacity</th><th>Movements</th><th>Status</th><th></th></tr></thead>
                 <tbody>

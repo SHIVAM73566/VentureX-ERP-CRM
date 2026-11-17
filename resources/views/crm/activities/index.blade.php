@@ -45,7 +45,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>Activity</th><th>Type</th><th>Related To</th><th>Assignee</th><th>Due</th><th>Status</th><th></th></tr></thead>
                 <tbody>

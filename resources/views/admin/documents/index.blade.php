@@ -36,7 +36,7 @@
                 </form>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="table-wrap">
                 <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="border-b border-ink-200 text-xs uppercase tracking-wide text-ink-400">

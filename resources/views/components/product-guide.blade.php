@@ -7,6 +7,7 @@
             request()->path()
         );
         $guideCounts = collect($guideDefinitions)->countBy('domain');
+        $navAccess = app(\App\Support\NavigationAccess::class);
     @endphp
 
     {{--
@@ -90,8 +91,12 @@
                             </p>
                             <div class="mt-4 flex flex-wrap gap-2">
                                 <a href="{{ route('getting-started') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-navy-900 transition hover:bg-navy-50">Start the quick tour</a>
-                                <a href="{{ route('ai.rag') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">Open RAG workspace</a>
-                                <a href="{{ route('ai.rag.tour') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">See all 84 pipelines</a>
+                                @if ($navAccess->can('ai.rag'))
+                                    <a href="{{ route('ai.rag') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">Open RAG workspace</a>
+                                @endif
+                                @if ($navAccess->can('ai.rag.tour'))
+                                    <a href="{{ route('ai.rag.tour') }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">See all 84 pipelines</a>
+                                @endif
                                 @if (auth()->user()?->hasRole('super_admin'))
                                     <a href="{{ route('admin.settings.index', ['tab' => 'ai']) }}" class="inline-flex items-center gap-1.5 rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10">Connect NVIDIA API key</a>
                                 @endif
@@ -105,14 +110,22 @@
                                     <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-600 text-xs font-bold text-white">1</span>
                                     <div>
                                         <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Create your first customer or supplier</p>
-                                        <p class="text-xs text-ink-500 dark:text-ink-400">Every downstream document — quote, order, invoice, shipment — starts from a party. <a href="{{ route('customers.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a customer</a>.</p>
+                                        @if ($navAccess->can('customers.create'))
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Every downstream document — quote, order, invoice, shipment — starts from a party. <a href="{{ route('customers.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a customer</a>.</p>
+                                        @else
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Every downstream document — quote, order, invoice, shipment — starts from a party.</p>
+                                        @endif
                                     </div>
                                 </li>
                                 <li class="flex gap-3">
                                     <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-600 text-xs font-bold text-white">2</span>
                                     <div>
                                         <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Add products and opening stock</p>
-                                        <p class="text-xs text-ink-500 dark:text-ink-400">Products drive quotations, orders, purchase lines and stock. <a href="{{ route('inventory.products.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a product</a>.</p>
+                                        @if ($navAccess->can('inventory.products.create'))
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Products drive quotations, orders, purchase lines and stock. <a href="{{ route('inventory.products.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a product</a>.</p>
+                                        @else
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Products drive quotations, orders, purchase lines and stock.</p>
+                                        @endif
                                     </div>
                                 </li>
                                 <li class="flex gap-3">
@@ -249,13 +262,15 @@
                             </div>
                         @endforeach
 
-                        <div class="rounded-xl border border-ink-200 p-3 dark:border-ink-800">
-                            <p class="text-xs leading-relaxed text-ink-500 dark:text-ink-400">
-                                Need the full tour? It explains how retrieval works, a live enterprise day, benefits by
-                                company type, governance and the API.
-                            </p>
-                            <a href="{{ route('ai.rag.tour') }}" class="mt-2 inline-flex text-xs font-semibold text-accent-700 hover:underline dark:text-accent-400">Open the 84-pipeline tour →</a>
-                        </div>
+                        @if ($navAccess->can('ai.rag.tour'))
+                            <div class="rounded-xl border border-ink-200 p-3 dark:border-ink-800">
+                                <p class="text-xs leading-relaxed text-ink-500 dark:text-ink-400">
+                                    Need the full tour? It explains how retrieval works, a live enterprise day, benefits by
+                                    company type, governance and the API.
+                                </p>
+                                <a href="{{ route('ai.rag.tour') }}" class="mt-2 inline-flex text-xs font-semibold text-accent-700 hover:underline dark:text-accent-400">Open the 84-pipeline tour →</a>
+                            </div>
+                        @endif
                     </section>
 
                     {{-- ============================ THIS PAGE ============================ --}}
@@ -269,14 +284,16 @@
                             </p>
                         </div>
 
-                        <div class="flex flex-wrap gap-1.5">
-                            @foreach ($guideContext['domain_labels'] as $domainKey => $domainLabel)
-                                <a href="{{ route('ai.rag', ['domain' => $domainKey]) }}"
-                                   class="rounded-full bg-accent-50 px-2.5 py-1 text-[11px] font-semibold text-accent-700 transition hover:bg-accent-100 dark:bg-accent-900/20 dark:text-accent-300 dark:hover:bg-accent-900/30">
-                                    {{ $domainLabel }}
-                                </a>
-                            @endforeach
-                        </div>
+                        @if ($navAccess->can('ai.rag'))
+                            <div class="flex flex-wrap gap-1.5">
+                                @foreach ($guideContext['domain_labels'] as $domainKey => $domainLabel)
+                                    <a href="{{ route('ai.rag', ['domain' => $domainKey]) }}"
+                                       class="rounded-full bg-accent-50 px-2.5 py-1 text-[11px] font-semibold text-accent-700 transition hover:bg-accent-100 dark:bg-accent-900/20 dark:text-accent-300 dark:hover:bg-accent-900/30">
+                                        {{ $domainLabel }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
 
                         <div class="space-y-2">
                             <h4 class="text-xs font-bold uppercase tracking-wide text-ink-500 dark:text-ink-400">Ask on this page</h4>
@@ -301,8 +318,12 @@
                         </div>
 
                         <div class="flex flex-wrap gap-2">
-                            <a href="{{ route('ai.rag', ['domain' => $guideContext['domains'][0] ?? 'crm']) }}" class="btn-primary text-xs">Ask in the RAG workspace</a>
-                            <a href="{{ route('ai.rag.tour') }}" class="btn-secondary text-xs">How the 84 pipelines work</a>
+                            @if ($navAccess->can('ai.rag'))
+                                <a href="{{ route('ai.rag', ['domain' => $guideContext['domains'][0] ?? 'crm']) }}" class="btn-primary text-xs">Ask in the RAG workspace</a>
+                            @endif
+                            @if ($navAccess->can('ai.rag.tour'))
+                                <a href="{{ route('ai.rag.tour') }}" class="btn-secondary text-xs">How the 84 pipelines work</a>
+                            @endif
                             <a href="{{ route('getting-started') }}" class="btn-secondary text-xs">Getting Started</a>
                         </div>
                     </section>

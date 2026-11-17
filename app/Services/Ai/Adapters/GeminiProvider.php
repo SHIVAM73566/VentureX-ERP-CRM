@@ -16,6 +16,8 @@ use Throwable;
  */
 class GeminiProvider implements ProviderAdapter
 {
+    use ProviderErrorReporter;
+
     public function generate(string $provider, array $payload): array
     {
         $config = (array) (config("ai.providers.{$provider}") ?? []);
@@ -26,7 +28,7 @@ class GeminiProvider implements ProviderAdapter
 
         $baseUrl = rtrim((string) ($config['base_url']
             ?? 'https://generativelanguage.googleapis.com'), '/');
-        $model = (string) ($payload['model'] ?? $config['model'] ?? 'gemini-2.5-flash');
+        $model = (string) ($payload['model'] ?? $config['model'] ?? 'gemini-3.5-flash-lite');
         $url = $baseUrl.'/v1beta/models/'.$model.':generateContent';
 
         $body = [
@@ -49,12 +51,12 @@ class GeminiProvider implements ProviderAdapter
                 ->post($url, $body);
 
             if (! $response->successful()) {
-                Log::warning('Gemini returned an error response', [
-                    'provider' => $provider,
-                    'status' => $response->status(),
-                ]);
-
-                throw new AiException("AI provider [{$provider}] returned HTTP {$response->status()}.");
+                $this->failWithProviderResponse(
+                    'Gemini',
+                    $provider,
+                    $response,
+                    (string) ($config['api_key'] ?? ''),
+                );
             }
 
             $data = $response->json();

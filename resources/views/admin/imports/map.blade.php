@@ -85,7 +85,7 @@
 
                 <div class="rounded-xl border border-ink-200 bg-white p-6">
                     <h3 class="mb-3 text-sm font-semibold text-ink-900">File Preview</h3>
-                    <div class="overflow-x-auto">
+                    <div class="table-wrap">
                         <table class="min-w-full text-xs">
                             <thead>
                                 <tr>

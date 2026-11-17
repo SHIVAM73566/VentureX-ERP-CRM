@@ -42,14 +42,14 @@ class AiProviderOnboardingTest extends TestCase
     protected array $providers = [
         'nvidia' => [
             'key' => 'nvapi-1234567890abcdefghijklmnopqrstuvwxyz',
-            'model' => 'nvidia/llama-3.3-nemotron-super-49b-v1.5',
+            'model' => 'nvidia/nemotron-3.5-bolt-e4b',
             'base_url' => 'https://integrate.api.nvidia.com',
             'path' => '/v1/chat/completions',
             'auth_mode' => 'bearer',
         ],
         'gemini' => [
             'key' => 'AIzaSyA1234567890abcdefghijklmnopqrstu',
-            'model' => 'gemini-2.5-flash',
+            'model' => 'gemini-3.5-flash-lite',
             'base_url' => 'https://generativelanguage.googleapis.com',
             'path' => '/v1beta/models/{model}:generateContent',
             'auth_mode' => 'google',
@@ -431,7 +431,7 @@ class AiProviderOnboardingTest extends TestCase
             'company_id' => $this->otherCompany->id,
             'provider' => 'nvidia',
             'encrypted_key' => app(AiCredentialService::class)->encryptKey('nvapi-other-company-key-000000000000'),
-            'model' => 'nvidia/llama-3.3-nemotron-super-49b-v1.5',
+            'model' => 'nvidia/nemotron-3.5-bolt-e4b',
             'enabled' => true,
             'created_by' => $this->admin->id,
         ]);

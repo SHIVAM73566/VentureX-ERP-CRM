@@ -1,5 +1,7 @@
 # Custom Website Integration Guide for VentureX ERP & CRM
 
+> **API accuracy notice (v1.3.0):** Examples in this guide use the current `/api` namespace. Use `/api/crm/customers`, `/api/crm/contacts`, `/api/crm/leads`, `/api/crm/opportunities`, `/api/sales/quotations`, `/api/sales/orders`, `/api/sales/invoices`, `/api/sales/payments`, `/api/inventory/products`, `/api/inventory/warehouses`, `/api/procurement/suppliers`, `/api/procurement/purchase-orders`, `/api/finance/accounts`, `/api/finance/journal-entries`, `/api/support/tickets`, `/api/ai/...`, `/api/tokens`, and `/api/user`. Tokens are created with `POST /api/tokens` after signing in. There is no login, docs, `companies`, `deals`, `webhooks`, or `health` API endpoint in this release; adapt legacy examples to the nearest implemented endpoint above. See `API-SETUP.md` and `routes/api.php` for authoritative examples.
+
 This guide covers integrating VentureX ERP & CRM with any custom website or application via the REST API.
 
 ## REST API Overview
@@ -9,13 +11,13 @@ The VentureX API follows RESTful conventions and uses JSON for request/response 
 ### Base URL
 
 ```
-https://yourdomain.com/api/v1
+https://yourdomain.com/api
 ```
 
 ### API Structure
 
 ```
-/api/v1/
+/api/
 ├── auth/
 │   ├── login
 │   ├── logout
@@ -40,18 +42,32 @@ All API requests require a Bearer token in the Authorization header.
 #### Getting a Token
 
 ```bash
-# Login to get token
-curl -X POST https://yourdomain.com/api/v1/auth/login \
+# 1. Sign in through the normal web login first (store the session cookie).
+curl -c cookies.txt -b cookies.txt -X POST https://yourdomain.com/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "user@example.com", "password": "your-password"}'
+  -H "X-CSRF-TOKEN: your-csrf-token" \
+  -d '{"email":"user@example.com","password":"your-password"}'
+
+# 2. Create a Sanctum API token with that authenticated session.
+curl -b cookies.txt -X POST https://yourdomain.com/api/tokens \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"name":"website-integration","abilities":["customers.read","products.read","invoices.read"]}'
 ```
 
 Response:
 ```json
 {
     "success": true,
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "expires_at": "2024-12-31 23:59:59"
+    "data": {
+        "id": 1,
+        "name": "website-integration",
+        "token": "1|plainTextTokenHere",
+        "abilities": ["customers.read", "products.read", "invoices.read"],
+        "expires_at": null,
+        "created_at": "2026-11-17T00:00:00.000000Z"
+    },
+    "message": "Token created"
 }
 ```
 
@@ -81,7 +97,7 @@ Authorization: Bearer your-api-token-here
 #### List Contacts
 
 ```bash
-curl -X GET https://yourdomain.com/api/v1/contacts \
+curl -X GET https://yourdomain.com/api/crm/contacts \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -118,7 +134,7 @@ Response:
 #### Create Contact
 
 ```bash
-curl -X POST https://yourdomain.com/api/v1/contacts \
+curl -X POST https://yourdomain.com/api/crm/contacts \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -149,7 +165,7 @@ Response:
 #### Update Contact
 
 ```bash
-curl -X PUT https://yourdomain.com/api/v1/contacts/2 \
+curl -X PUT https://yourdomain.com/api/crm/contacts/2 \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -161,7 +177,7 @@ curl -X PUT https://yourdomain.com/api/v1/contacts/2 \
 #### Delete Contact
 
 ```bash
-curl -X DELETE https://yourdomain.com/api/v1/contacts/2 \
+curl -X DELETE https://yourdomain.com/api/crm/contacts/2 \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -170,7 +186,7 @@ curl -X DELETE https://yourdomain.com/api/v1/contacts/2 \
 #### List Leads
 
 ```bash
-curl -X GET "https://yourdomain.com/api/v1/leads?status=new&source=website" \
+curl -X GET "https://yourdomain.com/api/crm/leads?status=new&source=website" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -184,7 +200,7 @@ Query Parameters:
 #### Create Lead
 
 ```bash
-curl -X POST https://yourdomain.com/api/v1/leads \
+curl -X POST https://yourdomain.com/api/crm/leads \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -202,25 +218,25 @@ curl -X POST https://yourdomain.com/api/v1/leads \
 #### Update Lead Status
 
 ```bash
-curl -X PATCH https://yourdomain.com/api/v1/leads/15/status \
+curl -X PATCH https://yourdomain.com/api/crm/leads/15 \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"status": "contacted"}'
 ```
 
-### Companies
+### Customers (legacy Companies examples)
 
 #### List Companies
 
 ```bash
-curl -X GET "https://yourdomain.com/api/v1/companies?industry=technology" \
+curl -X GET "https://yourdomain.com/api/crm/customers?industry=technology" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 #### Create Company
 
 ```bash
-curl -X POST https://yourdomain.com/api/v1/companies \
+curl -X POST https://yourdomain.com/api/crm/customers \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -233,12 +249,12 @@ curl -X POST https://yourdomain.com/api/v1/companies \
   }'
 ```
 
-### Deals
+### Opportunities (legacy Deals examples)
 
 #### List Deals
 
 ```bash
-curl -X GET "https://yourdomain.com/api/v1/deals?stage=negotiation" \
+curl -X GET "https://yourdomain.com/api/crm/opportunities?stage=negotiation" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -252,7 +268,7 @@ Query Parameters:
 #### Create Deal
 
 ```bash
-curl -X POST https://yourdomain.com/api/v1/deals \
+curl -X POST https://yourdomain.com/api/crm/opportunities \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -271,14 +287,14 @@ curl -X POST https://yourdomain.com/api/v1/deals \
 #### List Tickets
 
 ```bash
-curl -X GET "https://yourdomain.com/api/v1/tickets?status=open&priority=high" \
+curl -X GET "https://yourdomain.com/api/support/tickets?status=open&priority=high" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 #### Create Ticket
 
 ```bash
-curl -X POST https://yourdomain.com/api/v1/tickets \
+curl -X POST https://yourdomain.com/api/support/tickets \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -296,14 +312,14 @@ curl -X POST https://yourdomain.com/api/v1/tickets \
 #### List Invoices
 
 ```bash
-curl -X GET "https://yourdomain.com/api/v1/invoices?status=unpaid" \
+curl -X GET "https://yourdomain.com/api/sales/invoices?status=unpaid" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 #### Create Invoice
 
 ```bash
-curl -X POST https://yourdomain.com/api/v1/invoices \
+curl -X POST https://yourdomain.com/api/sales/invoices \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -332,12 +348,12 @@ curl -X POST https://yourdomain.com/api/v1/invoices \
 ### Basic Fetch Request
 
 ```javascript
-const API_BASE = 'https://yourdomain.com/api/v1';
+const API_BASE = 'https://yourdomain.com/api';
 const TOKEN = 'your-api-token';
 
 async function fetchContacts() {
     try {
-        const response = await fetch(`${API_BASE}/contacts`, {
+        const response = await fetch(`${API_BASE}/crm/contacts`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${TOKEN}`,
@@ -363,7 +379,7 @@ async function fetchContacts() {
 ```javascript
 async function createContact(contactData) {
     try {
-        const response = await fetch(`${API_BASE}/contacts`, {
+        const response = await fetch(`${API_BASE}/crm/contacts`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${TOKEN}`,
@@ -406,7 +422,7 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Sending...';
     
     try {
-        const response = await fetch(`${API_BASE}/leads`, {
+        const response = await fetch(`${API_BASE}/crm/leads`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${TOKEN}`,
@@ -456,7 +472,7 @@ class VentureXClient
 
     public function request($method, $endpoint, $data = [])
     {
-        $url = $this->baseUrl . '/api/v1' . $endpoint;
+        $url = $this->baseUrl . '/api' . $endpoint;
         
         $options = [
             'http' => [
@@ -482,17 +498,17 @@ class VentureXClient
     public function getContacts($params = [])
     {
         $query = http_build_query($params);
-        return $this->request('GET', '/contacts' . ($query ? '?' . $query : ''));
+        return $this->request('GET', '/crm/contacts' . ($query ? '?' . $query : ''));
     }
 
     public function createContact($data)
     {
-        return $this->request('POST', '/contacts', $data);
+        return $this->request('POST', '/crm/contacts', $data);
     }
 
     public function createLead($data)
     {
-        return $this->request('POST', '/leads', $data);
+        return $this->request('POST', '/crm/leads', $data);
     }
 }
 
@@ -527,7 +543,7 @@ function venturexApi($endpoint, $data = [], $method = 'GET')
     $ch = curl_init();
     
     curl_setopt_array($ch, [
-        CURLOPT_URL => 'https://yourdomain.com/api/v1' . $endpoint,
+        CURLOPT_URL => 'https://yourdomain.com/api' . $endpoint,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             'Authorization: Bearer your-api-token',
@@ -552,8 +568,8 @@ function venturexApi($endpoint, $data = [], $method = 'GET')
 }
 
 // Usage
-$result = venturexApi('/contacts', [], 'GET');
-$result = venturexApi('/leads', [
+$result = venturexApi('/crm/contacts', [], 'GET');
+$result = venturexApi('/crm/leads', [
     'name' => 'New Lead',
     'email' => 'lead@example.com'
 ], 'POST');
@@ -569,7 +585,7 @@ import requests
 class VentureXClient:
     def __init__(self, base_url, token):
         self.base_url = base_url.rstrip('/')
-        self.api_url = f"{self.base_url}/api/v1"
+        self.api_url = f"{self.base_url}/api"
         self.headers = {
             'Authorization': f'Bearer {token}',
             'Content-Type': 'application/json',
@@ -578,7 +594,7 @@ class VentureXClient:
 
     def get_contacts(self, params=None):
         response = requests.get(
-            f"{self.api_url}/contacts",
+            f"{self.api_url}/crm/contacts",
             headers=self.headers,
             params=params
         )
@@ -587,7 +603,7 @@ class VentureXClient:
 
     def create_contact(self, data):
         response = requests.post(
-            f"{self.api_url}/contacts",
+            f"{self.api_url}/crm/contacts",
             headers=self.headers,
             json=data
         )
@@ -596,7 +612,7 @@ class VentureXClient:
 
     def create_lead(self, data):
         response = requests.post(
-            f"{self.api_url}/leads",
+            f"{self.api_url}/crm/leads",
             headers=self.headers,
             json=data
         )
@@ -966,7 +982,7 @@ const testData = {
 ## Support
 
 For API-specific questions:
-- API Documentation: [API Reference](https://yourdomain.com/api/documentation)
+- API Documentation: [API Reference](API-SETUP.md)
 - API Status: [status.yourdomain.com](https://status.yourdomain.com)
 - Support Email: api-support@yourdomain.com
 

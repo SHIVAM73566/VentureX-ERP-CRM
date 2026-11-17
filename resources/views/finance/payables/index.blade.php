@@ -27,7 +27,7 @@
     </div>
 
     <div class="card">
-        <div class="overflow-x-auto">
+        <div class="table-wrap">
             <table class="table">
                 <thead><tr><th>PO Number</th><th>Supplier</th><th>Order Date</th><th>Expected</th><th class="text-right">Total</th><th class="text-right">Paid</th><th class="text-right">Payable</th><th></th></tr></thead>
                 <tbody>

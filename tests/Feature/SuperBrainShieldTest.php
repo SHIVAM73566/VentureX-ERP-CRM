@@ -83,7 +83,7 @@ class SuperBrainShieldTest extends TestCase
             'company_id' => $this->company->id,
             'provider' => $provider,
             'encrypted_key' => app(AiCredentialService::class)->encryptKey('nvapi-1234567890abcdefghijklmnopqrstuvwxyz'),
-            'model' => 'nvidia/llama-3.3-nemotron-super-49b-v1.5',
+            'model' => 'nvidia/nemotron-3.5-bolt-e4b',
             'enabled' => true,
             'created_by' => $this->admin->id,
         ]);

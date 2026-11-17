@@ -4,7 +4,13 @@
         ['label' => 'Support Center', 'url' => route('support.index')],
         ['label' => 'My Tickets'],
     ]"
-    :actions="'<a href=\'' . route('support.tickets.create') . '\' class=\'inline-flex items-center gap-2 rounded-lg bg-navy-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-navy-700\'><svg class=\'h-4 w-4\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 4v16m8-8H4\'/></svg> New Ticket</a>'">
+>
+    <x-slot name="actions">
+        <a href="{{ route('support.tickets.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-navy-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-navy-700">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            New Ticket
+        </a>
+    </x-slot>
 
     <div class="mx-auto max-w-6xl space-y-6">
 
@@ -35,7 +41,7 @@
         {{-- Tickets Table --}}
         @if (isset($tickets) && $tickets->count())
             <div class="card overflow-hidden">
-                <div class="overflow-x-auto">
+                <div class="table-wrap">
                     <table class="table">
                         <thead>
                             <tr>

@@ -160,25 +160,25 @@ Alpine.js provides client-side interactivity within Blade templates.
 ### Request Lifecycle
 
 ```
-Browser •’ Nginx/Apache •’ PHP-FPM •’ Laravel Router
-•’ Middleware •’ Controller/Livewire •’ Eloquent •’ MySQL
-•’ Response •’ Blade Template •’ HTML •’ Browser
+Browser → Nginx/Apache → PHP-FPM → Laravel Router
+→ Middleware → Controller/Livewire → Eloquent → MySQL
+→ Response → Blade Template → HTML → Browser
 ```
 
 ### Form Submission Flow
 
 ```
-User fills form •’ Alpine.js validates •’ POST to Laravel route
-•’ Controller validates •’ Eloquent saves to database
-•’ Redirect with flash message •’ Blade renders success
+User fills form → Alpine.js validates → POST to Laravel route
+→ Controller validates → Eloquent saves to database
+→ Redirect with flash message → Blade renders success
 ```
 
 ### Livewire Update Flow
 
 ```
-User interaction •’ Alpine.js triggers •’ Livewire AJAX to /livewire/update
-•’ Livewire component processes •’ Eloquent queries
-•’ Component re-renders •’ HTML diff sent to browser •’ DOM updated
+User interaction → Alpine.js triggers → Livewire AJAX to /livewire/update
+→ Livewire component processes → Eloquent queries
+→ Component re-renders → HTML diff sent to browser → DOM updated
 ```
 
 ---
@@ -232,8 +232,8 @@ Webhook support is planned for future versions to enable integration with extern
 ### Build Process
 
 ```
-resources/css/app.css •’ Tailwind CSS •’ PostCSS •’ public/build/app.css
-resources/js/app.js •’ Vite •’ public/build/app.js
+resources/css/app.css → Tailwind CSS → PostCSS → public/build/app.css
+resources/js/app.js → Vite → public/build/app.js
 ```
 
 ### Vite Configuration

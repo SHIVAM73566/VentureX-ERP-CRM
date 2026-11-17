@@ -18,6 +18,8 @@ use Throwable;
  */
 class ClaudeProvider implements ProviderAdapter
 {
+    use ProviderErrorReporter;
+
     public function supports(string $provider): bool
     {
         return $provider === 'claude';
@@ -62,12 +64,12 @@ class ClaudeProvider implements ProviderAdapter
             $response = $http->asJson()->post($baseUrl.$path, $body);
 
             if (! $response->successful()) {
-                Log::warning('Claude provider returned an error response', [
-                    'provider' => $provider,
-                    'status' => $response->status(),
-                ]);
-
-                throw new AiException("AI provider [{$provider}] returned HTTP {$response->status()}.");
+                $this->failWithProviderResponse(
+                    'Claude provider',
+                    $provider,
+                    $response,
+                    (string) ($config['api_key'] ?? ''),
+                );
             }
 
             $data = $response->json();

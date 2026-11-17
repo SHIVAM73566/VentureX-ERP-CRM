@@ -1,5 +1,7 @@
 # Wix Integration Guide for VentureX ERP & CRM
 
+> **API accuracy notice (v1.3.0):** Examples in this guide use the current `/api` namespace. Submit Wix forms to `/api/crm/leads`, sync contacts with `/api/crm/contacts`, create support cases with `/api/support/tickets`, and create a Sanctum token with `POST /api/tokens` after signing in. There is no `health`, `inquiries`, or `webhooks/wix` API endpoint in this release; replace those with an implemented `/api/crm/...` or `/api/support/...` route, or call your own webhook receiver. See `API-SETUP.md` and `routes/api.php` for authoritative examples.
+
 ## Important: Wix Cannot Run Laravel Directly
 
 Wix is a proprietary website builder with its own ecosystem. It cannot execute PHP/Laravel code. However, you can integrate Wix with VentureX ERP & CRM through the REST API.
@@ -90,7 +92,7 @@ $w.onReady(function () {
 
 async function submitToVentureX(data) {
     try {
-        const response = await fetch('https://yourdomain.com/api/v1/leads', {
+        const response = await fetch('https://yourdomain.com/api/crm/leads', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -135,7 +137,7 @@ import { apiSecret } from 'wix-secrets';
 export async function submitLead(leadData) {
     const apiKey = await apiSecret.get("VENTUREX_API_KEY");
     
-    const response = await fetch('https://yourdomain.com/api/v1/leads', {
+    const response = await fetch('https://yourdomain.com/api/crm/leads', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -188,7 +190,7 @@ $w.onReady(function () {
 // Fetch contacts from VentureX
 async function fetchContacts() {
     try {
-        const response = await fetch('https://yourdomain.com/api/v1/contacts?limit=100', {
+        const response = await fetch('https://yourdomain.com/api/crm/contacts?limit=100', {
             headers: {
                 'Authorization': 'Bearer YOUR_API_TOKEN',
                 'Accept': 'application/json'
@@ -227,7 +229,7 @@ async function syncUserToVentureX() {
     if (user) {
         const profile = await user.getMember();
         
-        await fetch('https://yourdomain.com/api/v1/contacts', {
+        await fetch('https://yourdomain.com/api/crm/contacts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -265,7 +267,7 @@ Set up a webhook endpoint in Wix:
 1. Go to **Automations** in Wix Dashboard
 2. Create new automation
 3. Trigger: Form submitted
-4. Action: Send webhook to `https://yourdomain.com/api/v1/webhooks/wix`
+4. Action: Call `https://yourdomain.com/api/crm/leads` with the form payload
 5. Include form data in payload
 
 ## Step 6: Product Inquiry Form
@@ -284,7 +286,7 @@ $w.onReady(function () {
         };
 
         try {
-            const response = await fetch('https://yourdomain.com/api/v1/inquiries', {
+            const response = await fetch('https://yourdomain.com/api/crm/leads', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -351,7 +353,7 @@ $w.onReady(function () {
 // Test endpoint
 async function testConnection() {
     try {
-        const response = await fetch('https://yourdomain.com/api/v1/health', {
+        const response = await fetch('https://yourdomain.com/api/user', {
             headers: {
                 'Authorization': 'Bearer YOUR_API_TOKEN'
             }

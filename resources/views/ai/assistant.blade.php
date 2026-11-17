@@ -1,6 +1,6 @@
 <x-layouts.app title="AI Assistant" :breadcrumbs="[['label' => 'AI Center'], ['label' => 'Assistant']]">
 
-    <div class="grid gap-6 md:grid-cols-4 lg:grid-cols-4">
+    <div class="grid gap-6 lg:grid-cols-4">
         <div class="lg:col-span-1 space-y-6">
             <div class="card">
                 <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-ink-400 dark:text-ink-500">Skills</h3>
@@ -30,7 +30,7 @@
         </div>
 
         <div class="lg:col-span-3">
-            <div class="card flex min-h-0 flex-1 lg:h-[calc(100vh-16rem)] flex-col">
+            <div class="card flex h-[60vh] min-h-0 flex-1 flex-col lg:h-[calc(100vh-16rem)]">
                 <div class="mb-4 border-b border-ink-100 pb-3 dark:border-ink-800">
                     <h2 class="text-lg font-bold text-ink-900 dark:text-ink-50">VentureX ERP & CRM Assistant</h2>
                     <p class="text-sm text-ink-400 dark:text-ink-500">Responses are labelled [FACT], [CALCULATION], [ASSUMPTION] and [RECOMMENDATION]. AI analysis never approves or rejects suppliers.</p>
@@ -60,7 +60,7 @@
 
                 <form id="chat-form" class="mt-4 flex items-end gap-2">
                     <input type="hidden" name="conversation_id" value="{{ $conversation?->id }}" id="conversation-id">
-                    <textarea name="message" id="chat-input" rows="1" placeholder="Type your question—¦" class="input flex-1 resize-none" required></textarea>
+                    <textarea name="message" id="chat-input" rows="1" placeholder="Type your question…" class="input flex-1 resize-none" required></textarea>
                     <button type="submit" class="btn-accent !px-4">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                     </button>
@@ -103,7 +103,7 @@
 
                 const pending = document.createElement('div');
                 pending.className = 'flex justify-start';
-                pending.innerHTML = '<div class="max-w-[80%] rounded-2xl rounded-bl-sm bg-ink-100 px-4 py-2 text-sm text-ink-400 flex items-center gap-2 dark:bg-ink-800 dark:text-ink-500"><svg class="animate-spin h-4 w-4 text-ink-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Analysing—¦</div>';
+                pending.innerHTML = '<div class="max-w-[80%] rounded-2xl rounded-bl-sm bg-ink-100 px-4 py-2 text-sm text-ink-400 flex items-center gap-2 dark:bg-ink-800 dark:text-ink-500"><svg class="animate-spin h-4 w-4 text-ink-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Analysing…</div>';
                 messages.appendChild(pending);
                 scrollBottom();
 

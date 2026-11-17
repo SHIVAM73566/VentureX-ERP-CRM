@@ -6,95 +6,124 @@
 @php
     $user = auth()->user();
 
+    // Keep navigation in sync with the policies enforced by controllers so a
+    // link is never shown to a role that would receive a 403 when following it.
+    // A permission row may be absent in fresh/partial installs; treat that as
+    // "no access" instead of breaking the whole layout.
+    $can = function (string $ability, mixed $target = null) use ($user): bool {
+        if (! $user) {
+            return false;
+        }
+
+        try {
+            return $target === null
+                ? $user->can($ability)
+                : $user->can($ability, $target);
+        } catch (\Spatie\Permission\Exceptions\PermissionDoesNotExist) {
+            return false;
+        }
+    };
+    $canView = fn (string $model): bool => $can('viewAny', $model);
+    $canAny = function (array $permissions) use ($user): bool {
+        if (! $user) {
+            return false;
+        }
+
+        try {
+            return $user->hasAnyPermission($permissions);
+        } catch (\Spatie\Permission\Exceptions\PermissionDoesNotExist) {
+            return false;
+        }
+    };
+
     $nav = [
         'Overview' => [
             ['label' => 'Dashboard', 'icon' => 'layout', 'route' => 'dashboard', 'active' => request()->routeIs('dashboard')],
             ['label' => 'Getting Started', 'icon' => 'play', 'route' => 'getting-started', 'active' => request()->routeIs('getting-started')],
         ],
         'CRM' => [
-            ['label' => 'Customers', 'icon' => 'users', 'route' => 'customers.index', 'active' => request()->routeIs('customers.*')],
-            ['label' => 'Contacts', 'icon' => 'user', 'route' => 'crm.contacts.index', 'active' => request()->routeIs('crm.contacts.*')],
-            ['label' => 'Leads', 'icon' => 'target', 'route' => 'leads.index', 'active' => request()->routeIs('leads.*')],
-            ['label' => 'Opportunities', 'icon' => 'trending', 'route' => 'opportunities.index', 'active' => request()->routeIs('opportunities.*')],
-            ['label' => 'Activities', 'icon' => 'calendar', 'route' => 'crm.activities.index', 'active' => request()->routeIs('crm.activities.*')],
-            ['label' => 'Sales Pipeline', 'icon' => 'columns', 'route' => 'pipeline.index', 'active' => request()->routeIs('pipeline.*')],
+            ['label' => 'Customers', 'icon' => 'users', 'route' => 'customers.index', 'active' => request()->routeIs('customers.*'), 'visible' => $canView(\App\Models\Customer::class)],
+            ['label' => 'Contacts', 'icon' => 'user', 'route' => 'crm.contacts.index', 'active' => request()->routeIs('crm.contacts.*'), 'visible' => $canView(\App\Models\Contact::class)],
+            ['label' => 'Leads', 'icon' => 'target', 'route' => 'leads.index', 'active' => request()->routeIs('leads.*'), 'visible' => $canView(\App\Models\Lead::class)],
+            ['label' => 'Opportunities', 'icon' => 'trending', 'route' => 'opportunities.index', 'active' => request()->routeIs('opportunities.*'), 'visible' => $canView(\App\Models\Opportunity::class)],
+            ['label' => 'Activities', 'icon' => 'calendar', 'route' => 'crm.activities.index', 'active' => request()->routeIs('crm.activities.*'), 'visible' => $canView(\App\Models\Activity::class)],
+            ['label' => 'Sales Pipeline', 'icon' => 'columns', 'route' => 'pipeline.index', 'active' => request()->routeIs('pipeline.*'), 'visible' => $canView(\App\Models\Opportunity::class)],
         ],
         'Sales' => [
-            ['label' => 'Quotations', 'icon' => 'file', 'route' => 'sales.quotations.index', 'active' => request()->routeIs('sales.quotations.*')],
-            ['label' => 'Sales Orders', 'icon' => 'clipboard', 'route' => 'sales.orders.index', 'active' => request()->routeIs('sales.orders.*')],
-            ['label' => 'Invoices', 'icon' => 'receipt', 'route' => 'sales.invoices.index', 'active' => request()->routeIs('sales.invoices.*')],
-            ['label' => 'Payments', 'icon' => 'credit', 'route' => 'sales.payments.index', 'active' => request()->routeIs('sales.payments.*')],
+            ['label' => 'Quotations', 'icon' => 'file', 'route' => 'sales.quotations.index', 'active' => request()->routeIs('sales.quotations.*'), 'visible' => $canView(\App\Models\Quotation::class)],
+            ['label' => 'Sales Orders', 'icon' => 'clipboard', 'route' => 'sales.orders.index', 'active' => request()->routeIs('sales.orders.*'), 'visible' => $canView(\App\Models\SalesOrder::class)],
+            ['label' => 'Invoices', 'icon' => 'receipt', 'route' => 'sales.invoices.index', 'active' => request()->routeIs('sales.invoices.*'), 'visible' => $canView(\App\Models\Invoice::class)],
+            ['label' => 'Payments', 'icon' => 'credit', 'route' => 'sales.payments.index', 'active' => request()->routeIs('sales.payments.*'), 'visible' => $canView(\App\Models\Payment::class)],
         ],
         'Purchase & Procurement' => [
-            ['label' => 'Suppliers', 'icon' => 'truck', 'route' => 'suppliers.index', 'active' => request()->routeIs('suppliers.*')],
-            ['label' => 'Supplier Offers', 'icon' => 'inbox', 'route' => 'supplier-offers.index', 'active' => request()->routeIs('supplier-offers.*')],
-            ['label' => 'Purchase Requisitions', 'icon' => 'request', 'route' => 'procurement.requisitions.index', 'active' => request()->routeIs('procurement.requisitions.*')],
-            ['label' => 'Purchase Orders', 'icon' => 'cart', 'route' => 'procurement.orders.index', 'active' => request()->routeIs('procurement.orders.*')],
-            ['label' => 'RFQs', 'icon' => 'mail', 'route' => 'procurement.rfqs.index', 'active' => request()->routeIs('procurement.rfqs.*')],
+            ['label' => 'Suppliers', 'icon' => 'truck', 'route' => 'suppliers.index', 'active' => request()->routeIs('suppliers.*'), 'visible' => $canView(\App\Models\Supplier::class)],
+            ['label' => 'Supplier Offers', 'icon' => 'inbox', 'route' => 'supplier-offers.index', 'active' => request()->routeIs('supplier-offers.*'), 'visible' => $canView(\App\Models\SupplierOffer::class)],
+            ['label' => 'Purchase Requisitions', 'icon' => 'request', 'route' => 'procurement.requisitions.index', 'active' => request()->routeIs('procurement.requisitions.*'), 'visible' => $canView(\App\Models\PurchaseRequisition::class)],
+            ['label' => 'Purchase Orders', 'icon' => 'cart', 'route' => 'procurement.orders.index', 'active' => request()->routeIs('procurement.orders.*'), 'visible' => $canView(\App\Models\PurchaseOrder::class)],
+            ['label' => 'RFQs', 'icon' => 'mail', 'route' => 'procurement.rfqs.index', 'active' => request()->routeIs('procurement.rfqs.*'), 'visible' => $canView(\App\Models\Rfq::class)],
         ],
         'Inventory' => [
-            ['label' => 'Products', 'icon' => 'box', 'route' => 'inventory.products.index', 'active' => request()->routeIs('inventory.products.*')],
-            ['label' => 'Warehouses', 'icon' => 'building', 'route' => 'inventory.warehouses.index', 'active' => request()->routeIs('inventory.warehouses.*')],
-            ['label' => 'Stock', 'icon' => 'layers', 'route' => 'inventory.stock.index', 'active' => request()->routeIs('inventory.stock.*')],
+            ['label' => 'Products', 'icon' => 'box', 'route' => 'inventory.products.index', 'active' => request()->routeIs('inventory.products.*'), 'visible' => $canView(\App\Models\Product::class)],
+            ['label' => 'Warehouses', 'icon' => 'building', 'route' => 'inventory.warehouses.index', 'active' => request()->routeIs('inventory.warehouses.*'), 'visible' => $canView(\App\Models\Warehouse::class)],
+            ['label' => 'Stock', 'icon' => 'layers', 'route' => 'inventory.stock.index', 'active' => request()->routeIs('inventory.stock.*'), 'visible' => $canView(\App\Models\StockMovement::class)],
         ],
         'Logistics' => [
-            ['label' => 'Shipments', 'icon' => 'ship', 'route' => 'logistics.shipments.index', 'active' => request()->routeIs('logistics.shipments.*')],
-            ['label' => 'Containers', 'icon' => 'box', 'route' => 'logistics.containers.index', 'active' => request()->routeIs('logistics.containers.*')],
-            ['label' => 'Landed Cost', 'icon' => 'calculator', 'route' => 'logistics.landed-costs.index', 'active' => request()->routeIs('logistics.landed-costs.*')],
+            ['label' => 'Shipments', 'icon' => 'ship', 'route' => 'logistics.shipments.index', 'active' => request()->routeIs('logistics.shipments.*'), 'visible' => $canView(\App\Models\Shipment::class)],
+            ['label' => 'Containers', 'icon' => 'box', 'route' => 'logistics.containers.index', 'active' => request()->routeIs('logistics.containers.*'), 'visible' => $canView(\App\Models\Container::class)],
+            ['label' => 'Landed Cost', 'icon' => 'calculator', 'route' => 'logistics.landed-costs.index', 'active' => request()->routeIs('logistics.landed-costs.*'), 'visible' => $canView(\App\Models\LandedCost::class)],
         ],
         'Finance' => [
-            ['label' => 'Dashboard', 'icon' => 'chart', 'route' => 'finance.dashboard', 'active' => request()->routeIs('finance.dashboard')],
-            ['label' => 'Chart of Accounts', 'icon' => 'book', 'route' => 'finance.accounts.index', 'active' => request()->routeIs('finance.accounts.*')],
-            ['label' => 'Journal Entries', 'icon' => 'clipboard', 'route' => 'finance.journals.index', 'active' => request()->routeIs('finance.journals.*')],
-            ['label' => 'Receivables', 'icon' => 'arrow-down', 'route' => 'finance.receivables', 'active' => request()->routeIs('finance.receivables')],
-            ['label' => 'Payables', 'icon' => 'arrow-up', 'route' => 'finance.payables', 'active' => request()->routeIs('finance.payables')],
+            ['label' => 'Dashboard', 'icon' => 'chart', 'route' => 'finance.dashboard', 'active' => request()->routeIs('finance.dashboard'), 'visible' => $canView(\App\Models\Account::class)],
+            ['label' => 'Chart of Accounts', 'icon' => 'book', 'route' => 'finance.accounts.index', 'active' => request()->routeIs('finance.accounts.*'), 'visible' => $canView(\App\Models\Account::class)],
+            ['label' => 'Journal Entries', 'icon' => 'clipboard', 'route' => 'finance.journals.index', 'active' => request()->routeIs('finance.journals.*'), 'visible' => $canView(\App\Models\JournalEntry::class)],
+            ['label' => 'Receivables', 'icon' => 'arrow-down', 'route' => 'finance.receivables', 'active' => request()->routeIs('finance.receivables'), 'visible' => $canView(\App\Models\Invoice::class)],
+            ['label' => 'Payables', 'icon' => 'arrow-up', 'route' => 'finance.payables', 'active' => request()->routeIs('finance.payables'), 'visible' => $canView(\App\Models\PurchaseOrder::class)],
         ],
         'Human Resources' => [
-            ['label' => 'HR Dashboard', 'icon' => 'briefcase', 'route' => 'hr.dashboard', 'active' => request()->routeIs('hr.dashboard'), 'visible' => $user?->can('viewAny', App\Models\Employee::class)],
-            ['label' => 'Employees', 'icon' => 'users', 'route' => 'hr.employees.index', 'active' => request()->routeIs('hr.employees.*'), 'visible' => $user?->can('viewAny', App\Models\Employee::class)],
-            ['label' => 'Attendance', 'icon' => 'calendar', 'route' => 'hr.attendance.index', 'active' => request()->routeIs('hr.attendance.*'), 'visible' => $user?->can('viewAny', App\Models\Attendance::class)],
-            ['label' => 'Leave', 'icon' => 'request', 'route' => 'hr.leave.index', 'active' => request()->routeIs('hr.leave.*'), 'visible' => $user?->can('viewAny', App\Models\LeaveRequest::class)],
-            ['label' => 'Payroll', 'icon' => 'wallet', 'route' => 'hr.payroll.index', 'active' => request()->routeIs('hr.payroll.*'), 'visible' => $user?->can('viewAny', App\Models\PayrollRun::class)],
-            ['label' => 'Performance', 'icon' => 'chart', 'route' => 'hr.reviews.index', 'active' => request()->routeIs('hr.reviews.*'), 'visible' => $user?->can('viewAny', App\Models\PerformanceReview::class)],
-            ['label' => 'Onboarding', 'icon' => 'badge', 'route' => 'hr.onboarding.index', 'active' => request()->routeIs('hr.onboarding.*'), 'visible' => $user?->can('viewAny', App\Models\OnboardingTask::class)],
-            ['label' => 'Departments', 'icon' => 'building', 'route' => 'hr.departments.index', 'active' => request()->routeIs('hr.departments.*'), 'visible' => $user?->can('viewAny', App\Models\Department::class)],
+            ['label' => 'HR Dashboard', 'icon' => 'briefcase', 'route' => 'hr.dashboard', 'active' => request()->routeIs('hr.dashboard'), 'visible' => $canView(\App\Models\Employee::class)],
+            ['label' => 'Employees', 'icon' => 'users', 'route' => 'hr.employees.index', 'active' => request()->routeIs('hr.employees.*'), 'visible' => $canView(\App\Models\Employee::class)],
+            ['label' => 'Attendance', 'icon' => 'calendar', 'route' => 'hr.attendance.index', 'active' => request()->routeIs('hr.attendance.*'), 'visible' => $canView(\App\Models\Attendance::class)],
+            ['label' => 'Leave', 'icon' => 'request', 'route' => 'hr.leave.index', 'active' => request()->routeIs('hr.leave.*'), 'visible' => $canView(\App\Models\LeaveRequest::class)],
+            ['label' => 'Payroll', 'icon' => 'wallet', 'route' => 'hr.payroll.index', 'active' => request()->routeIs('hr.payroll.*'), 'visible' => $canView(\App\Models\PayrollRun::class)],
+            ['label' => 'Performance', 'icon' => 'chart', 'route' => 'hr.reviews.index', 'active' => request()->routeIs('hr.reviews.*'), 'visible' => $canView(\App\Models\PerformanceReview::class)],
+            ['label' => 'Onboarding', 'icon' => 'badge', 'route' => 'hr.onboarding.index', 'active' => request()->routeIs('hr.onboarding.*'), 'visible' => $canView(\App\Models\OnboardingTask::class)],
+            ['label' => 'Departments', 'icon' => 'building', 'route' => 'hr.departments.index', 'active' => request()->routeIs('hr.departments.*'), 'visible' => $canView(\App\Models\Department::class)],
         ],
         'Automation' => [
-            ['label' => 'AERO X Agentic Engine', 'icon' => 'bolt', 'route' => 'admin.agentic.index', 'active' => request()->routeIs('admin.agentic.*'), 'visible' => $user?->hasRole('super_admin') || $user?->can('viewAny', App\Models\AgentAction::class)],
+            ['label' => 'AERO X Agentic Engine', 'icon' => 'bolt', 'route' => 'admin.agentic.index', 'active' => request()->routeIs('admin.agentic.*'), 'visible' => $user?->hasRole('super_admin') || $canView(\App\Models\AgentAction::class)],
         ],
         'Documents' => [
-            ['label' => 'Document Manager', 'icon' => 'folder', 'route' => 'admin.documents.index', 'active' => request()->routeIs('admin.documents.*'), 'visible' => $user?->can('configure')],
-            ['label' => 'AI Document Reader', 'icon' => 'scan', 'route' => 'ai.document-reader', 'active' => request()->routeIs('ai.document-reader*')],
+            ['label' => 'Document Manager', 'icon' => 'folder', 'route' => 'admin.documents.index', 'active' => request()->routeIs('admin.documents.*'), 'visible' => $can('configure')],
+            ['label' => 'AI Document Reader', 'icon' => 'scan', 'route' => 'ai.document-reader', 'active' => request()->routeIs('ai.document-reader*'), 'visible' => $canView(\App\Models\AiRun::class)],
         ],
         'AI Center' => [
-            ['label' => 'AI Assistant', 'icon' => 'spark', 'route' => 'ai.assistant', 'active' => request()->routeIs('ai.assistant')],
-            ['label' => 'Business Copilot', 'icon' => 'cpu', 'route' => 'ai.copilot', 'active' => request()->routeIs('ai.copilot'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
-            ['label' => 'Enterprise RAG', 'icon' => 'layers', 'route' => 'ai.rag', 'active' => request()->routeIs('ai.rag*'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
-            ['label' => 'AI Insights', 'icon' => 'bolt', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage*')],
-            ['label' => 'AI Usage', 'icon' => 'chart', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage'), 'visible' => $user?->can('viewAny', App\Models\AiRun::class)],
-            ['label' => 'AI Skills', 'icon' => 'cpu', 'route' => 'admin.ai-skills.index', 'active' => request()->routeIs('admin.ai-skills.*')],
+            ['label' => 'AI Assistant', 'icon' => 'spark', 'route' => 'ai.assistant', 'active' => request()->routeIs('ai.assistant'), 'visible' => $canView(\App\Models\AiRun::class)],
+            ['label' => 'Business Copilot', 'icon' => 'cpu', 'route' => 'ai.copilot', 'active' => request()->routeIs('ai.copilot'), 'visible' => $canView(\App\Models\AiRun::class)],
+            ['label' => 'Enterprise RAG', 'icon' => 'layers', 'route' => 'ai.rag', 'active' => request()->routeIs('ai.rag*'), 'visible' => $canView(\App\Models\AiRun::class)],
+            ['label' => 'AI Usage', 'icon' => 'chart', 'route' => 'ai.usage', 'active' => request()->routeIs('ai.usage'), 'visible' => $canView(\App\Models\AiRun::class)],
+            ['label' => 'AI Skills', 'icon' => 'cpu', 'route' => 'admin.ai-skills.index', 'active' => request()->routeIs('admin.ai-skills.*'), 'visible' => $user?->hasRole('super_admin')],
             ['label' => 'AI Providers', 'icon' => 'cpu', 'route' => 'admin.ai-providers.index', 'active' => request()->routeIs('admin.ai-providers.index') || request()->routeIs('admin.ai-providers.setup'), 'visible' => $user?->hasRole('super_admin')],
             ['label' => 'AI Security', 'icon' => 'shield', 'route' => 'admin.ai-providers.security', 'active' => request()->routeIs('admin.ai-providers.security'), 'visible' => $user?->hasRole('super_admin')],
-            ['label' => 'Procurement AI', 'icon' => 'scan', 'route' => 'ai.procurement', 'active' => request()->routeIs('ai.procurement*')],
-            ['label' => 'Support Assistant', 'icon' => 'chat', 'route' => 'ai.support-assistant', 'active' => request()->routeIs('ai.support-assistant')],
+            ['label' => 'Procurement AI', 'icon' => 'scan', 'route' => 'ai.procurement', 'active' => request()->routeIs('ai.procurement*'), 'visible' => $canView(\App\Models\AiRun::class)],
+            ['label' => 'Support Assistant', 'icon' => 'chat', 'route' => 'ai.support-assistant', 'active' => request()->routeIs('ai.support-assistant'), 'visible' => $canView(\App\Models\AiRun::class)],
         ],
         'Support' => [
             ['label' => 'Help Center', 'icon' => 'headset', 'route' => 'support.index', 'active' => request()->routeIs('support.index')],
-            ['label' => 'My Tickets', 'icon' => 'ticket', 'route' => 'support.tickets.index', 'active' => request()->routeIs('support.tickets.*')],
-            ['label' => 'Submit Ticket', 'icon' => 'plus', 'route' => 'support.tickets.create', 'active' => request()->routeIs('support.tickets.create')],
+            ['label' => 'My Tickets', 'icon' => 'ticket', 'route' => 'support.tickets.index', 'active' => request()->routeIs('support.tickets.*'), 'visible' => $canView(\App\Models\SupportTicket::class)],
+            ['label' => 'Submit Ticket', 'icon' => 'plus', 'route' => 'support.tickets.create', 'active' => request()->routeIs('support.tickets.create'), 'visible' => $can('create', \App\Models\SupportTicket::class)],
             ['label' => 'Documentation', 'icon' => 'book', 'route' => 'support.docs', 'active' => request()->routeIs('support.docs')],
             ['label' => 'FAQ', 'icon' => 'search', 'route' => 'support.faq', 'active' => request()->routeIs('support.faq')],
             ['label' => 'Contact Support', 'icon' => 'mail', 'route' => 'support.contact', 'active' => request()->routeIs('support.contact')],
-            ['label' => 'Report Error', 'icon' => 'warning', 'route' => 'support.report-error', 'active' => request()->routeIs('support.report-error')],
+            ['label' => 'Report Error', 'icon' => 'warning', 'route' => 'support.report-error', 'active' => request()->routeIs('support.report-error'), 'visible' => $can('create', \App\Models\ErrorReport::class)],
         ],
         'Administration' => [
             ['label' => 'Companies', 'icon' => 'building', 'route' => 'admin.companies.index', 'active' => request()->routeIs('admin.companies.*'), 'visible' => $user?->hasRole('super_admin')],
-            ['label' => 'Users', 'icon' => 'user-plus', 'route' => 'admin.users.index', 'active' => request()->routeIs('admin.users.*'), 'visible' => $user?->can('viewAny', App\Models\User::class)],
+            ['label' => 'Users', 'icon' => 'user-plus', 'route' => 'admin.users.index', 'active' => request()->routeIs('admin.users.*'), 'visible' => $canView(\App\Models\User::class)],
             ['label' => 'Roles & Permissions', 'icon' => 'shield', 'route' => 'admin.roles.index', 'active' => request()->routeIs('admin.roles.*'), 'visible' => $user?->hasRole('super_admin')],
             ['label' => 'Settings', 'icon' => 'gear', 'route' => 'admin.settings.index', 'active' => request()->routeIs('admin.settings.*'), 'visible' => $user?->hasRole('super_admin')],
             ['label' => 'Security Center', 'icon' => 'shield', 'route' => 'security.dashboard', 'active' => request()->routeIs('security.*'), 'visible' => $user?->hasRole('super_admin')],
-            ['label' => 'Export Center', 'icon' => 'file', 'route' => 'admin.exports.index', 'active' => request()->routeIs('admin.exports.*'), 'visible' => $user?->hasAnyPermission(['exports.view', 'exports.export']) || $user?->hasRole('super_admin')],
-            ['label' => 'Import Data', 'icon' => 'upload', 'route' => 'admin.imports.index', 'active' => request()->routeIs('admin.imports.*'), 'visible' => $user?->hasAnyPermission(['exports.import']) || $user?->hasRole('super_admin')],
+            ['label' => 'Export Center', 'icon' => 'file', 'route' => 'admin.exports.index', 'active' => request()->routeIs('admin.exports.*'), 'visible' => $canView(\App\Models\ExportRequest::class) || $user?->hasRole('super_admin')],
+            ['label' => 'Import Data', 'icon' => 'upload', 'route' => 'admin.imports.index', 'active' => request()->routeIs('admin.imports.*'), 'visible' => $canAny(['exports.import']) || $user?->hasRole('super_admin')],
             ['label' => 'Audit Logs', 'icon' => 'list', 'route' => 'admin.audit-logs.index', 'active' => request()->routeIs('admin.audit-logs.*'), 'visible' => $user?->hasRole('super_admin')],
             ['label' => 'System Health', 'icon' => 'shield', 'route' => 'admin.system-health.index', 'active' => request()->routeIs('admin.system-health.*'), 'visible' => $user?->hasRole('super_admin')],
         ],
@@ -262,12 +291,9 @@
                         <svg x-show="$store.theme.dark" x-cloak class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['sun'] }}"/></svg>
                     </button>
 
-                    <div x-data="dropdown" class="relative">
-                        <button @click="toggle()" @click.outside="close()" class="relative rounded-lg p-2 text-ink-500 hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-ink-800" aria-label="Notifications" aria-haspopup="menu" :aria-expanded="open">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['bell'] }}"/></svg>
-                            <span x-show="false" class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500"></span>
-                        </button>
-                    </div>
+                    <a href="{{ route('support.notifications') }}" class="relative rounded-lg p-2 text-ink-500 hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-ink-800" aria-label="Notifications" title="Notifications">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['bell'] }}"/></svg>
+                    </a>
 
                     <div x-data="dropdown" class="relative">
                         <button @click="toggle()" @click.outside="close()" class="flex items-center gap-2 rounded-lg p-1.5 hover:bg-ink-100 dark:hover:bg-ink-800" aria-label="Account menu" aria-haspopup="menu" :aria-expanded="open">
@@ -276,7 +302,7 @@
                             <svg class="h-4 w-4 text-ink-400 dark:text-ink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $icons['chevron'] }}"/></svg>
                         </button>
                         <div x-show="open" x-cloak x-transition @click.outside="close()" class="absolute right-0 mt-2 w-56 rounded-xl border border-ink-200 bg-white p-1.5 shadow-lg dark:border-ink-700 dark:bg-ink-800">
-                            @if ($user?->hasRole('super_admin') || $user?->can('configure'))
+                            @if ($user?->hasRole('super_admin') || $can('configure'))
                                 <a href="{{ route('admin.settings.index') }}" class="block rounded-lg px-3 py-2 text-sm text-ink-700 hover:bg-ink-50 dark:text-ink-200 dark:hover:bg-ink-700">Settings</a>
                             @endif
                             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10">Sign out</a>
