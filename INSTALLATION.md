@@ -59,6 +59,7 @@ Preview URLs are local only: `http://localhost:8000` and `http://127.0.0.1:8000`
 - The web installer writes database, mail and URL values with proper escaping. If you edit `.env` manually, quote values containing spaces, `#`, `$`, quotes or backslashes, and keep secrets out of shell history and chat/logs.
 - `.env`, `.env.*` (except `.env.example`), SQL dumps, private keys and `storage/.installed` are ignored by Git. Never commit them.
 - After changing `.env` in production, run `php artisan config:clear && php artisan config:cache` (or `php artisan optimize`).
+- **CSP / Alpine (temporary):** `VENTUREX_CSP_ALLOW_UNSAFE_EVAL=true` allows `unsafe-eval` in `script-src` so standard Alpine.js works while inline expressions exist. Set to `false` only after moving to `@alpinejs/csp` with registered components.
 
 ---
 
