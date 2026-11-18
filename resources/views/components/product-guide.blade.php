@@ -36,8 +36,8 @@
         </button>
 
         {{-- Slide-over --}}
-        <div x-show="open" x-cloak class="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-labelledby="product-guide-title">
-            <div x-show="open" x-transition.opacity @click="open = false" class="absolute inset-0 bg-ink-950/50" aria-hidden="true"></div>
+        <div x-show="open" x-cloak class="fixed inset-0 z-[9999]" role="dialog" aria-modal="true" aria-labelledby="product-guide-title">
+            <div x-show="open" x-transition.opacity @click="open = false" class="absolute inset-0 bg-ink-950/50 pointer-events-auto" aria-hidden="true"></div>
 
             <aside id="product-guide-panel"
                    x-show="open"
@@ -47,7 +47,7 @@
                    x-transition:leave="transition ease-in duration-150"
                    x-transition:leave-start="translate-x-0"
                    x-transition:leave-end="translate-x-full"
-                   class="absolute inset-y-0 right-0 flex w-full max-w-2xl flex-col bg-white shadow-2xl dark:bg-ink-900">
+                   class="absolute inset-y-0 right-0 flex w-full max-w-2xl flex-col bg-white shadow-2xl dark:bg-ink-900 pointer-events-auto">
 
                 {{-- Header --}}
                 <div class="flex items-start justify-between gap-4 border-b border-ink-200 px-5 py-4 dark:border-ink-800">
@@ -56,8 +56,8 @@
                         <h2 id="product-guide-title" class="mt-0.5 text-lg font-bold text-ink-900 dark:text-ink-50">Your product guide</h2>
                         <p class="mt-0.5 text-xs text-ink-500 dark:text-ink-400">Introduction, all {{ count($guideDefinitions) }} RAG pipelines, and what this page can answer.</p>
                     </div>
-                    <button type="button" @click="open = false"
-                            class="rounded-lg p-2 text-ink-400 transition hover:bg-ink-100 hover:text-ink-700 focus:outline-none focus:ring-2 focus:ring-navy-500 dark:hover:bg-ink-800 dark:hover:text-ink-200"
+                    <button type="button" @click.stop="open = false"
+                            class="relative z-10 rounded-lg p-2 text-ink-400 transition hover:bg-ink-100 hover:text-ink-700 focus:outline-none focus:ring-2 focus:ring-navy-500 dark:hover:bg-ink-800 dark:hover:text-ink-200"
                             aria-label="Close the product guide">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
