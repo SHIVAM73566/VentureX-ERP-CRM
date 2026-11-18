@@ -42,7 +42,7 @@ class RoleController extends Controller
         ]);
 
         $role = Role::create(['name' => $data['name']]);
-        $role->syncPermissions($data['permissions'] ?? []);
+        $role->syncPermissions($this->permissionModels($data['permissions'] ?? []));
 
         AuditLogger::log('create', 'roles', $role, null, ['permissions' => $data['permissions'] ?? []]);
 
@@ -73,7 +73,7 @@ class RoleController extends Controller
 
         $old = $role->permissions->pluck('id')->all();
         $role->update(['name' => $data['name']]);
-        $role->syncPermissions($data['permissions'] ?? []);
+        $role->syncPermissions($this->permissionModels($data['permissions'] ?? []));
         AuditLogger::updated($role, ['permissions' => $old]);
 
         return redirect()->route('admin.roles.index')->with('success', 'Role updated.');
@@ -91,6 +91,22 @@ class RoleController extends Controller
         AuditLogger::deleted($role);
 
         return redirect()->route('admin.roles.index')->with('success', 'Role deleted.');
+    }
+
+    /**
+     * The role form submits permission IDs. Spatie expects permission names or
+     * Permission models, so resolve the validated IDs before syncing.
+     *
+     * @param  array<int, mixed>  $ids
+     * @return \Illuminate\Database\Eloquent\Collection<int, Permission>
+     */
+    protected function permissionModels(array $ids)
+    {
+        if ($ids === []) {
+            return Permission::query()->whereRaw('1 = 0')->get();
+        }
+
+        return Permission::query()->whereIn('id', $ids)->get()->values();
     }
 
     protected function groupedPermissions(): array

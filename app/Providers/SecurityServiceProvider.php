@@ -12,9 +12,15 @@ class SecurityServiceProvider extends ServiceProvider
     public function boot(): void
     {
         RateLimiter::for('login', function (Request $request) {
-            $key = 'login:'.mb_strtolower((string) $request->string('email')).'|'.$request->ip();
+            $email = mb_strtolower((string) $request->string('email'));
+            $ip = $request->ip();
 
-            return Limit::perMinutes(5, 5)->by($key);
+            return [
+                // Per-account protection against targeted guessing.
+                Limit::perMinutes(5, 5)->by('login:'.$email.'|'.$ip),
+                // Per-source protection against credential stuffing with rotated accounts.
+                Limit::perMinutes(5, 20)->by('login-ip:'.$ip),
+            ];
         });
 
         RateLimiter::for('mfa', function (Request $request) {
