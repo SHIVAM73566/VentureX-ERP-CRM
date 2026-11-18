@@ -1,5 +1,15 @@
 # GITHUB MARKETPLACE LISTING CONTENT
 
+## CURRENT DEPLOY ACTION (v1.3.0)
+
+The Marketplace-eligible artifact is the **GitHub Action**, not the ERP source ZIP:
+
+- Repository: <https://github.com/SHIVAM73566/venturex-deploy-action>
+- Marketplace slug request: `venturex-erp-crm-deploy`
+- Summary: Deploy AI-native VentureX ERP & CRM to Ubuntu with PHP 8.4, MySQL, Nginx, queue worker, scheduler and optional HTTPS.
+- Verified: 484 tests passed / 1,607 assertions / 0 PHP syntax errors / production build passed / live red-team audit remediated.
+- Listing status: repository metadata pushed. Final Marketplace publication/approval still requires GitHub's web UI review.
+
 ## IMPORTANT: GitHub Marketplace is NOT for selling source code
 
 GitHub Marketplace is specifically for **GitHub Apps** that integrate with GitHub's API. It is NOT a marketplace for selling source code, scripts, or software like Codester or SellAnyCode.

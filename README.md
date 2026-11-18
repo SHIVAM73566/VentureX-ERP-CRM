@@ -1,8 +1,25 @@
-# VentureX ERP & CRM - AI-Powered Business Management Suite
+# VentureX ERP & CRM — The AI-Native Business Operating System for Laravel
 
-![Version](https://img.shields.io/badge/Version-1.0.0-blue) ![Laravel](https://img.shields.io/badge/Laravel-13-red) ![PHP](https://img.shields.io/badge/PHP-8.4+-purple) ![License](https://img.shields.io/badge/License-Proprietary-green)
+![Version](https://img.shields.io/badge/Version-1.3.0-blue) ![Laravel](https://img.shields.io/badge/Laravel-13-red) ![PHP](https://img.shields.io/badge/PHP-8.4+-purple) ![Tests](https://img.shields.io/badge/Tests-484%20passed-brightgreen) ![RAG](https://img.shields.io/badge/RAG-84%20pipelines-orange)
 
-A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS.
+**CRM + ERP + 84 enterprise RAG pipelines + auditable autonomous agents — in one self-hostable Laravel 13 application.**
+
+A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS. Built for teams that want the depth of an ERP, the speed of a modern SaaS, and AI that answers from **your own records** with sources, confidence and latency.
+
+> **Verified build:** 484 automated tests / 1,607 assertions / 0 failures · 418 PHP files linted / 0 errors · production Vite build passed · live enterprise workflow and red-team audit completed. See [`SECURITY-AUDIT-REPORT.md`](SECURITY-AUDIT-REPORT.md).
+
+## Live preview
+
+| Preview | Login |
+|---|---|
+| <http://localhost:8000/login> · <http://127.0.0.1:8000/login> · <http://10.91.96.75:8000/login> | `demo_admin@example.com` / `Demo_Admin_2026!` · `demo_manager@example.com` / `Demo_Manager_2026!` · `demo_sales@example.com` / `Demo_Sales_2026!` |
+
+## Downloads
+
+- [Source ZIP v1.3.0](release/VentureX-ERP-CRM-v1.3.0-source.zip)
+- [ZERO-ERRORS ZIP v1.3.0](release/VentureX-ERP-CRM-v1.3.0-ZERO-ERRORS.zip)
+- [All verified release artifacts](release/SHA256SUMS.txt)
+- [GitHub Marketplace deploy action](https://github.com/SHIVAM73566/venturex-deploy-action)
 
 ## Introduction
 
