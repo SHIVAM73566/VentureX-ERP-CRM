@@ -11,10 +11,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
-OUT_ZIP = DIST / "VentureX-ERP-CRM-Release-v1.0.0.zip"
+RELEASE = ROOT / "release"
+OUT_ZIP = RELEASE / "venturex-erp-crm-production-v2.6-final.zip"
 INNER = "VentureX-ERP-CRM"
 
-EXCLUDE_DIRS = {".git", "node_modules", ".idea", ".vscode", "dist"}
+EXCLUDE_DIRS = {".git", "node_modules", ".idea", ".vscode", "dist", "release"}
 
 
 def run(cmd: list[str], cwd: Path) -> None:
@@ -59,6 +60,7 @@ def should_skip(rel: Path) -> bool:
 
 def main() -> int:
     DIST.mkdir(exist_ok=True)
+    RELEASE.mkdir(exist_ok=True)
     done_marker = DIST / ".build_done"
     if done_marker.exists():
         try:
@@ -98,6 +100,19 @@ def main() -> int:
 
     size_mb = OUT_ZIP.stat().st_size / (1024 * 1024)
     print(f"==> Done: {OUT_ZIP} ({size_mb:.2f} MB)")
+
+    # Also create channel copies for requested marketplaces
+    for name in [
+        "VentureX-ERP-CRM-Acquire-Release-v2.6.zip",
+        "VentureX-ERP-CRM-SellAnyCode-v2.6.zip",
+        "VentureX-ERP-CRM-Payhip-v2.6.zip",
+        "VentureX-ERP-CRM-Codester-v2.6.zip",
+    ]:
+        dest = RELEASE / name
+        if dest != OUT_ZIP:
+            shutil.copy2(OUT_ZIP, dest)
+            print(f"==> Copied: {dest.name}")
+
     done_marker.write_text("ok", encoding="utf-8")
     return 0
 

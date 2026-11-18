@@ -1,9 +1,0 @@
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-Coderobotics.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-Codester.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-cPanel.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-full-source.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-Gumroad.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-LemonSqueezy.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-Payhip.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-SellAnyCode.zip
-faf7a44f2dfd5f7a3b89916f8167d84bb8516930592a6ac14ee12aee055babe2  VentureX-ERP-CRM-v1.3.1-ZERO-ERRORS.zip
