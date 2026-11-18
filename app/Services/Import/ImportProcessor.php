@@ -5,9 +5,13 @@ namespace App\Services\Import;
 use App\Models\Customer;
 use App\Models\Import;
 use App\Models\ImportRow;
+use App\Models\JournalEntry;
 use App\Models\Lead;
 use App\Models\Product;
+use App\Models\StockMovement;
 use App\Models\Supplier;
+use App\Models\Warehouse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ImportProcessor
@@ -25,6 +29,11 @@ class ImportProcessor
     public function execute(Import $import, array $rows, array $mappings, int $companyId): array
     {
         $import->update(['status' => 'processing', 'started_at' => now()]);
+
+        if ($import->destination === 'opening_balances') {
+            return $this->executeOpeningBalances($import, $rows, $mappings, $companyId);
+        }
+
         $results = ['created' => 0, 'updated' => 0, 'skipped' => 0, 'failed' => 0, 'errors' => []];
         $batchSize = 100;
 
@@ -44,8 +53,26 @@ class ImportProcessor
                     continue;
                 }
 
+                // Rows are revalidated at execute time, not only during the
+                // preview step. A stale session mapping cannot bypass rules.
+                $validation = $this->validator->validateRow($import->destination, $mapped);
+                if ($validation['errors'] !== []) {
+                    $message = implode(' ', $validation['errors']);
+                    $results['failed']++;
+                    $results['errors'][] = ['row' => $rowNum, 'error' => $message];
+                    $this->saveRow($import, $rowNum, $row, null, 'failed', $message);
+                    $processed++;
+
+                    continue;
+                }
+
                 try {
-                    $result = $this->importRecord($import->destination, $mapped, $companyId, $import->duplicate_strategy);
+                    $result = DB::transaction(fn () => $this->importRecord(
+                        $import->destination,
+                        $mapped,
+                        $companyId,
+                        $import->duplicate_strategy
+                    ));
                     $results[$result['status']]++;
                     $this->saveRow($import, $rowNum, $row, $result['id'] ?? null, $result['status'], $result['message'] ?? null);
                 } catch (\Throwable $e) {
@@ -75,6 +102,44 @@ class ImportProcessor
         ]);
 
         return $results;
+    }
+
+    /**
+     * Opening balances are all-or-nothing: the service creates one balanced
+     * journal or posts nothing at all.
+     */
+    protected function executeOpeningBalances(Import $import, array $rows, array $mappings, int $companyId): array
+    {
+        $result = (new OpeningBalanceImporter($this->validator))->process($import, $rows, $mappings, $companyId);
+        $statuses = $result['statuses'] ?? [];
+        $failure = $result['errors'][0]['error'] ?? 'Opening balance import failed.';
+
+        foreach ($rows as $index => $row) {
+            $status = $statuses[$index] ?? ['status' => 'failed', 'id' => null, 'message' => $failure];
+            $this->saveRow(
+                $import,
+                $index + 1,
+                $row,
+                $status['id'] ?? null,
+                $status['status'],
+                $status['message'] ?? null
+            );
+        }
+
+        unset($result['statuses']);
+
+        $import->update([
+            'processed_rows' => count($rows),
+            'created_rows' => $result['created'],
+            'updated_rows' => $result['updated'],
+            'skipped_rows' => $result['skipped'],
+            'failed_rows' => $result['failed'],
+            'status' => $result['failed'] > 0 ? 'completed_with_errors' : 'completed',
+            'completed_at' => now(),
+            'error_summary' => $result['errors'] !== [] ? json_encode($result['errors']) : null,
+        ]);
+
+        return $result;
     }
 
     protected function importRecord(string $destination, array $data, int $companyId, string $duplicateStrategy): array
@@ -137,24 +202,92 @@ class ImportProcessor
 
     protected function importProduct(array $data, int $companyId, string $strategy): array
     {
+        // Opening-stock columns are import-only; they create a stock movement
+        // and are never written to the product table.
+        $openingQuantity = $data['opening_quantity'] ?? null;
+        $unitCost = $data['unit_cost'] ?? null;
+        $warehouseCode = $data['warehouse_code'] ?? null;
+        $valuationDate = $data['valuation_date'] ?? null;
+
         $existing = null;
         if (($data['sku'] ?? '') !== '') {
             $existing = Product::where('company_id', $companyId)->where('sku', $data['sku'])->first();
         }
 
         if ($existing) {
-            return match ($strategy) {
+            $result = match ($strategy) {
                 'skip' => ['status' => 'skipped', 'message' => 'Duplicate product'],
                 'update' => $this->updateRecord($existing, $data),
                 default => ['status' => 'skipped', 'message' => 'Duplicate detected'],
             };
+
+            if ($result['status'] === 'skipped') {
+                return $result;
+            }
+
+            $product = $existing;
+        } else {
+            $data['company_id'] = $companyId;
+            $data['is_active'] = true;
+            $product = Product::create($this->cleanData($data, Product::class));
+            $result = ['status' => 'created', 'id' => $product->id, 'message' => null];
         }
 
-        $data['company_id'] = $companyId;
-        $data['is_active'] = true;
-        $product = Product::create($this->cleanData($data, Product::class));
+        $stockMessage = $this->createOpeningStock(
+            $product,
+            $companyId,
+            $openingQuantity,
+            $unitCost,
+            $warehouseCode,
+            $valuationDate
+        );
 
-        return ['status' => 'created', 'id' => $product->id, 'message' => null];
+        if ($stockMessage !== null) {
+            $result['message'] = $result['message'] === null
+                ? $stockMessage
+                : $result['message'].' '.$stockMessage;
+        }
+
+        return $result;
+    }
+
+    protected function createOpeningStock(
+        Product $product,
+        int $companyId,
+        mixed $quantity,
+        mixed $unitCost,
+        mixed $warehouseCode,
+        mixed $valuationDate
+    ): ?string {
+        if ($quantity === null || (float) $quantity == 0.0) {
+            return null;
+        }
+
+        $warehouse = null;
+        if ($warehouseCode !== null && trim((string) $warehouseCode) !== '') {
+            $warehouse = Warehouse::ofCompany($companyId)
+                ->where('code', $warehouseCode)
+                ->first();
+        }
+        $warehouse ??= Warehouse::ofCompany($companyId)->where('is_default', true)->first();
+
+        if (! $warehouse) {
+            return 'Opening stock skipped: no matching warehouse was found.';
+        }
+
+        StockMovement::create([
+            'company_id' => $companyId,
+            'product_id' => $product->id,
+            'warehouse_id' => $warehouse->id,
+            'type' => 'in',
+            'quantity' => (float) $quantity,
+            'unit_cost' => $unitCost === null ? $product->purchase_price : (float) $unitCost,
+            'reference_type' => 'opening_balance',
+            'note' => 'Opening stock import'.($valuationDate !== null ? ' (valuation '.$valuationDate.')' : ''),
+            'created_by' => auth()->id(),
+        ]);
+
+        return null;
     }
 
     protected function importLead(array $data, int $companyId, string $strategy): array
@@ -209,6 +342,7 @@ class ImportProcessor
                 'suppliers' => Supplier::class,
                 'products' => Product::class,
                 'leads' => Lead::class,
+                'opening_balances' => JournalEntry::class,
                 default => null,
             },
         ]);

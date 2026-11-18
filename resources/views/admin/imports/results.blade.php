@@ -2,7 +2,13 @@
 
     <div class="mx-auto max-w-4xl space-y-6">
         <div class="mb-8 text-center">
-            @if($import->status === 'completed' || $import->status === 'completed_with_errors')
+            @if(!empty($queued))
+                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h1 class="text-2xl font-bold text-ink-900">Import Queued</h1>
+                <p class="mt-2 text-sm text-ink-500">A queue worker will process this import. Check Import History for the final result.</p>
+            @elseif($import->status === 'completed' || $import->status === 'completed_with_errors')
                 <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
                     <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 </div>

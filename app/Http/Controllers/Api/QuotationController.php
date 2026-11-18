@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Quotation;
+use App\Services\NumberGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -42,7 +43,7 @@ class QuotationController extends ApiController
 
         $quotation = Quotation::create([
             ...$validated,
-            'quotation_number' => 'QUO-'.date('Ymd').'-'.str_pad(Quotation::max('id') + 1, 4, '0', STR_PAD_LEFT),
+            'quotation_number' => NumberGenerator::next('QUO', 'quotations'),
             'company_id' => auth()->user()->company_id,
             'created_by' => auth()->id(),
         ]);

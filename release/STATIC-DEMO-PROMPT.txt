@@ -54,7 +54,7 @@ Content:
 - Footer text: "Don't have an account? Contact chaturvedishivam179@gmail.com / ocoronews@gmail.com"
 
 INTERACTION:
-- Default pre-filled: email = "demo_admin@example.com", password = "••••••••"
+- LOCAL DEMO ONLY — do not use in production: default pre-filled email = "demo_admin@example.com", password = "••••••••"
 - Clicking "Sign In" triggers a 1-second fake loading spinner, then navigates to Dashboard
 - Also add 2 more demo login options below the form (as links/cards):
   "Login as CEO — demo_manager@example.com"
@@ -337,7 +337,7 @@ BOTTOM OF EVERY PAGE
 ═══════════════════════════════════════════
 
 A small footer bar inside main content:
-"Powered by VentureX ERP & CRM v1.0.0 | Demo Mode — This is a preview, no data is saved"
+"Powered by VentureX ERP & CRM v1.3.1 | Demo Mode — This is a preview, no data is saved"
 This makes it clear to Codester reviewers and visitors that this is a live product demo.
 
 ═══════════════════════════════════════════

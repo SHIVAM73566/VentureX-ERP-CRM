@@ -24,7 +24,7 @@ https://shivamverse418.gumroad.com/l/arrgpcw
 💻 Free GitHub preview:
 https://github.com/SHIVAM73566/VentureX-ERP-CRM
 
-What you get: 92 controllers, REST API, Docker files, WordPress plugin, 23 docs, video tutorials, web installer wizard. Laravel 13 + PHP 8.3.
+What you get: 92 controllers, REST API, Docker files, WordPress plugin, 23 docs, video tutorials, web installer wizard. Laravel 13 + PHP 8.4.
 
 💬 Questions? Comment below — I reply to everyone.
 📧 chaturvedishivam179@gmail.com / ocoronews@gmail.com
@@ -57,7 +57,7 @@ Everyone's bolting AI onto apps — but requiring API keys kills adoption. So Ve
 🚀 Full source code (one-time $89.99):
 https://shivamverse418.gumroad.com/l/arrgpcw
 
-Built on Laravel 13, PHP 8.3. Complete ERP included: CRM, inventory, procurement, double-entry accounting, logistics, support desk, RBAC security, audit logs.
+Built on Laravel 13, PHP 8.4. Complete ERP included: CRM, inventory, procurement, double-entry accounting, logistics, support desk, RBAC security, audit logs.
 
 💬 Which AI should I connect next — Claude or Gemini? Vote in comments!
 
@@ -89,7 +89,7 @@ No Composer. No terminal. No tears. Upload → click Next 5 times → running ER
 🚀 Download + install yourself:
 https://shivamverse418.gumroad.com/l/arrgpcw
 
-Includes: cPanel guide, VPS guide (Ubuntu), cloud guides (AWS/DO/Oracle FREE tier), Docker compose file, WordPress plugin, full docs. Requirements: PHP 8.3+, MySQL 5.7+, any Apache/Nginx host.
+Includes: cPanel guide, VPS guide (Ubuntu), cloud guides (AWS/DO/Oracle FREE tier), Docker compose file, WordPress plugin, full docs. Requirements: PHP 8.4, MySQL 8.0+, any Apache/Nginx host.
 
 💬 Got stuck installing? Comment your error — I help everyone.
 
@@ -121,12 +121,12 @@ Subscription fatigue is real: CRM $49 + inventory $79 + invoicing $35 + logistic
 🚀 Own it instead of renting:
 https://shivamverse418.gumroad.com/l/arrgpcw
 
-Commercial license included: rebrand it, sell installations to clients, run it for your own company. 339 automated tests passing. Full source on GitHub.
+MIT License included: rebrand it, sell installations to clients, run it for your own company. Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md. Full source on GitHub.
 
 💬 Still paying monthly for tools? Tell me which ones — I'll show you the switch plan.
 
 TAGS:
-saas alternatives, stop subscriptions, business software cost, self hosted vs saas, white label software, resell software rights, small business tools 2026, crm pricing, save money business, software ownership, one time purchase software, erp price comparison, freelance tools, agency software, startup stack, venturex, buy vs subscribe, business operating system, laravel commercial license, own your software
+saas alternatives, stop subscriptions, business software cost, self hosted vs saas, white label software, resell software rights, small business tools 2026, crm pricing, save money business, software ownership, one time purchase software, erp price comparison, freelance tools, agency software, startup stack, venturex, buy vs subscribe, business operating system, laravel mit license, own your software
 
 HASHTAGS: #SaaS #SmallBusiness #Entrepreneur #Software #Startup
 

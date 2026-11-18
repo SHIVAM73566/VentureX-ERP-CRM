@@ -43,7 +43,7 @@ Reason: Your product is open source code, not a compiled application. There's no
 
 Thank you for purchasing VentureX ERP & CRM!
 
-Your purchase includes the complete source code with a Commercial License. You can:
+Your purchase includes the complete source code under the MIT License. You can:
 - Deploy on unlimited domains
 - Use for unlimited projects and clients
 - Modify the source code freely
@@ -51,7 +51,7 @@ Your purchase includes the complete source code with a Commercial License. You c
 
 No activation needed. Download, extract, and start using immediately.
 
-License Type: Commercial (Lifetime)
+License Type: MIT
 Support: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 Documentation: Included in /documentation/ folder
 
@@ -83,7 +83,7 @@ Your purchase is complete. Here's what to do next:
 2. Upload to your server and extract
 3. Run: composer install && npm install && npm run build
 4. Copy .env.example to .env and set your database
-5. Run: php artisan migrate --seed
+5. Run: php artisan migrate --force, then complete /install in Clean Production Mode
 6. Open http://your-domain.com/install
 
 The 6-step installation wizard will guide you through the rest.
@@ -126,20 +126,20 @@ QUICK START (6 Steps)
 ----------------------
 
 1. Upload the ZIP to your server (e.g., /var/www/html/)
-2. Extract: unzip VentureX-ERP-CRM-v1.0.0.zip
+2. Extract: unzip VentureX-ERP-CRM-v1.3.1-source.zip
 3. Install dependencies: composer install && npm install && npm run build
 4. Configure: cp .env.example .env && php artisan key:generate
-5. Setup database: php artisan migrate --seed
+5. Setup database: php artisan migrate --force, then complete /install in Clean Production Mode
 6. Start: php artisan serve
 
 Open http://localhost:8000 in your browser. The installation wizard will guide you.
 
 ---
 
-DEMO CREDENTIALS
+LOCAL DEMO ONLY — do not use in production
 ----------------
 
-After running php artisan migrate --seed, use these accounts:
+After choosing Demo Preview Mode locally, use these **LOCAL DEMO ONLY** accounts:
 
 Super Admin: demo_admin@example.com / Demo_Admin_2026!
 CEO: demo_manager@example.com / Demo_Manager_2026!
@@ -161,14 +161,14 @@ WHAT'S INCLUDED
 - 17 high-resolution screenshots
 - Import/Export center (CSV/XLSX)
 - REST API with rate limiting
-- 339 PHPUnit tests (464 assertions, 0 failures)
+- Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md
 
 ---
 
 LICENSE TERMS
 -------------
 
-License Type: Commercial (Lifetime)
+License Type: MIT
 
 You can:
 - Deploy on unlimited domains
@@ -189,7 +189,7 @@ SYSTEM REQUIREMENTS
 - PHP 8.4+
 - MySQL 8.0+ or MariaDB 10.6+
 - Composer 2.x
-- Node.js 18+
+- Node.js 20+
 - Apache 2.4+ or Nginx 1.24+
 
 ---

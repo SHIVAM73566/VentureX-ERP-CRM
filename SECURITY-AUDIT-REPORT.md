@@ -1,207 +1,135 @@
-# VENTUREX ERP & CRM — SIGNED SECURITY & ENTERPRISE VERIFICATION REPORT
+# VentureX ERP & CRM — Security & Release Audit Report (v1.3.1)
 
-**Report ID:** VX-AUDIT-20261118-01  
-**Generated:** 18 November 2026  
-**Prepared for / signed by:** Shivam Chaturvedi <chaturvedishivam179@gmail.com>  
-**Repository:** <https://github.com/SHIVAM73566/VentureX-ERP-CRM>  
-**Deploy action:** <https://github.com/SHIVAM73566/venturex-deploy-action>  
-**Verified source/release commit:** `5f89811fc14d898975de8a708ab634c177ef856e`  
-**Report type:** Internal pre-release verification and red-team audit (not an independent third-party certification)
+**Version:** 1.3.1  
+**Report date:** 2026-11-18 (UTC)  
+**Application:** VentureX ERP & CRM (Laravel 13, PHP 8.4)  
+**Audited repository:** `C:\MY_ERP` (canonical)  
+**Primary repository:** <https://github.com/SHIVAM73566/VentureX-ERP-CRM>  
+**Deploy action repository:** <https://github.com/SHIVAM73566/venturex-deploy-action>
 
 ---
 
-## 1. Executive result
+## Scope
 
-| Result | Status |
+This report summarizes the v1.3.1 hardening, performance, installer/import, and documentation work performed in this repository, including:
+
+- **Phase 1** — Six-step `/install` (Clean Production vs Demo modes), company + buyer Super Admin setup, installer lockout, transactional demo-data wipe (Admin UI + AERO X manual confirmation flow), validated CSV/XLSX import with templates and opening balances guidance.
+- **Phase 2** — Enterprise indexing/migrations, atomic numbering via `document_sequences` with locking, pessimistic locking patterns in critical flows, dashboard caching, API pagination clamps, queued heavy jobs behind `VENTUREX_QUEUE_HEAVY_TASKS` (default off), `enterprise:load-test` command.
+- **Phase 3** — Tenant fail-closed behavior, invitation-bound registration OTP flow, Sanctum ability enforcement middleware, API AI authorization, RAG company/role ACL and untrusted-snippet framing, tighter upload rules (no SVG logos; private raster validation for support screenshots where applicable), CSP without `unsafe-eval`, security headers on API paths, removal of AI key tail/substring leakage from logs/flash/UI copy.
+- **Phase 4** — Buyer-facing docs, `.htaccess` / routing notes, deploy-action metadata alignment, WordPress connector text/path fixes, git ignore/export hygiene.
+
+**Out of scope / caveats:** No third-party penetration test or external code audit was performed as part of this report. “Zero vulnerabilities” is **not** claimed; this report records **confirmed findings addressed in executed scope** and residual operational notes. Git history prior to rotations may still contain historical secrets in old commits (see **Residual risk**).
+
+---
+
+## Environment (audit context)
+
+| Item | Value |
 |---|---|
-| Confirmed exploitable findings in executed scope after remediation | **0** |
-| Runtime/syntax errors in final verification | **0** |
-| Automated test failures | **0** |
-| Enterprise workflow steps passing | **20 / 20** |
-| Red-team controls passing after remediation | **12 / 12** |
-| Release ZIP integrity | **16 / 16 checksums verified** |
+| Local preview (developer machine) | `http://localhost:8000/login`, `http://127.0.0.1:8000/login` |
+| Production / deployment | Must use a proper web server document root pointing to `public/`, HTTPS at the edge, and real secrets in `.env` |
 
-**Statement:** Within the scope defined in Section 2, the final build completed with **zero confirmed vulnerabilities and zero errors**. This is a statement about the checks actually executed and reproduced, not a claim that no unknown or future vulnerability can ever exist.
+**Demo credentials (LOCAL DEMO ONLY):** When Demo Mode / demo seeders are used on a throwaway local install only:  
+`demo_admin@example.com` / `Demo_Admin_2026!`, `demo_manager@example.com` / `Demo_Manager_2026!`, `demo_sales@example.com` / `Demo_Sales_2026!` — remove or change before any non-local exposure.
 
 ---
 
-## 2. Scope and method
+## Verification performed (this audit cycle)
 
-### In scope
-- Laravel 13 application source at `C:\MY_ERP` at commit `5f89811`.
-- Web routes, authentication/session layer, RBAC/admin controllers, AI/RAG endpoints, self-healing middleware, response headers and release artifacts.
-- Live local preview at `http://127.0.0.1:8000`.
-- Deploy action metadata at `C:\Users\chatu\venturex-deploy-action`.
-
-### Method
-1. Static verification: PHP syntax lint, automated test suite, production asset build.
-2. Live enterprise simulation through authenticated HTTP sessions using demo users.
-3. Red-team probes against authentication, CSRF, sessions, authorization, injection, XSS, MFA/app-lock, rate limiting, error handling and key exposure.
-4. Artifact rebuild from the final commit, checksum verification and archive content inspection.
-
-### Out of scope
-- Independent third-party penetration tester signature.
-- Production infrastructure, network perimeter, DNS/TLS termination outside the local preview.
-- Absolute guarantees of future invulnerability or GitHub trending rank.
-
----
-
-## 3. Static and automated verification
+All commands executed from repository root (`C:\MY_ERP`) unless noted.
 
 | Check | Result |
 |---|---|
-| Full PHPUnit suite | **484 passed**, **1,607 assertions**, 0 failures |
-| Targeted security suite | **167 passed**, **510 assertions**, 0 failures |
-| PHP syntax lint | **418 files**, **0 errors** |
-| `npm run build` | Passed; `app-DVbV-UPi.css`, `app-J07HmFHb.js` emitted |
-| Route inventory | 487 routes registered |
+| `php artisan test --colors=never` | **Passed**: **556 passed**, **1990 assertions**, **0 failed** (duration reported by test runner in that run: ~890.83s) |
+| `npm run build` (Vite) | **Passed** (production build completed) |
+| `php artisan route:list` | **Succeeded** (route table generated; see application logs/output for full listing) |
+| Enterprise load simulation | `php artisan enterprise:load-test --users=30|100|300|500` — **0 errors** in each run (see **Enterprise load-test results** below) |
 
-Evidence digest (SHA-256 over concatenated logs listed in Appendix A):  
-`52EFC24BB14D0B20AFEEA2F01346EF29F65B933C65A36995DDBB3CDACAA929FB`
+> Note: A full `php artisan test` run is the primary automated regression gate recorded here. Additional manual browser testing is recommended for payment gateways, real mail/SMS providers, and production web server rewrites.
 
 ---
 
-## 4. Stage 1 — live enterprise simulation
+## Enterprise load-test results (30–500 simulated staff)
 
-All operations were performed over real authenticated HTTP requests against the local preview.
+Command: `php artisan enterprise:load-test --users=<N>` (deterministic query/path simulation across Sales, CRM, Procurement, Inventory, Logistics, Finance, HR batches as implemented in the command).
 
-| Workflow step | Result |
-|---|---|
-| Admin login + CSRF token established | PASS |
-| New enterprise company/tenant profile created | PASS |
-| Custom RBAC role with scoped permissions created | PASS after remediation |
-| Branch-equivalent warehouse entity created | PASS |
-| Product/SKU setup | PASS |
-| Stock receipt of 1,000 units | PASS |
-| Confirmed sales order for 250 units | PASS |
-| High-value invoice linked to the sales order | PASS |
-| Approved purchase order for 500 replenishment units | PASS |
-| EUR freight landed cost | PASS |
-| USD customs/duty landed cost | PASS |
-| Balanced journal created and posted | PASS |
-| Finance dashboard and ledger journals loaded | PASS |
-| Ledger integrity RAG query | PASS |
-| Copilot grounded enterprise query | PASS — `mode=ai`, `provider=nvidia`, 2,599 ms |
-| Hostile prompt-injection / SQL DROP payload | BLOCKED — HTTP 403, no key/prompt disclosure |
-| Five domain RAG pipelines queried | PASS — customer LTV, stockout risk, journal integrity, landed-cost audit, FX exposure |
-| AI assistant board brief | PASS |
+| Simulated staff | Batches | Queries (reported) | Time (ms, reported) | Errors |
+|---:|---:|---:|---:|---:|
+| 30 | 2 | 83 | 189.38 | 0 |
+| 100 | 4 | 273 | 271.01 | 0 |
+| 300 | 12 | 815 | 473.26 | 0 |
+| 500 | 20 | 1359 | 651.93 | 0 |
 
-RAG latencies observed: 2,507 ms, 2,178 ms, 3,248 ms, 2,215 ms, 1,674 ms. All responses were sanitised; no raw `<script>` payload or provider key pattern was present.
+**Optimizations / mitigations in place (high level):** grouped stock balance reads to reduce N+1 patterns, enterprise-focused indexes and `document_sequences` locking for numbering, pessimistic locks in critical financial/PO/stock paths where implemented, dashboard aggregate caching, API `per_page` clamping, and optional queued heavy work via `VENTUREX_QUEUE_HEAVY_TASKS` (default `false` to preserve synchronous test/local behavior). Continue to use MySQL/PostgreSQL in production (not SQLite) with appropriate connection pooling and queue workers when enabling heavy queues.
 
 ---
 
-## 5. Stage 2 — red-team audit
+## Security hardening summary (v1.3.1)
 
-| Attack vector | Probe | Result |
-|---|---|---|
-| SQL injection login bypass | `' OR 1=1 --` with arbitrary password | Authentication failed; redirected to `/login` |
-| CSRF | POST `/ai/copilot` without token | HTTP **419** |
-| Session tampering | Middle-character modification of encrypted session cookie | HTTP 302 to `/login`; rejected |
-| Session forgery | Random 64-character cookie value | HTTP 302 to `/login`; rejected |
-| Privilege escalation | Sales user direct GET/POST to `/admin/*` | HTTP **403** on all attempts |
-| MFA bypass | Invalid TOTP code at `/mfa/challenge` | Not accepted; user remained unprivileged |
-| App-lock bypass | Invalid password at `/auth/unlock` | Not accepted |
-| XSS reflection | `<script>alert(1)</script>` in customer search | Raw payload not reflected |
-| Credential stuffing | 22 rotated-email login attempts from one IP | HTTP **429** from attempt 21 onward |
-| Security headers | Authenticated dashboard response | CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy present |
-| Error leakage | Invalid route / 404 | No stack trace, DB path, APP_KEY or credentials exposed |
-| AI key exposure | Live AI provider/security pages | Plaintext key pattern hits: **0** |
+Representative areas addressed (non-exhaustive):
 
-HSTS is intentionally absent on plain HTTP preview responses; it must be enforced at the TLS-terminating proxy in production. Production Nginx templates and the deploy action support HTTPS via Let's Encrypt.
+- **Installer:** routes protected by web middleware stack with lockout (`InstallerGuard` + install state), throttling on installer routes, hardened env writing (no control/newline injection patterns as validated by tests), clear failure messaging patterns for missing extensions/DB privileges.
+- **Authentication & API:** Sanctum ability middleware (`EnsureTokenAbility`) applied to API groups; AI API methods authorized via policies/gates; session/regression coverage retained by existing test suite.
+- **Tenant isolation:** company scoping fail-closed behavior reinforced in shared concerns where applicable; registration/invitation OTP flow hardened (no auto-login before verification in the corrected flow).
+- **RAG:** company/role-aware retrieval filtering, untrusted snippet framing in prompts, removal of request-path pipeline writes in favor of controlled sync paths.
+- **Uploads:** SVG removed from logo allowlist; support attachments stored via private disk/raster validation patterns where implemented; importer validation uses security service checks.
+- **Secrets & keys:** AI provider keys encrypted at rest; **no key substrings/tails** persisted in audit payloads or flashed to users in the updated flows; UI copy updated to reflect non-display of key material.
+- **Headers:** security headers middleware behavior tightened (including API coverage as implemented); CSP adjusted away from `unsafe-eval` while preserving app functionality per test/build verification.
+- **Mass assignment:** sensitive fields protected on key models per Phase 3 changes (validated by `SecurityHardeningTest`).
 
 ---
 
-## 6. Stage 3 — remediation performed
+## Buyer operations: wipe demo data and import your own data
 
-### Finding 1 — RBAC role creation returned HTTP 500
-**Root cause:** The role form submits permission IDs. Validation accepted them, but `syncPermissions()` received raw numeric strings, which Spatie interprets as permission names, causing `PermissionDoesNotExist`.
+### A) Wipe demo data (Admin UI)
 
-**Fix:** `app/Http/Controllers/Admin/RoleController.php` now resolves validated IDs to `Permission` models before syncing on both `store()` and `update()`.
+1. Sign in as the **buyer Super Admin** (created during `/install` in Clean Production Mode, or your promoted admin account).
+2. Navigate to **Admin → Demo Data** (route: `admin.demo-data.index`, gated by super admin + step-up + throttle).
+3. Enter your **current admin password** and type the exact confirmation phrase: **`WIPE DEMO DATA`**.
+4. Submit. The operation runs in a **database transaction** and removes seeded/demo records while preserving system settings, roles/permissions, chart of accounts structure, and the active buyer Super Admin account (per `DemoDataWipeService` behavior).
 
-**Regression test:** `tests/Feature/AdminRolePermissionSyncTest.php` — 2 tests / 8 assertions passed. Live retry returned HTTP 200 with `Role created.`
+### B) Wipe demo data via AERO X (manual action)
 
-### Finding 2 — rotated-email credential stuffing was not throttled
-**Root cause:** The existing login limiter keyed on email + IP, so changing the email bypassed it.
+1. Use the AERO X / AI action entrypoint that exposes **`wipe_demo_data`** (manual confirmation required).
+2. Provide **current admin password** and the exact phrase **`WIPE DEMO DATA`** when prompted; the action only proceeds after confirmation payload/flow succeeds.
+3. The same transactional wipe service is used as the Admin UI path.
 
-**Fix:** `app/Providers/SecurityServiceProvider.php` now applies both a per-account limit (5 attempts / 5 minutes) and a per-source IP limit (20 attempts / 5 minutes).
+### C) Import your own Excel/CSV data
 
-**Regression test:** `tests/Feature/LoginIpRateLimitTest.php` — 1 test / 21 assertions passed. Live retry produced HTTP 429 from attempt 21 onward.
-
-No further confirmed exploit path remained in the executed scope after these fixes.
-
----
-
-## 7. Release artifacts
-
-All 9 current v1.3.0 ZIPs were rebuilt from final commit `5f89811` and are byte-identical.
-
-| Artifact | Size | SHA-256 |
-|---|---:|---|
-| `VentureX-ERP-CRM-v1.3.0-source.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-ZERO-ERRORS.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-Codester.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-Coderobotics.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-Gumroad.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-LemonSqueezy.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-Payhip.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-SellAnyCode.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-| `VentureX-ERP-CRM-v1.3.0-cPanel.zip` | 6,039,226 | `C165250782C2D899F92073D13025964FB61F42049395ECBEB696C0A0AFCF3CFF` |
-
-Full source bundle (local only, exceeds GitHub's 100 MB per-file limit):  
-`VentureX-ERP-CRM-v1.3.0-full-source.zip` — 328,740,218 bytes — SHA-256 `838A010B2A48A076575235C2E39BDD842B63E369B35CEF9FAFC6EE9A76D4F2B3`
-
-Archive checks confirmed: final hardening files present, rebuilt CSS present, no `.env`, no `release/` directory inside the 9 application ZIPs, no vendor directory, and all 16 entries in `release/SHA256SUMS.txt` verified.
-
-The stale local `ZERO-ERRORS` ZIP (SHA-256 beginning `72042335`) was replaced with the final verified artifact.
+1. Go to **Admin → Imports** (`admin.imports.*`).
+2. Download the provided **sample templates** (Customers, Suppliers, Leads, Products/Inventory, Opening Balances) from the import UI/templates area.
+3. Prepare files as **CSV or XLSX** (JSON/TXT are not accepted by the current importer). Keep files within size limits enforced by the application.
+4. Upload, map columns, validate, then execute. Opening balances and inventory-related imports follow the rules implemented in `app/Services/Import/*` (balanced journals / stock movements as designed).
+5. Review any error reports produced by the import workflow and correct source files before re-importing.
 
 ---
 
-## 8. Preview and credentials
+## Release artifacts (v1.3.1) — to be finalized at publish time
 
-| URL | Purpose |
-|---|---|
-| <http://localhost:8000/login> | Local preview |
-| <http://127.0.0.1:8000/login> | Loopback preview |
-| <http://10.91.96.75:8000/login> | LAN preview |
+The following should be produced from the final tagged commit and recorded in `SHA256SUMS.txt` (standard `sha256sum` format):
 
-| Role | Email | Password |
-|---|---|---|
-| Admin | `demo_admin@example.com` | `Demo_Admin_2026!` |
-| Manager | `demo_manager@example.com` | `Demo_Manager_2026!` |
-| Sales | `demo_sales@example.com` | `Demo_Sales_2026!` |
+- 9 application channel ZIPs (same channel set as prior releases), plus  
+- `VentureX-ERP-CRM-v1.3.1-full-source.zip`
+
+**Do not** publish hashes from intermediate builds. After rebuilding from the release commit, regenerate checksums and update GitHub Release assets and any mirrored copies under `C:\Users\chatu\OneDrive\Documents\Default Project` as applicable.
 
 ---
 
-## 9. Residual caveats
+## Residual risk and recommendations
 
-1. Historical commits `46bdfe4` and `a44034a` previously contained `.env`. Keys should be rotated and history rewritten if those commits are public; no live key value is printed or included in current artifacts.
-2. This report covers the executed automated and local live scope. It is not a substitute for an independent third-party pentest or a bug-bounty programme.
-3. GitHub Marketplace listing approval is controlled by GitHub and may still require web UI submission/review.
-4. GitHub trending rank cannot be guaranteed by metadata optimisation.
-5. The full-source ZIP exceeds GitHub's 100 MB per-file limit and remains a local artifact.
-6. HSTS must be enforced at the production TLS layer; it is not expected on plain HTTP preview responses.
-
----
-
-## 10. Signature
-
-I confirm that the results above reflect the verification executed against the stated commit and artifacts. No absolute or perpetual security guarantee is claimed.
-
-**Signed:** Shivam Chaturvedi  
-**Email:** chaturvedishivam179@gmail.com  
-**Date:** 18 November 2026  
-**Signature ID:** VX-AUDIT-20261118-01 / `52EFC24BB14D0B20AFEEA2F01346EF29F65B933C65A36995DDBB3CDACAA929FB`
+- **Git history:** If `.env` or secrets ever appeared in historical commits, rotate credentials and consider history rewrite + force-push coordination (high impact). This report does not assert history is clean beyond current working-tree practices.
+- **HSTS:** Not enforced on plain HTTP local previews; enforce HSTS and TLS at the production reverse proxy/load balancer.
+- **Dependencies:** Run `composer audit` / `npm audit` periodically and apply updates in a tested branch.
+- **Backups:** Take database and `storage/` backups before running wipe or bulk imports in production.
+- **Marketplace/trending:** GitHub Marketplace publication and search ranking depend on GitHub review and platform signals; they cannot be guaranteed by repository changes alone.
 
 ---
 
-## Appendix A — evidence files
+## Document history
 
-- `full_test_verified.log` / `full_test_final.log`
-- `security_audit_tests.log`
-- `enterprise_workflow.log`
-- `redteam_live.log`
-- `redteam_recheck.log`
-- `role_sync_test.log`
-- `login_rate_limit_test.log`
-- `lint_final.log`
-- `npm_build_final.log`
+- **v1.3.1 (this file):** Updated for Phase 1–4 work, full automated test pass recorded above, load-test metrics recorded above, demo/LAN guidance corrected.
+- Prior v1.3.0 report content is superseded for v1.3.1 release communication; retain Git history for audit trail.
+
+---
+
+*Prepared as an internal engineering audit artifact for the VentureX ERP & CRM v1.3.1 release process.*

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\PurchaseOrder;
+use App\Services\NumberGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -44,7 +45,7 @@ class PurchaseOrderController extends ApiController
 
         $purchaseOrder = PurchaseOrder::create([
             ...$validated,
-            'po_number' => 'PO-'.date('Ymd').'-'.str_pad(PurchaseOrder::max('id') + 1, 4, '0', STR_PAD_LEFT),
+            'po_number' => NumberGenerator::next('PO', 'purchase_orders'),
             'company_id' => auth()->user()->company_id,
             'created_by' => auth()->id(),
         ]);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\GeneratePdfJob;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -12,6 +13,7 @@ use App\Services\AuditLogger;
 use App\Services\AutoJournalService;
 use App\Services\BrandingService;
 use App\Services\CompanyContext;
+use App\Services\DashboardCacheService;
 use App\Services\NumberGenerator;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\RedirectResponse;
@@ -88,6 +90,7 @@ class InvoiceController extends Controller
                 return $invoice;
             });
 
+            DashboardCacheService::forget((int) $invoice->company_id);
             AuditLogger::created($invoice);
 
             return redirect()->route('sales.invoices.show', $invoice)->with('success', 'Invoice created.');
@@ -143,8 +146,15 @@ class InvoiceController extends Controller
 
         // Block financial edits on paid invoices — only notes allowed
         if ($invoice->status === 'paid') {
-            $allowed = ['notes' => $data['notes'] ?? $invoice->notes];
-            $invoice->update($allowed);
+            DB::transaction(function () use ($invoice, $data) {
+                $locked = Invoice::ofCompany((int) $invoice->company_id)
+                    ->whereKey($invoice->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $locked->update(['notes' => $data['notes'] ?? $locked->notes]);
+                $invoice->refresh();
+            });
             AuditLogger::updated($invoice);
 
             return redirect()->route('sales.invoices.show', $invoice)->with('success', 'Invoice notes updated.');
@@ -164,10 +174,24 @@ class InvoiceController extends Controller
             return back()->withInput()->with('error', "Cannot transition from \"{$invoice->status}\" to \"{$newStatus}\".");
         }
 
-        DB::transaction(function () use ($invoice, $data) {
-            $invoice->update([...$data, ...$this->totals($data)]);
-            $this->syncItems($invoice, $data['items'] ?? []);
-        });
+        try {
+            DB::transaction(function () use ($invoice, $data) {
+                $locked = Invoice::ofCompany((int) $invoice->company_id)
+                    ->whereKey($invoice->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $locked->update([...$data, ...$this->totals($data)]);
+                $this->syncItems($locked, $data['items'] ?? []);
+                $invoice->refresh();
+            });
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->withInput()->with('error', 'Failed to update invoice.');
+        }
+
+        DashboardCacheService::forget((int) $invoice->company_id);
         AuditLogger::updated($invoice);
 
         return redirect()->route('sales.invoices.show', $invoice)->with('success', 'Invoice updated.');
@@ -191,10 +215,23 @@ class InvoiceController extends Controller
             return back()->with('error', 'Cannot delete an invoice with recorded payments.');
         }
 
-        DB::transaction(function () use ($invoice) {
-            $invoice->items()->delete();
-            $invoice->delete();
-        });
+        try {
+            DB::transaction(function () use ($invoice) {
+                $locked = Invoice::ofCompany((int) $invoice->company_id)
+                    ->whereKey($invoice->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $locked->items()->delete();
+                $locked->delete();
+            });
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'Failed to delete invoice.');
+        }
+
+        DashboardCacheService::forget((int) $invoice->company_id);
         AuditLogger::deleted($invoice);
 
         return redirect()->route('sales.invoices.index')->with('success', 'Invoice deleted.');
@@ -208,16 +245,28 @@ class InvoiceController extends Controller
             abort(404);
         }
 
-        $invoice->load('customer', 'salesOrder', 'items.product', 'payments', 'createdBy');
+        if ((bool) config('venturex.queue_heavy_tasks', false)) {
+            GeneratePdfJob::dispatch($invoice->id, (int) $invoice->company_id);
 
-        $branding = app(BrandingService::class)->all();
+            return back()->with('success', 'PDF generation has been queued.');
+        }
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('sales.invoices.pdf', compact('invoice', 'branding'))
-            ->setPaper('a4')
-            ->setOption('isHtml5ParserEnabled', true)
-            ->setOption('isRemoteEnabled', false);
+        try {
+            $invoice->load('customer', 'salesOrder', 'items.product', 'payments', 'createdBy');
 
-        return $pdf->download('invoice-'.$invoice->invoice_number.'.pdf');
+            $branding = app(BrandingService::class)->all();
+
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('sales.invoices.pdf', compact('invoice', 'branding'))
+                ->setPaper('a4')
+                ->setOption('isHtml5ParserEnabled', true)
+                ->setOption('isRemoteEnabled', false);
+
+            return $pdf->download('invoice-'.$invoice->invoice_number.'.pdf');
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'Failed to generate invoice PDF.');
+        }
     }
 
     protected function syncItems(Invoice $invoice, array $items): void

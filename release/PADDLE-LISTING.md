@@ -43,7 +43,7 @@ Enterprise: $350.00
 ```
 Cover image: C:\MY_ERP\screenshots\Product demo\Dashboard of desktop.png
 Gallery: use remaining screenshots from C:\MY_ERP\screenshots\Product demo\
-File: Upload C:\MY_ERP\release\VentureX-ERP-CRM-v1.0.0-Gumroad.zip as fulfillment file
+File: Upload C:\MY_ERP\release\VentureX-ERP-CRM-v1.3.1-Gumroad.zip as fulfillment file
 ```
 
 ### _ Checkout Customization
@@ -68,7 +68,7 @@ File: Upload C:\MY_ERP\release\VentureX-ERP-CRM-v1.0.0-Gumroad.zip as fulfillmen
 |-------|-------|
 | Catalog Type | Digital Product (one-time) |
 | Category | Software |
-| File Included | VentureX-ERP-CRM-v1.0.0.zip |
-| Software Version | 1.0.0 |
+| File Included | VentureX-ERP-CRM-v1.3.1-source.zip |
+| Software Version | 1.3.1 |
 | Tax Category | Software as a good / Digital goods (auto-handled by Paddle) |
 | Price | $89.99 (single), $150.22 (pro), $350 (enterprise) |

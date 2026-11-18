@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Payment;
+use App\Services\NumberGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -43,7 +44,7 @@ class PaymentController extends ApiController
 
         $payment = Payment::create([
             ...$validated,
-            'payment_number' => 'PAY-'.date('Ymd').'-'.str_pad(Payment::max('id') + 1, 4, '0', STR_PAD_LEFT),
+            'payment_number' => NumberGenerator::next('PAY', 'payments'),
             'company_id' => auth()->user()->company_id,
             'created_by' => auth()->id(),
         ]);

@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Services\AuditLogger;
 use App\Services\AutoJournalService;
 use App\Services\CompanyContext;
+use App\Services\DashboardCacheService;
 use App\Services\NumberGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -80,6 +81,7 @@ class PaymentController extends Controller
                 return $payment;
             });
 
+            DashboardCacheService::forget((int) $payment->company_id);
             AuditLogger::created($payment);
 
             if ($payment->status === 'completed') {
@@ -141,17 +143,31 @@ class PaymentController extends Controller
 
         try {
             DB::transaction(function () use ($payment, $data, $oldInvoice, $oldAmount, $oldStatus) {
-                $payment->update($data);
+                $lockedPayment = Payment::ofCompany((int) $payment->company_id)
+                    ->whereKey($payment->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $lockedPayment->update($data);
 
                 if ($oldInvoice && $oldStatus === 'completed') {
-                    $oldInvoice->paid_amount = max(0, (float) $oldInvoice->paid_amount - $oldAmount);
-                    $oldInvoice->status = $oldInvoice->paid_amount >= (float) $oldInvoice->total ? 'paid' : ($oldInvoice->paid_amount > 0 ? 'partial' : 'sent');
-                    $oldInvoice->save();
+                    $lockedOldInvoice = Invoice::ofCompany((int) $payment->company_id)
+                        ->whereKey($oldInvoice->id)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if ($lockedOldInvoice) {
+                        $lockedOldInvoice->paid_amount = max(0, (float) $lockedOldInvoice->paid_amount - $oldAmount);
+                        $lockedOldInvoice->status = $lockedOldInvoice->paid_amount >= (float) $lockedOldInvoice->total ? 'paid' : ($lockedOldInvoice->paid_amount > 0 ? 'partial' : 'sent');
+                        $lockedOldInvoice->save();
+                    }
                 }
 
-                $this->applyToInvoice($payment);
+                $this->applyToInvoice($lockedPayment);
             });
 
+            $payment->refresh();
+            DashboardCacheService::forget((int) $payment->company_id);
             AuditLogger::updated($payment);
 
             return redirect()->route('sales.payments.index')->with('success', 'Payment updated.');
@@ -170,26 +186,57 @@ class PaymentController extends Controller
             abort(404);
         }
 
-        if ($payment->status === 'completed' && $payment->invoice) {
-            $invoice = $payment->invoice;
-            $invoice->paid_amount = max(0, (float) $invoice->paid_amount - (float) $payment->amount);
-            $invoice->status = $invoice->paid_amount >= (float) $invoice->total ? 'paid' : ($invoice->paid_amount > 0 ? 'partial' : 'sent');
-            $invoice->save();
-        }
+        try {
+            DB::transaction(function () use ($payment) {
+                $lockedPayment = Payment::ofCompany((int) $payment->company_id)
+                    ->whereKey($payment->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-        $payment->delete();
-        AuditLogger::deleted($payment);
+                if ($lockedPayment->status === 'completed' && $lockedPayment->invoice_id) {
+                    $invoice = Invoice::ofCompany((int) $payment->company_id)
+                        ->whereKey($lockedPayment->invoice_id)
+                        ->lockForUpdate()
+                        ->first();
+
+                    if ($invoice) {
+                        $invoice->paid_amount = max(0, (float) $invoice->paid_amount - (float) $lockedPayment->amount);
+                        $invoice->status = $invoice->paid_amount >= (float) $invoice->total ? 'paid' : ($invoice->paid_amount > 0 ? 'partial' : 'sent');
+                        $invoice->save();
+                    }
+                }
+
+                $lockedPayment->delete();
+            });
+
+            DashboardCacheService::forget((int) $payment->company_id);
+            AuditLogger::deleted($payment);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'Failed to delete payment.');
+        }
 
         return redirect()->route('sales.payments.index')->with('success', 'Payment deleted.');
     }
 
     protected function applyToInvoice(Payment $payment): void
     {
-        if (! $payment->invoice || $payment->status !== 'completed') {
+        if (! $payment->invoice_id || $payment->status !== 'completed') {
             return;
         }
 
-        $invoice = $payment->invoice;
+        // Callers invoke this inside a transaction; lock the invoice row so
+        // two concurrent payments cannot overwrite each other's paid_amount.
+        $invoice = Invoice::ofCompany((int) $payment->company_id)
+            ->whereKey($payment->invoice_id)
+            ->lockForUpdate()
+            ->first();
+
+        if (! $invoice) {
+            return;
+        }
+
         $invoice->paid_amount = min((float) $invoice->total, (float) $invoice->paid_amount + (float) $payment->amount);
         $invoice->status = $invoice->paid_amount >= (float) $invoice->total ? 'paid' : 'partial';
         $invoice->save();

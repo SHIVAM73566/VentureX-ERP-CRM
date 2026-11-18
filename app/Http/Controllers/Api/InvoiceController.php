@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Invoice;
+use App\Services\NumberGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -42,7 +43,7 @@ class InvoiceController extends ApiController
 
         $invoice = Invoice::create([
             ...$validated,
-            'invoice_number' => 'INV-'.date('Ymd').'-'.str_pad(Invoice::max('id') + 1, 4, '0', STR_PAD_LEFT),
+            'invoice_number' => NumberGenerator::next('INV', 'invoices'),
             'company_id' => auth()->user()->company_id,
             'created_by' => auth()->id(),
         ]);

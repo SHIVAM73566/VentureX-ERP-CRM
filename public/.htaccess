@@ -1,3 +1,8 @@
+# VentureX ERP & CRM — PREFERRED WEB ROOT
+# Point the web server document root at this /public directory. This standard
+# Laravel front-controller file is then the only rewrite layer required.
+# The project-root .htaccess exists only as a fallback for hosts that cannot
+# change the document root.
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes

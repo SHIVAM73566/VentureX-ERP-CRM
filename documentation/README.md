@@ -1,157 +1,94 @@
 ﻿# VentureX ERP & CRM Documentation
 
-Welcome to the VentureX ERP & CRM documentation. This guide covers everything you need to know to install, configure, and use VentureX ERP & CRM.
+Welcome to the v1.3.1 documentation set. These guides cover installation, deployment, configuration, security, APIs and day-to-day use of VentureX ERP & CRM.
 
-## ðŸ“š Documentation Files
+> The root [`INSTALLATION.md`](../INSTALLATION.md) is the canonical installation guide. This folder keeps the same guide for readers browsing `/documentation/`.
+
+## 📚 Documentation files
 
 | Document | Description |
-|----------|-------------|
-| [INSTALLATION.md](INSTALLATION.md) | Step-by-step installation guide |
+|---|---|
+| [INSTALLATION.md](INSTALLATION.md) | Canonical installation guide: local, Docker, VPS, cPanel and WordPress subdomain |
+| [GETTING-STARTED.md](GETTING-STARTED.md) | First-login tour and common workflows |
 | [USER_GUIDE.md](USER_GUIDE.md) | Complete user manual |
+| [PRODUCT-GUIDE.md](PRODUCT-GUIDE.md) | In-app product and RAG guide |
+| [ADMIN_GUIDE.md](ADMIN_GUIDE.md) | Administration reference |
 | [API_DOCUMENTATION.md](API_DOCUMENTATION.md) | REST API reference |
+| [API-SETUP.md](API-SETUP.md) | API and AI key setup |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Production deployment guide |
+| [VPS.md](VPS.md) | Ubuntu 22.04/24.04 VPS deployment |
+| [CPANEL.md](CPANEL.md) | cPanel shared-hosting deployment |
+| [CLOUD.md](CLOUD.md) | Generic cloud deployment |
 | [SECURITY.md](SECURITY.md) | Security features and configuration |
 | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Common issues and solutions |
 | [DATABASE-SETUP.md](DATABASE-SETUP.md) | Database configuration and management |
-| [AI-SETUP.md](AI-SETUP.md) | AI provider setup and configuration |
-| [API-SETUP.md](API-SETUP.md) | API key and provider configuration |
 | [BACKUP_AND_RESTORE.md](BACKUP_AND_RESTORE.md) | Backup and disaster recovery |
+| [AI-SETUP.md](AI-SETUP.md) | AI gateway and provider setup |
+| [AI-API-KEYS.md](AI-API-KEYS.md) | Secure API key handling |
+| [RAG-GUIDE.md](RAG-GUIDE.md) | 84 enterprise RAG pipelines |
+| [WIX.md](WIX.md) | Wix integration |
+| [BLOGGER.md](BLOGGER.md) | Blogger integration |
+| [CUSTOM-INTEGRATION.md](CUSTOM-INTEGRATION.md) | Custom website integration |
+| [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) | Third-party dependency licenses |
+| [LICENSES-AND-THIRD-PARTY.md](LICENSES-AND-THIRD-PARTY.md) | License inventory |
 
-## ðŸš€ Getting Started
-
-### Quick Installation (5 minutes)
+## 🚀 Quick installation
 
 ```bash
-# 1. Extract the package
-unzip VentureX-ERP.zip
-cd VentureX-ERP
-
-# 2. Install dependencies
+unzip VentureX-ERP-CRM-v1.3.1-source.zip
+cd VentureX-ERP-CRM
 composer install
-
-# 3. Setup environment
 cp .env.example .env
 php artisan key:generate
-
-# 4. Configure database in .env file
-DB_DATABASE=my_erp
-DB_USERNAME=root
-DB_PASSWORD=your_password
-
-# 5. Run migrations and seed demo data
-php artisan migrate --seed
-
-# 6. Build frontend assets
 npm install && npm run build
-
-# 7. Start the server
 php artisan serve
 ```
 
-Open http://127.0.0.1:8000 and login with demo credentials:
+Open <http://127.0.0.1:8000/install>, choose **Clean Production Mode** and create the first administrator. For a throwaway local preview only, choose **Demo Preview Mode**.
 
-- Email: `demo_admin@example.com`
-- Password: `Demo_Admin_2026!`
+> **LOCAL DEMO ONLY:** demo accounts (`demo_admin@example.com`, `demo_manager@example.com`, `demo_sales@example.com`) must never be used on a public or shared server. See [`INSTALLATION.md`](INSTALLATION.md) for details.
 
-> —¸ These are demo credentials for testing only. Change passwords before production use.
+For production, use `/install` or `php artisan migrate --force`. Do not run `php artisan migrate --seed` in production because legacy seeders can add demo data.
 
-### Alternative: CLI Setup Wizard
+## 📖 Module guides
 
-```bash
-php artisan setup
-```
+- **CRM:** customers, contacts, leads, opportunities, activities and pipeline
+- **Sales:** quotations, orders, invoices, payments and receivables
+- **Inventory:** products, warehouses, stock movements and reorder alerts
+- **Procurement:** suppliers, offers, requisitions, RFQs and purchase orders
+- **Finance:** chart of accounts, journals, AR/AP and reporting
+- **Logistics:** shipments, containers and landed costs
+- **HR:** employees, attendance, leave, payroll, reviews and onboarding
+- **Support:** tickets, FAQ, help centre and AI assistant
 
-Interactive wizard that guides you through the entire installation process.
+## 🔐 Security
 
-## ðŸ“– Module Guides
+- TOTP multi-factor authentication
+- App lock and device trust
+- Role-based access control with granular permissions
+- Complete audit logging
+- Emergency lockdown mode
+- Rate limiting and brute-force protection
+- Encrypted AI credentials and red-team tested controls
 
-### CRM (Customer Relationship Management)
-- Manage customers and contacts
-- Track activities (calls, emails, meetings)
-- Customer portal for self-service
-- AI-powered insights and recommendations
+See [SECURITY.md](SECURITY.md) and the root [SECURITY-AUDIT-REPORT.md](../SECURITY-AUDIT-REPORT.md).
 
-### Sales
-- Create quotations and convert to orders
-- Generate invoices and track payments
-- Sales pipeline management
-- Revenue analytics and forecasting
+## 🤖 AI features
 
-### Inventory
-- Product catalog with variants
-- Multi-warehouse management
-- Stock level tracking
-- Low stock alerts
+- Local-first assistant that works without API keys
+- Key-only onboarding for NVIDIA NIM, Google Gemini, OpenAI and Anthropic Claude
+- 84 enterprise RAG pipelines with sources, confidence and latency
+- AERO X Agentic Engine with auditable, transactional rules
 
-### Procurement
-- Purchase order management
-- Supplier relationship tracking
-- Request for Quotation system
-- Three-way matching
+See [AI-API-KEYS.md](AI-API-KEYS.md) and [RAG-GUIDE.md](RAG-GUIDE.md).
 
-### Finance
-- Chart of accounts
-- Journal entries
-- Accounts receivable and payable
-- Financial reporting
+## 🆘 Support
 
-### Logistics
-- Shipment tracking
-- Container management
-- Landed cost calculation
-- Delivery scheduling
-
-### HR
-- Employee management
-- Leave and attendance
-- Payroll processing
-- Performance reviews
-
-### Projects
-- Task management
-- Time tracking
-- Milestone tracking
-- Resource allocation
-
-### Helpdesk
-- Ticket management
-- SLA tracking
-- Knowledge base
-- Customer satisfaction
-
-## ðŸ” Security
-
-VentureX ERP & CRM includes comprehensive security features:
-
-- **3-Step Registration** — Email, Phone, and Selfie verification
-- **Multi-Factor Authentication** — TOTP-based 2FA
-- **App Lock** — 6-digit PIN protection
-- **Device Trust** — Trusted device management
-- **RBAC** — Role-based access control
-- **Audit Logging** — Complete activity tracking
-- **Emergency Lockdown** — System-wide security mode
-
-See [SECURITY.md](SECURITY.md) for detailed security documentation.
-
-## ðŸ¤– AI Features
-
-VentureX ERP & CRM integrates with multiple AI providers:
-
-- **GPT-5** — OpenAI's latest model
-- **Claude** — Anthropic's AI assistant
-- **Gemini** — Google's AI model
-- **DeepSeek** — Advanced reasoning model
-- **NVIDIA** — Enterprise AI platform
-
-Configure your preferred provider in Settings > AI Configuration.
-
-## ðŸ†˜ Support
-
-- **Email:** chaturvedishivam179@gmail.com, ocoronews@gmail.com
-- **Documentation:** This folder
-- **Video Tutorials:** Available on YouTube
-- **Community Forum:** [GitHub Discussions](https://github.com/SHIVAM73566/VentureX-ERP-CRM/discussions)
+- **Email / PayPal checkout:** chaturvedishivam179@gmail.com
+- **Documentation:** this folder and the root `README.md`
+- **Issues:** <https://github.com/SHIVAM73566/VentureX-ERP-CRM/issues>
+- **Maintainer:** Shivam Chaturvedi
 
 ## License
 
-> **Note:** This software is proprietary. Unauthorized copying, modification, or distribution is prohibited.
+VentureX ERP & CRM is licensed under the **MIT License** — see the root [LICENSE](../LICENSE). Third-party dependencies retain their own licenses; see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

@@ -1,0 +1,2 @@
+supplier_code,name,email,phone,address,city,state,country,postal_code,tax_id,contact_person,notes
+S1001,"Sample Supplier Ltd","supplier@example.com","+10000000001","2 Sample Street","Sample City","Sample State","US","10001","","Sample Contact","Replace this row with your data."

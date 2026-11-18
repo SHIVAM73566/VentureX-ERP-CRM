@@ -36,8 +36,15 @@ class RagSyncCommand extends Command
         $store->reindexMissingEmbeddings();
 
         if ($this->option('train')) {
-            dispatch_sync(new SelfTrainingPipeline);
-            $this->info('Self-training pass completed.');
+            if (config('venturex.queue_heavy_tasks', false)) {
+                SelfTrainingPipeline::dispatch();
+                $this->info('Self-training pass queued for the queue worker.');
+            } else {
+                // Maintenance CLI only: no web request is blocked. Local/admin
+                // runs stay deterministic when a worker is not configured.
+                SelfTrainingPipeline::dispatchSync();
+                $this->info('Self-training pass completed.');
+            }
         }
 
         $stats = $rag->stats();

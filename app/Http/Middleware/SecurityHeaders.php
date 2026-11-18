@@ -33,7 +33,10 @@ class SecurityHeaders
     {
         $csp = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Alpine 3 evaluates x-data/class bindings via new AsyncFunction; inline for @click/x-on
+            // No 'unsafe-eval': inline Blade/Alpine bootstrap remains allowed,
+            // but new Function()/eval() based expression compilation is not.
+            // Alpine directives must use the CSP build with registered components.
+            "script-src 'self' 'unsafe-inline'",
             "style-src 'self' 'unsafe-inline'",  // inline style="" attributes used by templates
             "img-src 'self' data: blob:",
             "font-src 'self' data:",

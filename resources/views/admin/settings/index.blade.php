@@ -191,10 +191,10 @@
                 <p class="font-semibold text-ink-700 dark:text-ink-200">How every key is protected</p>
                 <ul class="mt-2 list-disc space-y-1 pl-4">
                     <li>Encrypted at rest with the application key; a keyed HMAC fingerprint detects reuse without decryption.</li>
-                    <li>Only the last 4 characters are ever displayed. The full key is never stored in plaintext, logged, or flashed back on validation errors.</li>
+                    <li>No part of a key is ever displayed after saving. Keys are never stored in plaintext, logged, or flashed back on validation errors.</li>
                     <li>Every save, check, and removal requires step-up authentication (password/MFA verified within the last 5 minutes) and is rate limited.</li>
                     <li>Endpoint fields are never shown or accepted from the browser — base URLs and API paths come from server config only.</li>
-                    <li>All changes are written to the audit log with the key tail only; this page is served with <code class="rounded bg-ink-100 px-1 py-0.5 text-[11px]">Cache-Control: no-store</code>.</li>
+                    <li>All changes are written to the audit log without any key material; this page is served with <code class="rounded bg-ink-100 px-1 py-0.5 text-[11px]">Cache-Control: no-store</code>.</li>
                 </ul>
             </div>
 

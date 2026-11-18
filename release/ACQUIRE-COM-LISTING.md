@@ -20,7 +20,7 @@ AI-powered ERP & CRM sold as one-time licenses across 12 sales channels
 
 ### _ Short Pitch (shown in browse feed)
 ```
-Complete Laravel 13 business operating system: CRM, inventory, accounting, logistics, support + AI copilot requiring no API keys. Live on Gumroad with 11 additional channel listings ready to activate. 339 automated tests passing. Perfect acquisition for a developer-marketer who wants a turnkey digital product line.
+Complete Laravel 13 business operating system: CRM, inventory, accounting, logistics, support + AI copilot requiring no API keys. Live on Gumroad with 11 additional channel listings ready to activate. Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md. Perfect acquisition for a developer-marketer who wants a turnkey digital product line.
 ```
 
 ### _ The Ask
@@ -39,25 +39,25 @@ Complete Laravel 13 business operating system: CRM, inventory, accounting, logis
 | TTM Revenue | $0 at listing (product launched Aug 2026) - update as sales come |
 | Customers | Update count from Gumroad dashboard weekly |
 | Team size | 1 (founder) |
-| Tech stack | Laravel 13, PHP 8.3, MySQL, Tailwind CSS v4, Alpine.js, Vite |
+| Tech stack | Laravel 13, PHP 8.4, MySQL, Tailwind CSS v4, Alpine.js, Vite |
 | Infrastructure cost | $0 (static delivery via marketplaces) |
 
 ### _ Long Description
 ```
 THE PRODUCT
-VentureX ERP & CRM is a complete AI-powered business operating system targeting small-medium businesses that want ERP capability without SaaS subscriptions. Built on Laravel 13/PHP 8.3: 92 controllers, 74 models, 44 services, 169 responsive views, complete REST API. The differentiator is an AI Copilot that works WITHOUT API keys (local fallback) with optional routing to NVIDIA Nemotron, Gemini, OpenAI and Claude.
+VentureX ERP & CRM is a complete AI-powered business operating system targeting small-medium businesses that want ERP capability without SaaS subscriptions. Built on Laravel 13/PHP 8.4: 92 controllers, 74 models, 44 services, 169 responsive views, complete REST API. The differentiator is an AI Copilot that works WITHOUT API keys (local fallback) with optional routing to NVIDIA Nemotron, Gemini, OpenAI and Claude.
 
 GO-TO-MARKET (ALREADY BUILT)
-The acquisition includes 12 prepared sales channels: live Gumroad storefront plus fully-written listings for Lemon Squeezy, Paddle, FastSpring, PayPro Global, Payhip, Codester, Coderobotics, SellAnyCode, WooCommerce, Product Hunt launch kit and a published GitHub Marketplace deploy Action. Every listing file, refund policy, pricing tier and upload instruction is documented in a handover folder.
+The acquisition includes 12 prepared sales channels: live Gumroad storefront plus fully-written listings for Lemon Squeezy, Paddle, FastSpring, PayPro Global, Payhip, Codester, Coderobotics, SellAnyCode, WooCommerce, Product Hunt launch kit and a GitHub deploy Action (Marketplace approval pending). Every listing file, refund policy, pricing tier and upload instruction is documented in a handover folder.
 
 OPERATIONS
-Zero infrastructure cost - marketplaces handle checkout/delivery. Support volume expected under 2h/week using included docs. Codebase covered by 339 passing automated tests (PHPUnit), enabling safe future updates.
+Zero infrastructure cost - marketplaces handle checkout/delivery. Support volume expected under 2h/week using included docs. Codebase covered by Automated PHPUnit suite passing; final counts in SECURITY-AUDIT-REPORT.md, enabling safe future updates.
 
 GROWTH LEVERS FOR NEW OWNER
 - Activate remaining marketplace listings (files ready - 1 hour each)
 - Launch on Product Hunt using included kit
 - Add subscription tier (multi-year roadmap already in docs)
-- White-label/reseller program (commercial license permits rebranding)
+- White-label/reseller program (MIT License permits modification and rebranding with attribution preserved)
 
 INCLUDED IN SALE
 Full source code, 2 GitHub repositories, 17 screenshots, 15 video tutorials with scripts, 23 documentation files, all marketplace listings, refund policies, landing page content, and 30 days founder support.
@@ -67,10 +67,10 @@ TECH DUE DILIGENCE READY: public GitHub repo available for buyer inspection unde
 
 ## STEP 3: DATA ROOM (Upload these)
 ```
-- VentureX-ERP-CRM-v1.0.0-Gumroad.zip (full source)
+- VentureX-ERP-CRM-v1.3.1-Gumroad.zip (full source)
 - All listing .md files from C:/MY_ERP/release/
 - Screenshots pack
-- Test results: phpunit output showing 339 pass
+- Test results: PHPUnit output for the v1.3.1 suite (final counts in SECURITY-AUDIT-REPORT.md)
 - Gumroad analytics export (after first sales)
 ```
 

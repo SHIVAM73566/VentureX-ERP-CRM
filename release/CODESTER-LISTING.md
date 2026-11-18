@@ -10,7 +10,7 @@
 
 ## Short Description
 
-Full-stack Laravel ERP with CRM, invoicing, inventory, procurement, finance, AI copilot, multi-tenant security, REST API, Docker, and 17 screenshots. 339 tests passed. Ready to deploy.
+Full-stack Laravel ERP with CRM, invoicing, inventory, procurement, finance, AI copilot, multi-tenant security, REST API, Docker, and 17 screenshots. Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md. Ready to deploy.
 
 ---
 
@@ -29,7 +29,7 @@ Unlike template-based admin panels, VentureX is a **fully functional ERP** with 
 - **REST API** — full CRUD API for every module (customers, leads, products, invoices, payments, journal entries, etc.)
 - **Docker-ready** — production Dockerfile, docker-compose, nginx config, MySQL init scripts included
 - **17 product screenshots** and **15 video tutorial scripts** with subtitles included
-- **339 PHPUnit tests, 464 assertions, 0 failures** — verified code quality
+- **Automated test suite passing; final v1.3.1 counts in SECURITY-AUDIT-REPORT.md** — verified code quality
 - **WordPress integration plugin** — connect WordPress sites to your VentureX ERP via REST API
 - **Installer wizard** — browser-based setup for non-technical users (database, admin, seed data)
 
@@ -72,7 +72,7 @@ Unlike template-based admin panels, VentureX is a **fully functional ERP** with 
 - Dark mode support across all views
 - 17 product screenshots included
 - 15 video tutorial scripts with SRT subtitles
-- 339 PHPUnit tests (464 assertions)
+- Automated test suite passing; final v1.3.1 counts in SECURITY-AUDIT-REPORT.md
 - Comprehensive documentation (installation, admin guide, user guide, API docs, FAQ, troubleshooting)
 
 ---
@@ -99,16 +99,17 @@ Unlike template-based admin panels, VentureX is a **fully functional ERP** with 
    ```bash
    php artisan key:generate
    ```
-6. **Run migrations and seed demo data:**
+6. **Prepare the database:**
    ```bash
-   php artisan migrate --seed
+   php artisan migrate --force
    ```
+   Then open `http://localhost:8000/install` and choose **Clean Production Mode**. Demo Preview Mode is **LOCAL DEMO ONLY**.
 7. **Start the server:**
    ```bash
    php artisan serve
    ```
 8. **Open** `http://localhost:8000` in your browser
-9. **Login** with: `admin@venturex.demo` / `password`
+9. **Log in** with the administrator created in `/install` (LOCAL DEMO sign-ins only exist in Demo Preview Mode)
 
 ### Docker Deployment
 
@@ -122,7 +123,7 @@ docker-compose up -d
 2. Create MySQL database in cPanel
 3. Update `.env` with database credentials
 4. Point document root to the `public/` folder
-5. Run `php artisan migrate --seed` via SSH or terminal
+5. Run `php artisan migrate --force` via SSH, then complete `/install` in Clean Production Mode
 
 ---
 
@@ -238,7 +239,7 @@ docker
 Hi Codester Team,
 
 VentureX ERP & CRM is a production-ready Laravel 13 ERP system with 623 PHP files,
-169 Blade templates, 74 models, and 339 passing tests (464 assertions, 0 failures).
+169 Blade templates, 74 models, and an automated test suite passing (final counts and failure totals in SECURITY-AUDIT-REPORT.md).
 
 WHAT'S INCLUDED:
 - Complete ERP: CRM, Sales, Inventory, Procurement, Logistics, Finance, Support
@@ -263,7 +264,7 @@ DEMO:
 - Live demo URL: https://SHIVAM73566.github.io/VentureX-ERP-CRM/
 
 The codebase is clean, tested, documented, and ready for immediate deployment.
-PHP 8.4, Laravel 13, MySQL 8.0+, Node.js 18+.
+PHP 8.4, Laravel 13, MySQL 8.0+, Node.js 20+.
 
 Thank you for your review!
 

@@ -1,6 +1,6 @@
 # Blogger Integration Guide for VentureX ERP & CRM
 
-> **API accuracy notice (v1.3.0):** Examples in this guide use the current `/api` namespace. Submit Blogger forms to `/api/crm/leads`, sync contacts with `/api/crm/contacts`, and create a Sanctum token with `POST /api/tokens` after signing in. There is no `health` API endpoint in this release; use `/api/user` as an authenticated connectivity check. See `API-SETUP.md` and `routes/api.php` for authoritative examples.
+> **API accuracy notice (v1.3.1):** Examples in this guide use the current `/api` namespace. Submit Blogger forms to `/api/crm/leads`, sync contacts with `/api/crm/contacts`, and create a Sanctum token with `POST /api/tokens` after signing in. There is no `health` API endpoint in this release; use `/api/user` as an authenticated connectivity check. See `API-SETUP.md` and `routes/api.php` for authoritative examples.
 
 ## Important: Blogger Cannot Run PHP/Laravel
 

@@ -128,7 +128,7 @@ $89.99 - $350 (3 pricing tiers)
 
 ### TECHNOLOGY STACK
 
-- Backend: Laravel 13, PHP 8.3+
+- Backend: Laravel 13, PHP 8.4
 - Frontend: Blade, Alpine.js 3, Tailwind CSS v4
 - Database: MySQL 8.0+ / MariaDB 10.6+
 - Build: Vite 8.x, npm
@@ -149,7 +149,7 @@ $89.99 - $350 (3 pricing tiers)
 5. Copy `.env.example` to `.env`
 6. Run `php artisan key:generate`
 7. Create a MySQL database
-8. Run `php artisan migrate --seed`
+8. Run `php artisan migrate --force`, then complete `/install` in Clean Production Mode
 9. Run `php artisan serve`
 10. Open `http://localhost:8000`
 
@@ -166,7 +166,7 @@ $89.99 - $350 (3 pricing tiers)
 
 ---
 
-### DEMO CREDENTIALS
+### LOCAL DEMO ONLY — do not use in production
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -201,7 +201,7 @@ $89.99 - $350 (3 pricing tiers)
 - Docker support for modern deployment
 - Complete documentation and video tutorials
 - Clean, well-structured Laravel 13 code
-- Modern PHP 8.3 with type hints and attributes
+- Modern PHP 8.4 with type hints and attributes
 - Responsive design works on all devices
 - REST API for mobile and external integrations
 - WordPress plugin included for lead capture
@@ -210,8 +210,8 @@ $89.99 - $350 (3 pricing tiers)
 
 ### SERVER REQUIREMENTS
 
-- PHP 8.3 with extensions: pdo_mysql, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, fileinfo, gd
-- MySQL 5.7+ or MariaDB 10.6+
+- PHP 8.4 with extensions: pdo_mysql, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, fileinfo, gd
+- MySQL 8.0+ or MariaDB 10.6+
 - Apache 2.4+ with mod_rewrite or Nginx 1.24+
 - Node.js 20+ for asset compilation
 - Composer 2.x for dependency management
@@ -229,7 +229,7 @@ $89.99 - $350 (3 pricing tiers)
 
 ### UPLOAD CHECKLIST
 
-- [ ] ZIP file: VentureX-ERP-CRM-v1.0.0-Coderobotics.zip
+- [ ] ZIP file: VentureX-ERP-CRM-v1.3.1-Coderobotics.zip
 - [ ] Screenshots: 17 PNG files in screenshots/Product demo/
 - [ ] Title: VentureX ERP & CRM - AI-Powered Business Operating System | Laravel 13
 - [ ] Category: PHP Scripts > ERP / CRM

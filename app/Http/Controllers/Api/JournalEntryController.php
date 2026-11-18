@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\JournalEntry;
+use App\Services\NumberGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -49,7 +50,7 @@ class JournalEntryController extends ApiController
         }
 
         $entry = JournalEntry::create([
-            'entry_number' => 'JE-'.date('Ymd').'-'.str_pad(JournalEntry::max('id') + 1, 4, '0', STR_PAD_LEFT),
+            'entry_number' => NumberGenerator::next('JE', 'journal_entries'),
             'date' => $validated['date'],
             'description' => $validated['description'] ?? null,
             'company_id' => auth()->user()->company_id,

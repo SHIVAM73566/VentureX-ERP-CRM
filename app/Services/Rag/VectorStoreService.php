@@ -25,6 +25,16 @@ class VectorStoreService
      */
     public function ensurePipelines(): int
     {
+        $cacheKey = 'rag:pipeline-registry:seeded:v1';
+        $expected = count(RagPipelineRegistry::definitions());
+
+        // The registry is static. Once every definition exists, skip the
+        // write entirely on request paths and serve the cached registry.
+        if (cache()->get($cacheKey) === true
+            && RagPipeline::query()->count() >= $expected) {
+            return 0;
+        }
+
         $count = 0;
 
         RagPipeline::withoutEvents(function () use (&$count) {
@@ -54,6 +64,8 @@ class VectorStoreService
                 $count++;
             }
         });
+
+        cache()->forever($cacheKey, true);
 
         return $count;
     }
@@ -123,8 +135,9 @@ class VectorStoreService
      */
     public function syncAll(?int $companyId = null, int $limit = 150): array
     {
-        $this->ensurePipelines();
-
+        // Definitions are registered by the seeder / rag:sync command / nightly
+        // job. This method only indexes existing pipelines and performs no
+        // registry writes of its own.
         $result = [];
         foreach (RagPipeline::query()->where('is_active', true)->orderBy('domain')->orderBy('name')->get() as $pipeline) {
             $result[$pipeline->key] = $this->syncPipeline($pipeline, $companyId, $limit);
@@ -137,6 +150,13 @@ class VectorStoreService
     {
         $payload = $this->documentPayload($record);
         $embedding = $this->embeddings->embed($payload['title'].' '.$payload['content']);
+
+        // ACL metadata travels with the vector so retrieval can enforce both
+        // tenant and role/module boundaries without a schema migration.
+        $payload['metadata']['domain'] = $pipeline->domain;
+        $payload['metadata']['pipeline'] = $pipeline->key;
+        $payload['metadata']['source_model'] = $record::class;
+        $payload['metadata']['is_public'] = false;
 
         return RagDocument::updateOrCreate(
             [
@@ -158,19 +178,35 @@ class VectorStoreService
     }
 
     /**
+     * Tenant- and ACL-scored similarity search.
+     *
+     * @param  null|callable(RagDocument): bool  $authorize  per-document ACL check
+     * @param  bool  $allowPublic  may explicitly public global docs be considered?
      * @return array<int, array{document: RagDocument, score: float}>
      */
-    public function search(RagPipeline $pipeline, string $query, int $limit = 8, ?int $companyId = null): array
-    {
+    public function search(
+        RagPipeline $pipeline,
+        string $query,
+        int $limit = 8,
+        ?int $companyId = null,
+        ?callable $authorize = null,
+        bool $allowPublic = false,
+    ): array {
         $queryVector = $this->embeddings->embed($query);
         $queryTokens = array_unique($this->embeddings->tokens($query));
 
         $documents = RagDocument::query()
             ->where('pipeline_id', $pipeline->id)
-            ->where(function ($q) use ($companyId) {
-                $q->whereNull('company_id');
-                if ($companyId !== null) {
-                    $q->orWhere('company_id', $companyId);
+            ->where(function ($q) use ($companyId, $allowPublic) {
+                if ($companyId === null) {
+                    // No tenant context: only explicitly public global docs
+                    // may ever participate.
+                    $q->whereNull('company_id');
+                } else {
+                    $q->where('company_id', $companyId);
+                    if ($allowPublic) {
+                        $q->orWhereNull('company_id');
+                    }
                 }
             })
             ->limit(750)
@@ -178,6 +214,19 @@ class VectorStoreService
 
         $scored = [];
         foreach ($documents as $document) {
+            $metadata = is_array($document->metadata) ? $document->metadata : [];
+
+            // Never leak global/other-tenant content unless it was explicitly
+            // marked public and the caller opted into public documents.
+            if ($document->company_id === null
+                && (! $allowPublic || ($metadata['is_public'] ?? false) !== true)) {
+                continue;
+            }
+
+            if ($authorize !== null && ! $authorize($document)) {
+                continue;
+            }
+
             $embedding = is_array($document->embedding) ? $document->embedding : null;
             if ($embedding === null) {
                 $embedding = $this->embeddings->embed($document->title.' '.$document->content);

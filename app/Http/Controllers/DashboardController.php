@@ -19,7 +19,9 @@ use App\Models\SupplierOffer;
 use App\Services\Ai\AiInsightService;
 use App\Services\Ai\AiQuotaService;
 use App\Services\CompanyContext;
+use App\Services\DashboardCacheService;
 use App\Services\SettingService;
+use App\Services\StockService;
 use App\Support\NavigationAccess;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -43,47 +45,76 @@ class DashboardController extends Controller
             default => $currencyCode.' ',
         };
 
-        $stats = [
-            'customers' => Customer::ofCompany()->count(),
-            'leads' => Lead::ofCompany()->count(),
-            'leads_new' => Lead::ofCompany()->where('status', 'new')->count(),
-            'open_opportunities' => Opportunity::ofCompany()->whereNotIn('stage', ['won', 'lost'])->count(),
-            'pipeline_value' => (float) Opportunity::ofCompany()
-                ->whereNotIn('stage', ['won', 'lost'])
-                ->sum('expected_value'),
-            'won_value' => (float) Opportunity::ofCompany()->where('stage', 'won')->sum('expected_value'),
-        ];
+        try {
+            $aggregates = DashboardCacheService::remember($companyId, function (): array {
+                $stats = [
+                    'customers' => Customer::ofCompany()->count(),
+                    'leads' => Lead::ofCompany()->count(),
+                    'leads_new' => Lead::ofCompany()->where('status', 'new')->count(),
+                    'open_opportunities' => Opportunity::ofCompany()->whereNotIn('stage', ['won', 'lost'])->count(),
+                    'pipeline_value' => (float) Opportunity::ofCompany()
+                        ->whereNotIn('stage', ['won', 'lost'])
+                        ->sum('expected_value'),
+                    'won_value' => (float) Opportunity::ofCompany()->where('stage', 'won')->sum('expected_value'),
+                ];
 
-        $leadsByStatus = Lead::ofCompany()
-            ->select('status', DB::raw('count(*) as total'))
-            ->groupBy('status')
-            ->pluck('total', 'status')
-            ->toArray();
+                $leadsByStatus = Lead::ofCompany()
+                    ->select('status', DB::raw('count(*) as total'))
+                    ->groupBy('status')
+                    ->pluck('total', 'status')
+                    ->toArray();
 
-        $opportunitiesByStage = Opportunity::ofCompany()
-            ->select('stage', DB::raw('count(*) as total'))
-            ->groupBy('stage')
-            ->pluck('total', 'stage')
-            ->toArray();
+                $opportunitiesByStage = Opportunity::ofCompany()
+                    ->select('stage', DB::raw('count(*) as total'))
+                    ->groupBy('stage')
+                    ->pluck('total', 'stage')
+                    ->toArray();
 
-        $offers = [
-            'total' => SupplierOffer::ofCompany()->count(),
-            'green' => SupplierOffer::ofCompany()->where('quality_status', 'GREEN')->count(),
-            'yellow' => SupplierOffer::ofCompany()->where('quality_status', 'YELLOW')->count(),
-            'red' => SupplierOffer::ofCompany()->where('quality_status', 'RED')->count(),
-        ];
+                $offers = [
+                    'total' => SupplierOffer::ofCompany()->count(),
+                    'green' => SupplierOffer::ofCompany()->where('quality_status', 'GREEN')->count(),
+                    'yellow' => SupplierOffer::ofCompany()->where('quality_status', 'YELLOW')->count(),
+                    'red' => SupplierOffer::ofCompany()->where('quality_status', 'RED')->count(),
+                ];
 
-        $recentCustomers = Customer::ofCompany()->latest()->limit(5)->get();
-        $recentLeads = Lead::ofCompany()->with('assignedTo')->latest()->limit(5)->get();
-        $recentOffers = SupplierOffer::ofCompany()->with('supplier')->latest()->limit(5)->get();
+                return [
+                    'stats' => $stats,
+                    'leadsByStatus' => $leadsByStatus,
+                    'opportunitiesByStage' => $opportunitiesByStage,
+                    'offers' => $offers,
+                    'recentCustomers' => Customer::ofCompany()->latest()->limit(5)->get(),
+                    'recentLeads' => Lead::ofCompany()->with('assignedTo')->latest()->limit(5)->get(),
+                    'recentOffers' => SupplierOffer::ofCompany()->with('supplier')->latest()->limit(5)->get(),
+                    'followUps' => Lead::ofCompany()
+                        ->whereNotNull('next_follow_up')
+                        ->where('status', '!=', 'won')
+                        ->where('next_follow_up', '<=', now()->addDays(7))
+                        ->orderBy('next_follow_up')
+                        ->limit(8)
+                        ->get(),
+                    'cashFlow' => $this->cashFlowForecast(),
+                    'hrSummary' => $this->hrSummary(),
+                    'agenticSummary' => $this->agenticSummary(),
+                    'analytics' => [
+                        'revenueVelocity' => $this->revenueVelocity(),
+                        'pipelineConversion' => $this->pipelineConversion(),
+                        'inventoryTurnover' => $this->inventoryTurnover(),
+                    ],
+                ];
+            });
+        } catch (\Throwable $e) {
+            report($e);
+            $aggregates = $this->emptyAggregates();
+        }
 
-        $followUps = Lead::ofCompany()
-            ->whereNotNull('next_follow_up')
-            ->where('status', '!=', 'won')
-            ->where('next_follow_up', '<=', now()->addDays(7))
-            ->orderBy('next_follow_up')
-            ->limit(8)
-            ->get();
+        $stats = $aggregates['stats'];
+        $leadsByStatus = $aggregates['leadsByStatus'];
+        $opportunitiesByStage = $aggregates['opportunitiesByStage'];
+        $offers = $aggregates['offers'];
+        $recentCustomers = $aggregates['recentCustomers'];
+        $recentLeads = $aggregates['recentLeads'];
+        $recentOffers = $aggregates['recentOffers'];
+        $followUps = $aggregates['followUps'];
 
         $allModules = [
             ['name' => 'CRM', 'slug' => 'crm', 'ready' => true, 'icon' => 'users', 'route' => 'customers.index', 'permission' => 'customers.view'],
@@ -123,25 +154,27 @@ class DashboardController extends Controller
         $aiInsights = $insightService->cachedAi($companyId);
         $aiEnabled = $insightService->gatewayEnabled();
 
-        $quotaService = app(AiQuotaService::class);
-        $aiQuota = $quotaService->check();
+        // Check the quota exactly once per request and share the result with
+        // both the quota widget and the trend analytics.
+        try {
+            $aiQuota = app(AiQuotaService::class)->check();
+        } catch (\Throwable $e) {
+            report($e);
+            $aiQuota = [];
+        }
 
         $primaryRole = $user->getRoleNames()->first();
         $isExecutive = in_array($primaryRole, ['super_admin', 'company_admin', 'ceo', 'cfo', 'coo']);
 
         $quickActions = $this->buildQuickActions($user, $roleNames);
 
-        $cashFlow = $this->cashFlowForecast();
-        $hrSummary = $this->hrSummary();
-        $agenticSummary = $this->agenticSummary();
+        $cashFlow = $aggregates['cashFlow'];
+        $hrSummary = $aggregates['hrSummary'];
+        $agenticSummary = $aggregates['agenticSummary'];
         $briefing = $this->buildBriefing($stats, $cashFlow, $hrSummary, $agenticSummary);
 
-        $analytics = [
-            'revenueVelocity' => $this->revenueVelocity(),
-            'pipelineConversion' => $this->pipelineConversion(),
-            'inventoryTurnover' => $this->inventoryTurnover(),
-            'aiQuotaTrend' => $this->aiQuotaTrend(),
-        ];
+        $analytics = $aggregates['analytics'];
+        $analytics['aiQuotaTrend'] = $this->aiQuotaTrend($aiQuota);
 
         return view('dashboard.index', compact(
             'stats', 'leadsByStatus', 'opportunitiesByStage', 'offers',
@@ -343,13 +376,19 @@ class DashboardController extends Controller
                 ->where('type', 'in')
                 ->where('created_at', '>=', now()->subDays(30))
                 ->sum('quantity');
-            $activeProducts = Product::ofCompany()->where('status', 'active')->count();
-            $lowStock = Product::ofCompany()->where('status', 'active')->get()->filter(fn ($p) => $p->isLowStock())->count();
+            // One grouped stock query for the whole catalogue (no per-product
+            // movement queries) via the shared request-scoped snapshot.
+            $companyId = CompanyContext::id();
+            $balances = StockService::balances($companyId);
+            $activeProducts = Product::ofCompany()->where('status', 'active')->get(['id', 'reorder_level']);
+            $lowStock = $activeProducts->filter(
+                fn (Product $product) => ($balances[$product->id] ?? 0.0) <= (float) $product->reorder_level
+            )->count();
             return [
                 'stock_out' => round($stockOut, 2),
                 'stock_in' => round($stockIn, 2),
                 'turnover' => $stockIn > 0 ? round(($stockOut / $stockIn) * 100, 1) : 0,
-                'active_products' => $activeProducts,
+                'active_products' => $activeProducts->count(),
                 'low_stock' => $lowStock,
             ];
         } catch (\Throwable) {
@@ -359,22 +398,59 @@ class DashboardController extends Controller
 
     /**
      * AI quota utilization trend (daily used vs limit) and current quota.
+     * The quota is supplied by the caller so it is resolved only once.
+     *
+     * @param  array<string, mixed>  $quota
      */
-    protected function aiQuotaTrend(): array
+    protected function aiQuotaTrend(array $quota): array
     {
         try {
-            $quotaService = app(AiQuotaService::class);
-            $quota = $quotaService->check();
             return [
                 'daily_used' => (int) ($quota['daily_used'] ?? 0),
                 'daily_limit' => (int) ($quota['daily_limit'] ?? 0),
                 'weekly_used' => (int) ($quota['weekly_used'] ?? 0),
                 'weekly_limit' => (int) ($quota['weekly_limit'] ?? 0),
-                'utilization' => $quota['daily_limit'] > 0 ? round(($quota['daily_used'] / $quota['daily_limit']) * 100, 1) : 0,
+                'utilization' => ($quota['daily_limit'] ?? 0) > 0 ? round(((float) ($quota['daily_used'] ?? 0) / (float) $quota['daily_limit']) * 100, 1) : 0,
             ];
         } catch (\Throwable) {
             return ['daily_used' => 0, 'daily_limit' => 0, 'weekly_used' => 0, 'weekly_limit' => 0, 'utilization' => 0];
         }
+    }
+
+    /**
+     * Safe defaults when an aggregate query is unavailable.
+     *
+     * @return array<string, mixed>
+     */
+    protected function emptyAggregates(): array
+    {
+        return [
+            'stats' => [
+                'customers' => 0, 'leads' => 0, 'leads_new' => 0,
+                'open_opportunities' => 0, 'pipeline_value' => 0.0, 'won_value' => 0.0,
+            ],
+            'leadsByStatus' => [],
+            'opportunitiesByStage' => [],
+            'offers' => ['total' => 0, 'green' => 0, 'yellow' => 0, 'red' => 0],
+            'recentCustomers' => collect(),
+            'recentLeads' => collect(),
+            'recentOffers' => collect(),
+            'followUps' => collect(),
+            'cashFlow' => ['months' => [], 'overdue_total' => 0.0, 'overdue_count' => 0],
+            'hrSummary' => [
+                'headcount' => 0, 'on_leave' => 0, 'pending_leave' => 0,
+                'onboarding_open' => 0, 'latest_payroll_net' => 0.0,
+                'latest_payroll_status' => null, 'latest_payroll_period' => null,
+            ],
+            'agenticSummary' => [
+                'rules' => 0, 'enabled' => 0, 'runs_today' => 0, 'rollbacks' => 0, 'success_rate' => 100.0,
+            ],
+            'analytics' => [
+                'revenueVelocity' => ['labels' => [], 'data' => []],
+                'pipelineConversion' => ['won' => 0, 'open' => 0, 'lost' => 0, 'conversion_rate' => 0, 'win_rate' => 0],
+                'inventoryTurnover' => ['stock_out' => 0, 'stock_in' => 0, 'turnover' => 0, 'active_products' => 0, 'low_stock' => 0],
+            ],
+        ];
     }
 
     /**

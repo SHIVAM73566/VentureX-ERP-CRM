@@ -18,10 +18,10 @@ WHAT YOU GET
 - Demo data seeder to explore instantly
 
 REQUIREMENTS
-PHP 8.3+, MySQL 5.7+ or MariaDB 10.6+, Apache or Nginx. Node.js 20+ optional for asset rebuild.
+PHP 8.4, MySQL 8.0+ or MariaDB 10.6+, Apache or Nginx. Node.js 20+ optional for asset rebuild.
 
 LICENSE
-Commercial license: unlimited domains, rebranding allowed, client projects allowed. Source code redistribution not permitted.
+MIT license: unlimited domains, rebranding allowed, client projects allowed. Source redistribution is permitted with the MIT copyright and license notice included.
 
 SUPPORT
 chaturvedishivam179@gmail.com / ocoronews@gmail.com - documentation and video tutorials included.
@@ -33,7 +33,7 @@ REFUND POLICY (SHORT VERSION FOR ANY PLATFORM)
 5-Day Money-Back Guarantee. Full refund if AI features unused; refunds prorated by API usage when AI features were consumed. Technical issues unresolved within 48 hours always fully refunded. Products shared or redistributed are not refundable. Contact chaturvedishivam179@gmail.com / ocoronews@gmail.com.
 
 TECH FACTS FOR DUE DILIGENCE
-- 339 PHPUnit tests passing, 464 assertions, 0 failures
+- Automated test suite passing; final v1.3.1 counts in SECURITY-AUDIT-REPORT.md
 - 0 syntax errors across 340+ PHP files
 - Public repo: https://github.com/SHIVAM73566/VentureX-ERP-CRM
-- Live GitHub Marketplace Action: venturex-deploy-action v1.0.0
+- GitHub deploy Action (Marketplace approval pending): venturex-deploy-action v1.3.1

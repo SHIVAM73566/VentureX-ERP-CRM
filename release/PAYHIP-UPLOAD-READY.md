@@ -106,7 +106,7 @@ Security & Administration
 
 TECHNOLOGY STACK
 
-- Backend: Laravel 13, PHP 8.3+
+- Backend: Laravel 13, PHP 8.4
 - Frontend: Blade, Alpine.js 3, Tailwind CSS v4
 - Database: MySQL 8.0+ / MariaDB 10.6+
 - Build: Vite 8.x, npm
@@ -119,8 +119,8 @@ TECHNOLOGY STACK
 
 SERVER REQUIREMENTS
 
-- PHP 8.3 with extensions: pdo_mysql, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, fileinfo, gd
-- MySQL 5.7+ or MariaDB 10.6+
+- PHP 8.4 with extensions: pdo_mysql, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, fileinfo, gd
+- MySQL 8.0+ or MariaDB 10.6+
 - Apache 2.4+ with mod_rewrite or Nginx 1.24+
 - Node.js 20+ for asset compilation
 - Composer 2.x for dependency management
@@ -136,7 +136,7 @@ QUICK START (5 minutes)
 5. Copy .env.example to .env
 6. Run: php artisan key:generate
 7. Create a MySQL database
-8. Run: php artisan migrate --seed
+8. Run: php artisan migrate --force, then complete /install in Clean Production Mode
 9. Run: php artisan serve
 10. Open http://localhost:8000
 
@@ -153,7 +153,7 @@ Docker Install:
 
 ---
 
-DEMO CREDENTIALS
+LOCAL DEMO ONLY — do not use in production
 
 Super Admin: demo_admin@example.com / Demo_Admin_2026!
 CEO: demo_manager@example.com / Demo_Manager_2026!
@@ -180,7 +180,7 @@ DOCUMENTATION INCLUDED
 
 LICENSE
 
-Commercial license included. You can:
+MIT License included. You can:
 - Use for personal and client projects
 - Customize and rebrand
 - Deploy on unlimited domains
@@ -208,7 +208,7 @@ WHY CHOOSE THIS PRODUCT
 - Docker support for modern deployment
 - Complete documentation and video tutorials
 - Clean, well-structured Laravel 13 code
-- Modern PHP 8.3 with type hints and attributes
+- Modern PHP 8.4 with type hints and attributes
 - Responsive design works on all devices
 - REST API for mobile and external integrations
 - WordPress plugin included for lead capture
@@ -258,14 +258,14 @@ Software > Business & Finance
 
 ## TAGS (Comma Separated)
 ```
-erp, crm, ai, laravel, business, inventory, accounting, sales, procurement, logistics, support, erp system, crm system, business management, php scripts, saas, white-label, customer relationship, invoice, quotation, purchase order, warehouse, shipping, help desk, support ticket, ai copilot, rest api, wordpress plugin, docker, web installer, laravel 13, php 8.3, tailwind css, alpine.js
+erp, crm, ai, laravel, business, inventory, accounting, sales, procurement, logistics, support, erp system, crm system, business management, php scripts, saas, white-label, customer relationship, invoice, quotation, purchase order, warehouse, shipping, help desk, support ticket, ai copilot, rest api, wordpress plugin, docker, web installer, laravel 13, php 8.4, tailwind css, alpine.js
 ```
 
 ---
 
 ## CONTENT FILE
 ```
-Upload: C:\MY_ERP\release\VentureX-ERP-CRM-v1.0.0-Payhip.zip
+Upload: C:\MY_ERP\release\VentureX-ERP-CRM-v1.3.1-Payhip.zip
 ```
 
 ---
@@ -287,7 +287,7 @@ Digital product (downloadable)
 | Cover Image | Dashboard of desktop.png |
 | Category | Software > Business & Finance |
 | Tags | erp, crm, ai, laravel, business, inventory, accounting, sales |
-| Content File | VentureX-ERP-CRM-v1.0.0-Payhip.zip |
+| Content File | VentureX-ERP-CRM-v1.3.1-Payhip.zip |
 | File Type | Digital product (downloadable) |
-| Version | 1.0.0 |
+| Version | 1.3.1 |
 ```

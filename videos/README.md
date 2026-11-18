@@ -40,9 +40,11 @@ Open `players/index.html` in your browser to browse all videos, scripts, and sub
 - Browser zoom: 100%
 - Terminal font: 14pt+
 - Clean desktop (no personal tabs/bookmarks visible)
-- Demo data pre-seeded (php artisan migrate --seed)
+- Demo data only for local previews via `/install` → **Demo Mode** (never production)
 
-## Demo Credentials
+## LOCAL DEMO ONLY — do not use in production
+
+These accounts exist only when Demo Mode is deliberately selected in a throwaway local install.
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -52,6 +54,6 @@ Open `players/index.html` in your browser to browse all videos, scripts, and sub
 
 ## Platform
 
-- **Product:** VentureX ERP & CRM v1.0.0
+- **Product:** VentureX ERP & CRM v1.3.1
 - **Stack:** Laravel 13 / PHP 8.4+ / MySQL 8 / Tailwind CSS 4 / Vite 8
 - **Codester Reference:** VentureX-ERP-2026-01483863236

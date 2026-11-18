@@ -19,17 +19,17 @@ https://shivamverse418.gumroad.com/l/arrgpcw
 
 ## _ Short Pitch (shown in feed)
 ```
-Complete Laravel 13 ERP+CRM with AI copilot that needs no API keys. Live on Gumroad today; listings for 11 more marketplaces written and ready. 339 tests passing.
+Complete Laravel 13 ERP+CRM with AI copilot that needs no API keys. Live on Gumroad today; listings for 11 more marketplaces written and ready. Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md.
 ```
 
 ## _ Full Description
 ```
 THE PRODUCT
-A production-ready ERP & CRM on Laravel 13 / PHP 8.3: CRM pipeline, inventory, procurement, double-entry accounting, logistics, support desk, role-based security with 2FA, and an AI Copilot that works without any API keys (local fallback + optional NVIDIA/Gemini/OpenAI/Claude routing).
+A production-ready ERP & CRM on Laravel 13 / PHP 8.4: CRM pipeline, inventory, procurement, double-entry accounting, logistics, support desk, role-based security with 2FA, and an AI Copilot that works without any API keys (local fallback + optional NVIDIA/Gemini/OpenAI/Claude routing).
 
 WHAT MAKES IT SELLABLE
 - Real code quality: 92 controllers, 74 models, REST API, 169 responsive views
-- 339 PHPUnit tests passing (buyers can verify on public GitHub)
+- Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md (buyers can verify on public GitHub)
 - Web installer wizard = non-technical customers can deploy it
 - Already selling on Gumroad at $89.99/license
 
@@ -38,7 +38,7 @@ WHAT THE BUYER GETS
 - Live Gumroad storefront transfer
 - Copy-paste listings for Lemon Squeezy, Paddle, FastSpring, PayPro Global, Payhip, Codester, Coderobotics, SellAnyCode, WooCommerce
 - Product Hunt launch kit (assets + copy)
-- GitHub Marketplace deploy Action (published)
+- GitHub deploy Action (Marketplace approval pending)
 - 17 screenshots, 15 tutorial videos with scripts, 23 doc files
 - 30 days handover support from me
 

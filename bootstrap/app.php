@@ -19,20 +19,22 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Spatie\Permission\Middleware\PermissionMiddleware;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Spatie\Permission\Middleware\RoleMiddleware;
 
 require_once __DIR__.'/../app/Support/helpers.php';
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
+        // Installer routes are always registered inside the web group so they
+        // receive sessions, CSRF protection and the security-header stack.
+        // InstallerGuard alone decides whether they may be reached.
+        web: [
+            __DIR__.'/../routes/web.php',
+            __DIR__.'/../routes/installer.php',
+        ],
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
-        then: function () {
-            if (! InstallerGuard::isInstalled() || request()->is('install*')) {
-                require __DIR__.'/../routes/installer.php';
-            }
-        },
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -75,6 +77,15 @@ return Application::configure(basePath: dirname(__DIR__))
             'current_password',
             'password',
             'password_confirmation',
+            'admin_password',
+            'admin_password_confirmation',
+            'db_password',
+            'mail_password',
+            'openai_api_key',
+            'gemini_api_key',
+            'anthropic_api_key',
+            'nvidia_api_key',
+            'rapidapi_key',
         ]);
 
         $exceptions->shouldRenderJsonWhen(
@@ -84,7 +95,23 @@ return Application::configure(basePath: dirname(__DIR__))
         // A stale/encrypted session or a rotated APP_KEY can produce a 419
         // token mismatch. Instead of showing a dead-end error page, clear the
         // broken session state and send the user back to sign in safely.
-        $exceptions->render(function (TokenMismatchException $e, Request $request) {
+        // Laravel converts TokenMismatchException to a 419 HttpException before
+        // renderable callbacks run, so match the prepared exception here.
+        $exceptions->render(function (HttpException $e, Request $request) {
+            if ($e->getStatusCode() !== 419) {
+                return null;
+            }
+
+            // Installer POSTs must fail loudly with 419 rather than silently
+            // redirecting, so a missing/stale CSRF token is never mistaken for
+            // a completed step.
+            if ($request->is('install', 'install/*')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your session expired. Please refresh the installer and try again.',
+                ], 419);
+            }
+
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json([
                     'success' => false,

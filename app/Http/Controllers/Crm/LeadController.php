@@ -9,6 +9,7 @@ use App\Models\Lead;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
+use App\Services\NumberGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -137,17 +138,9 @@ class LeadController extends Controller
 
     protected function nextNumber(): string
     {
-        $key = 'number:LEAD:'.CompanyContext::id();
-
-        $number = Cache::lock("lock:{$key}", 10)->block(5, function () use ($key) {
-            $last = Lead::ofCompany()->max('lead_number');
-            $next = ((int) str($last)->after('LEAD-')->value()) + 1;
-            Cache::put($key, $next, now()->addDays(2));
-
-            return $next;
-        });
-
-        return 'LEAD-'.str_pad((string) $number, 6, '0', STR_PAD_LEFT);
+        // Database-backed sequence with lockForUpdate(); no cache lock or
+        // cross-request counter that can drift under concurrent staff load.
+        return NumberGenerator::next('LEAD', 'leads');
     }
 
     protected function formData(Lead $lead): array

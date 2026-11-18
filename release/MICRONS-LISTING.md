@@ -20,9 +20,9 @@ AI-powered ERP & CRM (Laravel) sold as one-time licenses across 12 prepared sale
 ```
 Complete business operating system built on Laravel 13: CRM with Kanban pipeline, multi-warehouse inventory, procurement RFQs, double-entry accounting, logistics with landed costs, support tickets, and an AI Copilot that works WITHOUT API keys (local fallback, optional NVIDIA/Gemini/OpenAI/Claude routing).
 
-Quality signals: 339 passing automated tests, 0 syntax errors across 340+ files, public GitHub repo, full REST API, 23 docs, 15 video tutorials.
+Quality signals: Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md, 0 syntax errors across 340+ files, public GitHub repo, full REST API, 23 docs, 15 video tutorials.
 
-Sales infrastructure included: live Gumroad storefront plus copy-paste-ready listings for Lemon Squeezy, Paddle, FastSpring, PayPro Global, Payhip, Codester, Coderobotics, SellAnyCode, WooCommerce and a Product Hunt launch kit. A GitHub Marketplace deploy Action is already published.
+Sales infrastructure included: live Gumroad storefront plus copy-paste-ready listings for Lemon Squeezy, Paddle, FastSpring, PayPro Global, Payhip, Codester, Coderobotics, SellAnyCode, WooCommerce and a Product Hunt launch kit. A GitHub deploy Action is included; GitHub Marketplace approval is pending.
 
 Asking: $19,500 (asset sale). Includes source code transfer, brand assets, all listings, 30 days founder support.
 
@@ -35,7 +35,7 @@ Ideal buyer: indie hacker or small agency wanting a turnkey digital product with
 | MRR | $0 at launch (update weekly from Gumroad) |
 | Customers | Update count weekly |
 | Team | Solo founder |
-| Tech | Laravel 13, PHP 8.3, MySQL |
+| Tech | Laravel 13, PHP 8.4, MySQL |
 | Launched | August 2026 |
 | Reason for sale | Founder pursuing new venture |
 | Included | Code, repos, listings, videos, docs, support |

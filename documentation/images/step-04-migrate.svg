@@ -17,9 +17,9 @@
   <rect x="30" y="90" width="740" height="35" fill="#161b22" rx="8"/>
   <rect x="30" y="115" width="740" height="10" fill="#161b22"/>
   <circle cx="55" cy="107" r="5" fill="#ef4444"/><circle cx="72" cy="107" r="5" fill="#eab308"/><circle cx="89" cy="107" r="5" fill="#22c55e"/>
-  <text x="400" y="108" text-anchor="middle" fill="#8b949e" font-family="monospace" font-size="12">php artisan migrate --seed</text>
+  <text x="400" y="108" text-anchor="middle" fill="#8b949e" font-family="monospace" font-size="12">php artisan migrate --force</text>
 
-  <text x="50" y="150" fill="#7ee787" font-family="monospace" font-size="13">C:\Projects\venturex-erp&gt; <tspan fill="#c9d1d9">php artisan migrate --seed</tspan></text>
+  <text x="50" y="150" fill="#7ee787" font-family="monospace" font-size="13">C:\Projects\venturex-erp&gt; <tspan fill="#c9d1d9">php artisan migrate --force</tspan></text>
 
   <text x="50" y="180" fill="#79c0ff" font-family="monospace" font-size="12">   INFO  Running migrations.</text>
   <text x="50" y="205" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000001_create_companies_table</text>
@@ -28,8 +28,8 @@
   <text x="50" y="265" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000004_create_customers_table</text>
   <text x="50" y="285" fill="#8b949e" font-family="monospace" font-size="11">  2024_01_01_000005_create_products_table</text>
   <text x="50" y="305" fill="#8b949e" font-family="monospace" font-size="11">  ... (36 migrations total)</text>
-  <text x="50" y="330" fill="#79c0ff" font-family="monospace" font-size="12">   INFO  Seeding database.</text>
-  <text x="50" y="355" fill="#7ee787" font-family="monospace" font-size="13">✓ Database seeded successfully</text>
+  <text x="50" y="330" fill="#79c0ff" font-family="monospace" font-size="12">   INFO  Clean Production Mode — no demo data.</text>
+  <text x="50" y="355" fill="#7ee787" font-family="monospace" font-size="13">✓ Migrations completed successfully</text>
 
   <!-- Database tables grid -->
   <rect x="30" y="390" width="740" height="90" fill="#1e293b" stroke="#334155" stroke-width="1" rx="8"/>

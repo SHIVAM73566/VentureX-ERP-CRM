@@ -55,10 +55,10 @@ Complete AI-powered ERP & CRM on Laravel 13. CRM, inventory, procurement, accoun
 </ul>
 
 <h3>Requirements</h3>
-<p>PHP 8.3+, MySQL 5.7+, Apache/Nginx web server. Node.js 20+ optional for asset rebuild.</p>
+<p>PHP 8.4, MySQL 8.0+, Apache/Nginx web server. Node.js 20+ optional for asset rebuild.</p>
 
 <h3>License</h3>
-<p>Commercial license: unlimited domains, rebranding allowed, client projects allowed. Source code redistribution not permitted.</p>
+<p>MIT license: unlimited domains, rebranding allowed, client projects allowed. Source redistribution is permitted with the MIT copyright and license notice included.</p>
 ```
 
 ### _ Product Data (below description)
@@ -73,8 +73,8 @@ Complete AI-powered ERP & CRM on Laravel 13. CRM, inventory, procurement, accoun
 
 ### _ Downloadable Files
 ```
-Name: VentureX ERP CRM v1.0.0
-URL: upload C:/MY_ERP/release/VentureX-ERP-CRM-v1.0.0-Gumroad.zip via media picker
+Name: VentureX ERP CRM v1.3.1
+URL: upload C:/MY_ERP/release/VentureX-ERP-CRM-v1.3.1-Gumroad.zip via media picker
 Download limit: 5
 Expiry: 30 days
 ```

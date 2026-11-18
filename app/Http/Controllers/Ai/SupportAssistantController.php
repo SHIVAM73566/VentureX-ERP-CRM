@@ -7,14 +7,17 @@ use App\Models\AiRun;
 use App\Services\Ai\AiException;
 use App\Services\Ai\AiGateway;
 use App\Services\CompanyContext;
+use App\Services\UploadSecurityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SupportAssistantController extends Controller
 {
     public function __construct(
         protected AiGateway $gateway,
+        protected UploadSecurityService $uploads,
     ) {}
 
     public function index(): View
@@ -33,14 +36,20 @@ class SupportAssistantController extends Controller
 
         $data = $request->validate([
             'question' => ['required', 'string', 'max:5000'],
-            'screenshot' => ['nullable', 'file', 'max:5120', 'image'],
+            'screenshot' => ['nullable', 'file', 'max:5120', 'mimetypes:image/png,image/jpeg,image/webp'],
         ]);
 
         $question = $data['question'];
 
         $screenshotPath = null;
         if ($request->hasFile('screenshot')) {
-            $screenshotPath = $request->file('screenshot')->store('support-screenshots', 'public');
+            $file = $request->file('screenshot');
+            $extension = $this->uploads->validateImage($file, ['png', 'jpg', 'jpeg', 'webp']);
+            $screenshotPath = $file->storeAs(
+                'support-screenshots',
+                Str::uuid()->toString().'.'.$extension,
+                'private'
+            );
         }
 
         $user = $request->user();

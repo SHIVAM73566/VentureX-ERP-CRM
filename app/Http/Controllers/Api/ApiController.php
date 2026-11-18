@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\CompanyContext;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
 
@@ -47,8 +48,32 @@ class ApiController extends Controller
         return response()->json($response, $code);
     }
 
+    /**
+     * Clamp the requested page size before running a paginated query.
+     */
+    protected function perPage(Request $request, int $default = 15): int
+    {
+        return max(1, min(100, $request->integer('per_page', $default)));
+    }
+
+    /**
+     * Central response guard: even callers that build their paginator from an
+     * unvalidated request cannot return more than 100 records per page.
+     */
     protected function paginatedResponse(LengthAwarePaginator $paginator, string $message = 'Success'): JsonResponse
     {
+        $perPage = max(1, min(100, $paginator->perPage()));
+
+        if ($perPage !== $paginator->perPage()) {
+            $paginator = new LengthAwarePaginator(
+                array_slice($paginator->items(), 0, $perPage),
+                $paginator->total(),
+                $perPage,
+                $paginator->currentPage(),
+                ['path' => $paginator->path()]
+            );
+        }
+
         return response()->json([
             'success' => true,
             'message' => $message,

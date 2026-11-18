@@ -11,6 +11,7 @@ use App\Models\Supplier;
 use App\Services\AuditLogger;
 use App\Services\AutoJournalService;
 use App\Services\CompanyContext;
+use App\Services\DashboardCacheService;
 use App\Services\NumberGenerator;
 use App\Services\StockService;
 use Illuminate\Http\RedirectResponse;
@@ -82,6 +83,7 @@ class PurchaseOrderController extends Controller
                 return $order;
             });
 
+            DashboardCacheService::forget((int) $order->company_id);
             AuditLogger::created($order);
 
             return redirect()->route('procurement.orders.show', $order)->with('success', 'Purchase order created.');
@@ -138,7 +140,16 @@ class PurchaseOrderController extends Controller
         // Block financial edits on received orders
         if (in_array($order->status, ['received'])) {
             $allowed = ['notes' => $data['notes'] ?? $order->notes];
-            $order->update($allowed);
+            DB::transaction(function () use ($order, $allowed) {
+                $locked = PurchaseOrder::ofCompany((int) $order->company_id)
+                    ->whereKey($order->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $locked->update($allowed);
+                $order->refresh();
+            });
+            DashboardCacheService::forget((int) $order->company_id);
             AuditLogger::updated($order);
 
             return redirect()->route('procurement.orders.show', $order)->with('success', 'Order notes updated.');
@@ -159,17 +170,26 @@ class PurchaseOrderController extends Controller
 
         try {
             DB::transaction(function () use ($order, $data, $oldStatus) {
-                $order->update([...$data, ...$this->totals($data)]);
-                $this->syncItems($order, $data['items'] ?? []);
+                // Serialise approvals and stock postings on the order row.
+                $locked = PurchaseOrder::ofCompany((int) $order->company_id)
+                    ->whereKey($order->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-                $newStatus = $data['status'] ?? $order->status;
+                $locked->update([...$data, ...$this->totals($data)]);
+                $this->syncItems($locked, $data['items'] ?? []);
+
+                $newStatus = $data['status'] ?? $locked->status;
                 if ($newStatus === 'received' && $oldStatus !== 'received') {
-                    StockService::recordPurchaseReceipt($order);
-                    AutoJournalService::recordPurchaseOrder($order);
+                    StockService::recordPurchaseReceipt($locked);
+                    AutoJournalService::recordPurchaseOrder($locked);
                 } elseif ($newStatus !== 'received' && $oldStatus === 'received') {
-                    StockService::reversePurchaseReceipt($order);
+                    StockService::reversePurchaseReceipt($locked);
                 }
+
+                $order->refresh();
             });
+            DashboardCacheService::forget((int) $order->company_id);
             AuditLogger::updated($order);
         } catch (\Exception $e) {
             report($e);
@@ -197,10 +217,23 @@ class PurchaseOrderController extends Controller
             return back()->with('error', 'Cannot delete a purchase order with recorded payments.');
         }
 
-        DB::transaction(function () use ($order) {
-            $order->items()->delete();
-            $order->delete();
-        });
+        try {
+            DB::transaction(function () use ($order) {
+                $locked = PurchaseOrder::ofCompany((int) $order->company_id)
+                    ->whereKey($order->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $locked->items()->delete();
+                $locked->delete();
+            });
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'Failed to delete purchase order.');
+        }
+
+        DashboardCacheService::forget((int) $order->company_id);
         AuditLogger::deleted($order);
 
         return redirect()->route('procurement.orders.index')->with('success', 'Purchase order deleted.');

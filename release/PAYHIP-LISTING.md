@@ -136,7 +136,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ### TECHNOLOGY STACK
 
-- Backend: Laravel 13, PHP 8.3+
+- Backend: Laravel 13, PHP 8.4
 - Frontend: Blade, Alpine.js 3, Tailwind CSS v4
 - Database: MySQL 8.0+ / MariaDB 10.6+
 - Build: Vite 8.x, npm
@@ -149,8 +149,8 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ### SERVER REQUIREMENTS
 
-- PHP 8.3 with extensions: pdo_mysql, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, fileinfo, gd
-- MySQL 5.7+ or MariaDB 10.6+
+- PHP 8.4 with extensions: pdo_mysql, mbstring, openssl, tokenizer, xml, ctype, json, bcmath, fileinfo, gd
+- MySQL 8.0+ or MariaDB 10.6+
 - Apache 2.4+ with mod_rewrite or Nginx 1.24+
 - Node.js 20+ for asset compilation
 - Composer 2.x for dependency management
@@ -167,7 +167,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 5. Copy `.env.example` to `.env`
 6. Run `php artisan key:generate`
 7. Create a MySQL database
-8. Run `php artisan migrate --seed`
+8. Run `php artisan migrate --force`, then complete `/install` in Clean Production Mode
 9. Run `php artisan serve`
 10. Open http://localhost:8000
 
@@ -184,7 +184,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ---
 
-### DEMO CREDENTIALS
+### LOCAL DEMO ONLY — do not use in production
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -213,7 +213,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ### LICENSE
 
-Commercial license included. You can:
+MIT License included. You can:
 - Use for personal and client projects
 - Customize and rebrand
 - Deploy on unlimited domains
@@ -233,7 +233,7 @@ You cannot:
 ---
 
 ## FILES TO UPLOAD
-VentureX-ERP-CRM-v1.0.0-Payhip.zip
+VentureX-ERP-CRM-v1.3.1-Payhip.zip
 
 ## CATEGORY
 Software > Business & Finance

@@ -2,7 +2,7 @@
 
 **VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
-> Version 1.0.0 | MySQL 8.0 Configuration and Management
+> Version 1.3.1 | MySQL 8 Configuration and Management
 
 ---
 
@@ -285,26 +285,27 @@ php artisan migrate:rollback --step=5
 # Rollback all migrations (destructive)
 php artisan migrate:reset
 
-# Fresh start: drop all tables and re-run migrations
-php artisan migrate:fresh --seed
+# Fresh start: drop all tables and re-run migrations (destructive)
+php artisan migrate:fresh --force
 ```
 
 ---
 
 ## Seeding
 
-### Running Seeders
+> **Production rule:** use `/install` or `php artisan migrate --force`. Do not use `migrate --seed` in production because legacy seeders can create demo accounts/data. The following commands are for local or explicitly approved setup tasks only.
+
+### Running Seeders (local / approved only)
 
 ```bash
-# Run all seeders (included with migrate)
+# Do not use in production: can include demo data
 php artisan migrate --seed
 
-# Run seeders only
-php artisan db:seed
-
-# Run a specific seeder
+# Run a specific non-demo seeder
 php artisan db:seed --class=CompanySeeder
-php artisan db:seed --class=DemoDataSeeder
+
+# LOCAL DEMO ONLY: creates known demo credentials
+php artisan db:seed --class=DemoCredentialSeeder --force
 ```
 
 ### What the Seeders Create
@@ -317,19 +318,19 @@ Creates the default company:
 
 #### UserSeeder
 
-Creates demo accounts with random passwords for security. To create demo accounts with known passwords:
+Creates demo accounts with random passwords. To create the **LOCAL DEMO ONLY** accounts with known passwords:
 
 ```bash
-php artisan db:seed --class=DemoCredentialSeeder
+php artisan db:seed --class=DemoCredentialSeeder --force
 ```
 
-| Role          | Email                       | Password          |
-|---------------|-----------------------------|-------------------|
-| Demo Admin    | demo_admin@example.com      | Demo_Admin_2026!  |
-| Demo Manager  | demo_manager@example.com    | Demo_Manager_2026!|
-| Demo Sales    | demo_sales@example.com      | Demo_Sales_2026!  |
+| Role | Email | Password |
+|---|---|---|
+| Demo Admin | `demo_admin@example.com` | `Demo_Admin_2026!` |
+| Demo Manager | `demo_manager@example.com` | `Demo_Manager_2026!` |
+| Demo Sales | `demo_sales@example.com` | `Demo_Sales_2026!` |
 
-> —¸ Change all passwords before production use.
+> **LOCAL DEMO ONLY:** never use these accounts on a public or shared server. Remove them or reinstall with Clean Production Mode before production use.
 
 #### RoleSeeder
 
@@ -385,15 +386,15 @@ Creates demo data:
 - Sample journal entries
 - Bank account records
 
-### Re-Seeding
+### Resetting (local/staging only)
 
-To reset and re-seed the database:
+To reset the schema:
 
 ```bash
-php artisan migrate:fresh --seed
+php artisan migrate:fresh --force
 ```
 
-> Warning: This destroys all existing data.
+> Warning: This destroys all existing data. Re-run `/install` or approved non-demo seeders afterwards; do not use `--seed` in production.
 
 ### Custom Seeders
 

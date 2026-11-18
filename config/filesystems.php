@@ -47,6 +47,17 @@ return [
             'report' => false,
         ],
 
+        // Explicit private disk for selfies, support screenshots and other
+        // non-public uploads. Kept separate from the public disk so these
+        // files can never be served through the /storage symlink.
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+            'serve' => false,
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

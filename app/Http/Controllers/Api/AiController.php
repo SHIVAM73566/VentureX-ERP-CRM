@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\AiConversation;
 use App\Models\AiMessage;
+use App\Models\AiRun;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Lead;
@@ -24,6 +25,8 @@ class AiController extends ApiController
 
     public function conversations(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', AiRun::class);
+
         $query = AiConversation::query()
             ->where('user_id', auth()->id())
             ->with('messages')
@@ -34,6 +37,8 @@ class AiController extends ApiController
 
     public function storeConversation(Request $request): JsonResponse
     {
+        $this->authorize('create', AiRun::class);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'skill_slug' => 'nullable|string|max:100',
@@ -51,7 +56,9 @@ class AiController extends ApiController
 
     public function showConversation(AiConversation $conversation): JsonResponse
     {
-        if ($conversation->user_id !== auth()->id()) {
+        $this->authorize('viewAny', AiRun::class);
+
+        if (! $this->ownsConversation($conversation)) {
             return $this->errorResponse('Unauthorized', 403);
         }
 
@@ -60,7 +67,9 @@ class AiController extends ApiController
 
     public function sendMessage(Request $request, AiConversation $conversation): JsonResponse
     {
-        if ($conversation->user_id !== auth()->id()) {
+        $this->authorize('create', AiRun::class);
+
+        if (! $this->ownsConversation($conversation)) {
             return $this->errorResponse('Unauthorized', 403);
         }
 
@@ -138,6 +147,15 @@ class AiController extends ApiController
         }
     }
 
+    /** A conversation is usable only by its owner inside the same tenant. */
+    protected function ownsConversation(AiConversation $conversation): bool
+    {
+        $user = auth()->user();
+
+        return $conversation->user_id === $user?->id
+            && (int) $conversation->company_id === (int) $user?->company_id;
+    }
+
     protected function systemPrompt(): string
     {
         $user = auth()->user();
@@ -152,6 +170,8 @@ class AiController extends ApiController
 
     public function insights(Request $request): JsonResponse
     {
+        $this->authorize('viewAny', AiRun::class);
+
         $user = auth()->user();
 
         $data = [

@@ -16,11 +16,11 @@
 
 | Platform | File | Size | Location |
 |----------|------|------|----------|
-| Gumroad | VentureX-ERP-CRM-v1.0.0-Gumroad.zip | 5.55 MB | C:\MY_ERP\release\ |
-| Payhip | VentureX-ERP-CRM-v1.0.0-Payhip.zip | 5.55 MB | C:\MY_ERP\release\ |
+| Gumroad | VentureX-ERP-CRM-v1.3.1-Gumroad.zip | 5.55 MB | C:\MY_ERP\release\ |
+| Payhip | VentureX-ERP-CRM-v1.3.1-Payhip.zip | 5.55 MB | C:\MY_ERP\release\ |
 | GitHub | N/A (use Gumroad/Payhip link) | - | See GITHUB-MARKETPLACE-LISTING.md |
-| Codester | VentureX-ERP-CRM-v1.0.0-Codester.zip | 5.55 MB | C:\MY_ERP\release\ |
-| SellAnyCode | VentureX-ERP-CRM-v1.0.0-SellAnyCode.zip | 10.96 MB | C:\MY_ERP\release\ |
+| Codester | VentureX-ERP-CRM-v1.3.1-Codester.zip | 5.55 MB | C:\MY_ERP\release\ |
+| SellAnyCode | VentureX-ERP-CRM-v1.3.1-SellAnyCode.zip | 10.96 MB | C:\MY_ERP\release\ |
 
 ## Listing Content Files
 
@@ -39,11 +39,11 @@
 ### Direct-Checkout Platforms (Merchant of Record)
 | Platform | Listing File | ZIP to Upload | Status |
 |----------|-------------|---------------|--------|
-| Lemon Squeezy | LEMON-SQUEEZY-LISTING.md | VentureX-ERP-CRM-v1.0.0-Gumroad.zip | Ready - needs account + approval |
-| Paddle | PADDLE-LISTING.md | VentureX-ERP-CRM-v1.0.0-Gumroad.zip | Ready - business verification required |
-| FastSpring | FASTSPRING-LISTING.md | VentureX-ERP-CRM-v1.0.0-Gumroad.zip | Ready - seller verification required |
-| PayPro Global | PAYPRO-GLOBAL-LISTING.md | VentureX-ERP-CRM-v1.0.0-Gumroad.zip | Ready - application review |
-| WooCommerce (own store) | WOOCOMMERCE-LISTING.md | VentureX-ERP-CRM-v1.0.0-Gumroad.zip | Ready - needs WP hosting + PayPal/Stripe |
+| Lemon Squeezy | LEMON-SQUEEZY-LISTING.md | VentureX-ERP-CRM-v1.3.1-Gumroad.zip | Ready - needs account + approval |
+| Paddle | PADDLE-LISTING.md | VentureX-ERP-CRM-v1.3.1-Gumroad.zip | Ready - business verification required |
+| FastSpring | FASTSPRING-LISTING.md | VentureX-ERP-CRM-v1.3.1-Gumroad.zip | Ready - seller verification required |
+| PayPro Global | PAYPRO-GLOBAL-LISTING.md | VentureX-ERP-CRM-v1.3.1-Gumroad.zip | Ready - application review |
+| WooCommerce (own store) | WOOCOMMERCE-LISTING.md | VentureX-ERP-CRM-v1.3.1-Gumroad.zip | Ready - needs WP hosting + PayPal/Stripe |
 
 ### Launch & Marketplace Channels
 | Platform | Listing File | Notes |

@@ -1,0 +1,2 @@
+name,sku,sell_price,cost_price,category,unit,tax_rate,warehouse_code,opening_quantity,unit_cost,valuation_date,min_stock,max_stock,notes
+"Sample Product","SKU-1001","25.00","15.00","General","pcs","0","MAIN","100","15.00","2026-01-01","10","","Replace this row with your data."

@@ -2,7 +2,7 @@
 
 **VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
-> Version 1.0.0 | Production Deployment Instructions
+> Version 1.3.1 | Production Deployment Instructions (PHP 8.4 / MySQL 8)
 
 ---
 
@@ -569,13 +569,15 @@ networks:
 
 ### Deploy with Docker
 
+The canonical local Compose file is the bundled `docker/docker-compose.yml`. Run it with `--project-directory .` from the project root so relative volumes resolve correctly. `docker-compose.prod.yml` is an optional override only.
+
 ```bash
 # Build and start all services
 docker compose -f docker-compose.prod.yml up -d --build
 
 # Run initial setup
 docker compose -f docker-compose.prod.yml exec app php artisan key:generate
-docker compose -f docker-compose.prod.yml exec app php artisan migrate --seed
+docker compose -f docker/docker-compose.yml --project-directory . exec app php artisan migrate --force
 docker compose -f docker-compose.prod.yml exec app php artisan storage:link
 docker compose -f docker-compose.prod.yml exec app npm run build
 

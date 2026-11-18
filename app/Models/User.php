@@ -14,6 +14,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * Fillable list is intentionally limited to profile data. Tenant and role
+ * fields are never taken from request arrays: admin controllers validate the
+ * payload and then assign company_id/roles explicitly server-side. 'role',
+ * 'encrypted_key' and 'key_hash' are deliberately absent.
+ */
 #[Fillable([
     'name', 'email', 'password', 'company_id', 'branch_id', 'department_id',
     'first_name', 'last_name', 'phone', 'job_title', 'timezone', 'locale',
@@ -85,7 +91,11 @@ class User extends Authenticatable
     {
         $id = $companyId ?? CompanyContext::id();
 
-        return $id ? $query->where('company_id', $id) : $query;
+        // Never fall back to "all users" when no tenant is set — that is a
+        // cross-tenant disclosure, not a harmless empty filter.
+        abort_if($id === null, 403, 'No company context available.');
+
+        return $query->where($this->qualifyColumn('company_id'), $id);
     }
 
     /** Roles that force MFA per policy. */

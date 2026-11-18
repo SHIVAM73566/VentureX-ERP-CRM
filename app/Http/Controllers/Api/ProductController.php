@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
+use App\Services\DashboardCacheService;
+use App\Services\StockService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends ApiController
 {
@@ -25,7 +28,17 @@ class ProductController extends ApiController
             ->when($request->filled('category'), fn ($q) => $q->where('category', $request->string('category')))
             ->latest();
 
-        return $this->paginatedResponse($query->paginate($request->integer('per_page', 15)));
+        $products = $query->paginate($this->perPage($request));
+
+        // One grouped ledger query for the whole page instead of one per row.
+        $balances = StockService::balances($this->companyId());
+        foreach ($products->items() as $product) {
+            $product->setAttribute('available_stock', (float) ($balances[$product->id] ?? 0));
+            $product->setAttribute('is_low_stock', $product->reorder_level !== null
+                && (float) ($balances[$product->id] ?? 0) <= (float) $product->reorder_level);
+        }
+
+        return $this->paginatedResponse($products);
     }
 
     public function store(Request $request): JsonResponse
@@ -47,11 +60,19 @@ class ProductController extends ApiController
             'notes' => 'nullable|string',
         ]);
 
-        $product = Product::create([
-            ...$validated,
-            'company_id' => auth()->user()->company_id,
-            'created_by' => auth()->id(),
-        ]);
+        try {
+            $product = DB::transaction(fn () => Product::create([
+                ...$validated,
+                'company_id' => auth()->user()->company_id,
+                'created_by' => auth()->id(),
+            ]));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return $this->errorResponse('Failed to create product.', 500);
+        }
+
+        DashboardCacheService::forget((int) $product->company_id);
 
         return $this->successResponse($product->load('unit', 'supplier', 'taxRate'), 'Product created', 201);
     }
@@ -92,7 +113,15 @@ class ProductController extends ApiController
             'notes' => 'nullable|string',
         ]);
 
-        $product->update($validated);
+        try {
+            DB::transaction(fn () => $product->update($validated));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return $this->errorResponse('Failed to update product.', 500);
+        }
+
+        DashboardCacheService::forget((int) $product->company_id);
 
         return $this->successResponse($product->fresh()->load('unit', 'supplier', 'taxRate'), 'Product updated');
     }
@@ -105,7 +134,15 @@ class ProductController extends ApiController
             return $this->errorResponse('Not found', 404);
         }
 
-        $product->delete();
+        try {
+            DB::transaction(fn () => $product->delete());
+        } catch (\Throwable $e) {
+            report($e);
+
+            return $this->errorResponse('Failed to delete product.', 500);
+        }
+
+        DashboardCacheService::forget((int) $product->company_id);
 
         return $this->successResponse(null, 'Product deleted');
     }

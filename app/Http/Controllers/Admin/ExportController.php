@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\GenerateExportJob;
 use App\Models\ExportRequest;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
@@ -56,10 +57,12 @@ class ExportController extends Controller
             return back()->with('success', 'Export requested. A privileged user must approve it before it is generated.');
         }
 
-        $this->exports->generate($export);
+        $this->generateExport($export);
         AuditLogger::log('export_requested', 'exports', null, null, ['export_id' => $export->export_id, 'data_type' => $export->data_type]);
 
-        return back()->with('success', 'Export generated. Download it from the table below.');
+        return back()->with('success', config('venturex.queue_heavy_tasks', false)
+            ? 'Export queued. It will appear in the table once the queue worker finishes.'
+            : 'Export generated. Download it from the table below.');
     }
 
     public function approve(Request $request, ExportRequest $export): RedirectResponse
@@ -76,12 +79,14 @@ class ExportController extends Controller
         }
 
         $this->exports->approve($export, auth()->user());
-        $this->exports->generate($export);
+        $this->generateExport($export);
 
         AuditLogger::log('export_approved', 'exports', null, null, ['export_id' => $export->export_id]);
         SecurityEventService::record('export', 'export_approved', "Export {$export->export_id} approved", 'info');
 
-        return back()->with('success', 'Export approved and generated.');
+        return back()->with('success', config('venturex.queue_heavy_tasks', false)
+            ? 'Export approved and queued for generation.'
+            : 'Export approved and generated.');
     }
 
     public function reject(Request $request, ExportRequest $export): RedirectResponse
@@ -128,6 +133,21 @@ class ExportController extends Controller
         SecurityEventService::record('export', 'export_downloaded', "Export {$export->export_id} downloaded", 'info');
 
         return redirect()->away($url);
+    }
+
+    /**
+     * Heavy exports are queued when the deployment enables a worker; the
+     * default synchronous path keeps small/single-host installs dependency-free.
+     */
+    protected function generateExport(ExportRequest $export): void
+    {
+        if (config('venturex.queue_heavy_tasks', false)) {
+            GenerateExportJob::dispatch($export->id);
+
+            return;
+        }
+
+        $this->exports->generate($export);
     }
 
     public function destroy(ExportRequest $export): RedirectResponse

@@ -2,18 +2,22 @@
 
 /**
  * Plugin Name: VentureX ERP & CRM Connector
- * Description: Connect your WordPress site to VentureX ERP & CRM
- * Version: 1.0.0
- * Author: VentureX
- * Requires at least: 5.0
- * Tested up to: 6.6
- * License: Proprietary
+ * Description: Connect a WordPress site to VentureX ERP & CRM v1.3.1 over HTTPS using a Sanctum API token.
+ * Version: 1.3.1
+ * Author: Shivam Chaturvedi — VentureX ERP & CRM
+ * Requires at least: 5.8
+ * Tested up to: 6.8
+ * Requires PHP: 7.4
+ * License: MIT
+ * License URI: https://opensource.org/licenses/MIT
+ * Text Domain: venturex-erp-connector
  */
+
 if (! defined('ABSPATH')) {
     exit;
 }
 
-define('VENTUREX_VERSION', '1.0.0');
+define('VENTUREX_VERSION', '1.3.1');
 define('VENTUREX_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('VENTUREX_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -38,21 +42,97 @@ function venturex_activate()
 
 function venturex_deactivate()
 {
-    // Cleanup if needed
+    // Keep configuration so reactivation does not require re-entering the token.
 }
 
+/**
+ * Derive an authenticated encryption key from WordPress salt constants.
+ * The token is never stored using the home URL as a key/IV.
+ */
+function venturex_crypto_key()
+{
+    if (! defined('AUTH_KEY') || ! defined('LOGGED_IN_KEY')) {
+        return false;
+    }
+    if (AUTH_KEY === '' || LOGGED_IN_KEY === '' || ! function_exists('hash_hkdf')) {
+        return false;
+    }
+
+    return hash_hkdf('sha256', AUTH_KEY.'|'.LOGGED_IN_KEY, 32, 'venturex/api-token/v1');
+}
+
+/**
+ * AES-256-GCM authenticated encryption. Requires OpenSSL and WordPress salts.
+ * Format: vx1:<base64 iv>.<base64 tag>.<base64 ciphertext>
+ */
 function venturex_encrypt($data)
 {
-    $key = home_url();
-    $iv = substr(md5($key), 0, 16);
+    $key = venturex_crypto_key();
+    if (! $key || ! function_exists('openssl_encrypt')) {
+        return '';
+    }
 
-    return base64_encode(openssl_encrypt($data, 'AES-128-CBC', $iv, 0, $iv));
+    try {
+        $iv = random_bytes(12);
+    } catch (Exception $e) {
+        return '';
+    }
+
+    $tag = '';
+    $ciphertext = openssl_encrypt((string) $data, 'aes-256-gcm', $key, OPENSSL_RAW_DATA, $iv, $tag);
+    if ($ciphertext === false || $tag === '') {
+        return '';
+    }
+
+    return 'vx1:'.base64_encode($iv).'.'.base64_encode($tag).'.'.base64_encode($ciphertext);
 }
 
+/**
+ * Decrypt only the authenticated v1 format. Legacy tokens are intentionally
+ * not accepted; re-enter the token in the settings page after upgrading.
+ */
 function venturex_decrypt($data)
 {
-    $key = home_url();
-    $iv = substr(md5($key), 0, 16);
+    $key = venturex_crypto_key();
+    if (! $key || ! function_exists('openssl_decrypt') || ! is_string($data) || strpos($data, 'vx1:') !== 0) {
+        return '';
+    }
 
-    return openssl_decrypt(base64_decode($data), 'AES-128-CBC', $iv, 0, $iv);
+    $parts = explode('.', substr($data, 4));
+    if (count($parts) !== 3) {
+        return '';
+    }
+
+    $iv = base64_decode($parts[0], true);
+    $tag = base64_decode($parts[1], true);
+    $ciphertext = base64_decode($parts[2], true);
+    if ($iv === false || $tag === false || $ciphertext === false || strlen($iv) !== 12 || strlen($tag) !== 16) {
+        return '';
+    }
+
+    $plaintext = openssl_decrypt($ciphertext, 'aes-256-gcm', $key, OPENSSL_RAW_DATA, $iv, $tag);
+    if ($plaintext === false) {
+        return '';
+    }
+
+    return $plaintext;
+}
+
+/**
+ * HTTPS is required for remote API URLs. Localhost is allowed for development.
+ */
+function venturex_is_allowed_api_url($url)
+{
+    $parts = wp_parse_url((string) $url);
+    if (! is_array($parts) || empty($parts['scheme']) || empty($parts['host'])) {
+        return false;
+    }
+
+    $scheme = strtolower($parts['scheme']);
+    $host = strtolower($parts['host']);
+    if ($scheme === 'https') {
+        return true;
+    }
+
+    return in_array($host, ['localhost', '127.0.0.1', '::1'], true);
 }

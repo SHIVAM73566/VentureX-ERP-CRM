@@ -23,7 +23,7 @@ use Tests\TestCase;
  * - one key input per provider; no base URL / path / auth fields accepted
  * - keys are encrypted at rest, fingerprinted, masked and never flashed back
  * - prefix validation keeps a vendor key out of the wrong provider
- * - every write requires step-up auth and is audit logged with the tail only
+ * - every write requires step-up auth and is audit logged without key material
  * - hardcoded endpoints/models come from config, not the browser
  */
 class AiProviderOnboardingTest extends TestCase
@@ -213,8 +213,9 @@ class AiProviderOnboardingTest extends TestCase
             ->get(route('admin.settings.index', ['tab' => 'ai']));
 
         $response->assertOk()
-            ->assertSee(substr($this->providers['nvidia']['key'], -4))
-            ->assertDontSee($this->providers['nvidia']['key']);
+            ->assertSee('********')
+            ->assertDontSee($this->providers['nvidia']['key'])
+            ->assertDontSee(substr($this->providers['nvidia']['key'], -4));
 
         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
         $this->assertStringContainsString('no-cache', (string) $response->headers->get('Cache-Control'));
@@ -346,7 +347,9 @@ class AiProviderOnboardingTest extends TestCase
 
         $this->assertNotNull($log);
         $this->assertStringNotContainsString($key, (string) json_encode($log->new_value));
-        $this->assertSame(substr($key, -4), $log->new_value['key_tail']);
+        $this->assertArrayNotHasKey('key_tail', $log->new_value);
+        $this->assertArrayNotHasKey('key_hint', $log->new_value);
+        $this->assertStringNotContainsString(substr($key, -4), (string) json_encode($log->new_value));
         $this->assertSame('anthropic', $log->new_value['provider']);
     }
 
@@ -381,7 +384,8 @@ class AiProviderOnboardingTest extends TestCase
         $message = (string) session('success');
         $this->assertStringContainsString('configuration check passed', $message);
         $this->assertStringNotContainsString($this->providers['gemini']['key'], $message);
-        $this->assertStringContainsString(substr($this->providers['gemini']['key'], -4), $message);
+        $this->assertStringNotContainsString(substr($this->providers['gemini']['key'], -4), $message);
+        $this->assertStringNotContainsString(substr($this->providers['gemini']['key'], 0, 6), $message);
     }
 
     public function test_configuration_check_without_a_key_returns_an_error(): void

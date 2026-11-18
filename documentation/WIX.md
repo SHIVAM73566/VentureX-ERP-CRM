@@ -1,6 +1,6 @@
 # Wix Integration Guide for VentureX ERP & CRM
 
-> **API accuracy notice (v1.3.0):** Examples in this guide use the current `/api` namespace. Submit Wix forms to `/api/crm/leads`, sync contacts with `/api/crm/contacts`, create support cases with `/api/support/tickets`, and create a Sanctum token with `POST /api/tokens` after signing in. There is no `health`, `inquiries`, or `webhooks/wix` API endpoint in this release; replace those with an implemented `/api/crm/...` or `/api/support/...` route, or call your own webhook receiver. See `API-SETUP.md` and `routes/api.php` for authoritative examples.
+> **API accuracy notice (v1.3.1):** Examples in this guide use the current `/api` namespace. Submit Wix forms to `/api/crm/leads`, sync contacts with `/api/crm/contacts`, create support cases with `/api/support/tickets`, and create a Sanctum token with `POST /api/tokens` after signing in. There is no `health`, `inquiries`, or `webhooks/wix` API endpoint in this release; replace those with an implemented `/api/crm/...` or `/api/support/...` route, or call your own webhook receiver. See `API-SETUP.md` and `routes/api.php` for authoritative examples.
 
 ## Important: Wix Cannot Run Laravel Directly
 

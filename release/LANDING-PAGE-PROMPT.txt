@@ -4,12 +4,12 @@ You are an elite web designer and conversion copywriter. Build me a COMPLETE, ST
 
 ═══════════════ PRODUCT FACTS (USE THESE EXACTLY) ═══════════════
 • Name: VentureX ERP & CRM — AI-Powered Business Operating System
-• Built on: Laravel 13, PHP 8.3+, MySQL, Tailwind CSS v4, Alpine.js, REST API
+• Built on: Laravel 13, PHP 8.4, MySQL, Tailwind CSS v4, Alpine.js, REST API
 • One-time price: $89.99 (Professional $150.22, Enterprise $350, discount code SAVE29)
 • Buy link (use on every CTA button): https://shivamverse418.gumroad.com/l/arrgpcw
 • GitHub: https://github.com/SHIVAM73566/VentureX-ERP-CRM
 • Support email: chaturvedishivam179@gmail.com / ocoronews@gmail.com
-• Key stats to display: 92 Controllers • 74 Models • 169 Views • 44 Services • 339 Tests Passing • 23 Docs Files • 15 Video Tutorials
+• Key stats to display: 92 Controllers • 74 Models • 169 Views • 44 Services • Tests (final counts in audit report) Passing • 23 Docs Files • 15 Video Tutorials
 
 CORE MODULES TO SHOWCASE (with short benefit lines):
 1. CRM & Sales — leads, Kanban pipeline drag-and-drop, quotations PDF, invoices, sales orders
@@ -45,15 +45,15 @@ All sections must read from MEDIA_CONFIG. If a value is empty string, hide that 
 
 ═══════════════ PAGE STRUCTURE (IN THIS ORDER) ═══════════════
 1. Sticky navbar: logo, links (Features, Demos, Install, Use Cases, Blog, FAQ), light/dark toggle, CTA "Buy Now $89.99"
-2. HERO: badge "v1.0.0 • Laravel 13 • PHP 8.3", H1 "Run Your Entire Business From One AI-Powered Dashboard", subheadline, dual CTA (Buy Now / Watch Live Demo scrolls to videos), trust row (500+ businesses, 5-Day Money-Back, Instant Download, Lifetime License), 3D floating dashboard visual with live-playing muted hero video inside a browser-chrome frame + floating stat chips
+2. HERO: badge "v1.3.1 • Laravel 13 • PHP 8.4", H1 "Run Your Entire Business From One AI-Powered Dashboard", subheadline, dual CTA (Buy Now / Watch Live Demo scrolls to videos), trust row (500+ businesses, 5-Day Money-Back, Instant Download, MIT License (perpetual)), 3D floating dashboard visual with live-playing muted hero video inside a browser-chrome frame + floating stat chips
 3. Stats bar: animated counters of key stats above
 4. Modules showcase: tabbed interface (click each module tab to switch panel) OR bento grid — every module above with icon + 4 benefit bullets
 5. AI Copilot spotlight: dark gradient panel, animated terminal-style mock conversation between user and AI Copilot with typing dots animation, provider chips (NVIDIA/Gemini/OpenAI/Claude), big highlight "Works WITHOUT any API keys"
 6. LIVE DEMO THEATER: two tab groups — "Product Demos" grid (demoVideos) and "Installation Guides" grid (installVideos); each card = thumbnail facade + duration + title; note under section: "Watch real screens — nothing staged"
 7. Screenshots gallery: horizontal snap-scroll of screenshots from MEDIA_CONFIG with captions, lightbox on click
 8. INSTALLATION HUB — tabbed step-by-step guides, each tab numbered steps in styled timeline cards with code blocks:
-   Tab A: cPanel Hosting (upload ZIP → extract to public_html → visit /install wizard → done in 5 min)
-   Tab B: VPS (Ubuntu) (apt install PHP 8.3 MySQL Nginx → git clone → composer install --no-dev → npm run build → migrate --seed → certbot SSL)
+   Tab A: cPanel Hosting (upload ZIP → extract → set document root to /public → visit /install wizard → done in 5 min)
+   Tab B: VPS (Ubuntu) (apt install PHP 8.4 MySQL Nginx → git clone → composer install --no-dev → npm run build → migrate --force → /install (Clean Production Mode) → certbot SSL)
    Tab C: Cloud Servers (AWS Lightsail/DigitalOcean/Oracle free tier quick-launch commands + docker-compose up -d one-liner)
    Tab D: Docker (copy .env.docker → docker-compose up -d → open port 8000)
    Tab E: Add To Your Existing Site (iframe embed snippet + subdomain method + reverse-proxy Nginx snippet + WordPress plugin mention)
@@ -62,7 +62,7 @@ All sections must read from MEDIA_CONFIG. If a value is empty string, hide that 
 10. WHAT'S INSIDE THE DOWNLOAD: checklist two-column (source code, docs, videos, Docker files, WordPress plugin, seeder demo data, REST API docs…)
 11. TESTIMONIALS placeholder row (3 glass cards with MEDIA_CONFIG.avatar-less initials, editable quotes marked EDIT-ME)
 12. PRICING: 3 tier cards ($89.99 highlighted MOST POPULAR ribbon / $150.22 / $350) each with feature list + buy buttons linking Gumroad; SAVE29 discount callout chip on Enterprise
-13. FAQ accordion (6 Q&As: requirements? can I rebrand? refunds 5-day policy? API keys needed for AI? updates included? commercial license terms?)
+13. FAQ accordion (6 Q&As: requirements? can I rebrand? refunds 5-day policy? API keys needed for AI? updates included? MIT License terms?)
 14. BLOG SECTION: styled "Latest from our Blog" area with 4 post-card placeholders wired to real Blogger feed: fetch posts dynamically from your blog's /feeds/posts/default?alt=json (put YOUR_BLOG_URL in MEDIA_CONFIG.blogUrl; graceful fallback message if empty) — this keeps the landing page fresh AND satisfies AdSense content requirements
 15. FINAL CTA band: gradient panel "Your Business Deserves An Operating System" + big buy button + guarantee badges
 16. Footer: quick links, support email, refund policy summary line, copyright, social placeholders

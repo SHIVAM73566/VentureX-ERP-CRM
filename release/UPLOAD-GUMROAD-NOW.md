@@ -9,7 +9,7 @@
 ## Step 2: Create Product
 1. After login, click "Create a product"
 2. Click "Digital product"
-3. Upload file: C:\MY_ERP\release\VentureX-ERP-CRM-v1.0.0-Gumroad.zip
+3. Upload file: C:\MY_ERP\release\VentureX-ERP-CRM-v1.3.1-Gumroad.zip
 
 ## Step 3: Fill Product Details
 1. Name: VentureX ERP & CRM - AI-Powered Business Operating System

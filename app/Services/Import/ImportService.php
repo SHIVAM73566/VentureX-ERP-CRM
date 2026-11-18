@@ -1,22 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Import;
 
+use App\Services\UploadSecurityService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
+use RuntimeException;
+use Throwable;
+use ZipArchive;
 
+/**
+ * @author Shivam Chaturvedi <chaturvedishivam179@gmail.com>
+ */
 class ImportService
 {
+    public const ALLOWED_EXTENSIONS = ['csv', 'xlsx'];
+
+    public const MAX_BYTES = 52428800; // 50 MB
+
+    public function __construct(protected XlsxReader $xlsx) {}
+
     public function uploadFile(UploadedFile $file, int $companyId): array
     {
-        $allowed = ['csv', 'json', 'txt'];
         $ext = strtolower($file->getClientOriginalExtension());
+        $this->assertAllowed($file, $ext);
 
-        if (! in_array($ext, $allowed)) {
-            throw new \InvalidArgumentException("File type [{$ext}] is not supported. Allowed: ".implode(', ', $allowed));
-        }
-
+        // The local disk resolves to storage/app/private, never public/.
         $path = $file->store("imports/{$companyId}", 'local');
-        $rows = $this->parseFromContent($file->getContent(), $ext);
+        $absolutePath = Storage::disk('local')->path($path);
+
+        try {
+            $rows = $this->parseFile($absolutePath, $ext);
+        } catch (\Throwable $e) {
+            Storage::disk('local')->delete($path);
+            throw $e;
+        }
 
         return [
             'file_path' => $path,
@@ -30,11 +52,87 @@ class ImportService
         ];
     }
 
+    /**
+     * Extension, MIME type and magic bytes must all agree. A renamed .exe or a
+     * JSON/TXT upload is rejected even if Laravel's mimes rule was bypassed.
+     */
+    public function assertAllowed(UploadedFile $file, string $ext): void
+    {
+        if (! in_array($ext, self::ALLOWED_EXTENSIONS, true)) {
+            throw new InvalidArgumentException('Only .csv and .xlsx files are supported.');
+        }
+
+        $size = $file->getSize();
+        if ($size !== null && $size > self::MAX_BYTES) {
+            throw new InvalidArgumentException('The import file must be 50 MB or smaller.');
+        }
+
+        // Reuse the application's upload security service when it is available.
+        // Its signature table checks .xlsx magic bytes and rejects embedded PHP
+        // in text-like files such as .csv. The importer's own 50 MB limit is
+        // applied temporarily so its narrower policy is not weakened here.
+        if (class_exists(UploadSecurityService::class)) {
+            $previousMax = config('security.upload.max_size_kb');
+            config()->set('security.upload.max_size_kb', (int) ceil(self::MAX_BYTES / 1024));
+
+            try {
+                app(UploadSecurityService::class)->validate($file, $ext);
+            } catch (ValidationException) {
+                throw new InvalidArgumentException('The uploaded file failed security validation.');
+            } catch (Throwable) {
+                throw new InvalidArgumentException('The uploaded file could not be validated.');
+            } finally {
+                config()->set('security.upload.max_size_kb', $previousMax);
+            }
+        }
+
+        $content = (string) @file_get_contents($file->getRealPath() ?: '');
+        $mime = strtolower((string) $file->getMimeType());
+
+        if ($ext === 'csv') {
+            $allowedMimes = ['text/csv', 'application/csv', 'text/plain', 'application/vnd.ms-excel', 'application/octet-stream'];
+            if (! in_array($mime, $allowedMimes, true)) {
+                throw new InvalidArgumentException('The uploaded file is not a valid CSV file.');
+            }
+
+            if (preg_match('/^(PK\x03\x04|%PDF-|\x89PNG|\xFF\xD8\xFF|GIF8)/', $content) === 1
+                || str_contains(substr($content, 0, 512), "\0")) {
+                throw new InvalidArgumentException('The uploaded file is not a valid CSV file.');
+            }
+
+            return;
+        }
+
+        $allowedMimes = [
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/zip',
+            'application/octet-stream',
+        ];
+        if (! in_array($mime, $allowedMimes, true) || ! str_starts_with($content, 'PK')) {
+            throw new InvalidArgumentException('The uploaded file is not a valid XLSX workbook.');
+        }
+
+        if (! class_exists(ZipArchive::class)) {
+            throw new RuntimeException('XLSX imports require the zip PHP extension.');
+        }
+
+        $zip = new ZipArchive;
+        if ($zip->open($file->getRealPath() ?: '') !== true) {
+            throw new InvalidArgumentException('The uploaded file is not a valid XLSX workbook.');
+        }
+
+        $hasWorkbook = $zip->locateName('xl/workbook.xml') !== false;
+        $zip->close();
+
+        if (! $hasWorkbook) {
+            throw new InvalidArgumentException('The uploaded file is not a valid XLSX workbook.');
+        }
+    }
+
     public function parseFromContent(string $content, string $ext): array
     {
         return match ($ext) {
-            'csv', 'txt' => $this->parseCsvContent($content),
-            'json' => $this->parseJsonContent($content),
+            'csv' => $this->parseCsvContent($content),
             default => [],
         };
     }
@@ -42,8 +140,8 @@ class ImportService
     public function parseFile(string $filePath, string $ext): array
     {
         return match ($ext) {
-            'csv', 'txt' => $this->parseCsv($filePath),
-            'json' => $this->parseJson($filePath),
+            'csv' => $this->parseCsv($filePath),
+            'xlsx' => $this->xlsx->read($filePath),
             default => [],
         };
     }
@@ -92,16 +190,6 @@ class ImportService
         return $rows;
     }
 
-    protected function parseJsonContent(string $content): array
-    {
-        $data = json_decode($content, true);
-        if (! is_array($data)) {
-            return [];
-        }
-
-        return isset($data[0]) && is_array($data[0]) ? $data : [$data];
-    }
-
     protected function parseCsv(string $filePath): array
     {
         $content = file_get_contents($filePath);
@@ -112,13 +200,6 @@ class ImportService
         return $this->parseCsvContent($content);
     }
 
-    protected function parseJson(string $filePath): array
-    {
-        $content = file_get_contents($filePath);
-
-        return $this->parseJsonContent($content);
-    }
-
     public function detectDestination(array $columns): array
     {
         $colStr = strtolower(implode(' ', $columns));
@@ -126,6 +207,7 @@ class ImportService
         $patterns = [
             'customers' => ['customer', 'client', 'buyer', 'billing', 'shipping'],
             'suppliers' => ['supplier', 'vendor', 'seller', 'procurement'],
+            'opening_balances' => ['opening balance', 'account_code', 'chart of account', 'as_of_date', 'debit', 'credit'],
             'products' => ['product', 'item', 'sku', 'inventory', 'stock', 'price'],
             'leads' => ['lead', 'prospect', 'funnel'],
             'invoices' => ['invoice', 'bill', 'amount due', 'total due'],

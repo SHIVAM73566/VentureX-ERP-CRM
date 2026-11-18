@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-4xl space-y-6">
         <div>
             <h1 class="text-2xl font-bold text-ink-900">New Data Import</h1>
-            <p class="mt-1 text-sm text-ink-500">Upload a CSV or JSON file to import business data into VentureX ERP & CRM.</p>
+            <p class="mt-1 text-sm text-ink-500">Upload a CSV or XLSX file to import business data into VentureX ERP &amp; CRM.</p>
         </div>
 
         <div class="rounded-xl border border-ink-200 bg-white p-6">
@@ -16,8 +16,8 @@
                         <svg class="mb-3 h-10 w-10 text-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                         <p class="text-sm font-medium text-ink-700">Drag & drop your file here</p>
                         <p class="mt-1 text-xs text-ink-500">or click to browse</p>
-                        <p class="mt-2 text-xs text-ink-400">Supports CSV, JSON, TXT (max 50MB)</p>
-                        <input type="file" name="file" id="file-input" class="hidden" accept=".csv,.json,.txt">
+                        <p class="mt-2 text-xs text-ink-400">Supports .csv and .xlsx only (max 50MB). Files are stored outside the public directory.</p>
+                        <input type="file" name="file" id="file-input" class="hidden" accept=".csv,.xlsx" required>
                     </div>
                     <div id="file-info" class="mt-3 hidden">
                         <div class="flex items-center gap-3 rounded-lg bg-green-50 p-3">
@@ -50,20 +50,34 @@
 
         <div class="rounded-xl border border-ink-200 bg-white p-6">
             <h3 class="mb-3 text-sm font-medium text-ink-700">Supported Formats</h3>
-            <div class="grid grid-cols-3 gap-4 text-center">
+            <div class="grid grid-cols-2 gap-4 text-center">
                 <div class="rounded-lg border border-ink-200 p-3">
                     <div class="text-lg font-bold text-ink-900">CSV</div>
-                    <div class="text-xs text-ink-500">Comma-separated values</div>
+                    <div class="text-xs text-ink-500">Comma-separated values (max 50MB)</div>
                 </div>
                 <div class="rounded-lg border border-ink-200 p-3">
-                    <div class="text-lg font-bold text-ink-900">JSON</div>
-                    <div class="text-xs text-ink-500">Structured data format</div>
-                </div>
-                <div class="rounded-lg border border-ink-200 p-3">
-                    <div class="text-lg font-bold text-ink-900">TXT</div>
-                    <div class="text-xs text-ink-500">Tab/comma delimited</div>
+                    <div class="text-lg font-bold text-ink-900">XLSX</div>
+                    <div class="text-xs text-ink-500">Excel workbook (max 50MB)</div>
                 </div>
             </div>
+            <p class="mt-3 text-xs text-ink-500">Files are validated by extension, MIME type and file signature, then stored outside the public directory.</p>
+        </div>
+
+        <div class="rounded-xl border border-ink-200 bg-white p-6">
+            <h3 class="mb-3 text-sm font-medium text-ink-700">Download a Template</h3>
+            <ul class="grid gap-2 text-sm sm:grid-cols-2">
+                @foreach (['customers' => 'Customers', 'suppliers' => 'Suppliers', 'leads' => 'Leads', 'products' => 'Products / Inventory', 'opening_balances' => 'Opening Balances'] as $destination => $label)
+                    <li>
+                        <a class="text-indigo-600 hover:underline" href="{{ route('admin.imports.templates.download', $destination) }}">{{ $label }} CSV template</a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
+        <div class="rounded-xl border border-amber-200 bg-amber-50 p-6">
+            <h3 class="text-sm font-medium text-amber-900">Demo data</h3>
+            <p class="mt-1 text-sm text-amber-800">Need to remove demo records before going live? Review counts and wipe them from the demo data panel.</p>
+            <a class="mt-3 inline-block text-sm font-medium text-amber-900 underline" href="{{ route('admin.demo-data.index') }}">Open demo data panel</a>
         </div>
     </div>
 

@@ -31,10 +31,10 @@ WHAT YOU ARE BUYING
 A complete, production-ready ERP & CRM application plus a fully-prepared multi-channel sales operation.
 
 THE PRODUCT
-VentureX ERP & CRM is built on Laravel 13 / PHP 8.3 with MySQL. It delivers CRM and sales pipeline (Kanban), multi-warehouse inventory, procurement workflows with RFQs, double-entry accounting, logistics with container/landed-cost management, customer support ticketing, and an AI Copilot that works WITHOUT API keys via local fallback with optional NVIDIA/Gemini/OpenAI/Claude routing.
+VentureX ERP & CRM is built on Laravel 13 / PHP 8.4 with MySQL. It delivers CRM and sales pipeline (Kanban), multi-warehouse inventory, procurement workflows with RFQs, double-entry accounting, logistics with container/landed-cost management, customer support ticketing, and an AI Copilot that works WITHOUT API keys via local fallback with optional NVIDIA/Gemini/OpenAI/Claude routing.
 
 CODE QUALITY (VERIFIABLE)
-- 339 automated PHPUnit tests passing, 464 assertions
+- Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md
 - 0 PHP syntax errors across 340+ files
 - REST API included (18 controllers)
 - Public GitHub repository available for inspection
@@ -43,7 +43,7 @@ CODE QUALITY (VERIFIABLE)
 THE SALES OPERATION (INCLUDED)
 - LIVE storefront: Gumroad ($89.99 single license)
 - READY-TO-ACTIVATE listings written for: Lemon Squeezy, Paddle, FastSpring, PayPro Global, Payhip, Codester, Coderobotics, SellAnyCode, WooCommerce, Product Hunt launch kit
-- Published GitHub Marketplace deploy Action (subscription potential)
+- GitHub deploy Action (Marketplace approval pending) (subscription potential)
 - All refund policies, pricing tiers, upload instructions documented
 
 OPERATIONS FOR NEW OWNER
@@ -63,7 +63,7 @@ Founder focusing on other ventures; product is complete and channel-ready for a 
 |-------|-------|
 | Model | One-time digital license |
 | Price points | $89.99 / $150.22 / $350.00 |
-| Channels live | Gumroad (+ GitHub Marketplace Action) |
+| Channels live | Gumroad (+ GitHub Action; Marketplace approval pending) |
 | Channels prepared | 10 more, files ready |
 
 ### _ Assets Included
@@ -83,7 +83,7 @@ Founder focusing on other ventures; product is complete and channel-ready for a 
 ```
 Upload: screenshots from Gumroad analytics + GitHub repo stats as they accumulate
 Link public repos: https://github.com/SHIVAM73566/VentureX-ERP-CRM
-Marketplace: https://github.com/marketplace/actions/venturex-erp-crm-deploy
+Planned GitHub Marketplace URL after approval (not live yet): https://github.com/marketplace/actions/venturex-erp-crm-deploy
 ```
 
 ## FLIPPA APPROVAL & TRUST CHECKLIST
@@ -103,4 +103,4 @@ Marketplace: https://github.com/marketplace/actions/venturex-erp-crm-deploy
 | Tech | Laravel / PHP / MySQL |
 | Age | New (Aug 2026) |
 | Files included | Full source + sales infrastructure |
-| Software version | 1.0.0 |
+| Software version | 1.3.1 |

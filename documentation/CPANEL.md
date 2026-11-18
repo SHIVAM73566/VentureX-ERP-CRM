@@ -5,12 +5,15 @@ This guide walks you through deploying VentureX ERP & CRM on a cPanel hosting en
 ## Prerequisites
 
 - cPanel hosting with:
-  - PHP 8.1 or higher (PHP 8.4 recommended)
-  - MySQL 5.7 or higher (MySQL 8.0 recommended)
+  - **PHP 8.4** (required for v1.3.1; older PHP 8.x is not supported)
+  - **MySQL 8.0+** (or MariaDB 10.6+)
   - Composer (or ability to run via SSH)
   - SSH access (recommended) or File Manager access
-  - Minimum 512MB PHP memory limit
+  - Permission to create MySQL databases and users
+  - Minimum 512 MB PHP memory limit
   - SSL certificate (Let's Encrypt or purchased)
+
+> **Document root MUST be `public/`.** Ask support to point the addon domain/subdomain at the project's `public` directory if cPanel will not let you set it.
 
 ## Step 1: Prepare Your Local Environment
 
@@ -148,34 +151,27 @@ chmod -R 755 public
 find . -type f -exec chmod 644 {} \;
 find . -type d -exec chmod 755 {} \;
 
-# Specific permissions for storage
-chmod -R 775 storage
-chmod -R 775 bootstrap/cache
+# Directories 775, files 664 (or 755/644 where the host requires it)
+find storage bootstrap/cache -type d -exec chmod 775 {} +
+find storage bootstrap/cache -type f -exec chmod 664 {} +
 ```
 
 Via File Manager:
 1. Right-click on `storage` folder → **Change Permissions**
-2. Set to **755** (or **775** if needed)
-3. Repeat for `bootstrap/cache`
+2. Set directories to **775** and files to **664**
+3. Repeat for `bootstrap/cache`. Avoid **777** unless required temporarily by the host; remove it once writes succeed.
 
 ## Step 7: Configure Document Root
 
-### Option A: Public Directory (Recommended)
+### Option A: Public Directory (Required / recommended)
 
-1. In cPanel, go to **Domains** or **Addon Domains**
-2. Set Document Root to `public_html/public`
-3. This is the most secure configuration
+1. In cPanel, go to **Domains** or **Addon Domains**.
+2. Set Document Root to the project's `public` directory (for example `public_html/public`).
+3. This is the required secure configuration.
 
-### Option B: Rewrite Rules (If can't change document root)
+### Option B: Root `.htaccess` fallback (only if the host refuses)
 
-Create or edit `.htaccess` in `public_html`:
-
-```apache
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteRule ^(.*)$ public/$1 [L]
-</IfModule>
-```
+Do not create a second unguarded rewrite. The shipped project-root `.htaccess` already blocks sensitive paths and contains a guarded one-pass route into `public/`. If the host forces the application into `public_html`, ensure that file is present and ask support to disable any duplicate host-level rewrite into `public/`. A redirect loop means the document root is still wrong.
 
 ## Step 8: Run Database Migrations
 
@@ -185,10 +181,7 @@ cd ~/public_html
 php artisan migrate --force
 ```
 
-If you have a seeder to run:
-```bash
-php artisan db:seed --force
-```
+Then open `https://your-domain/install` and complete **Clean Production Mode**. Do not use `migrate --seed` or demo seeders on a production cPanel install.
 
 ## Step 9: Configure Cron Jobs
 
@@ -230,7 +223,7 @@ For queue workers (if using database queue):
 
 1. Navigate to **MultiPHP Manager** in cPanel
 2. Select your domain
-3. Choose PHP 8.1 or higher
+3. Choose **PHP 8.4** (required)
 4. Click **Apply**
 
 ## Step 12: Optimize Performance

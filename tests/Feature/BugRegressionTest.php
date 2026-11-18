@@ -196,7 +196,9 @@ class BugRegressionTest extends TestCase
             'status' => 'draft',
         ]);
 
-        Sanctum::actingAs($this->adminA);
+        // Full-access token: the token-ability middleware must not weaken
+        // tenant scoping for a legitimate super admin API caller.
+        Sanctum::actingAs($this->adminA, ['*']);
 
         $this->getJson('/api/finance/journal-entries?q='.self::RIVAL_MARKER)
             ->assertOk()
@@ -215,7 +217,9 @@ class BugRegressionTest extends TestCase
             'status' => 'completed',
         ]);
 
-        Sanctum::actingAs($this->adminA);
+        // Full-access token: the token-ability middleware must not weaken
+        // tenant scoping for a legitimate super admin API caller.
+        Sanctum::actingAs($this->adminA, ['*']);
 
         $this->getJson('/api/sales/payments?q='.self::RIVAL_MARKER)
             ->assertOk()

@@ -13,6 +13,7 @@ use App\Models\SupportTicket;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
+use App\Services\DashboardCacheService;
 use App\Services\Hr\OnboardingService;
 use App\Services\NumberGenerator;
 use App\Services\SelfHealingService;
@@ -178,11 +179,19 @@ class AgenticEngine
 
         try {
             [$summary, $details] = DB::transaction(function () use ($action, $dryRun) {
-                return $this->execute($action, $dryRun);
+                // Lock the action row for the duration of the rule so a second
+                // worker cannot execute the same candidate concurrently.
+                $locked = AgentAction::ofCompany((int) $action->company_id)
+                    ->whereKey($action->id)
+                    ->lockForUpdate()
+                    ->first();
+
+                return $this->execute($locked ?? $action, $dryRun);
             });
 
             if (! $dryRun) {
                 $this->recordSuccess($action);
+                DashboardCacheService::forget((int) $action->company_id);
             }
 
             $run = $this->finish($run, $dryRun ? 'success' : 'success', $summary, $details, $started);
@@ -201,6 +210,7 @@ class AgenticEngine
             // The transaction has already rolled back; persist the failure in a
             // fresh write outside it and route the exception to the healer.
             $this->recordFailure($action);
+            DashboardCacheService::forget((int) $action->company_id);
 
             try {
                 $this->healer->capture($e, request());
@@ -248,6 +258,7 @@ class AgenticEngine
         $products = Product::ofCompany($action->company_id)
             ->whereNotNull('reorder_level')
             ->whereNotNull('supplier_id')
+            ->lockForUpdate()
             ->get()
             ->filter(fn (Product $product) => $product->availableStock() <= (float) $product->reorder_level);
 
@@ -260,6 +271,7 @@ class AgenticEngine
                 ->whereHas('purchaseOrder', fn ($q) => $q
                     ->where('company_id', $action->company_id)
                     ->whereNotIn('status', ['received', 'cancelled']))
+                ->lockForUpdate()
                 ->pluck('product_id')
                 ->all();
 
@@ -330,7 +342,8 @@ class AgenticEngine
         $query = Invoice::ofCompany($action->company_id)
             ->whereIn('status', ['sent', 'partial'])
             ->whereNotNull('due_date')
-            ->whereDate('due_date', '<', now()->toDateString());
+            ->whereDate('due_date', '<', now()->toDateString())
+            ->lockForUpdate();
 
         $count = (clone $query)->count();
 
@@ -353,6 +366,7 @@ class AgenticEngine
         $tickets = SupportTicket::ofCompany($action->company_id)
             ->whereNull('assigned_to')
             ->whereIn('status', ['open', 'investigating'])
+            ->lockForUpdate()
             ->get();
 
         if ($tickets->isEmpty()) {
@@ -362,6 +376,7 @@ class AgenticEngine
         $agent = User::query()
             ->where('company_id', $action->company_id)
             ->where('is_active', true)
+            ->lockForUpdate()
             ->get()
             ->sortBy(fn (User $user) => SupportTicket::ofCompany($action->company_id)
                 ->where('assigned_to', $user->id)
@@ -397,6 +412,7 @@ class AgenticEngine
             ->active()
             ->whereDate('hire_date', '>=', now()->subDays($lookback)->toDateString())
             ->whereDoesntHave('onboardingTasks')
+            ->lockForUpdate()
             ->get();
 
         $created = 0;
@@ -418,26 +434,52 @@ class AgenticEngine
 
     protected function recordSuccess(AgentAction $action): void
     {
-        $confidence = min(1.0, (float) $action->confidence + (1 - (float) $action->confidence) * 0.05);
+        DB::transaction(function () use ($action) {
+            $locked = AgentAction::ofCompany((int) $action->company_id)
+                ->whereKey($action->id)
+                ->lockForUpdate()
+                ->first();
 
-        $action->update([
-            'run_count' => (int) $action->run_count + 1,
-            'success_count' => (int) $action->success_count + 1,
-            'confidence' => round($confidence, 4),
-            'last_run_at' => now(),
-        ]);
+            if (! $locked) {
+                return;
+            }
+
+            $confidence = min(1.0, (float) $locked->confidence + (1 - (float) $locked->confidence) * 0.05);
+
+            $locked->update([
+                'run_count' => (int) $locked->run_count + 1,
+                'success_count' => (int) $locked->success_count + 1,
+                'confidence' => round($confidence, 4),
+                'last_run_at' => now(),
+            ]);
+
+            $action->refresh();
+        });
     }
 
     protected function recordFailure(AgentAction $action): void
     {
-        $confidence = max(0.0, (float) $action->confidence - 0.05);
+        DB::transaction(function () use ($action) {
+            $locked = AgentAction::ofCompany((int) $action->company_id)
+                ->whereKey($action->id)
+                ->lockForUpdate()
+                ->first();
 
-        $action->update([
-            'run_count' => (int) $action->run_count + 1,
-            'failure_count' => (int) $action->failure_count + 1,
-            'confidence' => round($confidence, 4),
-            'last_run_at' => now(),
-        ]);
+            if (! $locked) {
+                return;
+            }
+
+            $confidence = max(0.0, (float) $locked->confidence - 0.05);
+
+            $locked->update([
+                'run_count' => (int) $locked->run_count + 1,
+                'failure_count' => (int) $locked->failure_count + 1,
+                'confidence' => round($confidence, 4),
+                'last_run_at' => now(),
+            ]);
+
+            $action->refresh();
+        });
     }
 
     /**

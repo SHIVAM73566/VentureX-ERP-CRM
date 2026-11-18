@@ -114,7 +114,7 @@ class DataImportTest extends TestCase
         $this->assertEquals('uploaded', $import->status);
     }
 
-    public function test_upload_json_creates_import(): void
+    public function test_upload_rejects_json_files(): void
     {
         $json = json_encode([
             ['name' => 'Test Customer', 'email' => 'test@test.com'],
@@ -124,14 +124,9 @@ class DataImportTest extends TestCase
 
         $this->actingAs($this->admin)
             ->post(route('admin.imports.upload'), ['file' => $file])
-            ->assertOk();
+            ->assertSessionHasErrors('file');
 
-        $this->assertDatabaseHas('imports', [
-            'company_id' => $this->company->id,
-            'file_name' => 'test.json',
-            'file_type' => 'json',
-            'total_rows' => 1,
-        ]);
+        $this->assertDatabaseMissing('imports', ['file_name' => 'test.json']);
     }
 
     public function test_upload_rejects_invalid_extension(): void

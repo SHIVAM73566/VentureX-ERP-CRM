@@ -9,10 +9,12 @@ use App\Services\AuditLogger;
 use App\Services\BrandingService;
 use App\Services\CompanyContext;
 use App\Services\SettingService;
+use App\Services\UploadSecurityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
@@ -21,6 +23,7 @@ class SettingController extends Controller
         protected SettingService $settings,
         protected AiProviderManager $aiProviders,
         protected BrandingService $branding,
+        protected UploadSecurityService $uploads,
     ) {}
 
     public function index(Request $request): Response
@@ -145,7 +148,8 @@ class SettingController extends Controller
             'watermark_text' => ['nullable', 'string', 'max:50'],
             'show_watermark' => ['nullable', 'boolean'],
             'remove_logo' => ['nullable', 'boolean'],
-            'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            // Raster only: SVG can carry script and is never accepted as a logo.
+            'logo' => ['nullable', 'file', 'mimetypes:image/png,image/jpeg,image/webp', 'max:2048'],
         ]);
 
         $fields = [
@@ -182,8 +186,15 @@ class SettingController extends Controller
             $oldValues['branding.logo_path'] = $old['logo_path'] ?? null;
             $newValues['branding.logo_path'] = null;
         } elseif ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $extension = $this->uploads->validateImage($file, ['png', 'jpg', 'jpeg', 'webp']);
+
             $this->deleteLogo($old['logo_path'] ?? null);
-            $path = $request->file('logo')->store('branding/'.(CompanyContext::id() ?? 'shared'), 'public');
+            $path = $file->storeAs(
+                'branding/'.(CompanyContext::id() ?? 'shared'),
+                Str::uuid()->toString().'.'.$extension,
+                'public'
+            );
             $this->settings->set('branding.logo_path', $path, ['group' => 'branding']);
             $oldValues['branding.logo_path'] = $old['logo_path'] ?? null;
             $newValues['branding.logo_path'] = $path;

@@ -36,7 +36,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ### WHAT'S INCLUDED
 
-**Full Source Code (Laravel 13 + PHP 8.3)**
+**Full Source Code (Laravel 13 + PHP 8.4)**
 - 92 Controllers with full CRUD operations
 - 74 Eloquent Models with relationships
 - 44 Service classes for business logic
@@ -75,7 +75,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ### TECHNOLOGY STACK
 
-- Laravel 13, PHP 8.3+
+- Laravel 13, PHP 8.4
 - Blade, Alpine.js 3, Tailwind CSS v4
 - MySQL 8.0+ / MariaDB 10.6+
 - Vite 8.x build system
@@ -85,15 +85,15 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ### SERVER REQUIREMENTS
 
-- PHP 8.3+ (pdo_mysql, mbstring, openssl, tokenizer, xml, bcmath)
-- MySQL 5.7+ or MariaDB 10.6+
+- PHP 8.4 (pdo_mysql, mbstring, openssl, tokenizer, xml, bcmath)
+- MySQL 8.0+ or MariaDB 10.6+
 - Apache 2.4+ or Nginx 1.24+
 - Node.js 20+ (for asset compilation)
 - Composer 2.x
 
 ---
 
-### DEMO CREDENTIALS
+### LOCAL DEMO ONLY — do not use in production
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -111,7 +111,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 4. Copy `.env.example` to `.env`
 5. Run `php artisan key:generate`
 6. Create MySQL database
-7. Run `php artisan migrate --seed`
+7. Run `php artisan migrate --force`, then complete `/install` in Clean Production Mode
 8. Run `php artisan serve`
 9. Open http://localhost:8000
 
@@ -121,7 +121,7 @@ VentureX ERP & CRM is a complete AI-powered business operating system built with
 
 ### LICENSE
 
-Commercial license. You can:
+MIT license. You can:
 - Use for personal and client projects
 - Customize and rebrand
 - Deploy on unlimited domains
@@ -147,4 +147,4 @@ erp, crm, ai, laravel, business, inventory, accounting, sales, procurement, logi
 Software > Business & Finance
 
 ## FILES TO UPLOAD
-VentureX-ERP-CRM-v1.0.0-Gumroad.zip
+VentureX-ERP-CRM-v1.3.1-Gumroad.zip

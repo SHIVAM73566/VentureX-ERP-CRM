@@ -58,9 +58,9 @@
   <text x="50" y="248" fill="#7ee787" font-family="monospace" font-size="13">$ cd VentureX-ERP-CRM</text>
   <text x="50" y="270" fill="#7ee787" font-family="monospace" font-size="13">$ composer install</text>
   <text x="50" y="292" fill="#7ee787" font-family="monospace" font-size="13">$ cp .env.example .env &amp;&amp; php artisan key:generate</text>
-  <text x="50" y="314" fill="#7ee787" font-family="monospace" font-size="13">$ php artisan migrate --seed</text>
+  <text x="50" y="314" fill="#7ee787" font-family="monospace" font-size="13">$ php artisan migrate --force</text>
   <text x="50" y="336" fill="#7ee787" font-family="monospace" font-size="13">$ npm install &amp;&amp; npm run build</text>
   <text x="50" y="358" fill="#7ee787" font-family="monospace" font-size="13">$ php artisan serve</text>
   <text x="50" y="390" fill="#79c0ff" font-family="monospace" font-size="13">→ Open http://localhost:8000</text>
-  <text x="50" y="410" fill="#7ee787" font-family="monospace" font-size="13">→ Login: demo_admin@example.com / Demo_Admin_2026!</text>
+  <text x="50" y="410" fill="#7ee787" font-family="monospace" font-size="13">→ /install: create first admin (Clean Production Mode)</text>
 </svg>

@@ -1,53 +1,68 @@
-*.log
-*.zip
-.DS_Store
+# Environment and secrets
 .env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
+.env.*
+!.env.example
+auth.json
+
+# Databases and dumps
+*.sql
+*.sql.gz
+*.sqlite
+*.sqlite3
+database/database.sqlite
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+storage/*.key
+
+# Installer state
+/storage/.installed
+
+# Dependencies and generated files
 /node_modules
+/vendor
+/.phpunit.cache
+/.phpunit.result.cache
+.phpactor.json
+_ide_helper.php
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage
-/storage/*.key
-/storage/pail
-/vendor
-/storage/app/private/*
-!/storage/app/private/.gitignore
+
+# Laravel runtime caches and storage
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
 /storage/framework/cache/*
 !/storage/framework/cache/.gitignore
 /storage/framework/views/*
 !/storage/framework/views/.gitignore
 /storage/framework/sessions/*
 !/storage/framework/sessions/.gitignore
-/bootstrap/cache/*
-!.gitignore
-_ide_helper.php
-Homestead.json
-Homestead.yaml
+/storage/app/private/*
+!/storage/app/private/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/pail
+
+# Release binaries are never tracked; listing documents are trackable.
+*.zip
+!release/*.md
+!release/*.txt
+!release/*.html
+
+# Editor / OS files
+.DS_Store
 Thumbs.db
-database/database.sqlite
-storage/logs/*
-!storage/logs/.gitignore
-.env.bak
-.env.local
-.env.staging
-.env.testing
-/release
-/storage/.installed
-.env.bak*
+/.codex
+/.cursor/
+/.idea
+/.nova
+/.vscode
+/.zed
 
-# Local SQLite databases
-*.sqlite
-*.sqlite3
-/storage/*.sqlite*
-
+*.log

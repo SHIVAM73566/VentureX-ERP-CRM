@@ -50,11 +50,11 @@ VentureX is different:
 🐳 Docker included, plus a WordPress plugin for lead capture
 📚 23 docs files + 15-part video tutorials
 
-One-time license ($89.99), commercial rights included: rebrand it, deploy on unlimited domains, use for clients.
+One-time purchase ($89.99); MIT License included: modify and rebrand it, deploy on unlimited domains and use it for clients with attribution preserved.
 
 I'll be here ALL DAY answering questions - ask me anything about the architecture, the AI routing, or deployment!
 
-Demo credentials to try locally:
+LOCAL DEMO ONLY — do not use in production:
 demo_admin@example.com / Demo_Admin_2026!
 ```
 

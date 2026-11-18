@@ -2,7 +2,7 @@
 
 **VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
-> Version 1.0.0
+> Version 1.3.1 | PHP 8.4 | Laravel 13
 
 ---
 
@@ -18,19 +18,19 @@ VentureX ERP & CRM is built on Laravel 13.25 (PHP 8.4+), with Blade templates, A
 
 ### Is there a free trial or demo available?
 
-Yes. After running `php artisan db:seed`, demo accounts are created with random passwords for security. To create demo accounts with known passwords, run:
+For a throwaway **local preview only**, choose **Demo Preview Mode** in `/install` or explicitly run the demo credential seeder below. Production installs should use **Clean Production Mode** and create their own administrator.
 
 ```bash
-php artisan db:seed --class=DemoCredentialSeeder
+php artisan db:seed --class=DemoCredentialSeeder --force
 ```
 
-This creates demo accounts with these credentials:
+### LOCAL DEMO ONLY — never use in production
 
-- **Demo Admin**: demo_admin@example.com / Demo_Admin_2026!
-- **Demo Manager**: demo_manager@example.com / Demo_Manager_2026!
-- **Demo Sales**: demo_sales@example.com / Demo_Sales_2026!
+- **Demo Admin**: `demo_admin@example.com` / `Demo_Admin_2026!`
+- **Demo Manager**: `demo_manager@example.com` / `Demo_Manager_2026!`
+- **Demo Sales**: `demo_sales@example.com` / `Demo_Sales_2026!`
 
-> —¸ **Security Notice**: Change all passwords before production use.
+> **Security Notice:** These accounts are for localhost/127.0.0.1 evaluation only. Remove them or reinstall with Clean Production Mode before exposing the application.
 
 ### Can VentureX ERP & CRM be self-hosted?
 
@@ -50,7 +50,7 @@ You need PHP 8.4+, MySQL 8.0, a web server (Apache or Nginx), Composer 2.8+, and
 
 ### How do I install VentureX ERP & CRM?
 
-Follow the step-by-step instructions in [INSTALLATION.md](INSTALLATION.md). The short version: clone the repository, install dependencies with Composer and npm, configure your .env file, generate the application key, run migrations and seeders, build frontend assets, and start the development server.
+Follow the step-by-step instructions in [INSTALLATION.md](INSTALLATION.md). The short version: extract the v1.3.1 artifact, install dependencies with Composer and npm, create `.env`, generate the application key, build assets, start the server and complete `/install` in Clean Production Mode. Do not run demo seeders in production.
 
 ### Can I use Docker for installation?
 
@@ -58,7 +58,7 @@ Yes. A Docker Compose configuration is provided that sets up all required servic
 
 ### How do I configure the database?
 
-Edit the .env file with your MySQL connection details, then run `php artisan migrate --seed`. Detailed database configuration is covered in [DATABASE-SETUP.md](DATABASE-SETUP.md).
+Edit `.env` with your MySQL 8 connection details, then use `/install` or run `php artisan migrate --force`. Avoid `migrate --seed` in production because it can add demo data. Detailed database configuration is covered in [DATABASE-SETUP.md](DATABASE-SETUP.md).
 
 ---
 

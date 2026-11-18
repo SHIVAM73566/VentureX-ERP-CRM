@@ -1,263 +1,194 @@
-# VentureX ERP & CRM — The AI-Native Business Operating System for Laravel
+# VentureX ERP & CRM
 
-![Version](https://img.shields.io/badge/Version-1.3.0-blue) ![Laravel](https://img.shields.io/badge/Laravel-13-red) ![PHP](https://img.shields.io/badge/PHP-8.4+-purple) ![Tests](https://img.shields.io/badge/Tests-484%20passed-brightgreen) ![RAG](https://img.shields.io/badge/RAG-84%20pipelines-orange)
+**The AI-native business operating system for Laravel.**
 
-**CRM + ERP + 84 enterprise RAG pipelines + auditable autonomous agents — in one self-hostable Laravel 13 application.**
+![Version](https://img.shields.io/badge/Version-1.3.1-blue)
+![Laravel](https://img.shields.io/badge/Laravel-13-red)
+![PHP](https://img.shields.io/badge/PHP-8.4-purple)
+![Tests](https://img.shields.io/badge/Tests-484%2B%20passed-brightgreen)
+![RAG](https://img.shields.io/badge/RAG-84%20pipelines-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-A complete, production-ready AI-powered CRM and ERP business operating system built with Laravel 13, Blade, Alpine.js, and Tailwind CSS. Built for teams that want the depth of an ERP, the speed of a modern SaaS, and AI that answers from **your own records** with sources, confidence and latency.
+VentureX ERP & CRM is a self-hosted Laravel 13 application that brings CRM, sales, inventory, procurement, finance, logistics, HR, support, and 84 source-cited enterprise RAG pipelines into one auditable workspace. A lead becomes a customer, a quotation becomes an order, stock moves, an invoice is raised, payment is recorded, and finance sees the result without re-typing anything.
 
-> **Verified build:** 484 automated tests / 1,607 assertions / 0 failures · 418 PHP files linted / 0 errors · production Vite build passed · live enterprise workflow and red-team audit completed. See [`SECURITY-AUDIT-REPORT.md`](SECURITY-AUDIT-REPORT.md).
+- **Version:** v1.3.1
+- **License:** MIT — see [LICENSE](LICENSE)
+- **Maintainer:** Shivam Chaturvedi (VentureAI Pro)
+- **PayPal checkout / sales enquiries:** chaturvedishivam179@gmail.com
+- **Verification:** [SECURITY-AUDIT-REPORT.md](SECURITY-AUDIT-REPORT.md) · [release/SHA256SUMS.txt](release/SHA256SUMS.txt)
 
-## Live preview
+> **Test badge:** the `Tests-484+ passed` badge is a placeholder carried forward from the previous verified build. Final v1.3.1 counts will be published in `SECURITY-AUDIT-REPORT.md` after central integration; do not treat the badge as a new claim.
 
-| Preview | Login |
+---
+
+## Feature matrix
+
+| Area | What is included |
 |---|---|
-| <http://localhost:8000/login> · <http://127.0.0.1:8000/login> · <http://10.91.96.75:8000/login> | `demo_admin@example.com` / `Demo_Admin_2026!` · `demo_manager@example.com` / `Demo_Manager_2026!` · `demo_sales@example.com` / `Demo_Sales_2026!` |
+| CRM | Customers, contacts, leads, opportunities, activities, pipeline, scoring and 360° history |
+| Sales | Quotations, sales orders, invoices, payments, approvals and receivables |
+| Inventory | Products, warehouses, stock movements, reorder alerts, transfers and valuation |
+| Procurement | Suppliers, supplier offers, requisitions, RFQs, purchase orders and landed costs |
+| Finance | Chart of accounts, journals, AR/AP, multi-currency, GST/VAT, P&L, balance sheet and cash flow |
+| Logistics | Shipments, containers, dispatch, delivery notes and landed-cost audit |
+| HR | Employees, attendance, leave, payroll, performance reviews and onboarding |
+| Support | Tickets, help centre, FAQ and AI support assistant |
+| AI / RAG | Local-first assistant, Copilot, document reader, 84 enterprise pipelines with sources/confidence/latency |
+| Automation | AERO X Agentic Engine with auditable, transactional rules and rollback on failure |
+| Security | TOTP MFA, RBAC, rate limiting, app lock, emergency lockdown, audit logs and encrypted AI keys |
+| Administration | Users, roles, branding, import/export, audit logs, backups and one-time web installer |
+| Deployment | Local PHP, Docker Compose, VPS/Ubuntu, cPanel shared hosting, WordPress subdomain and GitHub Action |
 
-## Downloads
+---
 
-- [Source ZIP v1.3.0](release/VentureX-ERP-CRM-v1.3.0-source.zip)
-- [ZERO-ERRORS ZIP v1.3.0](release/VentureX-ERP-CRM-v1.3.0-ZERO-ERRORS.zip)
-- [All verified release artifacts](release/SHA256SUMS.txt)
-- [GitHub Marketplace deploy action](https://github.com/SHIVAM73566/venturex-deploy-action)
+## One-minute setup
 
-## Introduction
+All guides start from the v1.3.1 source artifact and use PHP 8.4, Composer 2, Node.js 20+, MySQL 8.0+ (or MariaDB 10.6+). Set the web root to the project's `public/` directory. Never expose the project root directly.
 
-VentureX ERP & CRM gives a company one shared workspace for the entire commercial cycle: a lead becomes a customer, a customer becomes a quotation, a quotation becomes an order, an order moves stock, an invoice becomes a payment, and finance sees the result without re-typing anything. Purchasing, warehouses, shipments and landed costs live in the same system, and an AI layer answers questions from your live records with sources and confidence scores.
+### Local — Windows or Mac
 
-It is designed for teams of 5–500 people who have outgrown spreadsheets, shared inboxes and disconnected invoicing tools but do not want a six-month enterprise rollout.
+```bash
+unzip VentureX-ERP-CRM-v1.3.1-source.zip
+cd VentureX-ERP-CRM
+composer install
+cp .env.example .env
+php artisan key:generate
+npm install && npm run build
+php artisan serve
+```
 
-**Who it is for**
+Open <http://localhost:8000/install>, choose **Clean Production Mode** (recommended), create the first administrator and finish the installer. For a throwaway local preview only, choose **Demo Preview Mode** and use the LOCAL DEMO credentials below. Preview URLs are limited to `localhost` and `127.0.0.1`.
 
-- Wholesale distributors and trading companies
-- Manufacturers managing stock, purchasing and sales
-- Service agencies running a pipeline and milestone invoicing
-- Import/export businesses that need true landed cost and margin
-- Owners and finance teams who want one dashboard instead of ten reports
+### Docker (bundled Compose file)
 
-## How to use it (quick examples)
+```bash
+unzip VentureX-ERP-CRM-v1.3.1-source.zip
+cd VentureX-ERP-CRM
+cp .env.example .env
+docker compose -f docker/docker-compose.yml --project-directory . up -d --build
+docker compose -f docker/docker-compose.yml --project-directory . exec app php artisan key:generate
+docker compose -f docker/docker-compose.yml --project-directory . exec app php artisan migrate --force
+```
 
-> The same walkthrough is available inside the app at **Getting Started** in the sidebar, with copyable examples and a saved checklist.
->
-> Every page also has a floating **Product guide** (bottom-right) with the full introduction and a searchable catalogue of all **84 RAG pipelines**, plus questions matched to the page you are on.
+Open <http://localhost/install> and complete the one-time installer. The bundled stack includes Nginx, PHP-FPM, MySQL 8, Redis and a queue worker. See [docker/README.md](docker/README.md) and [INSTALLATION.md](INSTALLATION.md).
 
-### 1. Sell something — lead to payment
-1. Add a **Customer** (Customers → New).
-2. Create a **Quotation** with 10 units of a product (Sales → Quotations).
-3. Mark the deal won and convert it to a **Sales Order**.
-4. Raise an **Invoice** from the order.
-5. Record the **Payment** — receivables update automatically.
+### VPS / Ubuntu 22.04 or 24.04
 
-*Example:* 10 × Bluetooth Headset @ ₹2,499 → quotation → order → `INV-2026-0042` → paid by UPI → balance ₹0.
+```bash
+# Install PHP 8.4 + extensions, MySQL 8, Nginx, Composer and Node.js 20+ first
+sudo mkdir -p /var/www/venturex
+cd /var/www/venturex
+# Upload and extract VentureX-ERP-CRM-v1.3.1-source.zip here
+composer install --no-dev --optimize-autoloader
+cp .env.example .env
+php artisan key:generate
+npm ci && npm run build
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo find storage bootstrap/cache -type d -exec chmod 775 {} +
+sudo find storage bootstrap/cache -type f -exec chmod 664 {} +
+sudo ln -s /var/www/venturex/public /etc/nginx/venturex-public  # document root must be /public
+```
 
-### 2. Buy and receive stock — requisition to shelf
-1. Compare **Supplier Offers** and pick a supplier.
-2. Raise a **Purchase Requisition**, approve it, and generate a **Purchase Order**.
-3. Receive the goods against the PO — stock increases in the chosen warehouse.
-4. Allocate freight and duty in **Landed Costs** to see true cost per unit.
+Point the Nginx server block at `/var/www/venturex/public`, add the scheduler cron and queue worker, enable HTTPS, then open `https://your-domain/install`. Full commands are in [INSTALLATION.md](INSTALLATION.md) and [documentation/VPS.md](documentation/VPS.md).
 
-*Example:* `PR-2026-0031` → `PO-2026-0114` → 200 units received → landed cost ₹1,890/unit.
+### cPanel shared hosting
 
-### 3. Understand the numbers
-- **Finance → Dashboard** for revenue, receivables and payables.
-- **Finance → Receivables / Payables** for what is owed and overdue.
-- **Inventory → Stock** for reorder alerts and warehouse balances.
-- **Admin → Audit Logs** for a full trail of who changed what.
+1. In **cPanel → Select PHP Version**, choose PHP 8.4 and enable `pdo_mysql`, `mbstring`, `xml`, `curl`, `zip`, `bcmath`, `gd`, `intl`, `fileinfo` and `opcache`.
+2. In **cPanel → MySQL Databases**, create a database and a user with **All Privileges**; note the prefixed names for `.env`.
+3. Upload the extracted v1.3.1 files beside `public_html`, not inside it.
+4. Set the addon domain/subdomain **document root to `/public`** (for example `/home/user/venturex/public`). If the host will not allow this, use a subdomain with a custom document root or choose a VPS.
+5. Set directory permissions to `775` and files to `664`, then open `https://your-domain/install`.
 
-### 4. Ask AI about your own data
-Open **AI Center → AI Assistant** (or **Enterprise RAG** for sourced answers) and ask:
+Friendly details and fallbacks are in [INSTALLATION.md](INSTALLATION.md) and [documentation/CPANEL.md](documentation/CPANEL.md).
 
-- “Which customers have overdue invoices this month?”
-- “Show products below reorder level in each warehouse.”
-- “Summarise procurement spend by supplier this quarter.”
-- “What is the landed cost and margin of container CONT-2026-014?”
+### WordPress subdomain
 
-Every answer is generated from your records, and RAG answers include the source documents, confidence and latency.
+1. Keep WordPress on the main domain and create a subdomain such as `erp.example.com`.
+2. Point that subdomain's document root to the ERP project's `public/` directory (not WordPress and not the project root).
+3. Install VentureX through `/install` over HTTPS, then create a Sanctum API token in the ERP.
+4. Copy `integrations/wordpress/venturex-erp-connector` into WordPress `wp-content/plugins`, activate it, and set the API URL to `https://erp.example.com/api` plus the token. Do not put the token in public JavaScript.
 
-### 5. Bring your existing data
-Use **Admin → Import Data** for CSV imports and **Admin → Export Center** for controlled exports. Roles and permissions decide who can import, export or approve.
+The connector README documents the supported endpoints and HTTPS requirements. Integration guides: [documentation/WIX.md](documentation/WIX.md) and [documentation/CUSTOM-INTEGRATION.md](documentation/CUSTOM-INTEGRATION.md).
 
-## Features
+---
 
-### Core Modules
-- **CRM** - Customer management, pipeline, activities, contacts
-- **Sales** - Quotations, orders, invoices, payments
-- **Inventory** - Products, warehouses, stock management
-- **Procurement** - Purchase orders, RFQs, suppliers, supplier offers
-- **Finance** - Chart of accounts, journals, AR/AP, dashboards
-- **Logistics** - Shipments, containers, landed costs
-- **HR** - Employee directory, attendance, leave, payroll, performance reviews and automated onboarding
-- **Automation** - AERO X Agentic Engine for autonomous, auditable business rules
-- **Support** - Help center, tickets, documentation, FAQ
-- **Admin** - Users, roles, settings, branding, import/export, audit logs
+## Installer modes and local demo credentials
 
-### AI Features (Work Without API Keys)
-- Natural language chat assistant
-- AI Copilot with context-aware suggestions
-- AI Support Assistant with built-in knowledge base
-- AI Document Reader for file analysis
-- AI Procurement intelligence
-- **84 enterprise RAG pipelines** across CRM, procurement, inventory, finance, logistics, executive and HR domains, with sources, confidence and latency
-- Rule-based business insights
-- Key-only onboarding for **NVIDIA NIM, Google Gemini, OpenAI and Anthropic Claude** - paste a key and the endpoint/model are wired server-side
-- **AERO X Super Intelligence Brain** shield: AES-256 encryption at rest, prompt/PII sanitisation, threat detection, rate limiting and audit telemetry
+`/install` is a one-time setup wizard. It checks requirements, configures the database and `.env`, creates the first administrator, runs migrations with `--force`, and writes `storage/.installed`. After setup, the installer is disabled.
 
-### Security
-- Multi-Factor Authentication (TOTP)
-- Role-Based Access Control (RBAC)
-- 10-layer security architecture
-- Emergency lockdown mode
-- Complete audit logging
-- Rate limiting and brute force protection
-- Encrypted AI credentials with masked keys and step-up authentication
-- Transactional rollback telemetry for every autonomous action
+| Mode | Use it for | Data created |
+|---|---|---|
+| **Clean Production Mode** (recommended) | Real deployments, client installs, VPS, cPanel, Docker production | Schema, required roles/permissions, settings and the administrator you specify. **No demo users and no sample business records.** |
+| **Demo Preview Mode** | Throwaway local evaluation only | Optional sample records and the LOCAL DEMO sign-ins below. Never use on a public or shared server. |
+
+### LOCAL DEMO ONLY — do not use in production
+
+| Role | Email | Password |
+|---|---|---|
+| Super Admin | `demo_admin@example.com` | `Demo_Admin_2026!` |
+| CEO | `demo_manager@example.com` | `Demo_Manager_2026!` |
+| Sales Manager | `demo_sales@example.com` | `Demo_Sales_2026!` |
+
+These accounts exist only when Demo Preview Mode or local demo seeders are deliberately enabled. Change or remove them before exposing the application. Preview URLs are local only: <http://localhost:8000/login> and <http://127.0.0.1:8000/login>.
+
+For a manual clean install, use `php artisan migrate --force` and optional non-demo seeders. Do **not** run `migrate --seed` in production: the legacy seed command includes demo data. See [INSTALLATION.md](INSTALLATION.md).
+
+---
 
 ## Screenshots
 
 | Dashboard | Customers | Login |
-|-----------|-----------|-------|
+|---|---|---|
 | ![Dashboard](screenshots/Product%20demo/Dashboard%20of%20desktop.png) | ![Customers](screenshots/Product%20demo/customer%20dashboard.png) | ![Login](screenshots/Product%20demo/LOGIN%20DAHBOARD.png) |
 
 | Purchase Orders | Sales Orders | Invoices |
-|-----------------|--------------|----------|
+|---|---|---|
 | ![Purchase Orders](screenshots/Product%20demo/Purchase%20Orders.png) | ![Sales Orders](screenshots/Product%20demo/Sales%20Orders.png) | ![Invoices](screenshots/Product%20demo/Invoices.png) |
 
 | Leads | Opportunities | Pipeline |
-|-------|---------------|----------|
+|---|---|---|
 | ![Leads](screenshots/Product%20demo/LEADS.png) | ![Opportunities](screenshots/Product%20demo/Opportunities.png) | ![Pipeline](screenshots/Product%20demo/Opportunity%20Pipeline.png) |
 
-| AI Quotas | Audit Logs | Roles |
-|-----------|------------|-------|
-| ![AI Quotas](screenshots/Product%20demo/AI%20Quotas.png) | ![Audit Logs](screenshots/Product%20demo/Audit%20Logs.png) | ![Roles](screenshots/Product%20demo/Roles.png) |
-
 | Import Data | Export Center | Finance Dashboard |
-|-------------|---------------|-------------------|
+|---|---|---|
 | ![Import Data](screenshots/Product%20demo/Import%20Data.png) | ![Export Center](screenshots/Product%20demo/Export%20Center.png) | ![Finance Dashboard](screenshots/Product%20demo/Finance%20Dashboard.png) |
-
-| AI Support | Landed Costs |
-|------------|--------------|
-| ![AI Support](screenshots/Product%20demo/AI%20Support%20Assistant.png) | ![Landed Costs](screenshots/Product%20demo/Landed%20Costs.png) |
-
-## Quick Start
-
-### Requirements
-- PHP 8.4+
-- MySQL 8.0+ or MariaDB 10.6+
-- Composer
-- Node.js 20+
-
-### Installation
-
-```bash
-# 1. Extract the project
-cd /var/www/html
-unzip VentureX-ERP-CRM-v1.0.0.zip
-cd VentureX-ERP-CRM
-
-# 2. Install dependencies
-composer install
-
-# 3. Configure environment
-cp .env.example .env
-php artisan key:generate
-
-# Edit .env with your database credentials
-
-# 4. Setup database
-php artisan migrate --seed
-
-# 5. Build assets
-npm install
-npm run build
-
-# 6. Start the server
-php artisan serve
-```
-
-Open http://localhost:8000/install in your browser to run the 6-step installation wizard.
-
-### Demo Credentials
-
-> **Security Notice**: These are DEMO credentials for testing only. Change all passwords before production use.
-
-| Role | Email | Password |
-|------|-------|----------|
-| Super Admin | demo_admin@example.com | Demo_Admin_2026! |
-| CEO | demo_manager@example.com | Demo_Manager_2026! |
-| Sales Manager | demo_sales@example.com | Demo_Sales_2026! |
-
-## AI Configuration (Optional)
-
-All AI features work **out-of-the-box without any API keys** using built-in local intelligence. For enhanced AI capabilities, connect a provider with a single key:
-
-1. Get a key from [NVIDIA NIM](https://build.nvidia.com) (`nvapi-...`), [Google AI Studio](https://aistudio.google.com) (`AIza...`), [OpenAI](https://platform.openai.com) (`sk-...`) or [Anthropic](https://console.anthropic.com) (`sk-ant-...`).
-2. Sign in as **Super Admin** → **Administration → Settings → AI Engine**.
-3. Paste the key into the matching provider panel and click **Save & enable key**. There are no Base URL, path or auth-mode fields - endpoints and models come from `config/ai.php` server-side.
-
-Keys are encrypted at rest with AES-256, masked in the UI, fingerprinted, protected by step-up authentication, rate limited, and audit-logged without the secret. Saving any key activates the **AERO X Super Intelligence Brain** shield: prompt/PII sanitisation, threat detection, rate limiting and audit telemetry wrap every model call. You can still use `NVIDIA_API_KEY=nvapi-xxx` in `.env` for immutable deployments. See [AI API Keys — Secure Setup](documentation/AI-API-KEYS.md) for the full security model.
-
-### Invoice branding
-
-Open **Administration → Settings → Branding & Invoices** to upload a logo and set the accent colour, PDF-safe typography, legal name, tax/registration IDs, footer, terms and watermark. Every invoice and quotation PDF uses this branding; values fall back to the company record when unset.
-
-## Documentation
-
-- [Getting Started & Quick Examples](documentation/GETTING-STARTED.md)
-- [Product Guide (in-app, every page)](documentation/PRODUCT-GUIDE.md)
-- [AI API Keys — Secure Setup](documentation/AI-API-KEYS.md)
-- [84-Pipeline RAG Guide](documentation/RAG-GUIDE.md)
-- [Installation Guide](documentation/INSTALLATION.md)
-- [User Guide](documentation/USER_GUIDE.md)
-- [Admin Guide](documentation/ADMIN_GUIDE.md)
-- [Security Guide](documentation/SECURITY.md)
-- [Deployment Guide](documentation/DEPLOYMENT.md)
-- [API Documentation](documentation/API_DOCUMENTATION.md)
-- [Troubleshooting](documentation/TROUBLESHOOTING.md)
-- [Changelog](CHANGELOG.md)
-
-## Architecture
-
-```
-VentureX ERP & CRM/
-  app/
-    Http/Controllers/    # 62+ Controllers
-    Models/              # 64+ Eloquent Models
-    Services/            # 32+ Business Services
-    Policies/            # 32 Authorization Policies
-  database/migrations/   # 39 Database Migrations
-  resources/views/       # 125+ Blade Views
-  routes/                # 220+ Routes
-  config/                # 22 Configuration Files
-  documentation/         # Complete Documentation
-  docker/                # Docker Support
-```
-
-## Tech Stack
-
-- **Backend:** Laravel 13, PHP 8.4+
-- **Frontend:** Blade, Alpine.js 3, Tailwind CSS v4
-- **Database:** MySQL 8.0+, MariaDB 10.6+
-- **Build:** Vite 8.x
-- **Server:** Apache 2.4+, Nginx 1.24+
-- **AI:** NVIDIA Nemotron, RapidAPI, Local Intelligence
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- Email: chaturvedishivam179@gmail.com, ocoronews@gmail.com
-- Documentation: /documentation/
-- Issues: GitHub Issues
-
-## Sponsor This Project
-
-If you find VentureX ERP & CRM useful, consider supporting the project:
-
-[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-red)](https://github.com/sponsors/SHIVAM73566)
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-yellow)](https://buymeacoffee.com/venturexerp)
 
 ---
 
-**VentureX ERP & CRM** - Built for modern businesses.
+## Documentation
+
+- [Installation Guide](INSTALLATION.md)
+- [Getting Started](documentation/GETTING-STARTED.md)
+- [Product Guide](documentation/PRODUCT-GUIDE.md)
+- [84-Pipeline RAG Guide](documentation/RAG-GUIDE.md)
+- [AI API Keys — Secure Setup](documentation/AI-API-KEYS.md)
+- [User Guide](documentation/USER_GUIDE.md)
+- [Administrator Guide](documentation/ADMIN_GUIDE.md)
+- [Security Guide](documentation/SECURITY.md)
+- [Deployment Guide](documentation/DEPLOYMENT.md)
+- [cPanel Guide](documentation/CPANEL.md)
+- [VPS Guide](documentation/VPS.md)
+- [API Setup](documentation/API-SETUP.md)
+- [API Documentation](documentation/API_DOCUMENTATION.md)
+- [Troubleshooting](documentation/TROUBLESHOOTING.md)
+- [Changelog](CHANGELOG.md)
+- [Security & Enterprise Verification Report](SECURITY-AUDIT-REPORT.md)
+- [Release checksums](release/SHA256SUMS.txt)
+
+## Releases and verification
+
+- Current release target: **v1.3.1**
+- Prior verified artifacts: [release/SHA256SUMS.txt](release/SHA256SUMS.txt)
+- [GitHub deploy action](https://github.com/SHIVAM73566/venturex-deploy-action) — GitHub Marketplace approval pending.
+- The root `LICENSE` is MIT. Third-party components keep their own licenses; see [documentation/THIRD_PARTY_LICENSES.md](documentation/THIRD_PARTY_LICENSES.md).
+
+## Support and attribution
+
+- Maintainer: **Shivam Chaturvedi** — chaturvedishivam179@gmail.com
+- PayPal checkout / sales: **chaturvedishivam179@gmail.com**
+- Documentation: `/documentation/`
+- Issues: <https://github.com/SHIVAM73566/VentureX-ERP-CRM/issues>
+
+---
+
+**VentureX ERP & CRM v1.3.1** — built for modern businesses. Copyright © 2026 Shivam Chaturvedi. Licensed under MIT.

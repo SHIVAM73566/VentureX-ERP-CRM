@@ -1,11 +1,33 @@
+# Deterministic checkouts and archives
 * text=auto eol=lf
-
-*.blade.php diff=html
-*.css diff=css
-*.html diff=html
 *.md diff=markdown
+*.html diff=html
+*.css diff=css
 *.php diff=php
+*.blade.php diff=html
+*.sql text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
 
+# Keep source archives small and deterministic.
 /.github export-ignore
-CHANGELOG.md export-ignore
-.styleci.yml export-ignore
+/tests export-ignore
+/node_modules export-ignore
+/vendor export-ignore
+/bootstrap/cache/ export-ignore
+/storage/framework/cache/ export-ignore
+/storage/framework/sessions/ export-ignore
+/storage/framework/views/ export-ignore
+/.phpunit.cache export-ignore
+/.phpunit.result.cache export-ignore
+*.cache export-ignore
+*.log export-ignore
+*.zip export-ignore
+/release/*.zip export-ignore
+/release/*.tar.gz export-ignore
+
+# Old screenshot archives and generated image bundles are not part of the source export.
+*screenshots*.zip export-ignore
+/screenshots/archive/ export-ignore
+/documentation/images/archive/ export-ignore

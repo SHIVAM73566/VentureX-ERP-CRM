@@ -31,7 +31,7 @@ layer. A key only improves answer quality and model choice.
 The provider is enabled for your company immediately. The page then shows:
 
 - a green **Connected** badge,
-- the masked key (last 4 characters only),
+- a fixed mask confirming a key is configured (no part of the secret is shown),
 - the active model and the last update time.
 
 Use **Run configuration check** to confirm the stored key decrypts and the
@@ -123,7 +123,7 @@ Saving any key activates the **AERO X Super Intelligence Brain** shield. Every
 AI request passes through four layers:
 
 1. **Encryption at rest** - AES-256 via the application key, plus an HMAC
-   fingerprint and masked key tail for identification.
+   fingerprint and a presence-only marker for identification (no key tail).
 2. **Prompt and PII sanitisation** - secrets, card numbers, emails and phone
    numbers are redacted before the prompt is cached or transmitted.
 3. **Threat detection and rate limiting** - prompt-injection and abuse patterns

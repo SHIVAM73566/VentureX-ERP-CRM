@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToCompany;
+use App\Services\StockService;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,11 +55,7 @@ class Product extends Model
 
     public function availableStock(): float
     {
-        $in = (float) $this->stockMovements()->where('type', 'in')->sum('quantity');
-        $out = (float) $this->stockMovements()->where('type', 'out')->sum('quantity');
-        $adjustment = (float) $this->stockMovements()->where('type', 'adjustment')->sum('quantity');
-
-        return $in - $out + $adjustment;
+        return StockService::balance($this->id, $this->company_id ? (int) $this->company_id : null);
     }
 
     public function isLowStock(): bool

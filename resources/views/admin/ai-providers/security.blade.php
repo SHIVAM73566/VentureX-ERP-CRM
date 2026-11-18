@@ -24,8 +24,8 @@
                 browser, JavaScript, HTML, API responses or logs.
             </p>
             <p class="mt-1 text-xs text-red-700 dark:text-red-400">
-                Any key shows only its last 4 characters. If you suspect a leak, use "Rotate key" on the AI Providers page to
-                re-encrypt it with the current application cipher.
+                A fixed mask confirms a key is configured without revealing any part of it. If you suspect a leak,
+                use "Rotate key" on the AI Providers page to re-encrypt it with the current application cipher.
             </p>
         </div>
 

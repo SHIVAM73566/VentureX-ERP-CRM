@@ -1,80 +1,36 @@
-# TWITTER ERP — Root .htaccess
-# Block access to sensitive files and directories
-# Place this in the PROJECT ROOT (not public/)
+# VentureX ERP & CRM — PROJECT ROOT .htaccess (fallback only)
+#
+# PREFERRED DEPLOYMENT: point the web server document root directly at /public.
+# In that configuration, public/.htaccess is the only rewrite file in use and
+# this file is never read by Apache.
+#
+# If your host absolutely cannot change the document root, this file may be
+# used as a fallback: it blocks sensitive paths and forwards the first request
+# pass into public/. The REDIRECT_STATUS guard prevents an internal loop.
+# Always prefer /public as the document root over using this fallback.
 
-# Block .env
-<Files .env>
-    Require all denied
-</Files>
+Options -Indexes
 
-# Block .git
-<Directory .git>
-    Require all denied
-</Directory>
-
-# Block common sensitive files
-<FilesMatch "\.(env|git|htaccess|htpasswd|ini|log|sh|sql|bak|dist|DS_Store)$">
+# Deny direct access to environment, credential, backup and VCS files.
+<FilesMatch "^(?:\.env(?:\..*)?|\.htaccess|\.htpasswd|\.git|\.gitignore|\.gitattributes|composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit(?:\.mysql)?\.xml|.*\.(?:sql|bak|old|log|ini|sh))$">
     Require all denied
 </FilesMatch>
 
-# Block access to hidden files (dotfiles)
-<DirectoryMatch "/\.">
+# Common hidden files and well-known metadata.
+<FilesMatch "^\.(?!well-known$)">
     Require all denied
-</DirectoryMatch>
+</FilesMatch>
 
-# Block access to storage directory
-<Directory storage>
-    Require all denied
-</Directory>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
 
-# Block access to config directory
-<Directory config>
-    Require all denied
-</Directory>
+    # Block sensitive directories before any fallback routing.
+    RewriteRule ^(?:\.git|\.github|\.idea|\.vscode|app|bootstrap|config|database|docker|documentation|node_modules|release|resources|routes|storage|tests|vendor)(?:/|$) - [F,L,NC]
 
-# Block access to routes directory
-<Directory routes>
-    Require all denied
-</Directory>
-
-# Block access to app directory
-<Directory app>
-    Require all denied
-</Directory>
-
-# Block access to bootstrap directory
-<Directory bootstrap>
-    Require all denied
-</Directory>
-
-# Block access to database directory
-<Directory database>
-    Require all denied
-</Directory>
-
-# Block composer files
-<Files composer.json>
-    Require all denied
-</Files>
-<Files composer.lock>
-    Require all denied
-</Files>
-<Files package.json>
-    Require all denied
-</Files>
-<Files package-lock.json>
-    Require all denied
-</Files>
-
-# Block phpunit files
-<Files phpunit.xml>
-    Require all denied
-</Files>
-<Files phpunit.mysql.xml>
-    Require all denied
-</Files>
-
-# Redirect all non-public requests to public/
-RewriteEngine On
-RewriteRule ^$ public/ [L]
-RewriteRule (.*) public/$1 [L]
+    # Root-document-root fallback only. The REDIRECT_STATUS condition ensures
+    # this runs on the original external request, not after public/.htaccess
+    # has already taken over. Remove this block when /public is the document root.
+    RewriteCond %{ENV:REDIRECT_STATUS} ^$
+    RewriteCond %{REQUEST_URI} !^/public/ [NC]
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

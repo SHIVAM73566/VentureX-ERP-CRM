@@ -10,6 +10,8 @@ use App\Models\TaxRate;
 use App\Models\Unit;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
+use App\Services\DashboardCacheService;
+use App\Services\StockService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,8 +37,7 @@ class ProductController extends Controller
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
             ->when($request->filled('category'), fn ($q) => $q->where('category', $request->string('category')))
             ->when($request->boolean('low'), function ($q) {
-                $q->whereNotNull('reorder_level')
-                    ->whereRaw('(SELECT COALESCE(SUM(CASE WHEN type=\'in\' THEN quantity WHEN type=\'out\' THEN -quantity ELSE 0 END), 0) FROM stock_movements WHERE product_id = products.id) <= reorder_level');
+                $q->whereIn('products.id', $this->lowStockProductIds());
             })
             ->latest()
             ->paginate(15)
@@ -45,7 +46,7 @@ class ProductController extends Controller
         $summary = [
             'total' => Product::ofCompany()->count(),
             'active' => Product::ofCompany()->where('status', 'active')->count(),
-            'low_stock' => Product::ofCompany()->whereNotNull('reorder_level')->get()->filter(fn (Product $p) => $p->availableStock() <= (float) $p->reorder_level)->count(),
+            'low_stock' => count($this->lowStockProductIds()),
             'stock_value' => (float) StockMovement::ofCompany()
                 ->join('products as p', 'p.id', '=', 'stock_movements.product_id')
                 ->whereNull('p.deleted_at')
@@ -86,6 +87,7 @@ class ProductController extends Controller
                 return $product;
             });
 
+            DashboardCacheService::forget((int) $product->company_id);
             AuditLogger::created($product);
 
             return redirect()->route('inventory.products.show', $product)->with('success', 'Product created.');
@@ -137,6 +139,7 @@ class ProductController extends Controller
             DB::transaction(function () use ($request, $product) {
                 $product->update($request->validate($this->rules()));
             });
+            DashboardCacheService::forget((int) $product->company_id);
             AuditLogger::updated($product);
 
             return redirect()->route('inventory.products.show', $product)->with('success', 'Product updated.');
@@ -155,10 +158,41 @@ class ProductController extends Controller
             abort(404);
         }
 
-        $product->delete();
-        AuditLogger::deleted($product);
+        try {
+            DB::transaction(function () use ($product) {
+                $product->delete();
+            });
+
+            StockService::invalidate((int) $product->company_id);
+            DashboardCacheService::forget((int) $product->company_id);
+            AuditLogger::deleted($product);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'Failed to delete product.');
+        }
 
         return redirect()->route('inventory.products.index')->with('success', 'Product deleted.');
+    }
+
+    /**
+     * Product ids at or below their reorder level, derived from one grouped
+     * stock-balance query per company/request.
+     *
+     * @return array<int, int>
+     */
+    protected function lowStockProductIds(): array
+    {
+        $companyId = CompanyContext::id();
+        $balances = StockService::balances($companyId);
+
+        return Product::ofCompany()
+            ->whereNotNull('reorder_level')
+            ->get(['id', 'reorder_level'])
+            ->filter(fn (Product $product) => ($balances[$product->id] ?? 0.0) <= (float) $product->reorder_level)
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
     }
 
     protected function rules(): array

@@ -350,7 +350,7 @@ Default limits (varies by plan):
 
 ### Storing API Keys
 
-API keys are stored encrypted in the database using Laravel's built-in encryption. They are never exposed in full in the admin panel — only the last 4 characters are shown.
+API keys are stored encrypted in the database using Laravel's built-in encryption. No part of a saved key is ever shown in the admin panel, logs, or API responses — the UI shows only a fixed presence marker.
 
 ### Key Rotation
 

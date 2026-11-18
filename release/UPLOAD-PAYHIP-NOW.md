@@ -10,7 +10,7 @@
 1. After login, go to "Products" page
 2. Click "Add new product"
 3. Click "Digital Product"
-4. Upload file: C:\MY_ERP\release\VentureX-ERP-CRM-v1.0.0-Payhip.zip
+4. Upload file: C:\MY_ERP\release\VentureX-ERP-CRM-v1.3.1-Payhip.zip
 
 ## Step 3: Fill Product Details
 1. Name: VentureX ERP & CRM - AI-Powered Business Operating System | Laravel 13

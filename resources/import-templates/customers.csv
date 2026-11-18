@@ -1,0 +1,2 @@
+customer_code,name,email,phone,address,city,state,country,postal_code,tax_id,contact_person,notes
+C1001,"Sample Customer Ltd","billing@example.com","+10000000000","1 Sample Street","Sample City","Sample State","US","10001","","Sample Contact","Replace this row with your data."

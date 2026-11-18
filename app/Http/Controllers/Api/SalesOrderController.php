@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\SalesOrder;
+use App\Services\NumberGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -43,7 +44,7 @@ class SalesOrderController extends ApiController
 
         $order = SalesOrder::create([
             ...$validated,
-            'order_number' => 'SO-'.date('Ymd').'-'.str_pad(SalesOrder::max('id') + 1, 4, '0', STR_PAD_LEFT),
+            'order_number' => NumberGenerator::next('SO', 'sales_orders'),
             'company_id' => auth()->user()->company_id,
             'created_by' => auth()->id(),
         ]);

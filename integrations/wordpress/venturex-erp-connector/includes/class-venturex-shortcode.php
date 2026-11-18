@@ -1,4 +1,5 @@
 <?php
+
 if (! defined('ABSPATH')) {
     exit;
 }
@@ -8,7 +9,6 @@ class VentureX_Shortcode
     public function __construct()
     {
         add_shortcode('venturex_form', [$this, 'renderShortcode']);
-        add_action('init', [$this, 'registerWidget']);
         add_action('widgets_init', [$this, 'loadWidget']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueFrontend']);
         add_action('rest_api_init', [$this, 'registerRESTRoutes']);
@@ -18,14 +18,19 @@ class VentureX_Shortcode
 
     public function enqueueFrontend()
     {
-        if (shortcode_exists('venturex_form') || is_active_widget(false, false, 'venturex_lead')) {
-            wp_enqueue_style('venturex-frontend', VENTUREX_PLUGIN_URL.'assets/frontend.css', [], VENTUREX_VERSION);
-            wp_enqueue_script('venturex-frontend', VENTUREX_PLUGIN_URL.'assets/frontend.js', ['jquery'], VENTUREX_VERSION, true);
-            wp_localize_script('venturex-frontend', 'venturexFrontend', [
-                'url' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('venturex_frontend_nonce'),
-            ]);
+        if (! shortcode_exists('venturex_form')) {
+            return;
         }
+        if (! is_singular() && ! is_home() && ! is_archive()) {
+            return;
+        }
+
+        wp_enqueue_style('venturex-frontend', VENTUREX_PLUGIN_URL.'assets/frontend.css', [], VENTUREX_VERSION);
+        wp_enqueue_script('venturex-frontend', VENTUREX_PLUGIN_URL.'assets/frontend.js', ['jquery'], VENTUREX_VERSION, true);
+        wp_localize_script('venturex-frontend', 'venturexFrontend', [
+            'url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('venturex_frontend_nonce'),
+        ]);
     }
 
     public function renderShortcode($atts)
@@ -40,14 +45,9 @@ class VentureX_Shortcode
         return ob_get_clean();
     }
 
-    public function registerWidget()
-    {
-        register_widget('VentureX_Lead_Widget');
-    }
-
     public function loadWidget()
     {
-        // Widget class is registered via registerWidget() in the constructor
+        register_widget('VentureX_Lead_Widget');
     }
 
     public function ajaxSubmitForm()
@@ -55,11 +55,11 @@ class VentureX_Shortcode
         check_ajax_referer('venturex_frontend_nonce', 'nonce');
 
         $data = [
-            'name' => isset($_POST['vx_name']) ? sanitize_text_field($_POST['vx_name']) : '',
-            'email' => isset($_POST['vx_email']) ? sanitize_email($_POST['vx_email']) : '',
-            'phone' => isset($_POST['vx_phone']) ? sanitize_text_field($_POST['vx_phone']) : '',
-            'company' => isset($_POST['vx_company']) ? sanitize_text_field($_POST['vx_company']) : '',
-            'message' => isset($_POST['vx_message']) ? sanitize_textarea_field($_POST['vx_message']) : '',
+            'name' => isset($_POST['vx_name']) ? sanitize_text_field(wp_unslash($_POST['vx_name'])) : '',
+            'email' => isset($_POST['vx_email']) ? sanitize_email(wp_unslash($_POST['vx_email'])) : '',
+            'phone' => isset($_POST['vx_phone']) ? sanitize_text_field(wp_unslash($_POST['vx_phone'])) : '',
+            'company' => isset($_POST['vx_company']) ? sanitize_text_field(wp_unslash($_POST['vx_company'])) : '',
+            'message' => isset($_POST['vx_message']) ? sanitize_textarea_field(wp_unslash($_POST['vx_message'])) : '',
             'source' => 'WordPress Form',
         ];
 
@@ -71,18 +71,24 @@ class VentureX_Shortcode
         $result = $api->createLead($data);
 
         if (is_wp_error($result)) {
-            wp_send_json_error(['message' => $result->get_error_message()]);
+            wp_send_json_error(['message' => 'The message could not be sent. Please try again later.']);
         }
 
         wp_send_json_success(['message' => 'Thank you! We have received your message.']);
     }
 
+    /**
+     * Optional authenticated proxy for server-side callers. It is NOT public:
+     * unauthenticated visitors must never be able to reuse the stored token.
+     */
     public function registerRESTRoutes()
     {
         register_rest_route('venturex/v1', '/proxy', [
             'methods' => 'POST',
             'callback' => [$this, 'restProxy'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => function () {
+                return current_user_can('manage_options');
+            },
             'args' => [
                 'endpoint' => [
                     'required' => true,
@@ -103,19 +109,24 @@ class VentureX_Shortcode
 
     public function restProxy($request)
     {
-        $endpoint = $request->get_param('endpoint');
-        $method = $request->get_param('method');
+        $endpoint_key = (string) $request->get_param('endpoint');
+        $method = strtoupper((string) $request->get_param('method'));
         $data = $request->get_param('data');
 
-        // Limit allowed endpoints for security
-        $allowed = ['customers', 'leads', 'tickets', 'products', 'orders'];
-        $parts = explode('/', trim($endpoint, '/'));
-        if (empty($parts[0]) || ! in_array($parts[0], $allowed)) {
+        // Only implemented routes may be reached, with explicit methods.
+        $allowed = [
+            'customers' => ['/crm/customers', ['GET', 'POST']],
+            'leads' => ['/crm/leads', ['GET', 'POST']],
+            'tickets' => ['/support/tickets', ['GET', 'POST']],
+            'orders' => ['/sales/orders', ['GET', 'POST']],
+        ];
+
+        if (! isset($allowed[$endpoint_key]) || ! in_array($method, $allowed[$endpoint_key][1], true)) {
             return new WP_Error('forbidden', 'Endpoint not allowed', ['status' => 403]);
         }
 
         $api = new VentureX_API;
-        $result = $api->request($method, '/'.$endpoint, $data);
+        $result = $api->request($method, $allowed[$endpoint_key][0], is_array($data) ? $data : []);
 
         if (is_wp_error($result)) {
             return new WP_Error($result->get_error_code(), $result->get_error_message(), ['status' => 500]);
@@ -150,10 +161,10 @@ class VentureX_Lead_Widget extends WP_Widget
         $title = ! empty($instance['title']) ? $instance['title'] : 'Contact Us';
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>">Title:</label>
+            <label for="<?php echo esc_attr($this->get_field_id('title')); ?>">Title:</label>
             <input class="widefat" type="text"
-                   id="<?php echo $this->get_field_id('title'); ?>"
-                   name="<?php echo $this->get_field_name('title'); ?>"
+                   id="<?php echo esc_attr($this->get_field_id('title')); ?>"
+                   name="<?php echo esc_attr($this->get_field_name('title')); ?>"
                    value="<?php echo esc_attr($title); ?>">
         </p>
         <?php

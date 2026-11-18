@@ -162,7 +162,7 @@
                         </button>
 
                         <p class="text-[11px] text-gray-400 dark:text-gray-500">
-                            The API key is encrypted at rest server-side and only ever shown masked (last 4 characters).
+                            The API key is encrypted at rest server-side and never displayed after saving.
                         </p>
                     </form>
 

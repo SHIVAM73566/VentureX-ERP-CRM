@@ -12,8 +12,8 @@ class UserPreference extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-
+    // Mass assignment is governed solely by #[Fillable]. A conflicting empty
+    // $guarded used to re-open every attribute (including user_id) to input.
     protected function casts(): array
     {
         return [

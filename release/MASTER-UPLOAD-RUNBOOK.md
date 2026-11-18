@@ -5,7 +5,7 @@ All text you need is in the listing files listed. Budget: ~20 min per platform.
 
 YOUR 2 FILES (used on every platform)
 -------------------------------------
-ZIP file:      C:/MY_ERP/release/VentureX-ERP-CRM-v1.0.0-Gumroad.zip   (5.55 MB)
+ZIP file:      C:/MY_ERP/release/VentureX-ERP-CRM-v1.3.1-Gumroad.zip   (5.55 MB)
 Main image:    C:/MY_ERP/screenshots/Product demo/Dashboard of desktop.png
 Extra images:  C:/MY_ERP/screenshots/Product demo/  (17 PNGs - use 6-10 best)
 

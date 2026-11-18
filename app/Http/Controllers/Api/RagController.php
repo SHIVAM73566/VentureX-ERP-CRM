@@ -7,6 +7,7 @@ use App\Services\Rag\RagService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 /**
@@ -18,9 +19,7 @@ class RagController extends ApiController
 
     public function pipelines(Request $request): JsonResponse
     {
-        if (! $request->user()?->can('viewAny', AiRun::class)) {
-            return $this->errorResponse('You are not authorised to use RAG pipelines.', 403);
-        }
+        $this->authorize('viewAny', AiRun::class);
 
         $domain = $request->string('domain')->toString() ?: null;
         $pipelines = $this->rag->pipelines($domain);
@@ -46,9 +45,7 @@ class RagController extends ApiController
 
     public function query(Request $request): JsonResponse
     {
-        if (! $request->user()?->can('viewAny', AiRun::class)) {
-            return $this->errorResponse('You are not authorised to use RAG pipelines.', 403);
-        }
+        $this->authorize('viewAny', AiRun::class);
 
         $validated = $request->validate([
             'pipeline' => ['required', 'string', 'max:100'],
@@ -62,6 +59,8 @@ class RagController extends ApiController
                 'limit' => $validated['limit'] ?? 8,
                 'use_ai' => $request->boolean('use_ai'),
             ]);
+        } catch (HttpException $e) {
+            throw $e;
         } catch (InvalidArgumentException $e) {
             return $this->errorResponse($e->getMessage(), 422);
         } catch (Throwable $e) {
@@ -75,9 +74,7 @@ class RagController extends ApiController
 
     public function sync(Request $request): JsonResponse
     {
-        if (! $request->user()?->can('create', AiRun::class)) {
-            return $this->errorResponse('You are not authorised to index RAG pipelines.', 403);
-        }
+        $this->authorize('create', AiRun::class);
 
         $validated = $request->validate([
             'pipeline' => ['nullable', 'string', 'max:100'],
@@ -105,9 +102,7 @@ class RagController extends ApiController
 
     public function stats(Request $request): JsonResponse
     {
-        if (! $request->user()?->can('viewAny', AiRun::class)) {
-            return $this->errorResponse('You are not authorised to use RAG pipelines.', 403);
-        }
+        $this->authorize('viewAny', AiRun::class);
 
         return $this->successResponse($this->rag->stats(), 'RAG statistics retrieved');
     }

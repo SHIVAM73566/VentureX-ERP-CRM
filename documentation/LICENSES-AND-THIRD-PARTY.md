@@ -1,6 +1,6 @@
 # Licenses and Third-Party Dependencies
 
-**Product:** VentureX ERP & CRM v1.0.0
+**Product:** VentureX ERP & CRM v1.3.1
 **Date:** 2026-08-20
 
 ## Core Framework

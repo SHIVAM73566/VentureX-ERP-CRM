@@ -88,7 +88,7 @@ This isn't a template or a starter kit. It's a **fully built, tested, production
 - **249 PHP files** — Controllers, Models, Services, Policies
 - **157 Blade views** — Responsive, dark mode, mobile-ready
 - **37 database migrations** — With demo data seeder
-- **339 PHPUnit tests** — 464 assertions, 0 failures
+- **Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md** — final v1.3.1 counts published after central integration
 - **Complete documentation** — Installation, User Guide, Admin Guide, API Docs
 
 ---
@@ -173,7 +173,7 @@ VentureX ERP & CRM gives you everything a $500/month SaaS ERP provides — CRM, 
 - Self-hosted — your data stays on your server
 - Free updates — pull from GitHub, run migration, done
 - Docker ready — deploy in minutes with Docker Compose
-- 339 tests passing — production-grade quality
+- Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md — production-grade quality
 - AI copilot included — works without API keys
 - Full documentation — installation, user guide, API docs
 
@@ -200,7 +200,7 @@ $59 uses charm pricing — it feels significantly less than $60 while being perc
 At $59, the cost-per-module is $7.37. The cost-per-controller is $0.95. The cost-per-test is $0.17. When customers calculate value per component, $59 feels like a steal compared to hiring a developer to build even one of these modules ($5,000-$15,000 per module).
 
 **Competitive Analysis:**
-Similar Laravel admin templates sell at $49-$79. VentureX isn't a template — it's a complete ERP with 8 business modules, AI copilot, and 339 tests. At $59, it's priced competitively with templates while delivering 10x more functionality.
+Similar Laravel admin templates sell at $49-$79. VentureX isn't a template — it's a complete ERP with 8 business modules, AI copilot, and a passing automated test suite (final counts in audit report). At $59, it's priced competitively with templates while delivering 10x more functionality.
 
 **Conversion Optimization:**
 $59 sits in the "credit card is already out" zone. It's below the $99 psychological threshold where purchase hesitation increases. It's above the $29 "too cheap to be good" floor. It's the sweet spot where impulse meets confidence.
@@ -251,8 +251,8 @@ Software > Business & Commerce
 # SECTION 10: FILE UPLOAD
 # ============================================================
 
-Upload: VentureX-ERP-CRM-v1.0.0-LemonSqueezy.zip
-(Located in: release/VentureX-ERP-CRM-v1.0.0-LemonSqueezy.zip)
+Upload: VentureX-ERP-CRM-v1.3.1-LemonSqueezy.zip
+(Located in: release/VentureX-ERP-CRM-v1.3.1-LemonSqueezy.zip)
 
 
 # ============================================================
@@ -299,7 +299,7 @@ erp, crm, laravel, php, business, management, ai, inventory, invoicing, procurem
 - 249 PHP files (Controllers, Models, Services, Policies)
 - 157 Blade views (responsive, dark mode, mobile-ready)
 - 37 database migrations with demo data seeder
-- 339 PHPUnit tests (464 assertions, 0 failures)
+- Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md
 - REST API with rate limiting
 - Docker & Docker Compose configs
 - 6-step browser-based installation wizard
@@ -320,7 +320,7 @@ erp, crm, laravel, php, business, management, ai, inventory, invoicing, procurem
 - PHP 8.4 or higher
 - MySQL 8.0+ or MariaDB 10.6+
 - Composer 2.x
-- Node.js 18+
+- Node.js 20+
 - Web server (Apache 2.4+ or Nginx 1.24+)
 - 512MB+ RAM (1GB+ recommended)
 
@@ -329,7 +329,7 @@ erp, crm, laravel, php, business, management, ai, inventory, invoicing, procurem
 # SECTION 16: LICENSE TERMS
 # ============================================================
 
-Commercial License — You can:
+MIT License — You can:
 - Use on unlimited domains
 - Use for unlimited client projects
 - Modify the source code
@@ -356,7 +356,7 @@ Response Time: Within 24 hours
 # SECTION 18: SEO / META DESCRIPTION
 # ============================================================
 
-Complete Laravel ERP + CRM + AI copilot for businesses. Self-hosted, one-time purchase, unlimited users. CRM, invoicing, inventory, procurement, finance, logistics. 339 tests passed. Production-ready.
+Complete Laravel ERP + CRM + AI copilot for businesses. Self-hosted, one-time purchase, unlimited users. CRM, invoicing, inventory, procurement, finance, logistics. Automated test suite passing; final counts in SECURITY-AUDIT-REPORT.md. Production-ready.
 
 
 # ============================================================

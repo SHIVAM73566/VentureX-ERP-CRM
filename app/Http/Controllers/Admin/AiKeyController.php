@@ -107,13 +107,12 @@ class AiKeyController extends Controller
             'model' => $row->model,
             'enabled' => true,
             'key_configured' => true,
-            'key_tail' => substr($apiKey, -4),
             'source' => 'admin.settings',
         ]);
 
         return redirect()
             ->route('admin.settings.index', ['tab' => 'ai'])
-            ->with('success', $meta['label'].' key saved. It is encrypted at rest and only ever shown masked (last 4 characters).');
+            ->with('success', $meta['label'].' key saved. It is encrypted at rest and never displayed, logged, or flashed back.');
     }
 
     /**
@@ -180,8 +179,10 @@ class AiKeyController extends Controller
                 ->with('error', $meta['label'].' is not defined in config/ai.php. Restore the default provider config.');
         }
 
+        // Report presence and length only. No prefix, suffix, mask or any
+        // other substring of the secret may enter the flash session.
         $pieces = [
-            'key decrypts ('.strlen($key).' chars, tail '.substr($key, -4).')',
+            'key present (length '.strlen($key).' characters)',
             'auth mode: '.($row->auth_mode ?? $config['auth_mode'] ?? 'n/a'),
             'model: '.($row->model ?? $config['model'] ?? 'n/a'),
             'endpoint: '.($row->base_url ?? $config['base_url'] ?? 'n/a').($row->path ?? $config['path'] ?? ''),

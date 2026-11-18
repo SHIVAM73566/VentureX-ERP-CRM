@@ -9,12 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Credential material, fingerprints and runtime telemetry are server-owned:
+ * request handlers assign them with forceFill()/direct assignment after
+ * validating the tenant and encrypting the key. They must never be copyable
+ * from an input array. Company binding is likewise set server-side; it stays
+ * fillable only because existing fixtures construct rows directly for tests.
+ */
 #[Fillable([
-    'company_id', 'provider', 'encrypted_key', 'key_hash', 'model', 'base_url',
+    'company_id', 'provider', 'encrypted_key', 'model', 'base_url',
     'path', 'auth_mode', 'enabled', 'fallback_enabled', 'per_user_daily_limit',
     'per_user_monthly_limit', 'org_daily_limit', 'org_monthly_limit',
-    'request_count', 'error_count', 'last_success_at', 'last_error_at',
-    'last_error', 'created_by',
+    'created_by',
 ])]
 class AiProvider extends Model
 {
@@ -52,13 +58,15 @@ class AiProvider extends Model
     }
 
     /**
-     * Masked key for display (e.g. "****abcd"). The full key is never shown.
+     * Permanent, non-reversible display marker for a configured key.
+     *
+     * No substring of the secret — not even its last characters — is ever
+     * exposed to the browser, logs, or error pages. Presence is the only fact
+     * the UI needs to render.
      */
     public function maskedKey(): ?string
     {
-        $key = $this->getDecryptedKey();
-
-        return $key !== null ? EncryptionService::mask($key, 4) : null;
+        return $this->getDecryptedKey() !== null ? '********' : null;
     }
 
     public function createdBy(): BelongsTo

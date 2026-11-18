@@ -2,7 +2,7 @@
 
 **VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
-> Version 1.0.0 | AI Provider and API Key Configuration
+> Version 1.3.1 | AI Provider and API Key Configuration (PHP 8.4 / Laravel 13)
 
 ---
 
@@ -33,7 +33,7 @@ VentureX ERP & CRM integrates with multiple AI providers through a unified gatew
 | OpenAI             | Bearer token    | `OPENAI_API_KEY`        | General purpose AI                 |
 | Anthropic          | Bearer token    | `ANTHROPIC_API_KEY`     | Complex reasoning, analysis        |
 
-> **Note:** This guide covers AI provider configuration only. VentureX ERP & CRM also provides a full RESTful API authenticated via Laravel Sanctum tokens (e.g., `/api/crm/customers`, `/api/crm/leads`, `/api/sales/invoices`). See API_DOCUMENTATION.md and the root `API-SETUP.md` for endpoint details.
+> **Note:** This guide covers AI provider configuration only. Keys can be pasted in **Administration → Settings → AI Engine**; endpoints and models are resolved server-side. VentureX ERP & CRM also provides a REST API authenticated via Laravel Sanctum tokens (for example `/api/crm/customers`, `/api/crm/leads`, `/api/sales/invoices`, `/api/support/tickets`). See [API_DOCUMENTATION.md](API_DOCUMENTATION.md) and the root `API-SETUP.md` for endpoint details.
 
 ---
 

@@ -553,4 +553,11 @@ Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/imp
     Route::get('/{import}/error-report', [ImportController::class, 'errorReport'])->name('error-report');
     Route::post('/templates', [ImportController::class, 'templateStore'])->name('templates.store');
     Route::delete('/templates/{template}', [ImportController::class, 'templateDestroy'])->name('templates.destroy');
+    Route::get('/templates/download/{destination}', [ImportController::class, 'templateDownload'])->name('templates.download');
+});
+
+Route::middleware(['auth', 'role:super_admin', 'step_up', 'throttle:6,1'])->prefix('admin/demo-data')->name('admin.demo-data.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Admin\DemoDataController::class, 'index'])->name('index');
+    Route::post('/wipe', [\App\Http\Controllers\Admin\DemoDataController::class, 'wipe'])->name('wipe');
+    Route::post('/aero-x/wipe', [\App\Http\Controllers\Ai\AiActionController::class, 'wipeDemoData'])->name('aero-x.wipe');
 });

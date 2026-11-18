@@ -95,8 +95,8 @@
                                     </div>
 
                                     @if ($p)
-                                        <p class="mt-2 font-mono text-xs text-gray-600 dark:text-gray-300" title="Stored &amp; encrypted at rest — only the last 4 characters are shown">
-                                            {{ $card['masked'] ?? '****' }}
+                                        <p class="mt-2 font-mono text-xs text-gray-600 dark:text-gray-300" title="Stored &amp; encrypted at rest — no part of the key is displayed">
+                                            {{ $card['masked'] ?? '********' }}
                                         </p>
                                         <div class="mt-2 flex flex-wrap gap-1.5">
                                             <span class="badge {{ $p->enabled ? 'badge-green' : 'badge-red' }}">{{ $p->enabled ? 'Enabled' : 'Disabled' }}</span>
@@ -291,7 +291,7 @@
         {{-- Security note --}}
         <div class="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20">
             <p class="text-sm text-red-800 dark:text-red-300">
-                <span class="font-semibold">Keys are secrets.</span> Only the last 4 characters of a key are ever shown here.
+                <span class="font-semibold">Keys are secrets.</span> No part of a saved key is ever shown here.
                 Keys are encrypted at rest with the application cipher and are never written to logs, export files, or API responses.
             </p>
         </div>

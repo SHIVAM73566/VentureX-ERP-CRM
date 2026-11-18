@@ -2,7 +2,7 @@
 
 **VentureX ERP & CRM — AI-Powered CRM & ERP Business Operating System**
 
-> Version 1.0.0 | AI Gateway and Provider Configuration
+> Version 1.3.1 | AI Gateway and Provider Configuration (PHP 8.4 / Laravel 13)
 
 ---
 

@@ -38,9 +38,9 @@ WHAT YOU GET:
 - WordPress lead-capture plugin
 - 23 documentation files + 15-part video tutorial series
 
-REQUIREMENTS: PHP 8.3+, MySQL 5.7+ (or MariaDB 10.6+), Apache or Nginx.
+REQUIREMENTS: PHP 8.4, MySQL 8.0+ (or MariaDB 10.6+), Apache or Nginx.
 
-LICENSE: Commercial license - unlimited domains, rebranding allowed, client projects allowed. Redistribution of source code not permitted.
+LICENSE: MIT license - unlimited domains, rebranding allowed, client projects allowed. Redistribution is permitted with the MIT copyright and license notice included.
 
 SUPPORT: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 ```
@@ -57,7 +57,7 @@ Optional upsells (Order Bumps):
 ### _ Fulfillment
 ```
 Delivery: Secure download link by email + thank-you page
-File: upload release/VentureX-ERP-CRM-v1.0.0-Gumroad.zip
+File: upload release/VentureX-ERP-CRM-v1.3.1-Gumroad.zip
 Download attempts limit: 5 | Link expiry: 30 days
 ```
 
@@ -72,7 +72,7 @@ Download attempts limit: 5 | Link expiry: 30 days
 | Category | Software / Web Applications |
 | Sub-category | ERP / Business Management |
 | Type | Digital download (one-time payment) |
-| File Included | VentureX-ERP-CRM-v1.0.0.zip (5.55 MB) |
-| Software Version | 1.0.0 |
+| File Included | VentureX-ERP-CRM-v1.3.1-source.zip (5.55 MB) |
+| Software Version | 1.3.1 |
 | Platforms | Web-based, self-hosted (PHP/MySQL) |
 | Price | $89.99 USD |

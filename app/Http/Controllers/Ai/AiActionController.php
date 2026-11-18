@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ai;
 
+use App\Http\Controllers\Admin\DemoDataController;
 use App\Http\Controllers\Controller;
 use App\Models\AiRun;
 use App\Models\Customer;
@@ -16,14 +17,19 @@ use App\Services\Ai\AiLocalIntelligence;
 use App\Services\Ai\AiPrompt;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
+use App\Services\Demo\DemoDataWipeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 /**
  * One-click AI actions. Every action is an explicit user trigger that only
  * GENERATES text (summaries, drafts, analysis) for human review. No AI action
- * mutates ERP data directly.
+ * mutates ERP data directly. The AERO X wipe endpoint is a manual, explicitly
+ * confirmed exception and is deliberately absent from AgenticEngine::runAll().
+ *
+ * @author Shivam Chaturvedi <chaturvedishivam179@gmail.com>
  */
 class AiActionController extends Controller
 {
@@ -301,5 +307,71 @@ class AiActionController extends Controller
                 'run_id' => $run->id,
             ]);
         }
+    }
+
+    /**
+     * AERO X action key: wipe_demo_data.
+     *
+     * This is deliberately NOT an AgenticEngine rule and never appears in
+     * AgenticEngine::runAll(). It needs a current-password re-check and the
+     * exact typed phrase, and it returns a confirmation payload before any
+     * destructive call is made.
+     */
+    public function wipeDemoData(Request $request, DemoDataWipeService $wipe): JsonResponse
+    {
+        $data = $request->validate([
+            'action_key' => ['required', 'string', 'in:wipe_demo_data'],
+            'confirm' => ['required', 'boolean'],
+            'password' => ['required', 'string'],
+            'confirmation' => ['required', 'string'],
+        ]);
+
+        $user = $request->user();
+        if (! $user || ! Hash::check($data['password'], (string) $user->password)) {
+            AuditLogger::log('demo_data_wipe_denied', 'automation');
+
+            return response()->json([
+                'success' => false,
+                'error' => 'Current password verification failed.',
+            ], 423);
+        }
+
+        $phrase = DemoDataController::CONFIRMATION_PHRASE;
+        if (! hash_equals($phrase, $data['confirmation'])) {
+            return response()->json([
+                'success' => false,
+                'error' => "Type the exact phrase {$phrase} to confirm.",
+            ], 422);
+        }
+
+        $companyId = (int) (CompanyContext::id() ?? $user->company_id ?? 0);
+        abort_if($companyId === 0, 403);
+
+        if (! $data['confirm']) {
+            return response()->json([
+                'success' => true,
+                'action_key' => 'wipe_demo_data',
+                'requires_confirmation' => true,
+                'phrase' => $phrase,
+                'preview' => $wipe->preview($companyId),
+                'message' => 'No changes were made. Submit again with confirm=true to execute the wipe.',
+            ]);
+        }
+
+        $deleted = $wipe->wipe($companyId, (int) $user->id);
+
+        AuditLogger::log('agent.manual_wipe', 'automation', null, null, [
+            'action_key' => 'wipe_demo_data',
+            'tables' => $deleted,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'action_key' => 'wipe_demo_data',
+            'requires_confirmation' => false,
+            'deleted' => $deleted,
+            'total_rows' => array_sum($deleted),
+            'message' => 'Demo data wiped successfully.',
+        ]);
     }
 }

@@ -573,7 +573,7 @@ Hi [NAME] — you mentioned spreadsheet-itis with your sales/stock setup. Ventur
 - [REQUIREMENTS] → PHP version, Composer, Node.js, database, hosting notes
 - [DATABASE] → MySQL/MariaDB
 - [HOSTING] → shared hosting/VPS/Docker
-- [LICENSE] → commercial license terms, install rights, white-label rights
+- [LICENSE] → MIT License terms, install rights, attribution requirements
 - [SUPPORT TERMS] → response time, channel, duration
 - [COMMERCIAL USE] → client-work rights clarification
 - [UPDATES] → update policy

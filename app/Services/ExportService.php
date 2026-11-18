@@ -85,32 +85,37 @@ class ExportService
             return $export;
         }
 
+        $name = 'exports/'.$export->export_id.'/'.$export->export_id.'.csv';
+        $count = 0;
+        $handle = tmpfile();
+
         try {
-            $rows = $this->rows($source, $export);
+            fputcsv($handle, array_map(fn ($c) => str_replace('_', ' ', ucfirst($c)), $source['columns']));
+
+            // Stream row by row: no full result set is ever held in memory,
+            // so 25k-row exports stay safe under PHP memory limits.
+            foreach ($this->streamRows($source, $export) as $row) {
+                fputcsv($handle, array_map(fn ($c) => $this->redact($export->data_type, $c, $row[$c] ?? null), $source['columns']));
+                $count++;
+            }
+
+            rewind($handle);
+            Storage::disk('local')->writeStream($name, $handle);
         } catch (\Throwable $e) {
             report($e);
             $export->update(['status' => 'failed']);
             SecurityEventService::record('export', 'export_failed', "Export {$export->export_id} failed", 'medium');
 
             return $export;
+        } finally {
+            if (is_resource($handle)) {
+                fclose($handle);
+            }
         }
-
-        $name = 'exports/'.$export->export_id.'/'.$export->export_id.'.csv';
-        $handle = fopen('php://temp', 'r+');
-
-        fputcsv($handle, array_map(fn ($c) => str_replace('_', ' ', ucfirst($c)), $source['columns']));
-
-        foreach ($rows as $row) {
-            fputcsv($handle, array_map(fn ($c) => $this->redact($export->data_type, $c, $row[$c] ?? null), $source['columns']));
-        }
-
-        rewind($handle);
-        Storage::disk('local')->put($name, stream_get_contents($handle));
-        fclose($handle);
 
         $export->update([
             'storage_path' => $name,
-            'record_count' => count($rows),
+            'record_count' => $count,
             'status' => 'ready',
         ]);
 
@@ -152,22 +157,32 @@ class ExportService
         return Storage::disk('local')->temporaryUrl($export->storage_path, now()->addMinutes((int) config('security.export.signed_url_minutes', 30)));
     }
 
-    protected function rows(array $source, ExportRequest $export): array
+    /**
+     * Yield rows from an unbuffered cursor so exports never materialise the
+     * entire table in PHP memory. The cap is still enforced in the loop.
+     *
+     * @return \Generator<int, array<string, mixed>>
+     */
+    protected function streamRows(array $source, ExportRequest $export): \Generator
     {
         $model = $source['model'];
-        $columns = $source['columns'];
-
-        $query = $model::query()->select($columns);
+        $query = $model::query()->select($source['columns']);
 
         if (method_exists($model, 'scopeOfCompany')) {
             $query->ofCompany($export->company_id);
         }
 
-        return $query
-            ->limit((int) config('security.export.max_records_per_export', 25000))
-            ->get()
-            ->map(fn ($row) => $row->toArray())
-            ->all();
+        $limit = (int) config('security.export.max_records_per_export', 25000);
+        $yielded = 0;
+
+        foreach ($query->cursor() as $row) {
+            if ($yielded >= $limit) {
+                break;
+            }
+
+            yield $row->toArray();
+            $yielded++;
+        }
     }
 
     /**

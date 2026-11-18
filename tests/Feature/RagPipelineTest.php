@@ -43,6 +43,7 @@ class RagPipelineTest extends TestCase
         ]);
 
         $this->admin->assignRole($role);
+        app(VectorStoreService::class)->ensurePipelines();
     }
 
     public function test_registry_defines_exactly_eighty_four_pipelines(): void
@@ -62,6 +63,7 @@ class RagPipelineTest extends TestCase
 
     public function test_vector_store_registers_eighty_four_unique_pipelines(): void
     {
+        RagPipeline::query()->delete();
         $count = app(VectorStoreService::class)->ensurePipelines();
 
         $this->assertSame(84, $count);
@@ -69,7 +71,8 @@ class RagPipelineTest extends TestCase
         $this->assertSame(84, RagPipeline::query()->distinct()->count('key'));
 
         // Re-running must not duplicate rows.
-        app(VectorStoreService::class)->ensurePipelines();
+        $again = app(VectorStoreService::class)->ensurePipelines();
+        $this->assertSame(0, $again);
         $this->assertSame(84, RagPipeline::query()->count());
     }
 
@@ -105,6 +108,12 @@ class RagPipelineTest extends TestCase
             'email' => 'ops@acme.test',
             'status' => 'active',
         ]);
+
+        // Request paths no longer auto-index; sync explicitly so retrieval has data.
+        $this->actingAs($this->admin)
+            ->withSession(['two_factor_verified_at' => now()->timestamp])
+            ->postJson(route('ai.rag.sync'), ['pipeline' => 'customer_lifetime_value'])
+            ->assertOk();
 
         $response = $this->actingAs($this->admin)
             ->withSession(['two_factor_verified_at' => now()->timestamp])
@@ -155,8 +164,11 @@ class RagPipelineTest extends TestCase
 
     public function test_api_lists_all_pipelines(): void
     {
-        $response = $this->actingAs($this->admin, 'sanctum')
-            ->getJson('/api/ai/rag/pipelines');
+        // API routes use Sanctum token abilities; super_admin web user needs
+        // a wildcard token to pass EnsureTokenAbility.
+        \Laravel\Sanctum\Sanctum::actingAs($this->admin, ['*']);
+
+        $response = $this->getJson('/api/ai/rag/pipelines');
 
         $response->assertOk();
         $response->assertJsonPath('success', true);

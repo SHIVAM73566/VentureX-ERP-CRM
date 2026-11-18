@@ -37,8 +37,8 @@ Includes: 92 controllers, 74 models, 44 services, 169 responsive Blade views, 32
 
 Install in 5 minutes via web installer wizard - no command line needed.
 
-Commercial license: unlimited domains, rebranding allowed, client projects allowed.
-Requirements: PHP 8.3+, MySQL 5.7+, Apache/Nginx. Optional: Node.js 20+ for assets.
+MIT license: unlimited domains, rebranding allowed, client projects allowed.
+Requirements: PHP 8.4, MySQL 8.0+, Apache/Nginx. Optional: Node.js 20+ for assets.
 Support: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 ```
 
@@ -55,7 +55,7 @@ Optional tiers as separate products:
 ### _ Fulfillment
 ```
 Type: File download
-Upload: release/VentureX-ERP-CRM-v1.0.0-Gumroad.zip  (5.55 MB)
+Upload: release/VentureX-ERP-CRM-v1.3.1-Gumroad.zip  (5.55 MB)
 License key delivery: None needed (license included inside package)
 ```
 
@@ -80,7 +80,7 @@ Email: chaturvedishivam179@gmail.com / ocoronews@gmail.com
 | Product Type | Software (downloadable) |
 | Platform | Web / Self-hosted |
 | Category | Software / Business Applications |
-| File Included | VentureX-ERP-CRM-v1.0.0.zip |
-| Software Version | 1.0.0 |
+| File Included | VentureX-ERP-CRM-v1.3.1-source.zip |
+| Software Version | 1.3.1 |
 | Language | English |
 | Price | $89.99 USD |

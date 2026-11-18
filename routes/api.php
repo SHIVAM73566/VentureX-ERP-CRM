@@ -19,6 +19,8 @@ use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\SupportTicketController;
 use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\WarehouseController;
+use App\Http\Middleware\EnsureTokenAbility;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,11 +35,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Protected API routes
-Route::middleware(['auth:sanctum', 'throttle:api'])->name('api.')->group(function () {
+// SecurityHeaders runs first so every response — including 401/403/429
+// short-circuits from later middleware — carries the full header set.
+Route::middleware([
+    SecurityHeaders::class,
+    'auth:sanctum',
+    'throttle:api',
+    EnsureTokenAbility::class,
+])->name('api.')->group(function () {
 
     // ─── Token Management ──────────────────────────────────────────────
     Route::get('/tokens', [TokenController::class, 'index'])->name('tokens.index');
-    Route::post('/tokens', [TokenController::class, 'store'])->name('tokens.create');
+    Route::post('/tokens', [TokenController::class, 'store'])->middleware('throttle:ai')->name('tokens.create');
     Route::delete('/tokens/{id}', [TokenController::class, 'destroy'])->name('tokens.destroy');
 
     // ─── CRM ───────────────────────────────────────────────────────────
@@ -76,7 +85,7 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->name('api.')->group(functio
     });
 
     // ─── AI ────────────────────────────────────────────────────────────
-    Route::prefix('ai')->group(function () {
+    Route::prefix('ai')->middleware('throttle:ai')->group(function () {
         Route::get('/conversations', [AiController::class, 'conversations'])->name('conversations');
         Route::post('/conversations', [AiController::class, 'storeConversation'])->name('conversations.store');
         Route::get('/conversations/{conversation}', [AiController::class, 'showConversation'])->name('conversations.show');

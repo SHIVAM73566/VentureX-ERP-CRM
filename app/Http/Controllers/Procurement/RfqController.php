@@ -185,7 +185,7 @@ class RfqController extends Controller
 
         $order = PurchaseOrder::create([
             'company_id' => CompanyContext::id(),
-            'po_number' => $data['po_number'] ?? 'PO-'.strtoupper(date('Ymd')).'-'.str_pad((string) (PurchaseOrder::ofCompany()->count() + 1), 4, '0', STR_PAD_LEFT),
+            'po_number' => $data['po_number'] ?? NumberGenerator::next('PO', 'purchase_orders'),
             'supplier_id' => $supplier->id,
             'rfq_id' => $rfq->id,
             'status' => 'draft',
