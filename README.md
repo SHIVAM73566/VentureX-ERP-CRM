@@ -5,19 +5,14 @@
 ![Version](https://img.shields.io/badge/Version-1.3.1-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-13-red)
 ![PHP](https://img.shields.io/badge/PHP-8.4-purple)
-![Tests](https://img.shields.io/badge/Tests-484%2B%20passed-brightgreen)
 ![RAG](https://img.shields.io/badge/RAG-84%20pipelines-orange)
-![License](https://img.shields.io/badge/License-MIT-green)
 
 VentureX ERP & CRM is a self-hosted Laravel 13 application that brings CRM, sales, inventory, procurement, finance, logistics, HR, support, and 84 source-cited enterprise RAG pipelines into one auditable workspace. A lead becomes a customer, a quotation becomes an order, stock moves, an invoice is raised, payment is recorded, and finance sees the result without re-typing anything.
 
 - **Version:** v1.3.1
-- **License:** MIT — see [LICENSE](LICENSE)
-- **Maintainer:** Shivam Chaturvedi (VentureAI Pro)
-- **PayPal checkout / sales enquiries:** chaturvedishivam179@gmail.com
-- **Verification:** [SECURITY-AUDIT-REPORT.md](SECURITY-AUDIT-REPORT.md) · [release/SHA256SUMS.txt](release/SHA256SUMS.txt)
-
-> **Test badge:** the `Tests-484+ passed` badge is a placeholder carried forward from the previous verified build. Final v1.3.1 counts will be published in `SECURITY-AUDIT-REPORT.md` after central integration; do not treat the badge as a new claim.
+- Maintainer: **Shivam Chaturvedi** — chaturvedishivam179@gmail.com
+- **Sales enquiries:** chaturvedishivam179@gmail.com (see [PRICING.md](PRICING.md))
+- **Verification:** [SECURITY-AUDIT-REPORT.md](SECURITY-AUDIT-REPORT.md) and release checksums where published by the maintainer.
 
 ---
 
@@ -153,6 +148,20 @@ For a manual clean install, use `php artisan migrate --force` and optional non-d
 |---|---|---|
 | ![Import Data](screenshots/Product%20demo/Import%20Data.png) | ![Export Center](screenshots/Product%20demo/Export%20Center.png) | ![Finance Dashboard](screenshots/Product%20demo/Finance%20Dashboard.png) |
 
+### More product screenshots
+
+| AERO X Agentic Engine | Dashboard (alt) | Dashboard (overview) |
+|---|---|---|
+| ![AERO X Agentic Engine](screenshots/Product%20demo/AERO%20X%20AGENTIC%20ENGINE%20IMAGE%201.png) | ![Dashboard 2](screenshots/Product%20demo/Dashboard%202.png) | ![Dashboard](screenshots/Product%20demo/Dashbord1.png) |
+
+| Enterprise RAG | HR Dashboard | Product Guide |
+|---|---|---|
+| ![Enterprise RAG](screenshots/Product%20demo/Enterprise%20RAG.png) | ![HR Dashboard](screenshots/Product%20demo/HR%20Dashboard%201.png) | ![Product Guide](screenshots/Product%20demo/Product%20guide%20Image%201.png) |
+
+| Quick Start |
+|---|
+| ![Quick Start](screenshots/Product%20demo/Quick%20Start%201.png) |
+
 ---
 
 ## Documentation
@@ -175,20 +184,26 @@ For a manual clean install, use `php artisan migrate --force` and optional non-d
 - [Security & Enterprise Verification Report](SECURITY-AUDIT-REPORT.md)
 - [Release checksums](release/SHA256SUMS.txt)
 
+## Licensing & Purchase
+
+- **Future releases (after tag `v1.3.1`):** commercial licence — see [LICENSE](LICENSE) (DRAFT pending legal review). See pricing and tiers in [PRICING.md](PRICING.md).
+- **Legacy (open source):** versions **up to and including `v1.3.1`** are MIT — see [LICENSE-MIT-LEGACY.md](LICENSE-MIT-LEGACY.md).
+- Third-party dependencies keep their own licences — see [documentation/THIRD_PARTY_LICENSES.md](documentation/THIRD_PARTY_LICENSES.md).
+
 ## Releases and verification
 
-- Current release target: **v1.3.1**
-- Prior verified artifacts: [release/SHA256SUMS.txt](release/SHA256SUMS.txt)
-- [GitHub deploy action](https://github.com/SHIVAM73566/venturex-deploy-action) — GitHub Marketplace approval pending.
-- The root `LICENSE` is MIT. Third-party components keep their own licenses; see [documentation/THIRD_PARTY_LICENSES.md](documentation/THIRD_PARTY_LICENSES.md).
+- Current release target: **v1.3.1** (legacy MIT applies to this tag and earlier as noted above)
+- Prior verified artifacts: [release/SHA256SUMS.txt](release/SHA256SUMS.txt) where published
+- [GitHub deploy action](https://github.com/SHIVAM73566/venturex-deploy-action) — GitHub Marketplace approval is manual in the GitHub UI.
 
 ## Support and attribution
 
 - Maintainer: **Shivam Chaturvedi** — chaturvedishivam179@gmail.com
-- PayPal checkout / sales: **chaturvedishivam179@gmail.com**
-- Documentation: `/documentation/`
+- Sales / licensing enquiries: see [PRICING.md](PRICING.md) or email the maintainer
+- Documentation: /documentation/
 - Issues: <https://github.com/SHIVAM73566/VentureX-ERP-CRM/issues>
+
 
 ---
 
-**VentureX ERP & CRM v1.3.1** — built for modern businesses. Copyright © 2026 Shivam Chaturvedi. Licensed under MIT.
+**VentureX ERP & CRM v1.3.1** — built for modern businesses. Copyright (c) 2026 Shivam Chaturvedi (VentureAI Pro).
