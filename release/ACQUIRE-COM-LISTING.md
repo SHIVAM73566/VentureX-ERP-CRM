@@ -70,7 +70,7 @@ TECH DUE DILIGENCE READY: public GitHub repo available for buyer inspection unde
 - VentureX-ERP-CRM-v1.3.1-Gumroad.zip (full source)
 - All listing .md files from C:/MY_ERP/release/
 - Screenshots pack
-- Test results: PHPUnit output for the v1.3.1 suite (final counts in SECURITY-AUDIT-REPORT.md)
+- Test results (verified): `php artisan test` — **556 passed, 1990 assertions, 0 failed** (341.11s). Full report: `TEST-VERIFICATION-REPORT-v2.7.txt` (and `test-report.txt` in repo root).
 - Gumroad analytics export (after first sales)
 ```
 
