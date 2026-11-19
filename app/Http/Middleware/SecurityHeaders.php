@@ -24,15 +24,18 @@ class SecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }
 
-        $response->headers->set('Content-Security-Policy', $this->csp());
+        $response->headers->set('Content-Security-Policy', $this->csp($request));
 
         return $response;
     }
 
-    protected function csp(): string
+    protected function csp(Request $request): string
     {
         $scriptSrc = "script-src 'self' 'unsafe-inline'";
-        if (config('security.csp.allow_unsafe_eval', false)) {
+        // Only allow unsafe-eval for non-API/web HTML responses that need Alpine (standard build).
+        // API/JSON responses must not include unsafe-eval (security test expects it absent).
+        $isApi = $request->is('api/*') || $request->expectsJson();
+        if (config('security.csp.allow_unsafe_eval', false) && ! $isApi) {
             $scriptSrc .= " 'unsafe-eval'";
         }
 
