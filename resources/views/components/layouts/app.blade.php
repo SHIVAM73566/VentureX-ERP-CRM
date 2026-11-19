@@ -201,6 +201,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>{{ $title ? $title.' — ' : '' }}{{ config('app.name', 'MyERP') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <style>[x-cloak]{display:none!important}</style>
     <script>
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark');
