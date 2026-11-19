@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AiSkillController;
 use App\Http\Controllers\Admin\ApprovalController;
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\DemoDataController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\ExportController;
 use App\Http\Controllers\Admin\ImportController;
@@ -557,7 +558,7 @@ Route::middleware(['auth', 'role:super_admin', 'two_factor'])->prefix('admin/imp
 });
 
 Route::middleware(['auth', 'role:super_admin', 'step_up', 'throttle:6,1'])->prefix('admin/demo-data')->name('admin.demo-data.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Admin\DemoDataController::class, 'index'])->name('index');
-    Route::post('/wipe', [\App\Http\Controllers\Admin\DemoDataController::class, 'wipe'])->name('wipe');
-    Route::post('/aero-x/wipe', [\App\Http\Controllers\Ai\AiActionController::class, 'wipeDemoData'])->name('aero-x.wipe');
+    Route::get('/', [DemoDataController::class, 'index'])->name('index');
+    Route::post('/wipe', [DemoDataController::class, 'wipe'])->name('wipe');
+    Route::post('/aero-x/wipe', [AiActionController::class, 'wipeDemoData'])->name('aero-x.wipe');
 });

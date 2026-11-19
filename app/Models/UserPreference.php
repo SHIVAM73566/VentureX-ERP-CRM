@@ -37,6 +37,7 @@ class UserPreference extends Model
         }
 
         $pref = self::where('user_id', $user->id)->where('key', $key)->first();
+
         return $pref?->value ?? $default;
     }
 

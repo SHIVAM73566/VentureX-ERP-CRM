@@ -135,6 +135,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Content Security Policy (CSP)
+    |--------------------------------------------------------------------------
+    | Temporary: allow unsafe-eval so standard Alpine.js works until migrated
+    | to @alpinejs/csp (Phase 3). Set VENTUREX_CSP_ALLOW_UNSAFE_EVAL=false
+    | after migrating all inline Alpine expressions to registered components.
+    */
+    'csp' => [
+        'allow_unsafe_eval' => (bool) env('VENTUREX_CSP_ALLOW_UNSAFE_EVAL', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Security Score / Checkpoints
     |--------------------------------------------------------------------------
     */

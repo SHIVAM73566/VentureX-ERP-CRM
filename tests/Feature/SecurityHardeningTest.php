@@ -137,7 +137,7 @@ class SecurityHardeningTest extends TestCase
                     return false;
                 }
 
-                $message = new Message(new SymfonyEmail());
+                $message = new Message(new SymfonyEmail);
                 $callback($message);
 
                 $recipients = array_map(

@@ -12,6 +12,7 @@ use App\Services\Import\ImportService;
 use App\Services\Import\MappingEngine;
 use App\Services\Import\ValidationEngine;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
 
 class ImportController extends Controller
@@ -246,7 +247,7 @@ class ImportController extends Controller
         ]);
     }
 
-    public function templateDownload(string $destination): \Illuminate\Http\Response
+    public function templateDownload(string $destination): Response
     {
         abort_unless(array_key_exists($destination, $this->getDestinations()), 404);
 

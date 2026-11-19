@@ -10,9 +10,11 @@ use App\Http\Middleware\InstallerGuard;
 use App\Models\Company;
 use App\Models\User;
 use App\Services\Installer\EnvWriter;
-use App\Services\Installer\InstallState;
 use App\Services\Installer\InstallerService;
+use App\Services\Installer\InstallState;
+use Database\Seeders\ComprehensiveDemoSeeder;
 use Database\Seeders\DemoCredentialSeeder;
+use Database\Seeders\DemoDataSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Http\UploadedFile;
@@ -196,8 +198,8 @@ class Phase1InstallerTest extends TestCase
         );
 
         $this->assertContains(DemoCredentialSeeder::class, $demoSeeders);
-        $this->assertContains(\Database\Seeders\DemoDataSeeder::class, $demoSeeders);
-        $this->assertContains(\Database\Seeders\ComprehensiveDemoSeeder::class, $demoSeeders);
+        $this->assertContains(DemoDataSeeder::class, $demoSeeders);
+        $this->assertContains(ComprehensiveDemoSeeder::class, $demoSeeders);
         $this->assertNotContains(PermissionSeeder::class, $demoSeeders);
         $this->assertTrue(InstallerService::isValidMode(InstallerService::MODE_PRODUCTION));
         $this->assertTrue(InstallerService::isValidMode(InstallerService::MODE_DEMO));

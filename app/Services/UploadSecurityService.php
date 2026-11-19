@@ -74,6 +74,7 @@ class UploadSecurityService
      * formats (notably SVG) must never be accepted.
      *
      * @param  array<int, string>  $allowed
+     *
      * @throws ValidationException
      */
     public function validateImage(UploadedFile $file, array $allowed = ['jpg', 'jpeg', 'png', 'webp']): string

@@ -35,7 +35,7 @@ class ImportService
 
         try {
             $rows = $this->parseFile($absolutePath, $ext);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Storage::disk('local')->delete($path);
             throw $e;
         }

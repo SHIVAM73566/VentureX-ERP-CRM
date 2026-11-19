@@ -7,6 +7,7 @@ namespace App\Services\Demo;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use InvalidArgumentException;
@@ -252,7 +253,7 @@ class DemoDataWipeService
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     protected function demoUserQuery(int $companyId, ?int $preserveUserId)
     {

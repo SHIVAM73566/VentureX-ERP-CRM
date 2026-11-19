@@ -12,7 +12,6 @@
  * License URI: https://opensource.org/licenses/MIT
  * Text Domain: venturex-erp-connector
  */
-
 if (! defined('ABSPATH')) {
     exit;
 }

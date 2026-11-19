@@ -1,0 +1,628 @@
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
+
+   PASS  Tests\Feature\AdminRolePermissionSyncTest
+  ✓ store resolves permission ids before syncing                                                                              0.74s  
+  ✓ update resolves permission ids before syncing                                                                             0.05s  
+
+   PASS  Tests\Feature\AgenticEngineTest
+  ✓ default rules are seeded idempotently                                                                                     0.06s  
+  ✓ disabled rule is skipped without writing                                                                                  0.06s  
+  ✓ cooldown prevents repeat runs                                                                                             0.05s  
+  ✓ dry run reports changes without writing                                                                                   0.05s  
+  ✓ overdue invoices are flagged on a real run                                                                                0.06s  
+  ✓ low stock rule drafts purchase orders                                                                                     0.07s  
+  ✓ unowned support tickets are self assigned                                                                                 0.06s  
+  ✓ onboarding autopilot seeds checklists for recent hires                                                                    0.06s  
+  ✓ failed transaction is rolled back and recorded                                                                            0.08s  
+
+   PASS  Tests\Feature\AiGatewayFeatureTest
+  ✓ landing page for guests                                                                                                   1.13s  
+  ✓ dashboard redirects guests to login                                                                                       1.12s  
+  ✓ authenticated dashboard and ai pages render                                                                               1.53s  
+  ✓ entity show pages render with ai actions                                                                                  1.32s  
+  ✓ copilot answers local questions without api key                                                                           1.19s  
+  ✓ copilot returns friendly error when ai unconfigured                                                                       1.18s  
+  ✓ ai action requires ai permission                                                                                          1.59s  
+  ✓ ai insights generate returns friendly error when unconfigured                                                             4.77s  
+  ✓ unauthenticated ai endpoints redirect                                                                                     1.19s  
+  ✓ decision engine gate only escalates complex high impact tasks                                                             1.12s  
+  ✓ simple tasks never route to claude                                                                                        1.16s  
+  ✓ deep supplier analysis routes to nvidia                                                                                   1.24s  
+  ✓ deep analysis is cached then reused without new api call                                                                  1.21s  
+  ✓ deep analysis returns local facts when all providers fail                                                                 1.20s  
+  ✓ negotiation and opportunity analyses route to nvidia                                                                      1.21s  
+  ✓ executive review and daily priorities route to nvidia                                                                     1.23s  
+  ✓ strategic copilot question routes to nvidia                                                                               1.18s  
+  ✓ provider health tracks failures                                                                                           1.25s  
+  ✓ complex tasks are config routed to nvidia                                                                                 1.15s  
+  ✓ fallback provider uses its own model not the company default model                                                        1.14s  
+
+   PASS  Tests\Feature\AiProviderAdminFeatureTest
+  ✓ guest is redirected to login                                                                                              0.06s  
+  ✓ viewer cannot access ai provider admin                                                                                    0.05s  
+  ✓ admin of another company cannot access this companys rows                                                                 0.05s  
+  ✓ index page loads and lists stored providers                                                                               0.07s  
+  ✓ security page never returns the plaintext key                                                                             0.06s  
+  ✓ api key is encrypted at rest and never stored in plaintext                                                                0.05s  
+  ✓ rate limits are persisted per provider                                                                                    0.05s  
+  ✓ enable survives a reload and key stays encrypted after disable                                                            0.05s  
+  ✓ provider can be soft deleted                                                                                              0.06s  
+
+   PASS  Tests\Feature\AiProviderOnboardingTest
+  ✓ guest is redirected to login                                                                                              0.04s  
+  ✓ non super admin cannot view or write keys                                                                                 0.06s  
+  ✓ saving a key requires step up authentication                                                                              0.04s  
+  ✓ unknown provider is rejected                                                                                              0.05s  
+  ✓ settings page shows one card per provider without endpoint fields                                                         0.06s  
+  ✓ settings page masks stored keys and is not cacheable                                                                      0.07s  
+  ✓ each provider can be connected with only a key                                                                            0.06s  
+  ✓ browser supplied endpoints are ignored                                                                                    0.05s  
+  ✓ model override is limited to the allowed catalogue                                                                        0.05s  
+  ✓ each provider rejects another vendors key                                                                                 0.05s  
+  ✓ short keys are rejected                                                                                                   0.05s  
+  ✓ secret is never flashed back on validation error                                                                          0.04s  
+  ✓ response and audit log never contain the plaintext key                                                                    0.07s  
+  ✓ replacing a key rotates the ciphertext                                                                                    0.05s  
+  ✓ configuration check reports success without echoing the key                                                               0.05s  
+  ✓ configuration check without a key returns an error                                                                        0.04s  
+  ✓ key can be removed and the row is soft deleted                                                                            0.05s  
+  ✓ removing a missing key returns an error                                                                                   0.04s  
+  ✓ keys are scoped to the acting company                                                                                     0.07s  
+  ✓ anthropic adapter uses native messages contract                                                                           0.04s  
+
+   PASS  Tests\Feature\AiSecurityTest
+  ✓ copilot requires authentication                                                                                           1.18s  
+  ✓ assistant requires authentication                                                                                         1.19s  
+  ✓ insights generate requires authentication                                                                                 1.22s  
+  ✓ usage dashboard requires authentication                                                                                   1.13s  
+  ✓ quota endpoint requires authentication                                                                                    1.18s  
+  ✓ action endpoints require authentication                                                                                   1.14s  
+  ✓ deep analysis endpoints require authentication                                                                            1.15s  
+  ✓ executive endpoints require authentication                                                                                1.14s  
+  ✓ document reader requires authentication                                                                                   1.13s  
+  ✓ procurement ai requires authentication                                                                                    1.13s  
+  ✓ unauthorized user gets redirect or forbidden                                                                              1.17s  
+  ✓ copilot handles missing api key gracefully                                                                                1.21s  
+  ✓ assistant handles missing api key gracefully                                                                              1.20s  
+  ✓ local questions work without any api key                                                                                  1.17s  
+  ✓ local inventory questions work without api key                                                                            1.14s  
+  ✓ local finance questions work without api key                                                                              1.14s  
+  ✓ copilot returns friendly error on api failure                                                                             1.21s  
+  ✓ assistant returns friendly error on api failure                                                                           1.23s  
+  ✓ action endpoint returns friendly error on api failure                                                                     1.18s  
+  ✓ deep analysis returns local facts on api failure                                                                          1.21s  
+  ✓ provider timeout returns friendly error                                                                                   1.19s  
+  ✓ ai response never exposes api keys                                                                                        1.21s  
+  ✓ quota endpoint never exposes api keys                                                                                     1.18s  
+  ✓ usage dashboard never exposes api keys                                                                                    1.34s  
+  ✓ ai error messages dont leak internal details                                                                              1.19s  
+  ✓ failed ai run records dont expose keys                                                                                    1.17s  
+  ✓ copilot has rate limiting middleware                                                                                      1.14s  
+  ✓ assistant send has rate limiting middleware                                                                               1.12s  
+  ✓ action endpoints have rate limiting                                                                                       1.13s  
+  ✓ deep analysis endpoints have rate limiting                                                                                1.13s  
+  ✓ executive endpoints have rate limiting                                                                                    1.14s  
+  ✓ insights generate has rate limiting                                                                                       1.11s  
+  ✓ local copilot answer creates ai run record                                                                                1.18s  
+  ✓ ai run records company and user                                                                                           1.18s  
+  ✓ quota service tracks usage                                                                                                1.16s  
+  ✓ usage monitor tracks requests                                                                                             1.11s  
+  ✓ usage monitor tracks errors                                                                                               1.12s  
+  ✓ usage monitor tracks cache hits                                                                                           1.11s  
+  ✓ usage monitor tracks costs                                                                                                1.13s  
+  ✓ usage monitor tracks latency                                                                                              1.12s  
+  ✓ copilot local fallback returns value when ai unavailable                                                                  1.18s  
+  ✓ local intelligence handles overdue invoices                                                                               1.10s  
+  ✓ local intelligence handles payables                                                                                       1.15s  
+  ✓ local intelligence handles leads due                                                                                      1.11s  
+  ✓ local intelligence returns null for unknown question                                                                      1.17s  
+  ✓ local intelligence handles top opportunities                                                                              1.14s  
+  ✓ local intelligence handles open purchase orders                                                                           1.13s  
+  ✓ local intelligence handles customers owing                                                                                1.11s  
+  ✓ quota service blocks when exhausted                                                                                       1.10s  
+  ✓ quota service allows within limit                                                                                         1.12s  
+  ✓ copilot rejects empty question                                                                                            1.23s  
+  ✓ copilot rejects missing question                                                                                          1.18s  
+  ✓ assistant rejects empty message                                                                                           1.23s  
+  ✓ action endpoints validate required fields                                                                                 1.14s  
+  ✓ inventory action validates question max length                                                                            1.45s  
+  ✓ copilot validates question max length                                                                                     1.35s  
+
+   PASS  Tests\Feature\AuthMfaFlowTest
+  ✓ owner without mfa signs in and lands on dashboard                                                                         0.16s  
+  ✓ enrolled user is challenged even when enforcement is disabled                                                             0.15s  
+  ✓ undecryptable secret is reset instead of locking the owner out                                                            0.15s  
+  ✓ mandatory role is sent to setup only when enforced                                                                        0.14s  
+  ✓ owner login is not blocked by stale second factor session keys                                                            0.15s  
+  ✓ authenticated user with enrolled mfa is redirected to challenge by middleware                                             0.15s  
+  ✓ authenticated user with broken secret is not trapped                                                                      0.20s  
+  ✓ valid totp code verifies the session                                                                                      0.12s  
+
+   PASS  Tests\Feature\BrandingSettingsTest
+  ✓ branding tab renders                                                                                                      0.06s  
+  ✓ branding update persists settings                                                                                         0.06s  
+  ✓ branding falls back to company record                                                                                     0.04s  
+  ✓ invalid accent colour is rejected                                                                                         0.05s  
+  ✓ logo can be uploaded and removed                                                                                          0.11s  
+  ✓ invoice pdf view uses saved branding                                                                                      0.30s  
+  ✓ invoice show page surfaces branding preview                                                                               0.09s  
+
+   PASS  Tests\Feature\BugRegressionTest
+  ✓ receivables search does not leak other tenants invoices                                                                   1.22s  
+  ✓ payables search does not leak other tenants purchase orders                                                               1.19s  
+  ✓ admin ai skill search does not leak other tenants skills                                                                  1.20s  
+  ✓ api journal entry search does not leak other tenants entries                                                              1.19s  
+  ✓ api payment search does not leak other tenants payments                                                                   1.16s  
+  ✓ sales payment edit form does not leak other tenants invoices                                                              1.22s  
+  ✓ error report deduplication is scoped to the reporting company                                                             1.17s  
+  ✓ regular user is allowed to report an error                                                                                1.20s  
+  ✓ block ip succeeds without a reason and actually blocks                                                                    1.16s  
+  ✓ blocked ip is rejected by the api protection middleware                                                                   1.18s  
+  ✓ unblock ip route releases the block                                                                                       1.17s  
+  ✓ security dashboard lists blocked ips                                                                                      1.27s  
+  ✓ api key vault model can be loaded and used                                                                                1.10s  
+  ✓ login verification model can record a verification attempt                                                                1.13s  
+  ✓ user controller uses the spatie role model                                                                                1.21s  
+
+   PASS  Tests\Feature\CodesterResubmissionTest
+  ✓ login page loads                                                                                                          0.17s  
+  ✓ valid credentials allow login                                                                                             0.16s  
+  ✓ invalid credentials reject login                                                                                          0.37s  
+  ✓ disabled account cannot login                                                                                             0.16s  
+  ✓ logout works                                                                                                              0.15s  
+  ✓ dashboard loads for authenticated user                                                                                    0.23s  
+  ✓ unauthenticated user redirected to login                                                                                  0.15s  
+  ✓ customer index loads                                                                                                      0.20s  
+  ✓ customer create form loads                                                                                                0.20s  
+  ✓ customer can be created                                                                                                   0.17s  
+  ✓ customer show loads                                                                                                       0.21s  
+  ✓ customer can be updated                                                                                                   0.17s  
+  ✓ customer can be deleted                                                                                                   0.17s  
+  ✓ viewer cannot create customer                                                                                             0.16s  
+  ✓ product index loads                                                                                                       0.22s  
+  ✓ product can be created                                                                                                    0.17s  
+  ✓ product can be updated                                                                                                    0.17s  
+  ✓ product can be deleted                                                                                                    0.17s  
+  ✓ viewer cannot create product                                                                                              0.17s  
+  ✓ quotation index loads                                                                                                     0.21s  
+  ✓ quotation can be created                                                                                                  0.17s  
+  ✓ quotation can be updated                                                                                                  0.17s  
+  ✓ quotation can be converted to order                                                                                       0.18s  
+  ✓ invoice index loads                                                                                                       0.23s  
+  ✓ invoice can be created                                                                                                    0.20s  
+  ✓ invoice show loads                                                                                                        0.22s  
+  ✓ invoice pdf generation                                                                                                    0.21s  
+  ✓ payment index loads                                                                                                       0.21s  
+  ✓ payment can be created                                                                                                    0.18s  
+  ✓ payment show loads                                                                                                        0.20s  
+  ✓ payment can be deleted                                                                                                    0.17s  
+  ✓ supplier index loads                                                                                                      0.21s  
+  ✓ supplier can be created                                                                                                   0.18s  
+  ✓ supplier can be updated                                                                                                   0.17s  
+  ✓ supplier can be deleted                                                                                                   0.17s  
+  ✓ viewer cannot create supplier                                                                                             0.17s  
+  ✓ purchase order index loads                                                                                                0.21s  
+  ✓ purchase order create form loads                                                                                          0.31s  
+  ✓ super admin can access all modules                                                                                        0.58s  
+  ✓ viewer cannot create in any module                                                                                        0.22s  
+  ✓ viewer can view modules                                                                                                   0.40s  
+  ✓ search works with valid query                                                                                             0.21s  
+  ✓ search returns empty for short query                                                                                      0.21s  
+  ✓ customer index is paginated                                                                                               0.27s  
+  ✓ product index is paginated                                                                                                0.21s  
+  ✓ security headers are present                                                                                              0.24s  
+  ✓ csp header is set                                                                                                         0.25s  
+  ✓ post without csrf token is rejected                                                                                       0.38s  
+  ✓ session is regenerated on login                                                                                           0.16s  
+  ✓ guest cannot access authenticated routes                                                                                  0.16s  
+  ✓ cross company supplier blocked by controller                                                                              0.17s  
+  ✓ cross company supplier update blocked                                                                                     0.17s  
+  ✓ cross company product blocked                                                                                             0.17s  
+  ✓ cross company account blocked                                                                                             0.17s  
+
+   PASS  Tests\Feature\DataImportTest
+  ✓ import requires auth                                                                                                      0.11s  
+  ✓ import requires super admin                                                                                               0.06s  
+  ✓ import index loads                                                                                                        0.10s  
+  ✓ import create page loads                                                                                                  0.08s  
+  ✓ upload requires file                                                                                                      0.06s  
+  ✓ upload csv creates import                                                                                                 0.09s  
+  ✓ upload rejects json files                                                                                                 0.09s  
+  ✓ upload rejects invalid extension                                                                                          0.07s  
+  ✓ destination auto detection                                                                                                0.10s  
+  ✓ mapping save creates validation results                                                                                   0.12s  
+  ✓ execute import creates records                                                                                            0.14s  
+  ✓ import with skip duplicate strategy                                                                                       0.15s  
+  ✓ import with update duplicate strategy                                                                                     0.14s  
+  ✓ import history page loads                                                                                                 0.09s  
+  ✓ import show page loads                                                                                                    0.10s  
+  ✓ import delete                                                                                                             0.06s  
+  ✓ cross company import blocked                                                                                              0.07s  
+  ✓ import template store                                                                                                     0.06s  
+  ✓ import template delete                                                                                                    0.06s  
+  ✓ error report download                                                                                                     0.06s  
+  ✓ import creates row records                                                                                                0.14s  
+
+   PASS  Tests\Feature\EnterpriseConcurrencyTest
+  ✓ grouped stock lookup avoids n plus one queries                                                                            0.05s  
+  ✓ direct stock writes invalidate the grouped snapshot                                                                       0.04s  
+  ✓ parallel number attempts yield unique numbers                                                                             0.04s  
+  ✓ number sequences are isolated per company                                                                                 0.04s  
+  ✓ enterprise load test command runs for 30 users                                                                            0.06s  
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ root redirects to login                                                                                                   0.04s  
+  ✓ authenticated user is redirected from root                                                                                1.14s  
+
+   PASS  Tests\Feature\GettingStartedTest
+  ✓ guests are redirected from the getting started page                                                                       1.06s  
+  ✓ authenticated user sees the product tour and examples                                                                     1.13s  
+  ✓ getting started is linked from the sidebar                                                                                1.17s  
+  ✓ dashboard shows the onboarding banner                                                                                     1.15s  
+  ✓ help center links to getting started                                                                                      1.18s  
+
+   PASS  Tests\Feature\HrModuleTest
+  ✓ hr dashboard renders for authorized users                                                                                 0.08s  
+  ✓ hr module is blocked for users without hr permission                                                                      0.06s  
+  ✓ employee directory and create form load                                                                                   0.10s  
+  ✓ employee store creates record and onboarding checklist                                                                    0.07s  
+  ✓ employee store validates required fields                                                                                  0.08s  
+  ✓ employee update and show work                                                                                             0.08s  
+  ✓ attendance is recorded and duplicates are rejected                                                                        0.06s  
+  ✓ leave request lifecycle approve and reject                                                                                0.07s  
+  ✓ payroll run generates items and can be approved                                                                           0.07s  
+  ✓ performance review is created with computed overall score                                                                 0.07s  
+  ✓ onboarding task can be completed and reopened                                                                             0.07s  
+  ✓ onboarding seed is idempotent for existing employees                                                                      0.06s  
+  ✓ departments can be created and listed                                                                                     0.08s  
+  ✓ department with employees cannot be deleted                                                                               0.06s  
+  ✓ every hr screen renders without errors                                                                                    0.51s  
+
+   PASS  Tests\Feature\LoginIpRateLimitTest
+  ✓ rotating email addresses from one ip is throttled                                                                         4.42s  
+
+   PASS  Tests\Feature\PasswordPolicyTest
+  ✓ password history table is singular and reuse detection works                                                              0.04s  
+
+   PASS  Tests\Feature\Phase1AeroXWipeTest
+  ✓ wipe demo data is not a default agentic engine action                                                                     0.03s  
+  ✓ aero x rejects wrong current password                                                                                     0.05s  
+  ✓ aero x rejects wrong confirmation phrase                                                                                  0.04s  
+  ✓ aero x returns confirmation payload without writing                                                                       0.07s  
+  ✓ aero x executes only after confirmation payload                                                                           0.08s  
+
+   PASS  Tests\Feature\Phase1DemoWipeTest
+  ✓ demo data page requires auth super admin and step up                                                                      0.09s  
+  ✓ manual wipe requires current password                                                                                     0.05s  
+  ✓ manual wipe requires exact phrase                                                                                         0.04s  
+  ✓ manual wipe removes demo rows and preserves structure                                                                     0.07s  
+  ✓ wipe removes demo accounts but preserves the buyer admin                                                                  0.07s  
+  ✓ wipe service is idempotent and never touches protected tables                                                             0.08s  
+
+   PASS  Tests\Feature\Phase1ImporterTest
+  ✓ create page links all five templates and demo panel                                                                       0.06s  
+  ✓ template download returns csv headers for opening balances                                                                0.08s  
+  ✓ csv upload is stored privately and json txt are rejected                                                                  0.07s  
+  ✓ csv with embedded php is rejected by upload security                                                                      0.04s  
+  ✓ xlsx upload is parsed with native reader                                                                                  0.08s  
+  ✓ saved template id is applied to upload mapping                                                                            0.07s  
+  ✓ balanced opening balances create one posted journal                                                                       0.05s  
+  ✓ unbalanced opening balances roll back the whole batch                                                                     0.05s  
+  ✓ product import creates opening stock movement                                                                             0.04s  
+  ✓ execute revalidates rows before writing                                                                                   0.04s  
+
+   PASS  Tests\Feature\Phase1InstallerTest
+  ✓ all six installer steps render when unlocked                                                                              2.15s  
+  ✓ installer is locked by flag even when database says not installed                                                         0.06s  
+  ✓ installer is locked by database even when flag file is missing                                                            0.04s  
+  ✓ mode step persists install mode to env and database                                                                       0.05s  
+  ✓ environment step never renders stored api keys                                                                            0.05s  
+  ✓ installer post without csrf token returns json 419                                                                        0.04s  
+  ✓ env writer quotes values and rejects newline injection                                                                    0.04s  
+  ✓ env writer rejects tabs and other control characters                                                                      0.05s  
+  ✓ missing extension hint and database privilege message are friendly                                                        2.08s  
+  ✓ seed chain is mode aware and permissions precede super admin creation                                                     0.05s  
+  ✓ production mode purges demo credentials and auth artifacts                                                                0.05s  
+  ✓ company name is explicit and never derived from admin name                                                                0.04s  
+  ✓ company step accepts a valid logo in private storage                                                                      0.05s  
+  ✓ complete step remains reachable after lockout                                                                             0.05s  
+
+   PASS  Tests\Feature\ProductGuideTest
+  ✓ guide is available on every major page with data set "dashboard"                                                          0.23s  
+  ✓ guide is available on every major page with data set "getting started"                                                    0.21s  
+  ✓ guide is available on every major page with data set "customers"                                                          0.20s  
+  ✓ guide is available on every major page with data set "leads"                                                              0.20s  
+  ✓ guide is available on every major page with data set "quotations"                                                         0.20s  
+  ✓ guide is available on every major page with data set "purchase orders"                                                    0.19s  
+  ✓ guide is available on every major page with data set "products"                                                           0.20s  
+  ✓ guide is available on every major page with data set "shipments"                                                          0.19s  
+  ✓ guide is available on every major page with data set "finance"                                                            0.20s  
+  ✓ guide is available on every major page with data set "support"                                                            0.20s  
+  ✓ guide is available on every major page with data set "users"                                                              0.20s  
+  ✓ guide is available on every major page with data set "audit logs"                                                         0.20s  
+  ✓ guide lists all eighty four pipelines on a single page                                                                    0.22s  
+  ✓ guide introduction explains the product and process                                                                       0.22s  
+  ✓ guide is page aware on finance pages                                                                                      0.21s  
+  ✓ guide is page aware on crm pages                                                                                          0.22s  
+  ✓ page guide service maps routes and paths to domains                                                                       0.14s  
+  ✓ page guide service builds labels and questions                                                                            0.17s  
+
+   PASS  Tests\Feature\QueryBudgetTest
+  ✓ 500 stock iterations stay within query budget                                                                             1.05s  
+  ✓ dashboard aggregates are cached and invalidated                                                                           0.03s  
+  ✓ api pagination is clamped centrally                                                                                       0.06s  
+  ✓ enterprise load test 500 iteration query budget                                                                           0.25s  
+
+   PASS  Tests\Feature\RagAclTest
+  ✓ another companys documents are never returned                                                                             0.09s  
+  ✓ null company documents are never returned to a tenant                                                                     0.08s  
+  ✓ finance hr and admin pipelines require module permission                                                                  0.09s  
+  ✓ restricted source models are filtered even inside an allowed domain                                                       0.09s  
+  ✓ stats and domains are company scoped                                                                                      0.11s  
+  ✓ retrieved snippets are sanitized before return                                                                            0.08s  
+
+   PASS  Tests\Feature\RagPipelineTest
+  ✓ registry defines exactly eighty four pipelines                                                                            0.15s  
+  ✓ vector store registers eighty four unique pipelines                                                                       0.12s  
+  ✓ embeddings rank related text higher                                                                                       0.08s  
+  ✓ dashboard renders for super admin                                                                                         0.12s  
+  ✓ query endpoint returns local answer with sources                                                                          0.11s  
+  ✓ unknown pipeline is rejected                                                                                              0.08s  
+  ✓ sync endpoint indexes pipeline documents                                                                                  0.11s  
+  ✓ api lists all pipelines                                                                                                   0.11s  
+
+   PASS  Tests\Feature\RagTourTest
+  ✓ guests are redirected from the tour                                                                                       0.06s  
+  ✓ tour renders all seven domains and their pipelines                                                                        0.07s  
+  ✓ tour explains live usage benefits and governance                                                                          0.07s  
+  ✓ tour route is not shadowed by the pipeline json route                                                                     0.07s  
+  ✓ rag workspace links to the tour                                                                                           0.07s  
+
+   PASS  Tests\Feature\SecurityAuditTest
+  ✓ security headers present on dashboard                                                                                     1.42s  
+  ✓ security headers present on login page                                                                                    1.23s  
+  ✓ content security policy header present                                                                                    1.39s  
+  ✓ permissions policy restricts dangerous features                                                                           1.37s  
+  ✓ x permitted cross domain policies                                                                                         1.30s  
+  ✓ security headers on api endpoints                                                                                         1.19s  
+  ✓ login form has csrf token                                                                                                 1.12s  
+  ✓ csrf middleware is registered                                                                                             1.14s  
+  ✓ logout requires post with csrf                                                                                            1.14s  
+  ✓ session regenerated on login                                                                                              1.13s  
+  ✓ database session driver used in production                                                                                1.15s  
+  ✓ session encryption configured                                                                                             1.14s  
+  ✓ session http only cookie                                                                                                  1.14s  
+  ✓ session same site cookie configured                                                                                       1.15s  
+  ✓ session serialization is json                                                                                             1.13s  
+  ✓ bcrypt or argon2 hashing configured                                                                                       1.15s  
+  ✓ bcrypt rounds configured in env example                                                                                   1.14s  
+  ✓ password hash is not reversible                                                                                           1.13s  
+  ✓ reset password uses strong validation                                                                                     1.12s  
+  ✓ login has throttle protection                                                                                             1.18s  
+  ✓ forgot password has rate limiting                                                                                         1.35s  
+  ✓ login throttle service blocks after max attempts                                                                          1.13s  
+  ✓ login throttle clears on success                                                                                          1.15s  
+  ✓ throttle provides delay seconds when blocked                                                                              1.23s  
+  ✓ sql injection in login email blocked                                                                                      1.16s  
+  ✓ sql injection in search blocked                                                                                           1.23s  
+  ✓ api protection detects sql injection patterns                                                                             1.12s  
+  ✓ api protection detects xss in request                                                                                     1.12s  
+  ✓ xss in login email not reflected                                                                                          1.13s  
+  ✓ dashboard has security headers against xss                                                                                1.24s  
+  ✓ api protection detects multiple xss patterns                                                                              1.18s  
+  ✓ selfie upload validates file type                                                                                         1.15s  
+  ✓ selfie upload validates file size                                                                                         1.15s  
+  ✓ session lifetime configured                                                                                               4.30s  
+  ✓ session expire on close configured                                                                                        1.42s  
+  ✓ session secure cookie config                                                                                              4.04s  
+  ✓ 500 errors dont expose stack traces                                                                                       1.17s  
+  ✓ api error responses dont expose internal paths                                                                            1.22s  
+  ✓ validation errors dont expose db details                                                                                  1.43s  
+  ✓ disabled account error is generic                                                                                         1.21s  
+  ✓ env example has no real api keys                                                                                          1.20s  
+  ✓ env example api keys are empty                                                                                            1.29s  
+  ✓ env example password is placeholder                                                                                       1.30s  
+  ✓ session cookie name is custom                                                                                             1.48s  
+  ✓ password validation requires minimum length                                                                               1.54s  
+  ✓ login controller prevents user enumeration                                                                                1.52s  
+  ✓ step up auth middleware exists                                                                                            1.33s  
+  ✓ emergency lockdown middleware exists                                                                                      1.31s  
+  ✓ force https middleware exists                                                                                             1.20s  
+  ✓ two factor middleware exists                                                                                              1.23s  
+  ✓ security headers middleware exists                                                                                        1.32s  
+  ✓ api protection middleware exists                                                                                          1.32s  
+  ✓ session controller allows viewing sessions                                                                                1.22s  
+  ✓ data deletion requires password confirmation                                                                              1.11s  
+  ✓ data deletion requires exact confirmation                                                                                 1.13s  
+  ✓ user model has expected fields                                                                                            1.38s  
+  ✓ api protection blocks known attack paths                                                                                  2.63s  
+  ✓ api protection ip block works                                                                                             2.88s  
+  ✓ registration steps have rate limiting                                                                                     1.37s  
+  ✓ password reset has rate limiting                                                                                          2.88s  
+  ✓ login success returns csrf token                                                                                          4.81s  
+
+   PASS  Tests\Feature\SecurityHardeningTest
+  ✓ of company fails closed without a company context                                                                         0.18s  
+  ✓ user of company also fails closed                                                                                         0.11s  
+  ✓ of company still works with an explicit company id                                                                        0.11s  
+  ✓ self registration without invitation is rejected                                                                          0.17s  
+  ✓ tampered or expired invitation is rejected                                                                                0.14s  
+  ✓ verified registration creates a company bound user without logging in                                                     0.22s  
+  ✓ registration step3 cannot create a null company user                                                                      0.12s  
+  ✓ api responses carry the full security header set without unsafe eval                                                      0.16s  
+  ✓ user preference mass assignment is fillable only                                                                          0.15s  
+  ✓ ai key test flash never contains any part of the key                                                                      0.15s  
+
+   PASS  Tests\Feature\SelfHealingTest
+  ✓ capture records error report and audit log                                                                                0.23s  
+  ✓ request data is sanitised                                                                                                 0.11s  
+  ✓ middleware renders safe fallback outside debug                                                                            0.19s  
+  ✓ middleware rethrows validation exceptions                                                                                 0.14s  
+  ✓ csrf exceptions are never swallowed                                                                                       0.11s  
+  ✓ duplicate errors are deduplicated into one report                                                                         0.12s  
+
+   PASS  Tests\Feature\SuperBrainShieldTest
+  ✓ sanitize redacts secrets and personal data                                                                                0.11s  
+  ✓ sanitize neutralises prompt injection instructions                                                                        0.12s  
+  ✓ sanitize prompt merges system and user counts                                                                             0.12s  
+  ✓ sanitize prompt is a no op when the shield is disabled                                                                    0.12s  
+  ✓ pii redaction can be disabled without disabling secret redaction                                                          0.13s  
+  ✓ redaction telemetry is recorded without prompt text                                                                       0.13s  
+  ✓ injection telemetry is recorded at medium severity                                                                        0.12s  
+  ✓ clean prompts write no security events                                                                                    0.17s  
+  ✓ inspect request blocks sql injection                                                                                      0.13s  
+  ✓ inspect request blocks path traversal and scanner signatures                                                              0.09s  
+  ✓ inspect request allows normal business questions                                                                          0.09s  
+  ✓ inspect request rate limits a single user                                                                                 0.10s  
+  ✓ middleware blocks an attack before it reaches the ai controller                                                           0.12s  
+  ✓ status reports four layers and activation state                                                                           0.14s  
+  ✓ gateway redacts pii before the prompt reaches the provider                                                                0.13s  
+
+   PASS  Tests\Feature\TokenAbilityTest
+  ✓ read only token can read but not mutate                                                                                   0.18s  
+  ✓ write token cannot be used for unrelated modules                                                                          0.13s  
+  ✓ ai and rag routes require ai abilities                                                                                    0.19s  
+  ✓ limited token cannot manage tokens                                                                                        0.15s  
+  ✓ rag scoped ability is accepted on rag routes                                                                              0.13s  
+  ✓ session and first party requests are not blocked by abilities                                                             0.14s  
+
+   PASS  Tests\Feature\UploadSecurityTest
+  ✓ validate image accepts a real png                                                                                         0.12s  
+  ✓ validate image rejects svg and script polyglots                                                                           0.13s  
+  ✓ logo upload rejects svg                                                                                                   0.17s  
+  ✓ logo upload accepts valid raster and uses uuid name                                                                       0.20s  
+  ✓ support screenshot is private and uses uuid filename                                                                      0.19s  
+  ✓ support screenshot rejects svg                                                                                            0.19s  
+
+   PASS  Tests\Feature\WorkflowIntegrationTest
+  ✓ crm full workflow                                                                                                         0.80s  
+  ✓ crm customer create requires name                                                                                         0.70s  
+  ✓ crm lead create requires contact name                                                                                     0.73s  
+  ✓ crm opportunity requires name                                                                                             0.72s  
+  ✓ crm viewer cannot create customer                                                                                         0.81s  
+  ✓ crm viewer cannot create lead                                                                                             0.86s  
+  ✓ crm sales user can create customer and lead                                                                               0.79s  
+  ✓ crm other company cannot see customers                                                                                    0.85s  
+  ✓ crm company isolation contacts                                                                                            0.81s  
+  ✓ sales full workflow                                                                                                       1.30s  
+  ✓ sales quotation create requires customer                                                                                  0.68s  
+  ✓ sales invoice create requires issue date                                                                                  0.96s  
+  ✓ sales viewer cannot create quotation                                                                                      0.80s  
+  ✓ sales other company cannot see quotations                                                                                 1.00s  
+  ✓ sales payment methods are valid                                                                                           0.72s  
+  ✓ sales payment status transitions                                                                                          0.69s  
+  ✓ procurement full workflow                                                                                                 0.81s  
+  ✓ procurement requisition requires status                                                                                   0.77s  
+  ✓ procurement viewer cannot create supplier                                                                                 0.77s  
+  ✓ procurement other company cannot see suppliers                                                                            0.83s  
+  ✓ procurement supplier status transitions                                                                                   0.82s  
+  ✓ inventory full workflow                                                                                                   0.72s  
+  ✓ inventory stock service available stock                                                                                   0.72s  
+  ✓ inventory warehouse isolation                                                                                             0.67s  
+  ✓ inventory viewer cannot create product                                                                                    0.78s  
+  ✓ inventory other company cannot see products                                                                               1.03s  
+  ✓ inventory product requires name                                                                                           1.04s  
+  ✓ inventory stock movements track reference                                                                                 0.80s  
+  ✓ finance full workflow                                                                                                     0.84s  
+  ✓ finance auto journal on invoice                                                                                           0.66s  
+  ✓ finance auto journal on payment                                                                                           0.63s  
+  ✓ finance account requires code and name                                                                                    1.16s  
+  ✓ finance journal entry requires balanced lines                                                                             0.70s  
+  ✓ finance viewer can view but not create accounts                                                                           1.12s  
+  ✓ finance other company cannot see accounts                                                                                 0.89s  
+  ✓ logistics full workflow                                                                                                   0.74s  
+  ✓ logistics landed cost types are valid                                                                                     0.71s  
+  ✓ logistics viewer can view but not create                                                                                  1.67s  
+  ✓ logistics other company cannot see shipments                                                                              0.82s  
+  ✓ logistics shipment modes are valid                                                                                        0.85s  
+  ✓ logistics container status transitions                                                                                    0.80s  
+  ✓ user management full workflow                                                                                             0.98s  
+  ✓ user cannot be created by viewer                                                                                          0.70s  
+  ✓ user permissions are enforced                                                                                             0.87s  
+  ✓ viewer role has view permissions                                                                                          2.36s  
+  ✓ settings full workflow                                                                                                    0.83s  
+  ✓ settings are company isolated                                                                                             0.81s  
+  ✓ settings default value when missing                                                                                       0.80s  
+  ✓ settings json value storage                                                                                               0.86s  
+  ✓ search finds customers                                                                                                    0.85s  
+  ✓ search requires minimum 2 characters                                                                                      0.91s  
+  ✓ search finds leads                                                                                                        0.93s  
+  ✓ search finds suppliers                                                                                                    1.05s  
+  ✓ search isolation between companies                                                                                        1.09s  
+  ✓ customers index is paginated                                                                                              0.97s  
+  ✓ products index is paginated                                                                                               1.11s  
+  ✓ suppliers index is paginated                                                                                              0.96s  
+  ✓ quotations index is paginated                                                                                             1.08s  
+  ✓ invoices index is paginated                                                                                               0.94s  
+  ✓ payments index is paginated                                                                                               0.96s  
+  ✓ accounts index is paginated                                                                                               0.91s  
+  ✓ export page loads                                                                                                         0.93s  
+  ✓ leads index loads                                                                                                         0.99s  
+  ✓ opportunities index loads                                                                                                 0.95s  
+  ✓ activities index loads                                                                                                    1.03s  
+  ✓ contacts index loads                                                                                                      1.09s  
+  ✓ purchase requisitions index loads                                                                                         0.97s  
+  ✓ rfqs index loads                                                                                                          0.86s  
+  ✓ purchase orders index loads                                                                                               1.09s  
+  ✓ warehouses index loads                                                                                                    0.96s  
+  ✓ stock movements index loads                                                                                               0.97s  
+  ✓ finance dashboard loads                                                                                                   0.87s  
+  ✓ finance receivables loads                                                                                                 0.89s  
+  ✓ finance payables loads                                                                                                    0.93s  
+  ✓ journal entries index loads                                                                                               0.91s  
+  ✓ sales orders index loads                                                                                                  1.00s  
+  ✓ pipeline index loads                                                                                                      1.09s  
+  ✓ dashboard loads for admin                                                                                                 1.17s  
+  ✓ dashboard loads for viewer                                                                                                1.35s  
+  ✓ dashboard loads for sales user                                                                                            1.21s  
+  ✓ dashboard loads for procurement user                                                                                      1.09s  
+  ✓ of company scope filters correctly                                                                                        0.69s  
+  ✓ supplier of company scope                                                                                                 0.77s  
+  ✓ lead of company scope                                                                                                     0.73s  
+  ✓ product of company scope                                                                                                  0.67s  
+  ✓ account of company scope                                                                                                  0.64s  
+  ✓ customer can be deleted                                                                                                   0.24s  
+  ✓ supplier can be deleted                                                                                                   0.22s  
+  ✓ product can be deleted                                                                                                    0.22s  
+  ✓ quotation can be deleted                                                                                                  0.23s  
+  ✓ payment can be deleted                                                                                                    0.22s  
+  ✓ invoice can be deleted                                                                                                    0.23s  
+  ✓ viewer cannot delete customer                                                                                             0.23s  
+  ✓ customer can be updated                                                                                                   0.23s  
+  ✓ product can be updated                                                                                                    0.22s  
+  ✓ supplier can be updated                                                                                                   0.23s  
+  ✓ product reorder level boundary                                                                                            0.24s  
+  ✓ invoice outstanding balance calculation                                                                                   0.21s  
+  ✓ purchase order outstanding balance                                                                                        0.23s  
+  ✓ sales user full crm workflow                                                                                              0.27s  
+  ✓ procurement user can manage suppliers                                                                                     0.23s  
+  ✓ activity complete and reopen                                                                                              0.23s  
+  ✓ activity types are valid                                                                                                  0.20s  
+  ✓ quotation status constants                                                                                                0.20s  
+  ✓ sales order status constants                                                                                              0.21s  
+  ✓ invoice status constants                                                                                                  0.27s  
+  ✓ lead status constants                                                                                                     0.23s  
+  ✓ opportunity stage constants                                                                                               0.32s  
+  ✓ purchase requisition status constants                                                                                     0.31s  
+  ✓ purchase requisition priority constants                                                                                   0.44s  
+  ✓ rfq status constants                                                                                                      0.39s  
+  ✓ container status constants                                                                                                0.36s  
+  ✓ account type constants                                                                                                    0.29s  
+  ✓ account balance calculation                                                                                               0.35s  
+  ✓ warehouse can be created                                                                                                  0.39s  
+  ✓ warehouse can be deleted                                                                                                  0.35s  
+  ✓ viewer cannot create warehouse                                                                                            0.40s  
+  ✓ landing page redirects to login                                                                                           0.38s  
+  ✓ stock service record purchase receipt                                                                                     0.26s  
+  ✓ company context resolves from auth                                                                                        0.26s  
+  ✓ company context set and clear                                                                                             0.40s  
+  ✓ company context current                                                                                                   0.34s  
+  ✓ settings encrypted value                                                                                                  0.34s  
+  ✓ quotation to order data integrity                                                                                         0.38s  
+  ✓ auto journal invoice payment cycle                                                                                        0.32s  
+
+  Tests:    556 passed (1990 assertions)
+  Duration: 341.11s
+
