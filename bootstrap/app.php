@@ -19,8 +19,8 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Spatie\Permission\Middleware\PermissionMiddleware;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Spatie\Permission\Middleware\RoleMiddleware;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 require_once __DIR__.'/../app/Support/helpers.php';
 

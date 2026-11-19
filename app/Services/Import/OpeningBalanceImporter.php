@@ -7,7 +7,6 @@ namespace App\Services\Import;
 use App\Models\Account;
 use App\Models\Import;
 use App\Models\JournalEntry;
-use App\Models\JournalEntryLine;
 use App\Services\AuditLogger;
 use App\Services\CompanyContext;
 use Illuminate\Support\Facades\DB;

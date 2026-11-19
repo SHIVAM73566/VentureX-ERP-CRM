@@ -258,7 +258,7 @@ class RagService
     protected function frameUntrusted(string $value): string
     {
         return str_replace(
-            ['<', '>', '[[' , ']]'],
+            ['<', '>', '[[', ']]'],
             ['‹', '›', '[ [', '] ]'],
             $this->sanitizeSnippet($value, 2000)
         );

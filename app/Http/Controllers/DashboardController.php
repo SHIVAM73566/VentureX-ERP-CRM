@@ -15,6 +15,7 @@ use App\Models\Opportunity;
 use App\Models\PayrollRun;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
+use App\Models\StockMovement;
 use App\Models\SupplierOffer;
 use App\Services\Ai\AiInsightService;
 use App\Services\Ai\AiQuotaService;
@@ -335,6 +336,7 @@ class DashboardController extends Controller
         } catch (\Throwable) {
             $months = [];
         }
+
         return ['labels' => array_column($months, 'short'), 'data' => array_column($months, 'revenue')];
     }
 
@@ -350,6 +352,7 @@ class DashboardController extends Controller
             $total = $won + $open + $lost;
             $conversionRate = $total > 0 ? round(($won / $total) * 100, 1) : 0;
             $winRate = ($won + $lost) > 0 ? round(($won / ($won + $lost)) * 100, 1) : 0;
+
             return [
                 'won' => round($won, 2),
                 'open' => round($open, 2),
@@ -368,11 +371,11 @@ class DashboardController extends Controller
     protected function inventoryTurnover(): array
     {
         try {
-            $stockOut = (float) \App\Models\StockMovement::ofCompany()
+            $stockOut = (float) StockMovement::ofCompany()
                 ->where('type', 'out')
                 ->where('created_at', '>=', now()->subDays(30))
                 ->sum('quantity');
-            $stockIn = (float) \App\Models\StockMovement::ofCompany()
+            $stockIn = (float) StockMovement::ofCompany()
                 ->where('type', 'in')
                 ->where('created_at', '>=', now()->subDays(30))
                 ->sum('quantity');
@@ -384,6 +387,7 @@ class DashboardController extends Controller
             $lowStock = $activeProducts->filter(
                 fn (Product $product) => ($balances[$product->id] ?? 0.0) <= (float) $product->reorder_level
             )->count();
+
             return [
                 'stock_out' => round($stockOut, 2),
                 'stock_in' => round($stockIn, 2),

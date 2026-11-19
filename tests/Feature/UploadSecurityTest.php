@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\AiRun;
 use App\Models\Company;
+use App\Models\Setting;
 use App\Models\User;
 use App\Services\UploadSecurityService;
 use Illuminate\Http\UploadedFile;
@@ -102,7 +103,7 @@ class UploadSecurityTest extends TestCase
             ->post(route('admin.settings.branding'), ['logo' => $file])
             ->assertRedirect();
 
-        $stored = \App\Models\Setting::query()->where('key', 'branding.logo_path')->value('value');
+        $stored = Setting::query()->where('key', 'branding.logo_path')->value('value');
         $this->assertNotEmpty($stored);
         $this->assertMatchesRegularExpression(
             '#^branding/[^/]+/[0-9a-f-]{36}\.png$#',

@@ -68,6 +68,7 @@ class User extends Authenticatable
     public function preference(string $key, mixed $default = null): mixed
     {
         $pref = $this->preferences()->where('key', $key)->first();
+
         return $pref?->value ?? $default;
     }
 

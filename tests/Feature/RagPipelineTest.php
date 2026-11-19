@@ -11,6 +11,7 @@ use App\Services\Rag\EmbeddingService;
 use App\Services\Rag\RagPipelineRegistry;
 use App\Services\Rag\VectorStoreService;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
@@ -166,7 +167,7 @@ class RagPipelineTest extends TestCase
     {
         // API routes use Sanctum token abilities; super_admin web user needs
         // a wildcard token to pass EnsureTokenAbility.
-        \Laravel\Sanctum\Sanctum::actingAs($this->admin, ['*']);
+        Sanctum::actingAs($this->admin, ['*']);
 
         $response = $this->getJson('/api/ai/rag/pipelines');
 

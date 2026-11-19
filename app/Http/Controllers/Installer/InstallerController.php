@@ -14,7 +14,6 @@ use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
-use RuntimeException;
 use Throwable;
 
 /**

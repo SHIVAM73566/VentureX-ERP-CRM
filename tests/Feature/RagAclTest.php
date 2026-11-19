@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\AiRun;
+use App\Models\AuditLog;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\RagDocument;
 use App\Models\RagPipeline;
 use App\Models\User;
@@ -70,13 +71,13 @@ class RagAclTest extends TestCase
         return RagDocument::create([
             'company_id' => $companyId,
             'pipeline_id' => $pipeline->id,
-            'source_type' => $sourceModel ?? \App\Models\Customer::class,
+            'source_type' => $sourceModel ?? Customer::class,
             'source_id' => 1,
             'title' => 'ACL Probe '.substr(md5($content), 0, 6),
             'content' => $content,
             'embedding' => null,
             'metadata' => [
-                'model' => $sourceModel ?? \App\Models\Customer::class,
+                'model' => $sourceModel ?? Customer::class,
                 'domain' => $domain,
                 'is_public' => $isPublic,
             ],
@@ -146,7 +147,7 @@ class RagAclTest extends TestCase
             $this->company->id,
             'PRIVATE_ADMIN_AUDIT_RECORD retention churn',
             'crm',
-            \App\Models\AuditLog::class
+            AuditLog::class
         );
 
         $response = $this->actingAs($this->limited, 'sanctum')
