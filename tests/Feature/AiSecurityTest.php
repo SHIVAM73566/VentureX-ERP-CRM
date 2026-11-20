@@ -35,7 +35,7 @@ class AiSecurityTest extends TestCase
 
         $this->withoutMiddleware(EnsureTwoFactor::class);
 
-        if (! User::where('email', 'admin@jainmetal.example')->exists()) {
+        if (! User::where('email', 'admin@example.com')->exists() && ! User::where('email', 'admin@jainmetal.example')->exists()) {
             app(PermissionRegistrar::class)->forgetCachedPermissions();
 
             $this->seed([
@@ -45,16 +45,17 @@ class AiSecurityTest extends TestCase
                 CompanySeeder::class,
                 DemoDataSeeder::class,
             ]);
+        }
 
-            User::where('email', 'admin@jainmetal.example')->update([
-                'password' => Hash::make('password'),
-            ]);
+        $admin = User::where('email', 'admin@example.com')->first() ?? User::where('email', 'admin@jainmetal.example')->first();
+        if ($admin) {
+            $admin->update(['password' => Hash::make('password')]);
         }
     }
 
     protected function admin(): User
     {
-        return User::where('email', 'admin@jainmetal.example')->firstOrFail();
+        return User::where('email', 'admin@example.com')->first() ?? User::where('email', 'admin@jainmetal.example')->firstOrFail();
     }
 
     protected function authAdmin(): self
