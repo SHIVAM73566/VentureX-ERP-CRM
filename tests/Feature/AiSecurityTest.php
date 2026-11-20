@@ -140,7 +140,7 @@ class AiSecurityTest extends TestCase
 
     public function test_unauthorized_user_gets_redirect_or_forbidden(): void
     {
-        $viewer = User::where('email', '!=', 'admin@jainmetal.example')->first();
+        $viewer = User::whereNotIn('email', ['admin@example.com', 'admin@jainmetal.example'])->first();
         if (! $viewer) {
             $this->markTestSkipped('No secondary user available.');
         }
