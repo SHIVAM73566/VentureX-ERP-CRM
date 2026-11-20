@@ -65,7 +65,8 @@ class BugRegressionTest extends TestCase
             CompanySeeder::class,
         ]);
 
-        $this->companyA = Company::where('email', 'admin@jainmetal.example')->firstOrFail();
+        $this->companyA = Company::where('email', 'admin@example.com')->first()
+            ?? Company::where('email', 'admin@jainmetal.example')->firstOrFail();
 
         $this->companyB = Company::create([
             'name' => 'Rival Industries',
@@ -75,7 +76,8 @@ class BugRegressionTest extends TestCase
             'is_active' => true,
         ]);
 
-        $this->adminA = User::where('email', 'admin@jainmetal.example')->firstOrFail();
+        $this->adminA = User::where('email', 'admin@example.com')->first()
+            ?? User::where('email', 'admin@jainmetal.example')->firstOrFail();
         $this->adminA->update(['password' => Hash::make('password')]);
 
         $this->adminB = User::create([
