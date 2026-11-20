@@ -30,9 +30,9 @@ class DemoDataSeeder extends Seeder
         CompanyContext::set($company->id);
 
         $users = User::ofCompany()->get();
-        $owner = $users->where('email', 'purchase@jainmetal.example')->first() ?? $users->first();
-        $salesUser = $users->where('email', 'sales@jainmetal.example')->first() ?? $users->first();
-        $procurement = $users->where('email', 'procurement@jainmetal.example')->first() ?? $users->first();
+        $owner = $users->where('email', 'purchase@example.com')->first() ?? $users->first();
+        $salesUser = $users->where('email', 'sales@example.com')->first() ?? $users->first();
+        $procurement = $users->where('email', 'procurement@example.com')->first() ?? $users->first();
 
         $suppliers = $this->seedSuppliers($company->id, $owner?->id);
         $customers = $this->seedCustomers($company->id, $salesUser?->id);

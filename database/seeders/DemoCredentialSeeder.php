@@ -56,7 +56,7 @@ class DemoCredentialSeeder extends Seeder
             ['name' => 'Jain Metal Industries'],
             [
                 'legal_name' => 'Jain Metal Industries Private Limited',
-                'email' => 'info@jainmetal.example',
+                'email' => 'info@example.com',
                 'is_active' => true,
             ]
         );

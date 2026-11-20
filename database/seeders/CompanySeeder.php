@@ -19,17 +19,17 @@ class CompanySeeder extends Seeder
         $country = Country::where('code', 'IN')->first();
 
         $company = Company::updateOrCreate(
-            ['name' => 'Jain Metal Industries'],
+            ['name' => 'Example Manufacturing Co.'],
             [
-                'legal_name' => 'Jain Metal Industries Private Limited',
-                'email' => 'admin@jainmetal.example',
-                'phone' => '+91 90000 00000',
-                'tax_id' => 'GSTIN-27XXXXXX0000X0Z5',
-                'industry' => 'Scrap Metal Trading & Procurement',
-                'address_line1' => 'GIDC Industrial Estate, Plot 42',
-                'city' => 'Jamnagar',
-                'state' => 'Gujarat',
-                'postal_code' => '361004',
+                'legal_name' => 'Example Manufacturing Company Ltd',
+                'email' => 'admin@example.com',
+                'phone' => '+1 555 0100',
+                'tax_id' => 'TAX-ID-EXAMPLE-0001',
+                'industry' => 'Manufacturing & Trading',
+                'address_line1' => '123 Example Industrial Estate',
+                'city' => 'Example City',
+                'state' => 'Example State',
+                'postal_code' => '00000',
                 'country_id' => $country?->id,
                 'currency_code' => 'INR',
                 'timezone' => 'Asia/Kolkata',
@@ -58,7 +58,7 @@ class CompanySeeder extends Seeder
         );
 
         $admin = User::firstOrCreate(
-            ['email' => 'admin@jainmetal.example'],
+            ['email' => 'admin@example.com'],
             [
                 'name' => 'System Administrator',
                 'first_name' => 'System',
@@ -73,11 +73,11 @@ class CompanySeeder extends Seeder
         );
         $admin->assignRole('super_admin');
 
-        $this->createUser('Prakash Jain', 'prakash@jainmetal.example', 'ceo', $company, $head, null, 'CEO');
-        $this->createUser('Ramesh Patel', 'purchase@jainmetal.example', 'purchase_manager', $company, $head, $purchase, 'Purchase Manager');
-        $this->createUser('Sunil Sharma', 'procurement@jainmetal.example', 'procurement_officer', $company, $head, $purchase, 'Procurement Officer');
-        $this->createUser('Anita Desai', 'accounts@jainmetal.example', 'finance_manager', $company, $head, $finance, 'Finance Manager');
-        $this->createUser('Vikram Singh', 'sales@jainmetal.example', 'sales_manager', $company, $head, $sales, 'Sales Manager');
+        $this->createUser('Alex Example', 'ceo@example.com', 'ceo', $company, $head, null, 'CEO');
+        $this->createUser('Sam Example', 'purchase@example.com', 'purchase_manager', $company, $head, $purchase, 'Purchase Manager');
+        $this->createUser('Taylor Example', 'procurement@example.com', 'procurement_officer', $company, $head, $purchase, 'Procurement Officer');
+        $this->createUser('Jordan Example', 'accounts@example.com', 'finance_manager', $company, $head, $finance, 'Finance Manager');
+        $this->createUser('Casey Example', 'sales@example.com', 'sales_manager', $company, $head, $sales, 'Sales Manager');
 
         $settings = app(SettingService::class);
         $settings->set('ai.provider', 'nvidia', ['company_id' => $company->id, 'group' => 'ai']);

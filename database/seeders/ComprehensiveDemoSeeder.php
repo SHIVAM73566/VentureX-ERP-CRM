@@ -66,7 +66,7 @@ class ComprehensiveDemoSeeder extends Seeder
             ['name' => 'Jain Metal Industries'],
             [
                 'legal_name' => 'Jain Metal Industries Private Limited',
-                'email' => 'admin@jainmetal.example',
+                'email' => 'admin@example.com',
                 'is_active' => true,
             ]
         );
@@ -908,7 +908,7 @@ class ComprehensiveDemoSeeder extends Seeder
             ['type' => 'user', 'title' => 'New User Registration — Logistics Department', 'risk' => 'low', 'status' => 'rejected', 'desc' => 'Registration request for new logistics coordinator with warehouse access'],
         ];
 
-        $approverId = $this->userId('admin@jainmetal.example');
+        $approverId = $this->userId('admin@example.com');
 
         foreach ($requests as $idx => $r) {
             $ar = ApprovalRequest::create([

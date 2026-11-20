@@ -91,14 +91,14 @@ class HrDemoSeeder extends Seeder
     protected function employees(int $companyId, array $departments, ?int $userId): array
     {
         $definitions = [
-            ['EMP-1001', 'Aarav', 'Mehta', 'aarav.mehta@jainmetal.example', 'Plant Manager', 'OPS', 95000, '2019-04-01', 'active'],
-            ['EMP-1002', 'Priya', 'Sharma', 'priya.sharma@jainmetal.example', 'HR Manager', 'HR', 72000, '2020-07-13', 'active'],
-            ['EMP-1003', 'Rohan', 'Iyer', 'rohan.iyer@jainmetal.example', 'Procurement Lead', 'PROC', 68000, '2021-02-08', 'active'],
-            ['EMP-1004', 'Sneha', 'Kulkarni', 'sneha.kulkarni@jainmetal.example', 'Sales Manager', 'SALES', 75000, '2018-11-19', 'active'],
-            ['EMP-1005', 'Vikram', 'Singh', 'vikram.singh@jainmetal.example', 'Warehouse Supervisor', 'LOG', 48000, '2022-06-06', 'active'],
-            ['EMP-1006', 'Ananya', 'Rao', 'ananya.rao@jainmetal.example', 'Finance Analyst', 'FIN', 62000, '2023-01-16', 'active'],
-            ['EMP-1007', 'Imran', 'Khan', 'imran.khan@jainmetal.example', 'Machine Operator', 'OPS', 32000, '2024-03-04', 'probation'],
-            ['EMP-1008', 'Kavya', 'Nair', 'kavya.nair@jainmetal.example', 'Customer Success Executive', 'SALES', 38000, now()->subDays(9)->toDateString(), 'active'],
+            ['EMP-1001', 'Aarav', 'Mehta', 'aarav.mehta@example.com', 'Plant Manager', 'OPS', 95000, '2019-04-01', 'active'],
+            ['EMP-1002', 'Priya', 'Sharma', 'priya.sharma@example.com', 'HR Manager', 'HR', 72000, '2020-07-13', 'active'],
+            ['EMP-1003', 'Rohan', 'Iyer', 'rohan.iyer@example.com', 'Procurement Lead', 'PROC', 68000, '2021-02-08', 'active'],
+            ['EMP-1004', 'Sneha', 'Kulkarni', 'sneha.kulkarni@example.com', 'Sales Manager', 'SALES', 75000, '2018-11-19', 'active'],
+            ['EMP-1005', 'Vikram', 'Singh', 'vikram.singh@example.com', 'Warehouse Supervisor', 'LOG', 48000, '2022-06-06', 'active'],
+            ['EMP-1006', 'Ananya', 'Rao', 'ananya.rao@example.com', 'Finance Analyst', 'FIN', 62000, '2023-01-16', 'active'],
+            ['EMP-1007', 'Imran', 'Khan', 'imran.khan@example.com', 'Machine Operator', 'OPS', 32000, '2024-03-04', 'probation'],
+            ['EMP-1008', 'Kavya', 'Nair', 'kavya.nair@example.com', 'Customer Success Executive', 'SALES', 38000, now()->subDays(9)->toDateString(), 'active'],
         ];
 
         $employees = [];
