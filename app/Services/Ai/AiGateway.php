@@ -54,7 +54,16 @@ class AiGateway
         $this->providers->syncForCurrentContext();
 
         if (! $this->isEnabled()) {
-            throw new AiException('AI analysis is not available right now. Ask your administrator to connect an AI provider in Settings.');
+            return [
+                'content' => 'AI is not configured. Add an API key in Settings or set environment variables to enable AI features. The application works without AI.',
+                'provider' => 'none',
+                'model' => 'none',
+                'prompt_tokens' => 0,
+                'completion_tokens' => 0,
+                'latency_ms' => 0,
+                'cached' => false,
+                'cost' => 0.0,
+            ];
         }
 
         // Layer 2: strip secrets/PII and neutralise prompt-injection attempts

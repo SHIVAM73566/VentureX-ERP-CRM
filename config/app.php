@@ -17,6 +17,8 @@ return [
 
     'version' => env('APP_VERSION', '1.0.0'),
 
+    'demo_mode' => (bool) env('DEMO_MODE', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
