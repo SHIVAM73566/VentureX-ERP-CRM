@@ -33,7 +33,9 @@
 
 ## What was done in this branch so far
 - Created branch `layers-v1` from `sale-ready`.
-- Added this `HANDOVER.md` (Phase 0 + Phase 1 notes).
+- PHASE 0/1: `HANDOVER.md`, `release/BILLING-STRIPE-NOTES.md`, `release/LAYERS-PRICING-15.md` (sources for packaging per decisions above).
+- PHASE 2 (client): layers config, entitlement model/migration, service, middleware+directive, locked UI component, tests (LayerEntitlementTest passing).
+- PHASE 3 (scaffold): `license-server/` directory with README, env example, routes, stub controllers/services (Cashier/webhook/idempotency notes, ed25519 token flow, verify endpoint stub, Stripe CLI steps, Tax/MoR note). This is a scaffold/template, not a runnable full Laravel app unless initialized.
 
 ## Next steps (pending your “go” per phase)
 - PHASE 1: enforce rules in code review/process; add guards where applicable (no secrets committed). 
