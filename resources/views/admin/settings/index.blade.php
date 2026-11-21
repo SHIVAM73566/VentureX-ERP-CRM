@@ -316,10 +316,11 @@
             <div class="card">
                 <h2 class="text-lg font-bold text-ink-900">Plan &amp; Layers</h2>
                 <p class="mt-1 text-sm text-ink-600">Overview of available add-on layers for this workspace. Entitlements are managed by your license/billing administrator.</p>
-                <div class="mt-3 rounded-lg bg-ink-50 p-3 text-xs text-ink-600 dark:bg-ink-800/50 dark:text-ink-300">
-                    <span class="font-semibold">AI usage (company, recorded):</span>
-                    Today {{ number_format((int)($aiUsageToday ?? 0)) }} requests · This month {{ number_format((int)($aiUsageMonth ?? 0)) }} requests.
-                    <span class="text-ink-400">(Meters are informational; BYOK keys and local fallback remain available unless your plan/layers change that in future updates.)</span>
+                <div class="mt-3 rounded-lg border border-ink-200 bg-ink-50 p-3 text-xs text-ink-700 dark:border-ink-700 dark:bg-ink-800/50 dark:text-ink-200">
+                    <p class="font-semibold text-ink-900 dark:text-ink-100">AI usage (company, recorded)</p>
+                    <p class="mt-1">Today: <span class="font-mono font-semibold">{{ number_format((int)($aiUsageToday ?? 0)) }}</span> requests</p>
+                    <p>This month: <span class="font-mono font-semibold">{{ number_format((int)($aiUsageMonth ?? 0)) }}</span> requests</p>
+                    <p class="mt-1 text-ink-500 dark:text-ink-400">Informational only. BYOK and local fallback remain available unless future layer policies change this.</p>
                 </div>
                 <div class="mb-4 rounded-lg bg-ink-50 p-3 text-sm dark:bg-ink-800/50">
                     <p class="font-medium text-ink-800 dark:text-ink-200">AI usage (this month, company): {{ number_format($aiUsageMonthly ?? 0) }} successful requests</p>

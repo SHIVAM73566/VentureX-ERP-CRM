@@ -27,6 +27,7 @@ class PlanLayersSettingsTest extends TestCase
         $this->actingAs($user)
             ->get(route('admin.settings.index', ['tab' => 'plan']))
             ->assertStatus(200)
-            ->assertSee('Plan & Layers');
+            ->assertSee('Plan & Layers')
+            ->assertSee('AI usage (company, recorded)');
     }
 }
