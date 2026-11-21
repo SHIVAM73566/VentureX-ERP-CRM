@@ -57,6 +57,19 @@ class SettingController extends Controller
             ];
         }
 
+        $layers = config('layers.layers', []);
+        $entitledKeys = [];
+        if ($companyId = \App\Services\CompanyContext::id()) {
+            $entitledKeys = \App\Models\LayerEntitlement::query()
+                ->where('company_id', $companyId)
+                ->whereIn('status', ['active', 'grace'])
+                ->where(function ($q) {
+                    $q->whereNull('expires_at')->orWhere('expires_at', '>=', now());
+                })
+                ->pluck('layer_key')
+                ->all();
+        }
+
         return response()
             ->view('admin.settings.index', [
                 'tab' => $tab,
@@ -65,10 +78,10 @@ class SettingController extends Controller
                 'aiKeyCards' => $cards,
                 'shieldStatus' => app(SuperBrainShield::class)->status(),
                 'nvidiaMeta' => config('ai.ui_providers.nvidia', []),
+                'layersList' => $layers,
+                'entitledKeys' => $entitledKeys,
             ])
             ->withHeaders([
-                // The panel shows credential metadata; never let a proxy or
-                // browser cache the rendered page.
                 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
                 'Pragma' => 'no-cache',
             ]);

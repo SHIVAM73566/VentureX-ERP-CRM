@@ -4,6 +4,7 @@
         <a href="{{ route('admin.settings.index', ['tab' => 'ai']) }}" class="tab {{ $tab === 'ai' ? 'tab-active' : '' }}">AI Engine</a>
         <a href="{{ route('admin.settings.index', ['tab' => 'company']) }}" class="tab {{ $tab === 'company' ? 'tab-active' : '' }}">Company</a>
         <a href="{{ route('admin.settings.index', ['tab' => 'branding']) }}" class="tab {{ $tab === 'branding' ? 'tab-active' : '' }}">Branding &amp; Invoices</a>
+        <a href="{{ route('admin.settings.index', ['tab' => 'plan']) }}" class="tab {{ $tab === 'plan' ? 'tab-active' : '' }}">Plan &amp; Layers</a>
     </div>
 
     @if ($tab === 'ai')
@@ -308,5 +309,36 @@
                 <button type="submit" class="btn-accent">Save Branding</button>
             </div>
         </form>
+    @endif
+
+    @if ($tab === 'plan')
+        <div class="mx-auto max-w-5xl space-y-6">
+            <div class="card">
+                <h2 class="text-lg font-bold text-ink-900">Plan &amp; Layers</h2>
+                <p class="mt-1 text-sm text-ink-600">Overview of available add-on layers for this workspace. Entitlements are managed by your license/billing administrator.</p>
+                <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                    @foreach (($layersList ?? []) as $layer)
+                        @php($owned = in_array($layer['key'], $entitledKeys ?? [], true))
+                        <div class="rounded-lg border border-ink-200 p-4 dark:border-ink-700">
+                            <div class="flex items-start justify-between gap-2">
+                                <div>
+                                    <p class="font-semibold text-ink-900">{{ $layer['name'] }}</p>
+                                    <p class="text-xs text-ink-500">Key: <span class="font-mono">{{ $layer['key'] }}</span> · Type: {{ $layer['type'] }}</p>
+                                </div>
+                                @if($owned)
+                                    <span class="badge badge-green">Active</span>
+                                @elseif(($layer['status'] ?? '') === 'coming_soon')
+                                    <span class="badge badge-gray">Coming soon</span>
+                                @else
+                                    <span class="badge badge-amber">Not enabled</span>
+                                @endif
+                            </div>
+                            <p class="mt-2 text-xs text-ink-500">Status: {{ $layer['status'] ?? 'unknown' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+                <p class="mt-4 text-xs text-ink-500">For billing and upgrade options, contact your publisher. This app never stores Stripe secrets.</p>
+            </div>
+        </div>
     @endif
 </x-layouts.app>
