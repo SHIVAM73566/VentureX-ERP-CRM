@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\SuperBrainShield;
+use App\Services\Ai\AiUsageService;
 use App\Services\AuditLogger;
 use App\Services\BrandingService;
 use App\Services\ClientLicenseService;
@@ -71,6 +72,22 @@ class SettingController extends Controller
                 ->all();
         }
 
+        $aiUsageToday = 0;
+        $aiUsageMonth = 0;
+        try {
+            $svc = app(\App\Services\Ai\AiUsageService::class);
+            $aiUsageToday = $svc->dailyCount(null, null);
+            $aiUsageMonth = $svc->monthlyCount(null, null);
+        } catch (\Throwable $e) {
+            $aiUsageToday = 0;
+            $aiUsageMonth = 0;
+        }
+
+        $licenseToken = null;
+        if ($companyId = \App\Services\CompanyContext::id()) {
+            $licenseToken = \App\Models\LicenseToken::query()->where('company_id', $companyId)->first();
+        }
+
         return response()
             ->view('admin.settings.index', [
                 'tab' => $tab,
@@ -81,6 +98,9 @@ class SettingController extends Controller
                 'nvidiaMeta' => config('ai.ui_providers.nvidia', []),
                 'layersList' => $layers,
                 'entitledKeys' => $entitledKeys,
+                'aiUsageToday' => $aiUsageToday,
+                'aiUsageMonth' => $aiUsageMonth,
+                'licenseToken' => $licenseToken,
             ])
             ->withHeaders([
                 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',

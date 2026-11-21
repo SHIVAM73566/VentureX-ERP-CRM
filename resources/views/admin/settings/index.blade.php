@@ -316,6 +316,15 @@
             <div class="card">
                 <h2 class="text-lg font-bold text-ink-900">Plan &amp; Layers</h2>
                 <p class="mt-1 text-sm text-ink-600">Overview of available add-on layers for this workspace. Entitlements are managed by your license/billing administrator.</p>
+                <div class="mt-3 rounded-lg bg-ink-50 p-3 text-xs text-ink-600 dark:bg-ink-800/50 dark:text-ink-300">
+                    <span class="font-semibold">AI usage (company, recorded):</span>
+                    Today {{ number_format((int)($aiUsageToday ?? 0)) }} requests · This month {{ number_format((int)($aiUsageMonth ?? 0)) }} requests.
+                    <span class="text-ink-400">(Meters are informational; BYOK keys and local fallback remain available unless your plan/layers change that in future updates.)</span>
+                </div>
+                <div class="mb-4 rounded-lg bg-ink-50 p-3 text-sm dark:bg-ink-800/50">
+                    <p class="font-medium text-ink-800 dark:text-ink-200">AI usage (this month, company): {{ number_format($aiUsageMonthly ?? 0) }} successful requests</p>
+                    <p class="text-xs text-ink-500 mt-1">Usage meters are informational. BYOK and local fallback remain available regardless of layers unless explicitly enforced by policy.</p>
+                </div>
                 <div class="mt-4 grid gap-4 sm:grid-cols-2">
                     @foreach (($layersList ?? []) as $layer)
                         @php($owned = in_array($layer['key'], $entitledKeys ?? [], true))

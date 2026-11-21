@@ -18,6 +18,24 @@
         </button>
     </div>
 
+    @if(!layer_enabled('updates_support'))
+    {{-- Contextual upgrade prompt (max 1 per session, dismissible) --}}
+    <div x-data="{ show: sessionStorage.getItem('vx-upgrade-upsell-dismissed') !== '1' }"
+         x-show="show" x-cloak
+         class="mb-5 flex flex-wrap items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800 dark:bg-amber-900/20">
+        <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold text-amber-900 dark:text-amber-100">Unlock updates &amp; support</p>
+            <p class="text-xs text-amber-800 dark:text-amber-200">Keep your ERP current with the Updates &amp; Support (Care) layer. See Plan &amp; Layers in Settings.</p>
+        </div>
+        <a href="{{ route('admin.settings.index', ['tab' => 'plan']) }}" class="btn-secondary text-xs">View plans</a>
+        <button type="button" @click="show = false; sessionStorage.setItem('vx-upgrade-upsell-dismissed', '1')"
+                class="rounded-lg p-1.5 text-amber-700 hover:bg-amber-100 dark:text-amber-300 dark:hover:bg-amber-900/40" aria-label="Dismiss">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+    @endif
+
+
     @php
         $user = auth()->user();
         $icons = [
