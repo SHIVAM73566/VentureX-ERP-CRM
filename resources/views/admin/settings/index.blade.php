@@ -334,10 +334,19 @@
                                 @endif
                             </div>
                             <p class="mt-2 text-xs text-ink-500">Status: {{ $layer['status'] ?? 'unknown' }}</p>
+                            @if($layer['key'] === 'updates_support' && $owned)
+                                <p class="mt-2 text-xs text-emerald-700 dark:text-emerald-400">Updates &amp; support entitlements are active for this workspace (per your agreement).</p>
+                            @endif
+                            @if($layer['key'] === 'managed_hosting')
+                                <p class="mt-2 text-xs text-ink-500">Managed hosting is a service offering. Contact your publisher for setup/retainer details (no in-app provisioning secrets).</p>
+                            @endif
+                            @if($layer['key'] === 'ai_credits')
+                                <p class="mt-2 text-xs text-ink-500">Default: use your own AI API keys (BYOK) in AI settings. Metered AI credits (if enabled by publisher) are optional; local/fallback behavior stays available.</p>
+                            @endif
                         </div>
                     @endforeach
                 </div>
-                <p class="mt-4 text-xs text-ink-500">For billing and upgrade options, contact your publisher. This app never stores Stripe secrets.</p>
+                <p class="mt-4 text-xs text-ink-500">For billing and upgrade options, contact your publisher. This app never stores Stripe secrets. Trial periods, cancellation, renewal reminders, and invoices are managed through the publisher’s billing flow (license server) when enabled.</p>
             </div>
 
             <div class="card space-y-4">
