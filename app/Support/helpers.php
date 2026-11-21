@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\CompanyContext;
+use App\Services\EntitlementService;
 
 if (! function_exists('company_id')) {
     /**
@@ -10,6 +11,20 @@ if (! function_exists('company_id')) {
     function company_id(): ?int
     {
         return CompanyContext::id();
+    }
+}
+
+if (! function_exists('layer_enabled')) {
+    /**
+     * Check if a layer entitlement is active for the current company context.
+     */
+    function layer_enabled(string $layerKey): bool
+    {
+        try {
+            return app(EntitlementService::class)->has($layerKey);
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 }
 

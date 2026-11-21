@@ -64,6 +64,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'super_brain' => SuperBrainShield::class,
             'api.protection' => ApiProtection::class,
             'installer' => InstallerGuard::class,
+            'layer' => \App\Http\Middleware\EnsureLayerEntitled::class,
         ]);
 
         $middleware->redirectGuestsTo(fn () => route('login'));

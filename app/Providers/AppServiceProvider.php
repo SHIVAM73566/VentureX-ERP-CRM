@@ -106,6 +106,14 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('configure', fn (User $user) => $user->hasPermissionTo('settings.configure'));
 
         $this->registerPolicies();
+
+        \Illuminate\Support\Facades\Blade::if('layer', function (string $layerKey): bool {
+            try {
+                return app(\App\Services\EntitlementService::class)->has($layerKey);
+            } catch (\Throwable $e) {
+                return false;
+            }
+        });
     }
 
     protected function registerPolicies(): void
