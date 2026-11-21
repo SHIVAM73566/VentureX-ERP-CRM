@@ -7,6 +7,7 @@ use App\Services\Ai\AiProviderManager;
 use App\Services\Ai\SuperBrainShield;
 use App\Services\AuditLogger;
 use App\Services\BrandingService;
+use App\Services\ClientLicenseService;
 use App\Services\CompanyContext;
 use App\Services\SettingService;
 use App\Services\UploadSecurityService;
@@ -218,6 +219,50 @@ class SettingController extends Controller
         return redirect()
             ->route('admin.settings.index', ['tab' => 'branding'])
             ->with('success', 'Branding saved.');
+    }
+
+    public function applyLicenseToken(Request $request, ClientLicenseService $licenseService): RedirectResponse
+    {
+        $this->authorize('configure');
+
+        $validated = $request->validate([
+            'license_token' => ['required', 'string', 'max:20000'],
+        ]);
+
+        $companyId = CompanyContext::id();
+        if (! $companyId) {
+            return back()->with('error', 'No company context available.');
+        }
+
+        $result = $licenseService->applyToken($companyId, trim($validated['license_token']));
+
+        AuditLogger::log('update', 'license_token', null, ['action' => 'apply_token'], ['ok' => $result['ok']]);
+
+        if (! $result['ok']) {
+            return back()->with('error', $result['message'])->withInput();
+        }
+
+        return redirect()->route('admin.settings.index', ['tab' => 'plan'])->with('success', $result['message']);
+    }
+
+    public function syncLicense(Request $request, ClientLicenseService $licenseService): RedirectResponse
+    {
+        $this->authorize('configure');
+
+        $companyId = CompanyContext::id();
+        if (! $companyId) {
+            return back()->with('error', 'No company context available.');
+        }
+
+        $result = $licenseService->syncFromServer($companyId);
+
+        AuditLogger::log('update', 'license_token', null, ['action' => 'sync_server'], ['ok' => $result['ok']]);
+
+        if (! $result['ok']) {
+            return back()->with('error', $result['message']);
+        }
+
+        return redirect()->route('admin.settings.index', ['tab' => 'plan'])->with('success', $result['message']);
     }
 
     protected function deleteLogo(?string $path): void

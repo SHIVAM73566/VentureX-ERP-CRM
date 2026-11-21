@@ -339,6 +339,23 @@
                 </div>
                 <p class="mt-4 text-xs text-ink-500">For billing and upgrade options, contact your publisher. This app never stores Stripe secrets.</p>
             </div>
+
+            <div class="card space-y-4">
+                <h3 class="text-sm font-bold uppercase tracking-wide text-ink-400">License token (advanced)</h3>
+                <p class="text-xs text-ink-500">Paste a signed license token from your license server, or sync if a server URL is configured. Tokens are verified using the configured public key; this app never stores payment secrets.</p>
+                <form method="POST" action="{{ route('admin.settings.license.apply-token') }}" class="space-y-2">
+                    @csrf
+                    <label for="license_token" class="label">License token</label>
+                    <textarea id="license_token" name="license_token" rows="3" class="input font-mono text-xs" placeholder="Paste token here">{{ old('license_token') }}</textarea>
+                    @error('license_token')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
+                    <button type="submit" class="btn-accent text-xs">Apply token (step-up required)</button>
+                </form>
+                <form method="POST" action="{{ route('admin.settings.license.sync') }}" class="pt-2 border-t border-ink-100 dark:border-ink-700">
+                    @csrf
+                    <p class="text-xs text-ink-500 mb-2">Sync from license server (requires <code>LICENSE_SERVER_URL</code> and server-side setup).</p>
+                    <button type="submit" class="btn-secondary text-xs">Sync from server (step-up required)</button>
+                </form>
+            </div>
         </div>
     @endif
 </x-layouts.app>

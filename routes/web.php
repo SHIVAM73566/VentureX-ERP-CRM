@@ -157,6 +157,8 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::post('settings', [SettingController::class, 'update'])->middleware('step_up')->name('settings.update');
         Route::post('settings/branding', [SettingController::class, 'updateBranding'])->middleware('step_up')->name('settings.branding');
+        Route::post('settings/license/apply-token', [SettingController::class, 'applyLicenseToken'])->middleware('step_up')->name('settings.license.apply-token');
+        Route::post('settings/license/sync', [SettingController::class, 'syncLicense'])->middleware('step_up')->name('settings.license.sync');
         Route::post('settings/ai-keys/{provider}', [AiKeyController::class, 'store'])->middleware('step_up')->name('settings.ai-key.store');
         Route::post('settings/ai-keys/{provider}/test', [AiKeyController::class, 'test'])->middleware('throttle:ai')->name('settings.ai-key.test');
         Route::delete('settings/ai-keys/{provider}', [AiKeyController::class, 'destroy'])->middleware('step_up')->name('settings.ai-key.destroy');
