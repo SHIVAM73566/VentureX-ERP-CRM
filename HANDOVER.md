@@ -18,11 +18,15 @@
 4. **Subscription lapse behavior**: **never lock or delete customer data** when a subscription lapses. Only **disable premium/layer-gated features** per entitlement rules; **exports must remain available** (or explicitly documented exception — default: keep export available). Confirm UX copy matches this.
 5. **PII/logging**: do not log full card data, raw webhook payloads containing secrets unnecessarily, or license private keys. Audit logs should record business events without leaking secrets.
 
-## Open questions / unknowns (you must decide)
+## Decisions recorded (user-confirmed, 2026-11-21)
+- **ZIP billing docs (in-repo sources, no secrets):** `release/BILLING-STRIPE-NOTES.md` explains Stripe/checkout/payouts at a high level with **no API keys, no webhook secrets, no credentials**. This file is intended to be included in **ALL** buyer release ZIPs (`release.sh` / packaging step must add it to every ZIP).
+- **15-layer model doc (source only in repo):** `release/LAYERS-PRICING-15.md` documents the full 15-layer model (honest statuses/pricing notes). Intended for **Codester and Payhip** ZIP packages **only** (not Acquire, not production-final, etc.). Do **not** add “10–25 different payout/billing systems”; the model is the **15 layers** defined in this doc/config plan.
+- **Packaging approach:** implement in-repo first; **`release.sh` (Phase 9)** should generate clean ZIPs and place the above docs correctly. Do **not** hand-edit existing binary ZIPs in `release/` unless explicitly approved later.
+- **License server remains separate**; Stripe secrets only there.
+
+## Open questions / unknowns
 - **License server**: new separate Laravel app location/repo strategy (not present). Define domains, DB, deployment, and who holds Stripe account.
 - **Entitlement source of truth**: license server issues **ed25519-signed license tokens** (Phase 3) consumed by client with embedded/public key verification + 14-day grace (offline). Client must store verification public key securely (config/env/artifact strategy TBC).
-- **“Stripe payout structure for users in every ZIP file”** (from user): needs precise definition. **Risk**: putting payout account details or secrets into buyer zips is dangerous and forbidden by Phase 1. Clarify whether this means (a) documentation/marketing copy only, (b) checkout URLs configured per deployment, or (c) something else. **Do not embed secrets.**
-- **Which ZIPs get “10–25 layers of payouts” content?** User said “add 10–25 different layers of payouts in THIS - VentureX-ERP-CRM-Codester-v2.6 / VentureX-ERP-CRM-Payhip-v2.6…” and “do not add 10–25 layers in every zip file”. This conflicts with “add Stripe payout structure in EVERY ZIP FILE”. Requires written confirmation before changing any files under `release/*.zip` (treat zips as artifacts; changing them may be destructive). Prefer generating via `release.sh` (Phase 9) rather than manual zip surgery.
 - **Tax/merchant of record**: Phase 3 requires a note (Stripe Tax vs MoR) — decision pending.
 - **Plan naming/prices**: PRICING.md is draft/TODO; Phase 6 references Core $499 one-time, Care monthly, Pro bundle — align with business decision before public assets.
 - **Keys/decisions still needed (checklist seed)**: Stripe account + test/live keys (license server only), webhook endpoint URL(s), ed25519 keypair for license signing, public key distribution method to clients, price IDs / lookup keys for all layers, email/SaaS provider for waitlists and onboarding emails, legal review for terms.
