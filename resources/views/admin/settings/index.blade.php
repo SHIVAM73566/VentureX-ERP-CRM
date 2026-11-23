@@ -329,6 +329,43 @@
                     <p class="mt-1">Add-ons are optional. Exact price, tax, renewal terms and invoices are shown on Stripe’s secure checkout before you confirm. Nothing is charged from this page. If an add-on lapses, only that paid feature is disabled — your business data and exports remain available.</p>
                 </div>
 
+                <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-200" data-stripe-billing-status>
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="font-semibold">Stripe billing status</p>
+                            <p class="mt-1">Checkout and invoices are enabled from the server environment only. Values are never rendered into Blade, JavaScript or logs.</p>
+                        </div>
+                        <span class="badge {{ $billingStatus['checkout_ready'] ? 'badge-green' : 'badge-amber' }}">
+                            {{ $billingStatus['checkout_ready'] ? 'Checkout ready' : 'Setup required' }}
+                        </span>
+                    </div>
+                    <div class="mt-3 grid gap-2 sm:grid-cols-2">
+                        <p>Stripe secret key: <span class="font-semibold">{{ $billingStatus['secret_configured'] ? 'Configured on server' : 'Missing — set STRIPE_SECRET' }}</span></p>
+                        <p>Webhook signing secret: <span class="font-semibold">{{ $billingStatus['webhook_configured'] ? 'Configured on server' : 'Missing — set STRIPE_WEBHOOK_SECRET' }}</span></p>
+                        <p>Price IDs configured: <span class="font-mono font-semibold">{{ $billingStatus['prices_configured'] }}/{{ $billingStatus['prices_total'] }}</span></p>
+                        <p>Portal return URL: <code class="font-mono">{{ $billingStatus['portal_return_url'] }}</code></p>
+                    </div>
+                    @if (! empty($billingStatus['missing_price_envs']))
+                        <p class="mt-3 font-semibold">Set these in the server <code>.env</code> to enable each add-on:</p>
+                        <div class="mt-1 flex flex-wrap gap-1">
+                            @foreach ($billingStatus['missing_price_envs'] as $envName)
+                                <code class="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-[11px] dark:bg-amber-900/40" data-stripe-price-env="{{ $envName }}">{{ $envName }}</code>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if (! $billingStatus['checkout_ready'])
+                        <p class="mt-3 text-[11px]">Not set up yet? No problem. Add <code>STRIPE_SECRET</code> and the Price ID named on each card to the server <code>.env</code>, then refresh this page. Your data and AppSumo license stay exactly as they are.</p>
+                    @endif
+                </div>
+
+                <div class="mt-4 rounded-lg border border-ink-200 bg-white p-3 text-xs text-ink-700 dark:border-ink-700 dark:bg-ink-900/40 dark:text-ink-200" data-appsumo-pricing>
+                    <p class="font-semibold text-ink-900 dark:text-ink-100">AppSumo codes (card-free redemption)</p>
+                    <p class="mt-1">1 Code — <span class="font-mono font-semibold">$49</span>: 1 company, standard support, single license rights.</p>
+                    <p>2 Codes Stacked — <span class="font-mono font-semibold">$98</span>: multi-company, advanced reporting, role permissions, priority support.</p>
+                    <p>Original / Direct comparison — <span class="font-mono font-semibold">$499</span>: reference price only, not the AppSumo checkout price.</p>
+                    <p class="mt-1 text-[11px] text-ink-500">Maximum 2 codes. Redemption stays card-free and is unchanged by Stripe add-ons.</p>
+                </div>
+
                 <div class="mt-4 grid gap-3 rounded-lg border border-ink-200 bg-ink-50 p-3 text-xs text-ink-700 dark:border-ink-700 dark:bg-ink-800/50 dark:text-ink-200 sm:grid-cols-2">
                     <div>
                         <p class="font-semibold text-ink-900 dark:text-ink-100">Value progression</p>
@@ -338,15 +375,24 @@
                         <p class="font-semibold text-ink-900 dark:text-ink-100">Transparent timing</p>
                         <p class="mt-1">Launch-window terms and capacity-based pricing can change. Capacity thresholds and renewal dates are shown by Stripe before payment — no countdowns, no forced upgrades, and no loss of business data if you wait.</p>
                     </div>
-                    @if($hasStripeCustomer ?? false)
-                        <div class="sm:col-span-2 border-t border-ink-200 pt-3 dark:border-ink-700">
+                    <div class="sm:col-span-2 border-t border-ink-200 pt-3 dark:border-ink-700" data-stripe-portal-status>
+                        @if (($hasStripeCustomer ?? false) && $billingStatus['secret_configured'])
                             <form method="POST" action="{{ route('admin.settings.billing.portal') }}">
                                 @csrf
-                                <button type="submit" class="btn-secondary text-xs">Manage billing &amp; invoices in Stripe (step-up required)</button>
-                                <p class="mt-1 text-[11px] text-ink-400">Update a payment method, download invoices or cancel a subscription. Your data stays here.</p>
+                                <button type="submit" class="btn-secondary text-xs" data-stripe-action="portal">Manage billing &amp; invoices in Stripe (step-up required)</button>
                             </form>
-                        </div>
-                    @endif
+                        @else
+                            <button type="button" disabled aria-disabled="true" class="btn-secondary cursor-not-allowed text-xs opacity-60" data-stripe-action="portal">Manage billing &amp; invoices in Stripe</button>
+                            <p class="mt-1 text-[11px] text-ink-400">
+                                @if (! $billingStatus['secret_configured'])
+                                    Set <code>STRIPE_SECRET</code> on the server to enable billing management.
+                                @else
+                                    Complete a Stripe upgrade first to create the customer record used by the portal.
+                                @endif
+                            </p>
+                        @endif
+                        <p class="mt-1 text-[11px] text-ink-400">Return URL: <code class="font-mono">{{ $billingStatus['portal_return_url'] }}</code>. Update a payment method, download invoices or cancel a subscription without losing ERP data.</p>
+                    </div>
                 </div>
 
                 <div class="mt-4 grid gap-4 sm:grid-cols-2">
@@ -354,12 +400,17 @@
                         @php
                             $owned = in_array($layer['key'], $entitledKeys ?? [], true);
                             $offer = ($checkoutOffers ?? [])[$layer['key']] ?? null;
-                            $purchasable = ! $owned
-                                && ($layer['status'] ?? '') === 'available'
-                                && is_array($offer)
-                                && filled(config('services.stripe.prices.'.$layer['key']));
+                            $envName = $billingStatus['price_env_by_layer'][$layer['key']] ?? ('STRIPE_PRICE_'.strtoupper($layer['key']));
+                            $priceConfigured = filled(config('services.stripe.prices.'.$layer['key']));
+                            $layerAvailable = ($layer['status'] ?? '') === 'available';
+                            $hasOffer = is_array($offer);
+                            $checkoutAllowed = ! $owned
+                                && $layerAvailable
+                                && $hasOffer
+                                && $priceConfigured
+                                && $billingStatus['secret_configured'];
                         @endphp
-                        <div class="rounded-lg border border-ink-200 p-4 dark:border-ink-700">
+                        <div class="rounded-lg border border-ink-200 p-4 dark:border-ink-700" data-stripe-layer-card="{{ $layer['key'] }}">
                             <div class="flex items-start justify-between gap-2">
                                 <div>
                                     <p class="font-semibold text-ink-900">{{ $layer['name'] }}</p>
@@ -369,13 +420,23 @@
                                     <span class="badge badge-green">Active</span>
                                 @elseif(($layer['status'] ?? '') === 'coming_soon')
                                     <span class="badge badge-gray">Coming soon</span>
-                                @elseif($purchasable)
-                                    <span class="badge badge-amber">Available</span>
+                                @elseif($checkoutAllowed)
+                                    <span class="badge badge-green">Ready</span>
+                                @elseif(! $priceConfigured)
+                                    <span class="badge badge-amber">Needs Price ID</span>
+                                @elseif(! $billingStatus['secret_configured'])
+                                    <span class="badge badge-amber">Needs Stripe key</span>
+                                @elseif(! $hasOffer)
+                                    <span class="badge badge-gray">Not offered</span>
                                 @else
                                     <span class="badge badge-amber">Not enabled</span>
                                 @endif
                             </div>
                             <p class="mt-2 text-xs text-ink-500">Status: {{ $layer['status'] ?? 'unknown' }}</p>
+                            <p class="mt-1 text-xs text-ink-500">
+                                Checkout env: <code class="font-mono" data-stripe-price-env="{{ $envName }}">{{ $envName }}</code>
+                                · {{ $priceConfigured ? 'Price ID configured on server (value hidden)' : 'Price ID not configured' }}
+                            </p>
 
                             @if(is_array($offer) && ! $owned)
                                 <p class="mt-2 text-xs text-ink-600 dark:text-ink-300">{{ $offer['summary'] }}</p>
@@ -388,13 +449,32 @@
                                 @endif
                             @endif
 
-                            @if($purchasable)
+                            @if($checkoutAllowed)
                                 <form method="POST" action="{{ route('admin.settings.billing.checkout') }}" class="mt-3 border-t border-ink-100 pt-3 dark:border-ink-700">
                                     @csrf
                                     <input type="hidden" name="layer_key" value="{{ $layer['key'] }}">
-                                    <button type="submit" class="btn-accent text-xs">Upgrade securely with Stripe</button>
+                                    <button type="submit" class="btn-accent text-xs" data-stripe-action="checkout" data-stripe-layer="{{ $layer['key'] }}" data-stripe-checkout-ready>Upgrade securely with Stripe</button>
                                     <p class="mt-1 text-[11px] text-ink-400">Step-up verification is required. Price, tax and renewal terms are confirmed on Stripe before payment.</p>
                                 </form>
+                            @else
+                                <div class="mt-3 border-t border-ink-100 pt-3 dark:border-ink-700">
+                                    <button type="button" disabled aria-disabled="true" class="btn-secondary cursor-not-allowed text-xs opacity-60" data-stripe-action="checkout" data-stripe-layer="{{ $layer['key'] }}">Upgrade securely with Stripe</button>
+                                    <p class="mt-1 text-[11px] text-ink-400">
+                                        @if($owned)
+                                            This layer is already active.
+                                        @elseif(! $layerAvailable)
+                                            This layer is not available for checkout yet.
+                                        @elseif(! $hasOffer)
+                                            No checkout offer is configured for this layer.
+                                        @elseif(! $priceConfigured)
+                                            Set <code>{{ $envName }}</code> in the server <code>.env</code> to enable this button.
+                                        @elseif(! $billingStatus['secret_configured'])
+                                            Set <code>STRIPE_SECRET</code> in the server <code>.env</code> to enable this button.
+                                        @else
+                                            Checkout is not available for this layer.
+                                        @endif
+                                    </p>
+                                </div>
                             @endif
 
                             @if($layer['key'] === 'updates_support' && $owned)
@@ -413,8 +493,8 @@
             </div>
 
             <div class="card space-y-4">
-                <h3 class="text-sm font-bold uppercase tracking-wide text-ink-400">License token (advanced)</h3>
-                <p class="text-xs text-ink-500">Paste a signed license token from your license server, or sync if a server URL is configured. Tokens are verified using the configured public key; this app never stores payment secrets.</p>
+                <h3 class="text-sm font-bold uppercase tracking-wide text-ink-400">LICENSE TOKEN (ADVANCED)</h3>
+                <p class="text-xs text-ink-500">Optional. Use this only if your publisher gave you a signed license token. Stripe add-ons do not need it. Tokens are checked on the server; this app never stores payment secrets.</p>
                 <form method="POST" action="{{ route('admin.settings.license.apply-token') }}" class="space-y-2">
                     @csrf
                     <label for="license_token" class="label">License token</label>

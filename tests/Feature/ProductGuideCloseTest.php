@@ -64,6 +64,7 @@ class ProductGuideCloseTest extends TestCase
 
         $js = (string) file_get_contents($asset);
         $this->assertStringContainsString('data-guide-close', $js);
+        $this->assertStringContainsString('data-guide-overlay', $js);
         $this->assertStringContainsString('data-guide-open', $js);
         $this->assertStringContainsString('data-close-overlay', $js);
     }
@@ -73,6 +74,7 @@ class ProductGuideCloseTest extends TestCase
         $expectations = [
             'resources/views/components/product-guide.blade.php' => [
                 'data-guide-close',
+                'data-guide-overlay',
                 'aria-label="Close the product guide"',
                 '@keydown.escape.window="open = false"',
             ],

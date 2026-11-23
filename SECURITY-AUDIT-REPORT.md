@@ -17,7 +17,7 @@ This report summarizes the v1.3.1 hardening, performance, installer/import, and 
 - **Phase 2** — Enterprise indexing/migrations, atomic numbering via `document_sequences` with locking, pessimistic locking patterns in critical flows, dashboard caching, API pagination clamps, queued heavy jobs behind `VENTUREX_QUEUE_HEAVY_TASKS` (default off), `enterprise:load-test` command.
 - **Phase 3** — Tenant fail-closed behavior, invitation-bound registration OTP flow, Sanctum ability enforcement middleware, API AI authorization, RAG company/role ACL and untrusted-snippet framing, tighter upload rules (no SVG logos; private raster validation for support screenshots where applicable), security headers on API paths, removal of AI key tail/substring leakage from logs/flash/UI copy.
 - **Phase 4** — Buyer-facing docs, `.htaccess` / routing notes, deploy-action metadata alignment, WordPress connector text/path fixes, git ignore/export hygiene.
-- **Phase 5** — Settings/plan-tab reliability, server-only Stripe Checkout/Billing Portal, signed idempotent webhook, step-up open-redirect fix, cross-tenant 403 enforcement, API session CSRF guard, and reliable close/dismiss controls for the product guide and all overlays.
+- **Phase 5** — Settings/plan-tab reliability, server-only Stripe Checkout/Billing Portal, signed idempotent webhook, step-up open-redirect fix, cross-tenant 403 enforcement, API session CSRF guard, and reliable close/dismiss controls for the product guide and all overlays, including a whole-overlay native fallback and plain-language guide copy.
 
 **Out of scope / caveats:** No third-party penetration test or external code audit was performed as part of this report. “Zero vulnerabilities” is **not** claimed; this report records **confirmed findings addressed in executed scope** and residual operational notes. Git history prior to rotations may still contain historical secrets in old commits (see **Residual risk**).
 
@@ -41,7 +41,7 @@ All commands executed from repository root (`C:\MY_ERP`) unless noted.
 
 | Check | Result |
 |---|---|
-| `php artisan test --colors=never` | **Passed**: **582 passed**, **2195 assertions**, **0 failed / 0 errors** (final full-suite duration: **563.53s**) |
+| `php artisan test --colors=never` | **Passed**: **584 passed**, **2235 assertions**, **0 failed / 0 errors** (final full-suite duration: **358.22s**) |
 | `npm run build` (Vite) | **Passed** (production build completed) |
 | `php artisan route:list` | **Succeeded** (route table generated; see application logs/output for full listing) |
 | Enterprise load simulation | `php artisan enterprise:load-test --users=30|100|300|500` — **0 errors** in each run (see **Enterprise load-test results** below) |

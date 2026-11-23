@@ -88,7 +88,9 @@ class StripeBillingSecurityTest extends TestCase
             ->assertSee('Granular roles &amp; permissions', false)
             ->assertSee('Industry template: Manufacturing+', false)
             ->assertSee('Advanced logistics suite', false)
-            ->assertSee('Custom development credits', false);
+            ->assertSee('Custom development credits', false)
+            ->assertDontSee('sk_test_not_a_real_key')
+            ->assertDontSee('price_test_granular');
     }
 
     public function test_settings_pages_reject_unauthorized_users_and_guests(): void
@@ -247,7 +249,30 @@ class StripeBillingSecurityTest extends TestCase
             ->post(route('admin.settings.billing.portal'))
             ->assertRedirect('https://billing.stripe.com/p/session/test');
 
-        Http::assertSent(fn ($request) => str_contains($request->body(), 'cus_stored_123'));
+        Http::assertSent(function ($request) {
+            $body = urldecode($request->body());
+
+            return str_contains($body, 'cus_stored_123')
+                && str_contains($body, '/admin/settings')
+                && str_contains($body, 'tab=plan');
+        });
+    }
+
+    public function test_plan_tab_shows_billing_portal_action_when_a_customer_exists(): void
+    {
+        LayerEntitlement::create([
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'active',
+            'stripe_customer_id' => 'cus_stored_123',
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get(route('admin.settings.index', ['tab' => 'plan']))
+            ->assertOk()
+            ->assertSee('data-stripe-portal-status', false)
+            ->assertSee('data-stripe-action="portal"', false)
+            ->assertSee('Manage billing &amp; invoices in Stripe', false);
     }
 
     public function test_billing_portal_fails_closed_without_a_stripe_customer(): void

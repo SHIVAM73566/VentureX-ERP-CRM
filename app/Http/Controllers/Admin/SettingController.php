@@ -65,6 +65,7 @@ class SettingController extends Controller
         $companyId = \App\Services\CompanyContext::id();
         $hasStripeCustomer = $companyId !== null
             && app(\App\Services\Billing\StripeBillingPortalService::class)->hasCustomer($companyId);
+        $billingStatus = $this->billingStatus($hasStripeCustomer, $layers);
 
         $aiUsageToday = 0;
         $aiUsageMonth = 0;
@@ -94,6 +95,7 @@ class SettingController extends Controller
                 'checkoutOffers' => $checkoutOffers,
                 'entitledKeys' => $entitledKeys,
                 'hasStripeCustomer' => $hasStripeCustomer,
+                'billingStatus' => $billingStatus,
                 'aiUsageToday' => $aiUsageToday,
                 'aiUsageMonth' => $aiUsageMonth,
                 'licenseToken' => $licenseToken,
@@ -102,6 +104,54 @@ class SettingController extends Controller
                 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
                 'Pragma' => 'no-cache',
             ]);
+    }
+
+    /**
+     * Describe billing readiness for the plan tab using only booleans, env
+     * variable names and the portal return URL. No secret or Price ID value is
+     * ever handed to the view or rendered into browser code.
+     */
+    protected function billingStatus(bool $hasStripeCustomer, array $layers): array
+    {
+        $secretConfigured = filled(config('services.stripe.secret'));
+        $webhookConfigured = filled(config('services.stripe.webhook_secret'));
+        $configuredPortalReturnUrl = trim((string) config('services.stripe.portal_return_url'));
+        $portalReturnUrl = $configuredPortalReturnUrl !== ''
+            ? $configuredPortalReturnUrl
+            : route('admin.settings.index', ['tab' => 'plan']);
+
+        $priceEnvByLayer = [];
+        $missingPriceEnvs = [];
+        $configuredPrices = 0;
+
+        foreach ($layers as $key => $layer) {
+            if (! is_string($key) || ! is_array($layer)) {
+                continue;
+            }
+
+            $envName = 'STRIPE_PRICE_'.Str::upper($key);
+            $priceEnvByLayer[$key] = $envName;
+
+            if (filled(config('services.stripe.prices.'.$key))) {
+                $configuredPrices++;
+            } else {
+                $missingPriceEnvs[] = $envName;
+            }
+        }
+
+        return [
+            'secret_configured' => $secretConfigured,
+            'webhook_configured' => $webhookConfigured,
+            'portal_return_url' => $portalReturnUrl,
+            'portal_return_url_configured' => $configuredPortalReturnUrl !== '',
+            'price_env_by_layer' => $priceEnvByLayer,
+            'missing_price_envs' => $missingPriceEnvs,
+            'prices_configured' => $configuredPrices,
+            'prices_total' => count($layers),
+            'checkout_ready' => $secretConfigured && $configuredPrices > 0,
+            'webhook_ready' => $secretConfigured && $webhookConfigured,
+            'portal_ready' => $secretConfigured && $hasStripeCustomer,
+        ];
     }
 
     public function update(Request $request): RedirectResponse

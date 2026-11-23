@@ -89,6 +89,7 @@ class ProductGuideTest extends TestCase
         // The X button, backdrop and Escape handler must be present on every
         // page that renders the global guide, not only on the dashboard.
         $response->assertSee('data-guide-root', false);
+        $response->assertSee('data-guide-overlay', false);
         $response->assertSee('data-guide-open', false);
         $response->assertSee('data-guide-panel', false);
         $response->assertSee('data-guide-close', false);

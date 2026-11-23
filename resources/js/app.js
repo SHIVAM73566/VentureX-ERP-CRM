@@ -115,6 +115,14 @@ Alpine.start();
             data.open = open;
         }
 
+        // Hide the whole overlay, not only the panel. This keeps the backdrop
+        // from trapping clicks when Alpine is stale, and allows a clean reopen.
+        const overlay = root.querySelector('[data-guide-overlay]');
+        if (overlay) {
+            overlay.style.display = open ? '' : 'none';
+            overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+        }
+
         root.querySelectorAll('[data-guide-panel]').forEach(function (el) {
             el.style.display = open ? '' : 'none';
         });

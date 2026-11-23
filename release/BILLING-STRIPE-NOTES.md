@@ -29,6 +29,12 @@ This document describes the Stripe upgrade/add-on flow shipped with VentureX ERP
 - `POST /admin/settings/billing/portal` (super admin, step-up, throttled) reads the stored `stripe_customer_id` from the tenant's entitlement record. The customer ID is never accepted from the request, URL, Blade or JavaScript.
 - Stripe-hosted Billing Portal lets the customer update payment methods, download invoices and cancel subscriptions. The return URL comes from `STRIPE_BILLING_PORTAL_RETURN_URL` or defaults to the Plan & Layers settings tab.
 
+### Plan tab visibility
+
+- `/admin/settings?tab=plan` always renders all 18 add-on cards, the **Stripe billing status** panel, the AppSumo price reference, and the **LICENSE TOKEN (ADVANCED)** section.
+- The status panel reports only readiness booleans, the exact missing `STRIPE_PRICE_*` names, the configured-price count, and the portal return URL. No secret key, webhook secret or Price ID value is ever rendered.
+- When `STRIPE_SECRET` or a layer's Price ID is missing, its card stays visible with a friendly explanation and a disabled Upgrade button. Adding the value to the server `.env` and refreshing activates that card's checkout button.
+
 ### Add-on catalog
 
 Advanced Reporting, Granular Roles & Security Patches, Capacity Expansion, Industry Templates (Manufacturing/Trading/Services), Advanced Logistics, Advanced Finance, and Custom Development Credits are all defined in `config/layers.php`. Each offer has plain-language value copy; price and renewal terms are always shown by Stripe at checkout. There are no countdowns, fake scarcity, pre-checked consents or forced upgrades.

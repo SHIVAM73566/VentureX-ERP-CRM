@@ -38,7 +38,7 @@
         </button>
 
         {{-- Slide-over --}}
-        <div x-show="open" x-cloak class="fixed inset-0 z-[9999]" role="dialog" aria-modal="true" aria-labelledby="product-guide-title">
+        <div x-show="open" x-cloak data-guide-overlay class="fixed inset-0 z-[9999]" role="dialog" aria-modal="true" aria-labelledby="product-guide-title">
             <div x-show="open" x-transition.opacity @click="open = false" data-guide-close data-guide-backdrop class="absolute inset-0 bg-ink-950/50 pointer-events-auto" aria-hidden="true"></div>
 
             <aside id="product-guide-panel"
@@ -87,10 +87,9 @@
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide">Universal business operating system</span>
                             <h3 class="mt-3 text-2xl font-bold leading-tight">One login. Every department. 84 AI pipelines.</h3>
                             <p class="mt-2 text-sm leading-relaxed text-navy-100">
-                                VentureX ERP &amp; CRM connects customers, sales, procurement, inventory, finance,
-                                logistics, support and administration in one system. Its {{ count($guideDefinitions) }}
-                                Retrieval-Augmented Generation (RAG) pipelines answer questions from
-                                <strong class="text-white">your own records</strong> — not from generic internet knowledge.
+                                VentureX keeps customers, sales, purchasing, stock, finance, shipping, support and admin
+                                in one place. Its {{ count($guideDefinitions) }} AI helpers answer questions using
+                                <strong class="text-white">your own records</strong> — not the internet.
                             </p>
                             <div class="mt-4 flex flex-wrap gap-2">
                                 <a href="{{ route('getting-started') }}" class="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-navy-900 transition hover:bg-navy-50">Start the quick tour</a>
@@ -112,11 +111,11 @@
                                 <li class="flex gap-3">
                                     <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-600 text-xs font-bold text-white">1</span>
                                     <div>
-                                        <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Create your first customer or supplier</p>
+                                        <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Add a customer or supplier</p>
                                         @if ($navAccess->can('customers.create'))
-                                            <p class="text-xs text-ink-500 dark:text-ink-400">Every downstream document — quote, order, invoice, shipment — starts from a party. <a href="{{ route('customers.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a customer</a>.</p>
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Start here. Quotes, orders, invoices and shipments all link back to this record. <a href="{{ route('customers.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a customer</a>.</p>
                                         @else
-                                            <p class="text-xs text-ink-500 dark:text-ink-400">Every downstream document — quote, order, invoice, shipment — starts from a party.</p>
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Start here. Quotes, orders, invoices and shipments all link back to this record.</p>
                                         @endif
                                     </div>
                                 </li>
@@ -125,24 +124,24 @@
                                     <div>
                                         <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Add products and opening stock</p>
                                         @if ($navAccess->can('inventory.products.create'))
-                                            <p class="text-xs text-ink-500 dark:text-ink-400">Products drive quotations, orders, purchase lines and stock. <a href="{{ route('inventory.products.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a product</a>.</p>
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Products feed quotes, orders, purchases and stock counts. <a href="{{ route('inventory.products.create') }}" class="font-medium text-accent-700 hover:underline dark:text-accent-400">Add a product</a>.</p>
                                         @else
-                                            <p class="text-xs text-ink-500 dark:text-ink-400">Products drive quotations, orders, purchase lines and stock.</p>
+                                            <p class="text-xs text-ink-500 dark:text-ink-400">Products feed quotes, orders, purchases and stock counts.</p>
                                         @endif
                                     </div>
                                 </li>
                                 <li class="flex gap-3">
                                     <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-600 text-xs font-bold text-white">3</span>
                                     <div>
-                                        <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Run one sales cycle end to end</p>
-                                        <p class="text-xs text-ink-500 dark:text-ink-400">Quotation → sales order → invoice → payment. Each step posts the right stock and ledger entries automatically.</p>
+                                        <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Run one sale from start to finish</p>
+                                        <p class="text-xs text-ink-500 dark:text-ink-400">Quotation → sales order → invoice → payment. VentureX updates stock and accounts for you.</p>
                                     </div>
                                 </li>
                                 <li class="flex gap-3">
                                     <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-600 text-xs font-bold text-white">4</span>
                                     <div>
                                         <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Ask a question in plain English</p>
-                                        <p class="text-xs text-ink-500 dark:text-ink-400">Open the RAG workspace, pick a pipeline and ask “Which SKUs will stock out in 14 days?” Answers include sources and confidence.</p>
+                                        <p class="text-xs text-ink-500 dark:text-ink-400">Open the RAG workspace and ask “Which items may run out in 14 days?” You get the answer with its sources.</p>
                                     </div>
                                 </li>
                             </ol>
@@ -153,19 +152,19 @@
                             <div class="mt-3 grid gap-3 sm:grid-cols-2">
                                 <div class="rounded-xl border border-ink-200 p-3 dark:border-ink-800">
                                     <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Distributors &amp; wholesalers</p>
-                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Quote from live stock, reorder before stockouts, and track supplier lead times and landed cost per container.</p>
+                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Quote from live stock, reorder on time and track supplier costs.</p>
                                 </div>
                                 <div class="rounded-xl border border-ink-200 p-3 dark:border-ink-800">
                                     <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Manufacturers</p>
-                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Forecast material requirements, compare RFQ responses and monitor on-time, in-full supplier delivery.</p>
+                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Plan materials, compare supplier quotes and check on-time delivery.</p>
                                 </div>
                                 <div class="rounded-xl border border-ink-200 p-3 dark:border-ink-800">
                                     <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Professional services</p>
-                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Manage leads, opportunities and pipelines, then connect delivery to invoices, receivables and account health.</p>
+                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Track leads and jobs, then invoice clients and follow up on payment.</p>
                                 </div>
                                 <div class="rounded-xl border border-ink-200 p-3 dark:border-ink-800">
                                     <p class="text-sm font-semibold text-ink-800 dark:text-ink-100">Multi-company groups</p>
-                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Keep each company's data scoped and auditable, while executives compare consolidated KPIs and risk.</p>
+                                    <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">Keep each company's data separate while comparing group results.</p>
                                 </div>
                             </div>
                         </div>
@@ -184,28 +183,28 @@
                                 <span class="rounded-full bg-navy-100 px-3 py-1.5 text-navy-800 dark:bg-navy-900 dark:text-navy-200">Analyse</span>
                             </div>
                             <p class="mt-2 text-xs leading-relaxed text-ink-500 dark:text-ink-400">
-                                Every stage writes to the same dataset, so the AI, dashboards and audit trail always agree.
+                                Each step saves to the same records, so reports and AI answers stay in sync.
                             </p>
                         </div>
 
                         <div>
                             <h3 class="text-sm font-bold uppercase tracking-wide text-ink-500 dark:text-ink-400">Features that work together</h3>
                             <ul class="mt-3 space-y-2 text-xs leading-relaxed text-ink-600 dark:text-ink-300">
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Quote-to-cash:</strong> quotation → sales order → invoice → payment, with stock and journals posted automatically.</span></li>
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Source-to-pay:</strong> requisition → RFQ → supplier offer → purchase order → shipment → landed cost.</span></li>
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Inventory intelligence:</strong> stock movements, warehouse capacity, stockout risk and replenishment planning.</span></li>
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Finance controls:</strong> chart of accounts, journals, payables, receivables and duplicate-payment detection.</span></li>
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Logistics &amp; customs:</strong> shipments, containers, demurrage risk and document completeness.</span></li>
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>AI everywhere:</strong> assistant, copilot, document reader, procurement AI, support AI and the 84 RAG pipelines.</span></li>
-                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Governance:</strong> roles, audit logs, approvals, company scoping, quotas and error tracking.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Sales:</strong> quote, order, invoice and get paid — stock and accounts update automatically.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Purchasing:</strong> request, compare quotes, order, receive and track supplier costs.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Stock:</strong> see movements, capacity, low-stock risk and what to reorder.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Finance:</strong> accounts, journals, money in and out, and duplicate-payment checks.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Shipping:</strong> shipments, containers, document checks and delay risk.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>AI helpers:</strong> assistant, copilot, document reader and the 84 RAG pipelines.</span></li>
+                                <li class="flex gap-2"><span class="text-accent-600">•</span><span><strong>Controls:</strong> roles, approvals, audit logs and company separation.</span></li>
                             </ul>
                         </div>
 
                         <div class="rounded-xl border border-accent-200 bg-accent-50 p-4 dark:border-accent-900/40 dark:bg-accent-900/10">
                             <p class="text-sm font-semibold text-accent-800 dark:text-accent-300">This guide follows you everywhere</p>
                             <p class="mt-1 text-xs leading-relaxed text-accent-700 dark:text-accent-400">
-                                The same launcher appears on every page. The <strong>This page</strong> tab reads the current
-                                screen and suggests the RAG pipelines and questions that matter there.
+                                The launcher is on every page. Open <strong>This page</strong> for questions and helpers
+                                that match what you are doing right now.
                             </p>
                         </div>
                     </section>
@@ -215,8 +214,8 @@
                         <div>
                             <h3 class="text-base font-bold text-ink-900 dark:text-ink-50">All {{ count($guideDefinitions) }} RAG pipelines</h3>
                             <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">
-                                Seven domains, one searchable catalogue. Search by name, question or keyword, or filter to a
-                                domain. Every pipeline is company-scoped and returns its sources, confidence and latency.
+                                Search by name or keyword, or pick a domain. Each helper uses only your company's data and
+                                shows where its answer came from.
                             </p>
                         </div>
 
@@ -282,8 +281,8 @@
                             <p class="text-[11px] font-semibold uppercase tracking-widest text-ink-400 dark:text-ink-500">You are on</p>
                             <h3 class="mt-0.5 text-xl font-bold text-ink-900 dark:text-ink-50">{{ $guideContext['page'] }}</h3>
                             <p class="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">
-                                The guide matched this screen to the RAG domains below. The questions are the ones this
-                                page usually raises — ask them in the workspace and the answer is grounded in your company's records.
+                                We picked questions that fit this screen. Ask one in the workspace and get an answer based
+                                on your company's records.
                             </p>
                         </div>
 
@@ -333,7 +332,7 @@
                 </div>
 
                 <div class="shrink-0 border-t border-ink-200 px-5 py-3 text-[11px] text-ink-400 dark:border-ink-800 dark:text-ink-500">
-                    Available on every page · {{ count($guideDefinitions) }} company-scoped pipelines · answers include sources, confidence and latency
+                    Available on every page · {{ count($guideDefinitions) }} company-scoped pipelines · answers include their sources
                 </div>
             </aside>
         </div>
