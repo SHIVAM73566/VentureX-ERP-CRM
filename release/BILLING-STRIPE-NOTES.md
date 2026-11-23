@@ -41,6 +41,8 @@ Advanced Reporting, Granular Roles & Security Patches, Capacity Expansion, Indus
 
 ## Manual Stripe Dashboard steps (operator checklist)
 
+For a click-by-click walkthrough and a secure `.env` setup script, see `release/STRIPE-DASHBOARD-BEGINNER-GUIDE.md` and `release/setup-stripe-env.ps1`.
+
 1. Create the Products/Prices matching each layer in `config/services.php` (`STRIPE_PRICE_*`). Copy each Price ID into the server `.env` only; never paste them into source, docs or chat screenshots.
 2. In **Developers → Webhooks**, add `https://<your-host>/billing/stripe/webhook`.
 3. Subscribe exactly these events:
