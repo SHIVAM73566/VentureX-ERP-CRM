@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\TransientToken;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,8 +60,21 @@ class EnsureTokenAbility
         $token = $request->user()?->currentAccessToken();
 
         // No token (session auth) or a first-party transient token: policies
-        // and the web auth stack remain the authorisation boundary.
+        // remain the authorisation boundary, but state-changing calls must
+        // still carry a CSRF token — API routes are outside the web group and
+        // would otherwise be callable cross-site via the session cookie.
         if ($token === null || $token instanceof TransientToken) {
+            // State-changing calls authenticated only by a first-party session
+            // must carry a CSRF token. API routes normally have no session
+            // store (bearer-token clients), in which case policies and Sanctum
+            // remain the authorisation boundary and we must not fatal here.
+            if ($request->hasSession() && ! in_array($request->getRealMethod(), ['GET', 'HEAD', 'OPTIONS'], true)) {
+                app(VerifyCsrfToken::class)->handle(
+                    $request,
+                    fn (Request $passed) => $next($passed)
+                );
+            }
+
             return $next($request);
         }
 

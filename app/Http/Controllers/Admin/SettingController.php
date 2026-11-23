@@ -60,17 +60,11 @@ class SettingController extends Controller
         }
 
         $layers = config('layers.layers', []);
-        $entitledKeys = [];
-        if ($companyId = \App\Services\CompanyContext::id()) {
-            $entitledKeys = \App\Models\LayerEntitlement::query()
-                ->where('company_id', $companyId)
-                ->whereIn('status', ['active', 'grace'])
-                ->where(function ($q) {
-                    $q->whereNull('expires_at')->orWhere('expires_at', '>=', now());
-                })
-                ->pluck('layer_key')
-                ->all();
-        }
+        $entitledKeys = app(\App\Services\EntitlementService::class)->activeLayerKeys();
+        $checkoutOffers = config('layers.checkout_offers', []);
+        $companyId = \App\Services\CompanyContext::id();
+        $hasStripeCustomer = $companyId !== null
+            && app(\App\Services\Billing\StripeBillingPortalService::class)->hasCustomer($companyId);
 
         $aiUsageToday = 0;
         $aiUsageMonth = 0;
@@ -84,7 +78,7 @@ class SettingController extends Controller
         }
 
         $licenseToken = null;
-        if ($companyId = \App\Services\CompanyContext::id()) {
+        if ($companyId !== null) {
             $licenseToken = \App\Models\LicenseToken::query()->where('company_id', $companyId)->first();
         }
 
@@ -97,7 +91,9 @@ class SettingController extends Controller
                 'shieldStatus' => app(SuperBrainShield::class)->status(),
                 'nvidiaMeta' => config('ai.ui_providers.nvidia', []),
                 'layersList' => $layers,
+                'checkoutOffers' => $checkoutOffers,
                 'entitledKeys' => $entitledKeys,
+                'hasStripeCustomer' => $hasStripeCustomer,
                 'aiUsageToday' => $aiUsageToday,
                 'aiUsageMonth' => $aiUsageMonth,
                 'licenseToken' => $licenseToken,

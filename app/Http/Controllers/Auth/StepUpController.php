@@ -16,7 +16,7 @@ class StepUpController extends Controller
     public function show(Request $request): View
     {
         return view('auth.step-up', [
-            'intended' => $request->string('intended', route('dashboard'))->toString(),
+            'intended' => $this->localPath($request->string('intended')->toString()) ?? route('dashboard'),
         ]);
     }
 
@@ -27,7 +27,7 @@ class StepUpController extends Controller
         $data = $request->validate([
             'password' => ['required', 'string'],
             'code' => ['nullable', 'string'],
-            'intended' => ['nullable', 'url'],
+            'intended' => ['nullable', 'string', 'max:2048'],
         ]);
 
         // Password re-entry OR MFA code.
@@ -49,18 +49,40 @@ class StepUpController extends Controller
             ]);
         }
 
-        $request->session()->put('step_up_verified_at', now()->getTimestamp());
+        $request->session()->put('step_up_verified_at', [
+            'user_id' => $user->id,
+            'at' => now()->getTimestamp(),
+        ]);
         AuditLogger::log('step_up_verified', 'auth');
 
-        $intended = $data['intended'] ?? null;
-        if ($intended) {
-            $parsedUrl = parse_url($intended);
-            $localPath = $parsedUrl['path'] ?? $intended;
-            if (str_starts_with($localPath, '/') && ! str_contains($localPath, '://')) {
-                return redirect()->to($localPath);
-            }
+        $intended = $this->localPath($data['intended'] ?? '');
+
+        return $intended !== null
+            ? redirect()->to($intended)
+            : redirect()->route('dashboard');
+    }
+
+    /**
+     * Only a single-leading-slash local path may be used after step-up.
+     * This blocks protocol-relative redirects (//evil.example), backslashes
+     * and any absolute URL with a scheme/host.
+     */
+    protected function localPath(string $value): ?string
+    {
+        if ($value === '' || str_contains($value, '\\') || str_contains($value, '://')) {
+            return null;
         }
 
-        return redirect()->route('dashboard');
+        $parsed = parse_url($value);
+        if ($parsed === false || isset($parsed['scheme']) || isset($parsed['host'])) {
+            return null;
+        }
+
+        $path = $parsed['path'] ?? '';
+        if (! str_starts_with($path, '/') || str_starts_with($path, '//')) {
+            return null;
+        }
+
+        return $path.(isset($parsed['query']) ? '?'.$parsed['query'] : '');
     }
 }

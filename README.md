@@ -184,9 +184,24 @@ For a manual clean install, use `php artisan migrate --force` and optional non-d
 - [Security & Enterprise Verification Report](SECURITY-AUDIT-REPORT.md)
 - [Release checksums](release/SHA256SUMS.txt)
 
+## AppSumo pricing (submission #236667)
+
+| Offer | Price | Entitlement |
+|---|---|---|
+| **1 Code** | **$49** | 1 company, standard support, single license rights |
+| **2 Codes Stacked** | **$98** | Full ERP/CRM multi-company, advanced reporting, role permissions, priority support, multiple license rights |
+| **Original / Direct comparison price** | **$499** | Reference comparison price for direct/full commercial licensing — not the AppSumo checkout price |
+
+- **Max 2 stackable codes.** $49 per code, $98 stacked.
+- **Card-free redemption:** payment is handled by AppSumo; no credit card is entered in the app. Redeem in **Admin → Settings → Plan & Layers** by pasting the code. Apply a **second code** in the same screen to stack to $98.
+- **Optional Stripe add-ons:** the Plan & Layers screen can offer publisher-provided add-ons through Stripe-hosted Checkout and Billing Portal. They are separate from AppSumo codes; exact price, tax and renewal terms are shown by Stripe before payment. No payment secrets are bundled. See [release/BILLING-STRIPE-NOTES.md](release/BILLING-STRIPE-NOTES.md).
+- Full steps: [PRICING.md](PRICING.md).
+- **Reviewer login (local preview only):** <http://127.0.0.1:8000/login> — `demo_admin@example.com` / `Demo_Admin_2026!` (also `demo_manager@example.com` / `Demo_Manager_2026!`, `demo_sales@example.com` / `Demo_Sales_2026!`). Production credentials are created during installation and are never bundled in the ZIP.
+- **Package contents:** the release ZIP bundles the complete source tree including `vendor/` and `public/build`, so `composer install` / `npm run build` are not required for a standard install. No live `.env`, `.git`, or secrets are included.
+
 ## Licensing & Purchase
 
-- **Future releases (after tag `v1.3.1`):** commercial licence — see [LICENSE](LICENSE) (DRAFT pending legal review). See pricing and tiers in [PRICING.md](PRICING.md).
+- **Future releases (after tag `v1.3.1`):** commercial licence - see [LICENSE](LICENSE) (DRAFT pending legal review). See exact pricing and tiers (**1 Code = $49**, **2 Codes Stacked = $98**, **Original/Direct comparison = $499**, max 2 codes) and redemption/stacking steps in [PRICING.md](PRICING.md).
 - **Legacy (open source):** versions **up to and including `v1.3.1`** are MIT — see [LICENSE-MIT-LEGACY.md](LICENSE-MIT-LEGACY.md).
 - Third-party dependencies keep their own licences — see [documentation/THIRD_PARTY_LICENSES.md](documentation/THIRD_PARTY_LICENSES.md).
 

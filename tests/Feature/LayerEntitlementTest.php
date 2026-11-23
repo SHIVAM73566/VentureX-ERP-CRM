@@ -23,11 +23,18 @@ class LayerEntitlementTest extends TestCase
         });
     }
 
-    public function test_config_has_fifteen_layers(): void
+    public function test_config_has_the_full_addon_catalog(): void
     {
         $layers = config('layers.layers');
         $this->assertIsArray($layers);
-        $this->assertCount(15, $layers);
+        $this->assertCount(18, $layers);
+        $this->assertArrayHasKey('reporting_pack_adv', $layers);
+        $this->assertArrayHasKey('granular_rbac', $layers);
+        $this->assertArrayHasKey('security_patches', $layers);
+        $this->assertArrayHasKey('tpl_manufacturing_plus', $layers);
+        $this->assertArrayHasKey('logistics_suite_adv', $layers);
+        $this->assertArrayHasKey('finance_suite_adv', $layers);
+        $this->assertArrayHasKey('custom_dev_credits', $layers);
     }
 
     public function test_middleware_blocks_without_entitlement(): void

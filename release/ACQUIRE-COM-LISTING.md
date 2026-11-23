@@ -70,9 +70,15 @@ TECH DUE DILIGENCE READY: public GitHub repo available for buyer inspection unde
 - VentureX-ERP-CRM-v1.3.1-Gumroad.zip (full source)
 - All listing .md files from C:/MY_ERP/release/
 - Screenshots pack
-- Test results (verified): `php artisan test` — **556 passed, 1990 assertions, 0 failed** (341.11s). Full report: `TEST-VERIFICATION-REPORT-v2.7.txt` (and `test-report.txt` in repo root).
+- Test results (verified): `php artisan test` — **582 passed, 2195 assertions, 0 failed / 0 errors** (563.53s). Full report: `release/TEST-VERIFICATION-REPORT-v2.7.txt`.
 - Gumroad analytics export (after first sales)
 ```
+
+## RECURRING REVENUE LAYERS (opportunities for the buyer; not guaranteed, no verified recurring revenue at listing time)
+The following are **low-overhead recurring revenue options** the new owner can offer (documented direction only — no invented customers, revenue, or testimonials):
+1. **Annual “updates + support”** — around **$149/year per license** for ongoing updates, fixes, and support (pricing to be set by buyer).
+2. **Managed install and maintenance retainer** — **$49–$99/month** for hosted/managed setup, monitoring, and routine maintenance (scope/tier defined by buyer).
+3. **Paid AI-credits or add-on modules** — optional paid AI credits or add-on modules; **buyers bring their own AI model/API keys by default (BYOK)** unless the owner chooses to resell metered AI separately (subject to provider terms and compliance).
 
 ## ACQUIRE.COM APPROVAL TIPS
 1. Listings without revenue get "Early traction" tag - still fine

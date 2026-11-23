@@ -10,6 +10,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Sem
 
 Target release for the buyer-facing documentation and deployment metadata refresh. Test totals are intentionally not restated here; final counts, assertions and checksum values will be published in [`SECURITY-AUDIT-REPORT.md`](SECURITY-AUDIT-REPORT.md) after central integration.
 
+### Phase 4 — Billing, settings reliability and overlay controls
+
+#### Added
+- Server-side Stripe Checkout and Billing Portal for optional add-ons. All secrets and Price IDs are read from the billing server environment; none are exposed to Blade, JavaScript, git or release archives.
+- Signed and idempotent Stripe webhook with a `billing_events` ledger, raw-payload HMAC verification, tenant-scoped activation/revocation and bounded validity for one-time add-ons.
+- Full 18-layer add-on catalog: Advanced Reporting, Granular Roles, Security Patches, Capacity, Industry Templates, Logistics/Finance Suites and Custom Development Credits.
+- Native DOM fallback hooks for the product guide, AI action modal, dashboard layout drawer and upgrade prompts so a stale Alpine bundle cannot trap users behind an overlay.
+
+#### Fixed
+- `/admin/settings` and `/admin/settings?tab=plan` 500s caused by a missing `layer_entitlements` table during schema drift; the app now fails closed, and migrations create the table. The plan tab renders correctly after replacing a miscompiled inline Blade `@php(...)` directive with a block directive.
+- Product guide X button was buried behind the backdrop in some layouts; it now has `relative z-50`, plus Alpine and native delegated close handlers for the button, backdrop and Escape key.
+- Cross-tenant record access by super admins now returns 403 instead of leaking another company's record through the global role bypass.
+- Step-up redirects carry only a local path+query, preventing protocol-relative open redirects.
+- API requests without a session no longer fatal in the first-party CSRF guard; session-authenticated state changes remain CSRF-protected.
+
+#### Security
+- HTML responses may include `'unsafe-eval'` only because the UI uses Alpine's standard build for inline expressions; API/JSON responses never include it.
+- Stripe webhook route is CSRF-exempt only because it verifies the raw signed payload; all other POST routes retain CSRF protection.
+
 ### Phase 1 — Installer and data lifecycle
 
 #### Added
@@ -41,6 +60,10 @@ Target release for the buyer-facing documentation and deployment metadata refres
 - Hardened RBAC permission synchronisation and login throttling, including per-account and per-source IP limits.
 - Continued audit coverage for CSRF, session tampering, privilege escalation, MFA/app-lock bypass, XSS, injection and AI key exposure.
 - WordPress connector: API endpoint paths corrected to the implemented `/api/crm/customers`, `/api/crm/leads`, `/api/support/tickets` and `/api/sales/orders` routes; the REST proxy is no longer publicly callable; token storage uses authenticated AES-256-GCM encryption derived from WordPress `AUTH_KEY` and `LOGGED_IN_KEY`, with HTTPS required.
+
+#### Licensing
+- **DRAFT (not final legal text):** Future releases after tag `v1.3.1` are intended under a commercial licence (`LICENSE`); `v1.3.1` and earlier remain MIT (`LICENSE-MIT-LEGACY.md`). See `PRICING.md` and `docs/BUYER-DELIVERY.md`.
+
 
 #### Changed
 - README, installation, deployment, cPanel, VPS, API and support documentation refreshed for **v1.3.1**, PHP 8.4 and Laravel 13.

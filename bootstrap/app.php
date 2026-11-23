@@ -54,6 +54,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->validateCsrfTokens(except: [
+            // Stripe authenticates with a signed raw payload instead of a
+            // browser CSRF token. All other POST routes stay protected.
+            'billing/stripe/webhook',
         ]);
 
         $middleware->alias([

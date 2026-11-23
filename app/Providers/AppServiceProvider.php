@@ -99,8 +99,22 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Gate::before(function (User $user, string $ability) {
-            return $user->hasRole('super_admin') ? true : null;
+        // A super admin is powerful inside their own tenant, but a global
+        // role name must never become a cross-tenant data bypass. When an
+        // ability is checked against a company-scoped record, require an
+        // exact company match; other (class-level/admin) abilities keep the
+        // historical convenience behaviour.
+        Gate::before(function (User $user, string $ability, array $arguments = []) {
+            if (! $user->hasRole('super_admin')) {
+                return null;
+            }
+
+            $subject = $arguments[0] ?? null;
+            if (is_object($subject) && isset($subject->company_id)) {
+                return (int) $subject->company_id === (int) $user->company_id ? true : false;
+            }
+
+            return true;
         });
 
         Gate::define('configure', fn (User $user) => $user->hasPermissionTo('settings.configure'));

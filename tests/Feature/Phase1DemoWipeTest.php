@@ -65,9 +65,11 @@ class Phase1DemoWipeTest extends TestCase
 
         $this->flushSession();
 
+        // Step-up accepts only a local path+query as `intended` so an
+        // attacker cannot turn it into an open redirect.
         $this->actingAs($this->admin)
             ->get(route('admin.demo-data.index'))
-            ->assertRedirect(route('step-up.show', ['intended' => route('admin.demo-data.index')]));
+            ->assertRedirect(route('step-up.show', ['intended' => '/admin/demo-data']));
 
         $this->adminUser()
             ->get(route('admin.demo-data.index'))

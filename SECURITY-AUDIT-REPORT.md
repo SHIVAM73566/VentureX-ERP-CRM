@@ -1,7 +1,7 @@
 # VentureX ERP & CRM — Security & Release Audit Report (v1.3.1)
 
 **Version:** 1.3.1  
-**Report date:** 2026-11-18 (UTC)  
+**Report date:** 2026-11-23 (UTC)
 **Application:** VentureX ERP & CRM (Laravel 13, PHP 8.4)  
 **Audited repository:** `C:\MY_ERP` (canonical)  
 **Primary repository:** <https://github.com/SHIVAM73566/VentureX-ERP-CRM>  
@@ -15,8 +15,9 @@ This report summarizes the v1.3.1 hardening, performance, installer/import, and 
 
 - **Phase 1** — Six-step `/install` (Clean Production vs Demo modes), company + buyer Super Admin setup, installer lockout, transactional demo-data wipe (Admin UI + AERO X manual confirmation flow), validated CSV/XLSX import with templates and opening balances guidance.
 - **Phase 2** — Enterprise indexing/migrations, atomic numbering via `document_sequences` with locking, pessimistic locking patterns in critical flows, dashboard caching, API pagination clamps, queued heavy jobs behind `VENTUREX_QUEUE_HEAVY_TASKS` (default off), `enterprise:load-test` command.
-- **Phase 3** — Tenant fail-closed behavior, invitation-bound registration OTP flow, Sanctum ability enforcement middleware, API AI authorization, RAG company/role ACL and untrusted-snippet framing, tighter upload rules (no SVG logos; private raster validation for support screenshots where applicable), CSP without `unsafe-eval`, security headers on API paths, removal of AI key tail/substring leakage from logs/flash/UI copy.
+- **Phase 3** — Tenant fail-closed behavior, invitation-bound registration OTP flow, Sanctum ability enforcement middleware, API AI authorization, RAG company/role ACL and untrusted-snippet framing, tighter upload rules (no SVG logos; private raster validation for support screenshots where applicable), security headers on API paths, removal of AI key tail/substring leakage from logs/flash/UI copy.
 - **Phase 4** — Buyer-facing docs, `.htaccess` / routing notes, deploy-action metadata alignment, WordPress connector text/path fixes, git ignore/export hygiene.
+- **Phase 5** — Settings/plan-tab reliability, server-only Stripe Checkout/Billing Portal, signed idempotent webhook, step-up open-redirect fix, cross-tenant 403 enforcement, API session CSRF guard, and reliable close/dismiss controls for the product guide and all overlays.
 
 **Out of scope / caveats:** No third-party penetration test or external code audit was performed as part of this report. “Zero vulnerabilities” is **not** claimed; this report records **confirmed findings addressed in executed scope** and residual operational notes. Git history prior to rotations may still contain historical secrets in old commits (see **Residual risk**).
 
@@ -40,7 +41,7 @@ All commands executed from repository root (`C:\MY_ERP`) unless noted.
 
 | Check | Result |
 |---|---|
-| `php artisan test --colors=never` | **Passed**: **556 passed**, **1990 assertions**, **0 failed** (duration reported by test runner in that run: ~890.83s) |
+| `php artisan test --colors=never` | **Passed**: **582 passed**, **2195 assertions**, **0 failed / 0 errors** (final full-suite duration: **563.53s**) |
 | `npm run build` (Vite) | **Passed** (production build completed) |
 | `php artisan route:list` | **Succeeded** (route table generated; see application logs/output for full listing) |
 | Enterprise load simulation | `php artisan enterprise:load-test --users=30|100|300|500` — **0 errors** in each run (see **Enterprise load-test results** below) |
@@ -74,8 +75,27 @@ Representative areas addressed (non-exhaustive):
 - **RAG:** company/role-aware retrieval filtering, untrusted snippet framing in prompts, removal of request-path pipeline writes in favor of controlled sync paths.
 - **Uploads:** SVG removed from logo allowlist; support attachments stored via private disk/raster validation patterns where implemented; importer validation uses security service checks.
 - **Secrets & keys:** AI provider keys encrypted at rest; **no key substrings/tails** persisted in audit payloads or flashed to users in the updated flows; UI copy updated to reflect non-display of key material.
-- **Headers:** security headers middleware behavior tightened (including API coverage as implemented); CSP adjusted away from `unsafe-eval` while preserving app functionality per test/build verification.
+- **Headers:** security headers middleware behavior tightened (including API coverage). HTML may include `'unsafe-eval'` in CSP because the UI uses Alpine's standard build for inline expressions; **API/JSON responses never include it** (covered by `ProductGuideCloseTest`).
+- **Step-up & RBAC:** step-up redirects accept only local path+query values; state is bound to the authenticated user. Super Admin's class-level abilities no longer bypass record-level `company_id` checks; cross-tenant reads/updates return 403.
+- **Billing:** Stripe secrets and Price IDs exist only in server environment/config. Checkout and Billing Portal sessions are created server-side; the webhook is CSRF-exempt only because it verifies the raw `Stripe-Signature` HMAC, enforces timestamp tolerance, and records event IDs in a unique `billing_events` ledger. Entitlement changes are tenant-scoped and never delete customer data.
 - **Mass assignment:** sensitive fields protected on key models per Phase 3 changes (validated by `SecurityHardeningTest`).
+- **UI controls:** the product guide X button, backdrop and Escape handler are present on every authenticated page; native DOM fallbacks close overlays even if an Alpine bundle is stale. A 556-iteration audit covered 46 close/dismiss checks (25,576 checks, 0 failures).
+
+---
+
+## Product guide close-button fix
+
+**Root cause:** the floating guide rendered its backdrop and panel in the same `z-[9999]` stacking context. The X button had no local stacking position, so in several layouts the `absolute inset-0 pointer-events-auto` backdrop won the hit test and absorbed the click. A stale/cached Alpine bundle also left no non-Alpine way out.
+
+**Fix:** `resources/views/components/product-guide.blade.php` now gives the X button `relative z-50 cursor-pointer`, keeps the SVG `pointer-events-none`, and retains explicit Alpine `@click.prevent.stop`, backdrop `@click`, and `@keydown.escape.window` handlers. `resources/js/app.js` adds a native delegated fallback keyed by `data-guide-open`, `data-guide-close`, `data-guide-panel`, and `data-close-overlay`; it updates Alpine state when available and directly hides the DOM otherwise. The launcher, panel and title IDs are unique in the source tree, and no CSS rule overrides the inline `display` used by `x-show`.
+
+**Verification:** `ProductGuideTest` asserts the guide and its close hooks on Dashboard, Getting Started, Customers, Leads, Quotations, Purchase Orders, Products, Shipments, Finance, Support, Users and Audit Logs. `ProductGuideCloseTest` checks the z-index fix, ARIA label, compiled asset hooks and API CSP behavior. The 556-iteration audit report recorded 25,576/25,576 passing checks.
+
+---
+
+## Stripe billing implementation notes
+
+Optional publisher add-ons use server-side Checkout and Billing Portal sessions. Secrets and Price IDs are read only from `config/services.php` and the server `.env`; nothing is embedded in Blade, JavaScript, docs, git or release ZIPs. `POST /billing/stripe/webhook` is CSRF-exempt solely because `StripeSignatureVerifier` validates the raw payload HMAC and timestamp; verified events are idempotently recorded in `billing_events`, then applied to the paying tenant. Cancellation disables only the paid layer; business data is never deleted. AppSumo redemption remains card-free at 1 Code = $49, 2 Codes = $98, comparison price $499, max 2 codes. Operator steps are in `release/BILLING-STRIPE-NOTES.md`.
 
 ---
 

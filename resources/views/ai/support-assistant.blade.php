@@ -126,7 +126,7 @@
                 <div class="mb-3 flex items-center gap-2 rounded-lg bg-ink-50 px-3 py-2 dark:bg-ink-800">
                     <img :src="screenshotPreview" class="h-10 w-10 rounded object-cover" alt="Screenshot preview">
                     <span class="flex-1 truncate text-xs text-ink-500" x-text="screenshotName"></span>
-                    <button type="button" @click="removeScreenshot()" class="rounded p-1 text-ink-400 hover:bg-ink-200 hover:text-ink-600 dark:hover:bg-ink-700">
+                    <button type="button" @click="removeScreenshot()" class="rounded p-1 text-ink-400 hover:bg-ink-200 hover:text-ink-600 dark:hover:bg-ink-700" aria-label="Remove screenshot">
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>

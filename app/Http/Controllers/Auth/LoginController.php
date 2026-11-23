@@ -73,6 +73,7 @@ class LoginController extends Controller
         // codes or the stored TOTP secret here.
         $request->session()->forget([
             'two_factor_verified_at',
+            'step_up_verified_at',
             'mfa_setup_secret',
             'mfa_recovery_codes',
         ]);

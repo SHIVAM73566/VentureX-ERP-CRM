@@ -372,6 +372,21 @@ The following SVGs exist in `documentation/images/` and are referenced above:
 
 No other screenshot files are referenced; do not add broken links to missing PNGs.
 
+
+---
+
+## AppSumo buyers (1–2 codes, max stackable)
+
+**Exact pricing:** **1 Code = $49** (1 company, standard support, single license rights). **2 Codes Stacked = $98** (full ERP/CRM multi-company, advanced reporting, role permissions, priority support, multiple license rights). **Original/Direct comparison price = $499** (reference only — not the AppSumo checkout price). **Maximum 2 codes.**
+
+**Card-free redemption:** payment is handled by AppSumo; no credit card is entered in the app. After installation, sign in as an admin and open **Admin → Settings → Plan & Layers**:
+
+1. Paste your **first code** and submit — the **1 Code / $49** entitlement activates.
+2. If you bought 2 codes, paste the **second code** in the same screen and submit — the plan stacks to **2 Codes / $98**. A third code cannot be stacked.
+3. Verify the active tier on **Plan & Layers**. Full steps: **[PRICING.md](PRICING.md)**.
+
+**Reviewer login (local preview only):** `http://127.0.0.1:8000/login` — `demo_admin@example.com` / `Demo_Admin_2026!` (or `demo_manager@example.com` / `Demo_Manager_2026!`, `demo_sales@example.com` / `Demo_Sales_2026!`). Production credentials are created by you during installation and are never bundled in the ZIP.
+
 ---
 
 ## Need help?

@@ -11,12 +11,20 @@ class SetCompanyContext
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Always (re)set, including null: an unscoped user must never inherit
+        // a previous request's tenant on Octane/long-lived workers.
         $user = $request->user();
-
-        if ($user && $user->company_id) {
-            CompanyContext::set($user->company_id);
-        }
+        CompanyContext::set($user && $user->company_id ? (int) $user->company_id : null);
 
         return $next($request);
+    }
+
+    /**
+     * Called by the framework after the response is sent. Keeps static state
+     * from leaking between requests in long-lived workers.
+     */
+    public function terminate(Request $request, Response $response): void
+    {
+        CompanyContext::clear();
     }
 }

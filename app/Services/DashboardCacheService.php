@@ -12,13 +12,21 @@ class DashboardCacheService
 {
     public const TTL_SECONDS = 60;
 
+    /**
+     * Bump whenever the shape of the cached aggregate changes. This prevents
+     * older, incompatible payloads (e.g. follow-ups stored as plain strings)
+     * from ever being served after a code upgrade.
+     */
+    private const SCHEMA_VERSION = 3;
+
     private const EPOCH_KEY = 'venturex:dashboard:epoch';
 
     public static function key(?int $companyId = null): string
     {
         $epoch = (int) Cache::get(self::EPOCH_KEY, 0);
 
-        return 'venturex:dashboard:aggregates:'.($companyId ?? 0).':v'.$epoch;
+        return 'venturex:dashboard:aggregates:'.($companyId ?? 0)
+            .':v'.self::SCHEMA_VERSION.'.'.$epoch;
     }
 
     /**

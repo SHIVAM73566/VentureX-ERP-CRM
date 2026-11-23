@@ -42,7 +42,7 @@
                                     <td><input type="number" step="0.0001" min="0" :name="'items['+index+'][quantity]'" x-model.number="item.quantity" class="input" /></td>
                                     <td><input type="text" :name="'items['+index+'][unit]'" x-model="item.unit" placeholder="kg, m, pcs" class="input" /></td>
                                     <td><input type="text" :name="'items['+index+'][notes]'" x-model="item.notes" placeholder="Specs / brand" class="input" /></td>
-                                    <td><button type="button" @click="items.splice(index, 1)" class="text-red-500 hover:text-red-400">✕</button></td>
+                                    <td><button type="button" @click="items.splice(index, 1)" class="text-red-500 hover:text-red-400" aria-label="Remove item">✕</button></td>
                                 </tr>
                             </template>
                             <tr x-show="items.length === 0"><td colspan="6" class="py-6 text-center text-ink-400">No items yet.</td></tr>

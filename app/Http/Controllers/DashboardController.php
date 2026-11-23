@@ -83,16 +83,20 @@ class DashboardController extends Controller
                     'leadsByStatus' => $leadsByStatus,
                     'opportunitiesByStage' => $opportunitiesByStage,
                     'offers' => $offers,
-                    'recentCustomers' => Customer::ofCompany()->latest()->limit(5)->get(),
-                    'recentLeads' => Lead::ofCompany()->with('assignedTo')->latest()->limit(5)->get(),
-                    'recentOffers' => SupplierOffer::ofCompany()->with('supplier')->latest()->limit(5)->get(),
-                    'followUps' => Lead::ofCompany()
+                    // Cache scalar IDs only. Object unserialization is disabled
+                    // for cache security (config/cache.php serializable_classes),
+                    // so Eloquent models cannot survive a cache round-trip.
+                    'recentCustomerIds' => Customer::ofCompany()->latest()->limit(5)->pluck('id')->all(),
+                    'recentLeadIds' => Lead::ofCompany()->latest()->limit(5)->pluck('id')->all(),
+                    'recentOfferIds' => SupplierOffer::ofCompany()->latest()->limit(5)->pluck('id')->all(),
+                    'followUpIds' => Lead::ofCompany()
                         ->whereNotNull('next_follow_up')
                         ->where('status', '!=', 'won')
                         ->where('next_follow_up', '<=', now()->addDays(7))
                         ->orderBy('next_follow_up')
                         ->limit(8)
-                        ->get(),
+                        ->pluck('id')
+                        ->all(),
                     'cashFlow' => $this->cashFlowForecast(),
                     'hrSummary' => $this->hrSummary(),
                     'agenticSummary' => $this->agenticSummary(),
@@ -108,14 +112,17 @@ class DashboardController extends Controller
             $aggregates = $this->emptyAggregates();
         }
 
+        // Rehydrate models from cached IDs. Cached objects are never trusted:
+        // the cache store deliberately disallows object unserialization.
+        $recentCustomers = $this->modelsById(Customer::query(), $aggregates['recentCustomerIds'] ?? []);
+        $recentLeads = $this->modelsById(Lead::with('assignedTo'), $aggregates['recentLeadIds'] ?? []);
+        $recentOffers = $this->modelsById(SupplierOffer::with('supplier'), $aggregates['recentOfferIds'] ?? []);
+        $followUps = $this->modelsById(Lead::query(), $aggregates['followUpIds'] ?? []);
+
         $stats = $aggregates['stats'];
         $leadsByStatus = $aggregates['leadsByStatus'];
         $opportunitiesByStage = $aggregates['opportunitiesByStage'];
         $offers = $aggregates['offers'];
-        $recentCustomers = $aggregates['recentCustomers'];
-        $recentLeads = $aggregates['recentLeads'];
-        $recentOffers = $aggregates['recentOffers'];
-        $followUps = $aggregates['followUps'];
 
         $allModules = [
             ['name' => 'CRM', 'slug' => 'crm', 'ready' => true, 'icon' => 'users', 'route' => 'customers.index', 'permission' => 'customers.view'],
@@ -422,6 +429,33 @@ class DashboardController extends Controller
     }
 
     /**
+     * Rehydrate an ordered collection of models from cache-safe scalar IDs.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<model>  $query
+     * @param  array<int, mixed>  $ids
+     * @return \Illuminate\Support\Collection<int, model>
+     */
+    protected function modelsById($query, array $ids)
+    {
+        $ids = array_values(array_filter(
+            $ids,
+            fn ($id) => is_int($id) || (is_string($id) && ctype_digit($id))
+        ));
+
+        if ($ids === []) {
+            return collect();
+        }
+
+        return $query->whereIn('id', $ids)->get()
+            ->sortBy(function ($model) use ($ids) {
+                $position = array_search($model->id, $ids, false);
+
+                return $position === false ? PHP_INT_MAX : $position;
+            })
+            ->values();
+    }
+
+    /**
      * Safe defaults when an aggregate query is unavailable.
      *
      * @return array<string, mixed>
@@ -436,10 +470,10 @@ class DashboardController extends Controller
             'leadsByStatus' => [],
             'opportunitiesByStage' => [],
             'offers' => ['total' => 0, 'green' => 0, 'yellow' => 0, 'red' => 0],
-            'recentCustomers' => collect(),
-            'recentLeads' => collect(),
-            'recentOffers' => collect(),
-            'followUps' => collect(),
+            'recentCustomerIds' => [],
+            'recentLeadIds' => [],
+            'recentOfferIds' => [],
+            'followUpIds' => [],
             'cashFlow' => ['months' => [], 'overdue_total' => 0.0, 'overdue_count' => 0],
             'hrSummary' => [
                 'headcount' => 0, 'on_leave' => 0, 'pending_leave' => 0,

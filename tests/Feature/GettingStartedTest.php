@@ -5,8 +5,10 @@ namespace Tests\Feature;
 use App\Http\Middleware\EnsureTwoFactor;
 use App\Models\Company;
 use App\Models\User;
+use App\Services\DashboardCacheService;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -86,5 +88,22 @@ class GettingStartedTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Start with the product tour', false);
+    }
+
+    public function test_dashboard_cache_stores_only_scalar_ids_not_model_objects(): void
+    {
+        $this->actingAs($this->admin)->get(route('dashboard'))->assertOk();
+
+        $aggregate = Cache::get(DashboardCacheService::key($this->company->id));
+        $this->assertIsArray($aggregate);
+
+        foreach (['recentCustomerIds', 'recentLeadIds', 'recentOfferIds', 'followUpIds'] as $key) {
+            $this->assertArrayHasKey($key, $aggregate);
+            $this->assertIsArray($aggregate[$key]);
+
+            foreach ($aggregate[$key] as $id) {
+                $this->assertIsInt($id);
+            }
+        }
     }
 }

@@ -36,7 +36,7 @@
                                     <td><input type="text" :name="'lines['+index+'][description]'" x-model="line.description" class="input" /></td>
                                     <td><input type="number" step="0.01" min="0" :name="'lines['+index+'][debit]'" x-model.number="line.debit" class="input" @input="clearCredit(index)" /></td>
                                     <td><input type="number" step="0.01" min="0" :name="'lines['+index+'][credit]'" x-model.number="line.credit" class="input" @input="clearDebit(index)" /></td>
-                                    <td><button type="button" @click="lines.splice(index, 1)" class="text-red-500 hover:text-red-400">✕</button></td>
+                                    <td><button type="button" @click="lines.splice(index, 1)" class="text-red-500 hover:text-red-400" aria-label="Remove line">✕</button></td>
                                 </tr>
                             </template>
                             <tr x-show="lines.length === 0"><td colspan="5" class="py-6 text-center text-ink-400">No lines yet.</td></tr>

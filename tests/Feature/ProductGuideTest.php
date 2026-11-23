@@ -85,6 +85,17 @@ class ProductGuideTest extends TestCase
         $response->assertSee('Product guide', false);
         $response->assertSee('All 84 RAG pipelines', false);
         $response->assertSee('This page', false);
+
+        // The X button, backdrop and Escape handler must be present on every
+        // page that renders the global guide, not only on the dashboard.
+        $response->assertSee('data-guide-root', false);
+        $response->assertSee('data-guide-open', false);
+        $response->assertSee('data-guide-panel', false);
+        $response->assertSee('data-guide-close', false);
+        $response->assertSee('data-guide-backdrop', false);
+        $response->assertSee('aria-label="Close the product guide"', false);
+        $response->assertSee('relative z-50 cursor-pointer', false);
+        $response->assertSee('@keydown.escape.window="open = false"', false);
     }
 
     public function test_guide_lists_all_eighty_four_pipelines_on_a_single_page(): void

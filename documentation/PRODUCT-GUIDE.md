@@ -16,6 +16,19 @@ Because the guide is rendered by
 `<x-product-guide />`, it is available everywhere automatically — including
 pages added later — with no per-page wiring and no extra request.
 
+## Closing the guide
+
+Use any of these controls on any authenticated page:
+
+- the **X** button in the top-right of the slide-over;
+- the dimmed backdrop outside the panel;
+- the **Escape** key.
+
+The X button is raised above the backdrop (`relative z-50`) and has both an
+Alpine handler and a native DOM fallback, so a cached JavaScript bundle cannot
+leave the panel stuck open. Closing the guide does not navigate away, and the
+bottom-right **Product guide 84+ RAG** launcher opens it again cleanly.
+
 ---
 
 ## Why the guide exists

@@ -62,7 +62,9 @@
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     @foreach ($aiKeyCards as $card)
-                        @php($provider = $card['provider'])
+                        @php
+                            $provider = $card['provider'];
+                        @endphp
                         <div class="card space-y-4" x-data="{ reveal: false }">
                             <div class="flex items-start justify-between gap-2">
                                 <div>
@@ -322,13 +324,41 @@
                     <p>This month: <span class="font-mono font-semibold">{{ number_format((int)($aiUsageMonth ?? 0)) }}</span> requests</p>
                     <p class="mt-1 text-ink-500 dark:text-ink-400">Informational only. BYOK and local fallback remain available unless future layer policies change this.</p>
                 </div>
-                <div class="mb-4 rounded-lg bg-ink-50 p-3 text-sm dark:bg-ink-800/50">
-                    <p class="font-medium text-ink-800 dark:text-ink-200">AI usage (this month, company): {{ number_format($aiUsageMonthly ?? 0) }} successful requests</p>
-                    <p class="text-xs text-ink-500 mt-1">Usage meters are informational. BYOK and local fallback remain available regardless of layers unless explicitly enforced by policy.</p>
+                <div class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-900 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-200">
+                    <p class="font-semibold">Optional add-ons, no dark patterns</p>
+                    <p class="mt-1">Add-ons are optional. Exact price, tax, renewal terms and invoices are shown on Stripe’s secure checkout before you confirm. Nothing is charged from this page. If an add-on lapses, only that paid feature is disabled — your business data and exports remain available.</p>
                 </div>
+
+                <div class="mt-4 grid gap-3 rounded-lg border border-ink-200 bg-ink-50 p-3 text-xs text-ink-700 dark:border-ink-700 dark:bg-ink-800/50 dark:text-ink-200 sm:grid-cols-2">
+                    <div>
+                        <p class="font-semibold text-ink-900 dark:text-ink-100">Value progression</p>
+                        <p class="mt-1">Starter (single code) → Growth (multi-company, reporting, roles) → Enterprise (security patches, industry templates, logistics/finance suites, custom development credits). Add only what you need; existing records and exports are never removed.</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-ink-900 dark:text-ink-100">Transparent timing</p>
+                        <p class="mt-1">Launch-window terms and capacity-based pricing can change. Capacity thresholds and renewal dates are shown by Stripe before payment — no countdowns, no forced upgrades, and no loss of business data if you wait.</p>
+                    </div>
+                    @if($hasStripeCustomer ?? false)
+                        <div class="sm:col-span-2 border-t border-ink-200 pt-3 dark:border-ink-700">
+                            <form method="POST" action="{{ route('admin.settings.billing.portal') }}">
+                                @csrf
+                                <button type="submit" class="btn-secondary text-xs">Manage billing &amp; invoices in Stripe (step-up required)</button>
+                                <p class="mt-1 text-[11px] text-ink-400">Update a payment method, download invoices or cancel a subscription. Your data stays here.</p>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+
                 <div class="mt-4 grid gap-4 sm:grid-cols-2">
                     @foreach (($layersList ?? []) as $layer)
-                        @php($owned = in_array($layer['key'], $entitledKeys ?? [], true))
+                        @php
+                            $owned = in_array($layer['key'], $entitledKeys ?? [], true);
+                            $offer = ($checkoutOffers ?? [])[$layer['key']] ?? null;
+                            $purchasable = ! $owned
+                                && ($layer['status'] ?? '') === 'available'
+                                && is_array($offer)
+                                && filled(config('services.stripe.prices.'.$layer['key']));
+                        @endphp
                         <div class="rounded-lg border border-ink-200 p-4 dark:border-ink-700">
                             <div class="flex items-start justify-between gap-2">
                                 <div>
@@ -339,11 +369,34 @@
                                     <span class="badge badge-green">Active</span>
                                 @elseif(($layer['status'] ?? '') === 'coming_soon')
                                     <span class="badge badge-gray">Coming soon</span>
+                                @elseif($purchasable)
+                                    <span class="badge badge-amber">Available</span>
                                 @else
                                     <span class="badge badge-amber">Not enabled</span>
                                 @endif
                             </div>
                             <p class="mt-2 text-xs text-ink-500">Status: {{ $layer['status'] ?? 'unknown' }}</p>
+
+                            @if(is_array($offer) && ! $owned)
+                                <p class="mt-2 text-xs text-ink-600 dark:text-ink-300">{{ $offer['summary'] }}</p>
+                                @if(! empty($offer['capabilities']))
+                                    <ul class="mt-2 list-disc space-y-0.5 pl-4 text-xs text-ink-500">
+                                        @foreach($offer['capabilities'] as $capability)
+                                            <li>{{ $capability }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            @endif
+
+                            @if($purchasable)
+                                <form method="POST" action="{{ route('admin.settings.billing.checkout') }}" class="mt-3 border-t border-ink-100 pt-3 dark:border-ink-700">
+                                    @csrf
+                                    <input type="hidden" name="layer_key" value="{{ $layer['key'] }}">
+                                    <button type="submit" class="btn-accent text-xs">Upgrade securely with Stripe</button>
+                                    <p class="mt-1 text-[11px] text-ink-400">Step-up verification is required. Price, tax and renewal terms are confirmed on Stripe before payment.</p>
+                                </form>
+                            @endif
+
                             @if($layer['key'] === 'updates_support' && $owned)
                                 <p class="mt-2 text-xs text-emerald-700 dark:text-emerald-400">Updates &amp; support entitlements are active for this workspace (per your agreement).</p>
                             @endif
@@ -356,7 +409,7 @@
                         </div>
                     @endforeach
                 </div>
-                <p class="mt-4 text-xs text-ink-500">For billing and upgrade options, contact your publisher. This app never stores Stripe secrets. Trial periods, cancellation, renewal reminders, and invoices are managed through the publisher’s billing flow (license server) when enabled.</p>
+                <p class="mt-4 text-xs text-ink-500">When an add-on is unavailable for direct checkout, contact your publisher. This app never stores Stripe secret keys, webhook secrets or Price IDs in browser code or version control. Renewal reminders and invoices are handled by Stripe and your publisher’s billing flow.</p>
             </div>
 
             <div class="card space-y-4">

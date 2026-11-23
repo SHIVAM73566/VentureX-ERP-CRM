@@ -1,26 +1,56 @@
-# Billing & Payments (Stripe) — Informational (no secrets)
+# Billing & Payments (Stripe) — server-side implementation, no secrets
 
-This document describes how **purchases and recurring billing** are intended to work for VentureX ERP & CRM add-ons/layers when offered by the software publisher. It is for **buyers and operators** reading this package.
+This document describes the Stripe upgrade/add-on flow shipped with VentureX ERP & CRM. It contains **no API keys, webhook secrets, Stripe account identifiers, Price IDs or live credentials**.
 
-## Important rules (read first)
-- **No API keys, no webhook secrets, and no live credentials** belong in this software package or in any distributed ZIP. Payment secrets are configured only on the **publisher’s license/billing server** (separate system), never inside your deployed ERP application files you distribute to end users.
-- This ERP can be used **without** online billing: you may operate with a one-time licensed package as agreed with the seller. Paid layers/subscriptions are optional unless your contract says otherwise.
-- **Your data is protected:** if a subscription lapses, the intended behavior is to **disable premium/layer-gated features only**. **Customer/business data is not locked or deleted** solely due to non-payment, and **data export remains available** (subject to your legal/security policies). Exact behavior is defined by the version you run and the publisher’s terms.
+## Non-negotiable rules
 
-## How checkout is meant to work (high level)
-1. You choose a plan/layer on the publisher’s official checkout page (hosted by the payment provider, e.g. Stripe Checkout).
-2. After successful payment, the publisher’s billing system records the entitlement (what you purchased) and issues a **signed license/entitlement token** (or equivalent) that your ERP installation can verify.
-3. Your ERP checks entitlement (online when available, with a documented offline grace period if implemented). Features unlock/lock according to entitlements—not by deleting your data.
+- Stripe secrets live **only** in the billing server environment (`.env` / secret manager): `STRIPE_SECRET`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_*`, `STRIPE_CHECKOUT_SUCCESS_URL`, `STRIPE_CHECKOUT_CANCEL_URL`, `STRIPE_BILLING_PORTAL_RETURN_URL`.
+- No secret, publishable key, Price ID or account ID is hardcoded in Blade, JavaScript, source, docs, git history or release ZIPs.
+- AppSumo pricing is unchanged: **1 Code = $49**, **2 Codes Stacked = $98**, **Original/Direct comparison = $499**, **max 2 codes**, **card-free redemption** inside the app. Stripe is for optional publisher-provided add-ons, not AppSumo code redemption.
 
-## Payouts to the publisher (Stripe)
-- Customer payments are processed by the payment provider (e.g. Stripe) according to the publisher’s Stripe account and connected payout settings.
-- **Payout timing, fees, taxes, and settlement** are governed by the payment provider and the publisher’s account configuration—not by this ERP source code.
-- This file does **not** contain payout bank details, Stripe account identifiers, or any credentials.
+## What is implemented
 
-## What you should do as a buyer/operator
-- Buy only through **official links** provided by the publisher (website, invoice, or marketplace listing stated by the seller).
-- Keep your ERP and license-server integration values (if any) in secure server environment variables on **your** infrastructure—never commit them to git or share screenshots containing secrets.
-- For tax/VAT/GST and invoicing, follow the publisher’s checkout and receipt flow and your local regulations.
+### Server-side checkout
 
-## Support
-For billing questions, refunds, or invoice help, contact the publisher using the contact method listed in your purchase confirmation or official product page (not via secrets shared in chat/email threads).
+- `POST /admin/settings/billing/checkout` (super admin, step-up, throttled) resolves the requested layer from the server-side catalog in `config/layers.php`.
+- The Stripe Price ID is read only from `config('services.stripe.prices')`, which reads `STRIPE_PRICE_*` from the server environment. An unmapped layer returns 404; a missing key disables checkout.
+- The Checkout Session is created server-to-server with an `Idempotency-Key`, tenant `company_id`, `layer_key` and validity metadata. The browser is redirected to Stripe-hosted Checkout. Exact price, tax and renewal terms are displayed by Stripe before payment.
+
+### Signed, idempotent webhook
+
+- `POST /billing/stripe/webhook` is CSRF-exempt because it authenticates with Stripe's signature instead of a browser CSRF token.
+- `StripeSignatureVerifier` hashes the **raw request body** with `t.payload` using HMAC-SHA256, compares with `hash_equals`, enforces a timestamp tolerance, and rejects malformed/stale signatures with HTTP 400.
+- Verified events are recorded in the `billing_events` ledger by `event_id` with a unique constraint. Duplicate deliveries are accepted without double-activating anything; concurrent `processing` deliveries are treated as accepted.
+- Events handled: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`.
+- Entitlements are activated/revoked inside the tenant that paid. One-time add-ons get a bounded expiry. Subscription cancellation disables only the paid layer; **business data is never deleted or locked**.
+
+### Billing Portal
+
+- `POST /admin/settings/billing/portal` (super admin, step-up, throttled) reads the stored `stripe_customer_id` from the tenant's entitlement record. The customer ID is never accepted from the request, URL, Blade or JavaScript.
+- Stripe-hosted Billing Portal lets the customer update payment methods, download invoices and cancel subscriptions. The return URL comes from `STRIPE_BILLING_PORTAL_RETURN_URL` or defaults to the Plan & Layers settings tab.
+
+### Add-on catalog
+
+Advanced Reporting, Granular Roles & Security Patches, Capacity Expansion, Industry Templates (Manufacturing/Trading/Services), Advanced Logistics, Advanced Finance, and Custom Development Credits are all defined in `config/layers.php`. Each offer has plain-language value copy; price and renewal terms are always shown by Stripe at checkout. There are no countdowns, fake scarcity, pre-checked consents or forced upgrades.
+
+## Manual Stripe Dashboard steps (operator checklist)
+
+1. Create the Products/Prices matching each layer in `config/services.php` (`STRIPE_PRICE_*`). Copy each Price ID into the server `.env` only; never paste them into source, docs or chat screenshots.
+2. In **Developers → Webhooks**, add `https://<your-host>/billing/stripe/webhook`.
+3. Subscribe exactly these events:
+   - `checkout.session.completed`
+   - `checkout.session.async_payment_succeeded`
+   - `invoice.paid`
+   - `invoice.payment_failed`
+   - `customer.subscription.updated`
+   - `customer.subscription.deleted`
+4. Copy the endpoint signing secret into `STRIPE_WEBHOOK_SECRET` on the server. Restart/reload PHP-FPM so the new environment is visible.
+5. In **Settings → Billing → Customer portal**, enable the portal and set the return URL to the same absolute URL as `STRIPE_BILLING_PORTAL_RETURN_URL` (or `https://<your-host>/admin/settings?tab=plan`).
+6. Send one test Checkout Session and confirm: redirect to Stripe, successful webhook delivery, entitlement activation, duplicate delivery idempotency, portal redirect, and cancellation revoking only the paid layer.
+7. Verify the production webhook endpoint returns 2xx for valid signatures and 400 for invalid/stale signatures. Never disable signature verification to “make it work”.
+
+## Troubleshooting
+
+- **Checkout button does nothing / 404:** the layer has no `STRIPE_PRICE_*` value on this server, or Stripe config cache needs clearing (`php artisan config:clear && php artisan config:cache`).
+- **Webhook 400:** wrong `STRIPE_WEBHOOK_SECRET`, proxy modified the body, or the timestamp is outside `STRIPE_WEBHOOK_TOLERANCE_SECONDS`. Stripe must deliver the raw body.
+- **Billing Portal unavailable:** complete a Stripe upgrade first so a `stripe_customer_id` exists for the tenant, then retry with step-up authentication.

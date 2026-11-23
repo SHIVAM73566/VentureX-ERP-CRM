@@ -166,6 +166,7 @@ Navigate to **Admin > Settings**:
 - **Default Timezone**: For date/time display
 - **Date Format**: Display format for dates
 - **Currency**: Default system currency
+- **Plan & Layers (AppSumo/licensing):** Use the **Plan & Layers** tab to view entitlements and apply/redeem license codes. **1 Code = $49** (1 company, standard support, single license rights); **2 Codes Stacked = $98** (full ERP/CRM multi-company, advanced reporting, role permissions, priority support, multiple license rights); **Original/Direct comparison price = $499** (reference only). **Max 2 codes.** Redemption is card-free — paste the first code to activate $49, then paste a second code in the same screen to stack to $98. See **PRICING.md** for full steps.
 
 ### Mail Settings
 

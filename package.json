@@ -3,7 +3,7 @@
     "name": "VentureX-ERP",
     "description": "VentureX ERP & CRM - AI-Powered CRM & ERP Business Operating System frontend assets",
     "private": true,
-    "license": "UNLICENSED",
+    "license": "SEE LICENSE IN LICENSE",
     "author": {
         "name": "Shivam Chaturvedi",
         "email": "chaturvedishivam179@gmail.com",
@@ -15,6 +15,7 @@
         "dev": "vite"
     },
     "devDependencies": {
+        "@alpinejs/csp": "^3.17.5",
         "@tailwindcss/vite": "^4.0.0",
         "alpinejs": "^3.14.0",
         "laravel-vite-plugin": "^3.1",

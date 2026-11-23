@@ -12,7 +12,9 @@ return [
     */
     'lockdown' => [
         'enabled' => (bool) env('SECURITY_LOCKDOWN_ACTIVE', false),
-        'except' => ['up', 'login', 'login.attempt', 'logout'],
+        // Billing webhook stays reachable so paid entitlements are never
+        // stranded during a temporary operator lockdown.
+        'except' => ['up', 'login', 'login.attempt', 'logout', 'billing.stripe.webhook'],
     ],
 
     /*
@@ -137,9 +139,11 @@ return [
     |--------------------------------------------------------------------------
     | Content Security Policy (CSP)
     |--------------------------------------------------------------------------
-    | Temporary: allow unsafe-eval so standard Alpine.js works until migrated
-    | to @alpinejs/csp (Phase 3). Set VENTUREX_CSP_ALLOW_UNSAFE_EVAL=false
-    | after migrating all inline Alpine expressions to registered components.
+    | The UI uses Alpine's standard build because several components rely on
+    | full inline expressions (storage writes, clipboard, timers). SecurityHeaders
+    | therefore permits 'unsafe-eval' on HTML responses ONLY; it is explicitly
+    | stripped from API/JSON responses. Set VENTUREX_CSP_ALLOW_UNSAFE_EVAL=false
+    | only after migrating every inline expression to @alpinejs/csp.
     */
     'csp' => [
         'allow_unsafe_eval' => (bool) env('VENTUREX_CSP_ALLOW_UNSAFE_EVAL', true),

@@ -19,11 +19,13 @@
     --}}
     <div x-data="{ open: false, tab: 'intro', query: '', domain: 'all', copied: null }"
          @keydown.escape.window="open = false"
+         data-guide-root
          class="print:hidden">
 
         {{-- Floating launcher --}}
         <button type="button"
                 @click="open = true"
+                data-guide-open
                 class="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-navy-900 px-4 py-3 text-sm font-semibold text-white shadow-xl ring-1 ring-white/20 transition hover:bg-navy-800 focus:outline-none focus:ring-2 focus:ring-accent-400 dark:bg-accent-600 dark:hover:bg-accent-500"
                 aria-haspopup="dialog"
                 aria-controls="product-guide-panel"
@@ -37,9 +39,10 @@
 
         {{-- Slide-over --}}
         <div x-show="open" x-cloak class="fixed inset-0 z-[9999]" role="dialog" aria-modal="true" aria-labelledby="product-guide-title">
-            <div x-show="open" x-transition.opacity @click="open = false" class="absolute inset-0 bg-ink-950/50 pointer-events-auto" aria-hidden="true"></div>
+            <div x-show="open" x-transition.opacity @click="open = false" data-guide-close data-guide-backdrop class="absolute inset-0 bg-ink-950/50 pointer-events-auto" aria-hidden="true"></div>
 
             <aside id="product-guide-panel"
+                   data-guide-panel
                    x-show="open"
                    x-transition:enter="transition ease-out duration-200"
                    x-transition:enter-start="translate-x-full"
@@ -56,8 +59,8 @@
                         <h2 id="product-guide-title" class="mt-0.5 text-lg font-bold text-ink-900 dark:text-ink-50">Your product guide</h2>
                         <p class="mt-0.5 text-xs text-ink-500 dark:text-ink-400">Introduction, all {{ count($guideDefinitions) }} RAG pipelines, and what this page can answer.</p>
                     </div>
-                    <button type="button" @click.prevent.stop="open = false"
-                            class="relative z-10 cursor-pointer rounded-lg p-2 text-ink-400 transition hover:bg-ink-100 hover:text-ink-700 focus:outline-none focus:ring-2 focus:ring-navy-500 dark:hover:bg-ink-800 dark:hover:text-ink-200"
+                    <button type="button" @click.prevent.stop="open = false" data-guide-close
+                            class="relative z-50 cursor-pointer rounded-lg p-2 text-ink-400 transition hover:bg-ink-100 hover:text-ink-700 focus:outline-none focus:ring-2 focus:ring-navy-500 dark:hover:bg-ink-800 dark:hover:text-ink-200"
                             aria-label="Close the product guide">
                         <svg class="h-5 w-5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>

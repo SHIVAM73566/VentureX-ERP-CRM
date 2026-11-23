@@ -50,7 +50,7 @@
                                     <td><input type="number" step="0.01" min="0" :name="'items['+index+'][unit_price]'" x-model.number="item.unit_price" class="input" /></td>
                                     <td><input type="number" step="0.01" min="0" :name="'items['+index+'][tax_rate]'" x-model.number="item.tax_rate" class="input" /></td>
                                     <td class="text-right font-semibold text-ink-800" x-text="lineTotal(item).toFixed(2)"></td>
-                                    <td><button type="button" @click="items.splice(index, 1)" class="text-red-500 hover:text-red-400">✕</button></td>
+                                    <td><button type="button" @click="items.splice(index, 1)" class="text-red-500 hover:text-red-400" aria-label="Remove item">✕</button></td>
                                 </tr>
                             </template>
                             <tr x-show="items.length === 0"><td colspan="8" class="py-6 text-center text-ink-400">No items yet.</td></tr>

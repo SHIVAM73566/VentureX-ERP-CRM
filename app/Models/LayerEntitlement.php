@@ -10,6 +10,8 @@ class LayerEntitlement extends Model
     protected $fillable = [
         'company_id',
         'layer_key',
+        'stripe_subscription_id',
+        'stripe_customer_id',
         'status',
         'starts_at',
         'expires_at',

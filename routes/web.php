@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AiQuotaController;
 use App\Http\Controllers\Admin\AiSkillController;
 use App\Http\Controllers\Admin\ApprovalController;
 use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\BillingController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DemoDataController;
 use App\Http\Controllers\Admin\DocumentController;
@@ -36,6 +37,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SecurityVerificationController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\Auth\StepUpController;
+use App\Http\Controllers\Billing\StripeWebhookController;
 use App\Http\Controllers\Crm\ActivityController;
 use App\Http\Controllers\Crm\ContactController;
 use App\Http\Controllers\Crm\CustomerController;
@@ -96,6 +98,12 @@ Route::get('health', fn () => response()->json([
 ]))->name('health');
 Route::get('healthz', fn () => response()->json(['status' => 'ok']))->name('healthz');
 
+// Stripe calls this endpoint server-to-server. It is CSRF-exempt by design;
+// authenticity is proven by the verified raw-payload Stripe-Signature.
+Route::post('/billing/stripe/webhook', [StripeWebhookController::class, 'handle'])
+    ->middleware('throttle:60,1')
+    ->name('billing.stripe.webhook');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login')->name('login.attempt');
@@ -114,6 +122,11 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::middleware(['auth'])->group(function () {
+    Route::post('/upgrade-prompt/dismiss', function () {
+        session(['upgrade_prompt_shown_this_session' => true]);
+        return response()->json(['ok' => true]);
+    })->name('upgrade-prompt.dismiss');
+
     Route::get('mfa/setup', [MfaController::class, 'setup'])->name('mfa.setup');
     Route::post('mfa/setup', [MfaController::class, 'enable'])->middleware('throttle:mfa')->name('mfa.enable');
     Route::get('mfa/recovery', [MfaController::class, 'recovery'])->name('mfa.recovery');
@@ -155,6 +168,12 @@ Route::middleware(['auth', 'two_factor'])->group(function () {
         Route::resource('users', UserController::class)->except('show');
         Route::resource('roles', RoleController::class)->except('show');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('settings/billing/checkout', [BillingController::class, 'checkout'])
+            ->middleware(['step_up', 'throttle:10,1'])
+            ->name('settings.billing.checkout');
+        Route::post('settings/billing/portal', [BillingController::class, 'portal'])
+            ->middleware(['step_up', 'throttle:10,1'])
+            ->name('settings.billing.portal');
         Route::post('settings', [SettingController::class, 'update'])->middleware('step_up')->name('settings.update');
         Route::post('settings/branding', [SettingController::class, 'updateBranding'])->middleware('step_up')->name('settings.branding');
         Route::post('settings/license/apply-token', [SettingController::class, 'applyLicenseToken'])->middleware('step_up')->name('settings.license.apply-token');

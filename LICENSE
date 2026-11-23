@@ -1,21 +1,46 @@
-MIT License
+# VentureX Commercial Software License (DRAFT — LEGAL REVIEW REQUIRED)
 
-Copyright (c) 2026 VentureX ERP & CRM - Shivam Chaturvedi (VentureAI Pro)
+**DRAFT — NOT LEGAL ADVICE.** This draft is provided for planning only and must be reviewed and finalized by qualified legal counsel before use in any sale or distribution. Replace all bracketed placeholders (e.g. `[JURISDICTION]`, `[EMAIL]`, tier meanings) with your approved terms.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Copyright (c) 2026 VentureX ERP & CRM — Shivam Chaturvedi (VentureAI Pro). All rights reserved unless expressly granted below.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## 1. Licence grant (plain language)
+Subject to payment of the applicable fee and compliance with this Licence, you are granted a **non-exclusive, non-transferable** right to use the VentureX ERP & CRM software (the “Software”) according to the **tier** you purchased (choose one of the following as stated in your invoice/order):
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+- **Single Project (TODO: define)** — use the Software for **one** end production project/deployment as described in your order, for your own business operations or for that single client project as agreed in writing.
+- **Agency (TODO: define)** — use the Software for up to **[TODO: number]** client projects or deployments as specified in your order.
+- **SaaS (TODO: define)** — right to operate the Software as a hosted/service offering as specified in your order (including permitted number of tenants/instances if stated).
+
+Exact scope (environments, domains, tenants, user counts, or seats) **must be confirmed in your purchase record/invoice**. If unclear, the **most restrictive** reasonable reading applies until clarified in writing by the licensor.
+
+## 2. Restrictions (you must not)
+Unless you have written permission from the licensor:
+- You may **not** resell, redistribute, sublicense, rent, lease, or lend the Software or any copy of it.
+- You may **not** share the source code, access credentials, private repositories, or installation packages with third parties outside your licensed organization/team as permitted by your tier.
+- You may **not** make the Software available to others as a standalone product, template market listing, or competing hosted offering except under a written **SaaS** (or other) agreement that explicitly allows it.
+- You may **not** remove or alter copyright, licence, or proprietary notices.
+
+## 3. Third-party components
+The Software may include or depend on third-party open-source or other components. Those components remain governed by their **own licences** (see repository documentation such as `documentation/THIRD_PARTY_LICENSES.md` where provided). This Licence applies to the VentureX ERP & CRM proprietary/custom parts as specified above, not to replacing third-party terms.
+
+## 4. Updates and support (summary)
+Any **support period**, **update period**, **bug-fix policy**, or **refund terms** are **only** those stated in your order, invoice, or `PRICING.md` at the time of purchase (or as later agreed in writing). Absence of a written promise means no guaranteed support or updates beyond what you voluntarily receive.
+
+## 5. Warranty disclaimer
+THE SOFTWARE IS PROVIDED **“AS IS”** AND **“AS AVAILABLE”** WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. YOU USE THE SOFTWARE AT YOUR OWN RISK.
+
+## 6. Limitation of liability
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, DATA, BUSINESS, OR GOODWILL, ARISING OUT OF OR RELATED TO THE SOFTWARE OR THIS LICENCE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE LICENSOR’S TOTAL LIABILITY FOR ANY CLAIM RELATING TO THE SOFTWARE SHALL NOT EXCEED THE AMOUNT YOU PAID FOR THE LICENCE GIVING RISE TO THE CLAIM (OR **[TODO: set amount/cap]** if you prefer a fixed cap), EXCEPT WHERE LAW DOES NOT ALLOW SUCH LIMITATION.
+
+## 7. Termination
+This Licence terminates automatically if you breach it. Upon termination you must stop using the Software and delete or destroy copies in your possession/control, except where law requires retention. Provisions that by nature should survive (including restrictions, disclaimers, and limits of liability) survive termination.
+
+## 8. Governing law
+This Licence is governed by the laws of **[JURISDICTION — TODO]**, without regard to conflict-of-law rules, and you agree to the exclusive jurisdiction of courts in **[JURISDICTION — TODO]** for disputes arising from it, unless otherwise required by applicable law.
+
+## 9. Contact
+Licensing questions, purchases, and notices: **[EMAIL — TODO]** (replace with your official contact).
+
+---
+
+**Legacy MIT:** Versions of VentureX ERP & CRM released **on or before tag `v1.3.1`** remain under the MIT License described in `LICENSE-MIT-LEGACY.md`. This commercial Licence applies to **later versions** unless a specific release states otherwise in writing.

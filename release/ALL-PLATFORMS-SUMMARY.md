@@ -1,6 +1,6 @@
 # ALL PLATFORM ZIP FILES - READY TO UPLOAD
 
-## NEW PRICING STRUCTURE
+## NEW PRICING STRUCTURE (one-time license examples shown in listings)
 
 | Tier | Price | Features |
 |------|-------|----------|
@@ -9,6 +9,12 @@
 | **Enterprise** | $350 | Full updates for company/big business, dedicated support |
 
 **Enterprise Discount Code:** `SAVE29` - Save $29 on Enterprise tier
+
+## Recurring revenue layers (optional, buyer-defined; not guaranteed)
+These are **low-overhead recurring options** a new owner can offer (no invented revenue/customers/claims; terms set by buyer):
+1. **Annual “updates + support”** — about **$149/year per license** for ongoing updates, fixes, and support.
+2. **Managed install and maintenance retainer** — **$49–$99/month** for hosted/managed setup, monitoring, and routine maintenance.
+3. **Paid AI-credits or add-on modules** — optional paid AI credits or add-on modules; **buyers bring their own AI model/API keys by default (BYOK)** (owner may resell metered AI only if they choose and comply with provider terms).
 
 ---
 

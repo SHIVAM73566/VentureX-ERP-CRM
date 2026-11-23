@@ -414,12 +414,23 @@
             </div>
             <div class="divide-y divide-ink-100 dark:divide-ink-800">
                 @forelse ($followUps as $lead)
-                    <a href="{{ route('leads.show', $lead) }}" class="flex items-start gap-3 p-4 hover:bg-ink-50 dark:hover:bg-ink-800/50">
-                        <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-50 text-xs font-bold text-amber-600 dark:bg-amber-500/15 dark:text-amber-400">{{ $lead->contact_name[0] ?? '?' }}</span>
+                    @php
+                        // Tolerate legacy/denormalized aggregate entries so a
+                        // stale cache value can never break the dashboard.
+                        $leadName = is_object($lead) ? (string) ($lead->contact_name ?? '') : (string) $lead;
+                        $leadCompany = is_object($lead) ? (string) ($lead->company_name ?? '') : '';
+                        $leadDue = is_object($lead) ? $lead->next_follow_up : null;
+                        $leadDue = ($leadDue && ! is_string($leadDue)) ? $leadDue : null;
+                        $leadInitial = $leadName !== '' ? mb_substr($leadName, 0, 1) : '?';
+                    @endphp
+                    <a href="{{ is_object($lead) ? route('leads.show', $lead) : route('leads.index') }}" class="flex items-start gap-3 p-4 hover:bg-ink-50 dark:hover:bg-ink-800/50">
+                        <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-50 text-xs font-bold text-amber-600 dark:bg-amber-500/15 dark:text-amber-400">{{ $leadInitial }}</span>
                         <div class="min-w-0">
-                            <p class="truncate text-sm font-medium text-ink-800 dark:text-ink-100">{{ $lead->contact_name }}</p>
-                            <p class="truncate text-xs text-ink-500 dark:text-ink-400">{{ $lead->company_name }}</p>
-                            <p class="mt-1 text-xs font-semibold {{ $lead->next_follow_up->isPast() ? 'text-red-600 dark:text-red-400' : 'text-ink-400 dark:text-ink-500' }}">Due {{ $lead->next_follow_up->diffForHumans() }}</p>
+                            <p class="truncate text-sm font-medium text-ink-800 dark:text-ink-100">{{ $leadName !== '' ? $leadName : 'Unknown contact' }}</p>
+                            <p class="truncate text-xs text-ink-500 dark:text-ink-400">{{ $leadCompany }}</p>
+                            @if ($leadDue)
+                                <p class="mt-1 text-xs font-semibold {{ $leadDue->isPast() ? 'text-red-600 dark:text-red-400' : 'text-ink-400 dark:text-ink-500' }}">Due {{ $leadDue->diffForHumans() }}</p>
+                            @endif
                         </div>
                     </a>
                 @empty
@@ -767,11 +778,11 @@
     @endpush
 
     {{-- Layout Customization Drawer --}}
-    <div x-data="layoutCustomize" x-show="open" x-cloak
+    <div x-data="layoutCustomize" x-show="open" x-cloak data-overlay
          @open-layout-customizer.window="open = true"
          @click.away="open = false"
          class="fixed inset-0 z-50">
-        <div x-show="open" x-transition.opacity @click="open = false" class="absolute inset-0 bg-ink-950/60 backdrop-blur-sm"></div>
+        <div x-show="open" x-transition.opacity @click="open = false" data-close-overlay class="absolute inset-0 bg-ink-950/60 backdrop-blur-sm"></div>
         <aside x-show="open"
                x-transition:enter="transition ease-out duration-300"
                x-transition:enter-start="translate-x-full opacity-0"
@@ -782,8 +793,9 @@
                class="absolute inset-y-0 right-0 w-full max-w-md flex-col bg-white shadow-2xl dark:bg-ink-900 z-50">
             <div class="border-b border-ink-200 px-6 py-5 dark:border-ink-800 flex items-center justify-between">
                 <h3 class="text-sm font-bold text-ink-900 dark:text-ink-100">Customize Layout</h3>
-                <button type="button" @click="open = false"
-                        class="rounded-lg p-2 text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-800 dark:text-ink-400">
+                <button type="button" @click="open = false" data-close-overlay
+                        class="rounded-lg p-2 text-ink-400 hover:bg-ink-100 dark:hover:bg-ink-800 dark:text-ink-400"
+                        aria-label="Close layout customizer">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>

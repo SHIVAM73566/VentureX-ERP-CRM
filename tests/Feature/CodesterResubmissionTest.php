@@ -841,7 +841,7 @@ class CodesterResubmissionTest extends TestCase
         ]);
 
         $response = $this->actingAdmin()->get(route('suppliers.show', $supplier));
-        $response->assertNotFound();
+        $response->assertForbidden();
     }
 
     public function test_cross_company_supplier_update_blocked(): void
@@ -857,7 +857,7 @@ class CodesterResubmissionTest extends TestCase
             'name' => 'Hacked',
             'status' => 'approved',
         ]);
-        $response->assertNotFound();
+        $response->assertForbidden();
     }
 
     public function test_cross_company_product_blocked(): void
@@ -871,7 +871,7 @@ class CodesterResubmissionTest extends TestCase
         ]);
 
         $response = $this->actingAdmin()->get(route('inventory.products.show', $product));
-        $response->assertNotFound();
+        $response->assertForbidden();
     }
 
     public function test_cross_company_account_blocked(): void
@@ -884,6 +884,6 @@ class CodesterResubmissionTest extends TestCase
         ]);
 
         $response = $this->actingAdmin()->get(route('finance.accounts.show', $account));
-        $response->assertNotFound();
+        $response->assertForbidden();
     }
 }

@@ -57,10 +57,26 @@ class ClientLicenseService
             return ['ok' => false, 'message' => 'Token payload is not valid JSON.'];
         }
 
-        $exp = isset($payload['exp']) ? (int) $payload['exp'] : null;
-        $expiresAt = $exp ? now()->setTimestamp($exp) : null;
-        $graceDays = (int) config('license.offline_grace_days', 14);
-        $graceExpiresAt = $expiresAt ? $expiresAt->copy()->addDays($graceDays) : now()->addDays($graceDays);
+        // A valid signature is not enough: the token must be for THIS
+        // tenant/installation and must have a bounded lifetime by default.
+        $bindingError = $this->validateBinding($companyId, $payload);
+        if ($bindingError !== null) {
+            return ['ok' => false, 'message' => $bindingError];
+        }
+
+        $exp = isset($payload['exp']) && is_numeric($payload['exp']) ? (int) $payload['exp'] : null;
+        if ($exp === null && ! (bool) config('license.allow_unbounded_tokens', false)) {
+            return ['ok' => false, 'message' => 'License token must include a valid expiry (exp).'];
+        }
+        if ($exp !== null && $exp <= now()->getTimestamp()) {
+            return ['ok' => false, 'message' => 'License token has expired.'];
+        }
+
+        $expiresAt = $exp !== null ? now()->setTimestamp($exp) : null;
+        $graceDays = max(1, (int) config('license.offline_grace_days', 14));
+        $graceExpiresAt = $expiresAt
+            ? $expiresAt->copy()->addDays($graceDays)
+            : now()->addDays($graceDays);
 
         LicenseToken::updateOrCreate(
             ['company_id' => $companyId],
@@ -88,8 +104,9 @@ class ClientLicenseService
 
         try {
             $response = Http::timeout(15)->post(rtrim($url, '/') . '/api/license/verify', [
-                'installation_id' => $installationId,
-                'customer_key' => $customerKey,
+                'installation_id' => $installationId ?? config('license.installation_id'),
+                'customer_key' => $customerKey ?? config('license.customer_key'),
+                'company_id' => $companyId,
             ]);
         } catch (\Throwable $e) {
             Log::warning('License server sync failed', ['error' => $e->getMessage()]);
@@ -120,7 +137,47 @@ class ClientLicenseService
     }
 
     /**
-     * Accept PEM or raw base64 (32 bytes for Ed25519 public key).
+     * Reject tokens issued for a different tenant/installation and replayed
+     * token IDs. Only claims that are actually present are checked; operators
+     * can bind installations with LICENSE_INSTALLATION_ID/CUSTOMER_KEY.
+     */
+    private function validateBinding(int $companyId, array $payload): ?string
+    {
+        $claims = [
+            'company_id' => config('license.installation_id'),
+            'installation_id' => config('license.installation_id'),
+            'customer_key' => config('license.customer_key'),
+        ];
+
+        if (isset($payload['company_id']) && (int) $payload['company_id'] !== $companyId) {
+            return 'License token was issued for a different company.';
+        }
+
+        foreach (['installation_id', 'customer_key'] as $claim) {
+            $expected = $claims[$claim];
+            if ($expected !== null && $expected !== '' && isset($payload[$claim])
+                && (string) $payload[$claim] !== (string) $expected) {
+                return 'License token installation binding does not match this server.';
+            }
+        }
+
+        $jti = isset($payload['jti']) ? (string) $payload['jti'] : '';
+        if ($jti !== '') {
+            $replay = LicenseToken::query()
+                ->where('company_id', '!=', $companyId)
+                ->where('payload->jti', $jti)
+                ->exists();
+            if ($replay) {
+                return 'License token ID has already been used by another company.';
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Ed25519 verification needs exactly 32 raw bytes. SPKI PEM decodes to a
+     * DER wrapper whose final 32 bytes are the public key.
      */
     private function normalizePublicKey(string $key): ?string
     {
@@ -128,20 +185,22 @@ class ClientLicenseService
         if ($key === '') {
             return null;
         }
-        // PEM format
+
         if (str_contains($key, 'BEGIN PUBLIC KEY')) {
-            $pem = $key;
-            $keyData = preg_replace('/-----[^-]+-----/', '', $pem);
+            $keyData = preg_replace('/-----[^-]+-----/', '', $key);
             $keyData = preg_replace('/\s+/', '', (string) $keyData);
-            $raw = base64_decode($keyData, true);
-            return $raw !== false && strlen($raw) > 0 ? $raw : null;
+            $raw = base64_decode((string) $keyData, true);
+        } else {
+            $raw = base64_decode($key, true);
         }
-        // Try raw base64
-        $raw = base64_decode($key, true);
-        if ($raw !== false && strlen($raw) >= 32) {
-            // If it's longer (SPKI wrapped in some cases), take last 32? Or use as-is if sodium expects raw 32-byte key in some libs; better try as-is.
-            return $raw;
+
+        if ($raw === false || strlen($raw) < SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES) {
+            return null;
         }
-        return null;
+
+        // Raw 32-byte keys stay as-is; SPKI/DER wrappers resolve to the tail.
+        $publicKey = substr($raw, -SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES);
+
+        return strlen($publicKey) === SODIUM_CRYPTO_SIGN_PUBLICKEYBYTES ? $publicKey : null;
     }
 }

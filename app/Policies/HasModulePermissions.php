@@ -62,10 +62,8 @@ trait HasModulePermissions
 
     protected function inCompany(User $user, $model): bool
     {
-        if ($user->hasRole('super_admin')) {
-            return true;
-        }
-
+        // Even super admins stay inside their own tenant for record-level
+        // access. Cross-tenant administration uses separate admin screens.
         // If model has company_id, it must match the user's company
         if (isset($model->company_id)) {
             return (int) $model->company_id === (int) $user->company_id;

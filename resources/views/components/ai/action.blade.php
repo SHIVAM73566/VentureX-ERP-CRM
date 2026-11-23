@@ -15,12 +15,12 @@
         <span x-show="busy">Working…</span>
     </button>
 
-    <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+    <div x-show="open" x-cloak data-overlay class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
         @keydown.escape.window="close()">
         <div class="w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-xl" style="max-height: 80vh">
             <div class="flex items-center justify-between border-b border-ink-100 px-5 py-3">
                 <h3 class="text-sm font-bold text-ink-800">{{ $label }}</h3>
-                <button type="button" @click="close()" class="text-ink-400 transition hover:text-ink-600" aria-label="Close">✕</button>
+                <button type="button" @click="close()" data-close-overlay class="text-ink-400 transition hover:text-ink-600" aria-label="Close">✕</button>
             </div>
             <div class="p-5">
                 <p x-show="busy" class="text-sm text-ink-500">AI is analysing…</p>

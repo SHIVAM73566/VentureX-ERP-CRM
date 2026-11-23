@@ -1,6 +1,8 @@
-# License Server (separate Laravel app) — Phase 3 scaffold
+# License Server (separate Laravel app)
 
-> **This is a scaffold/template for a separate Laravel application.** Do **not** deploy this folder as the main ERP app. Create a new Laravel project and copy/adapt these files, or use this as a specification.
+> **This is a separate Laravel application template.** Do **not** deploy this folder as the main ERP app. Create a new Laravel project and copy these files into it, then add the missing framework bootstrap, migrations and queue workers for your environment.
+
+The token issuer and verification endpoint in this folder are implemented. The Stripe webhook controller still delegates to Cashier; add a `stripe_events` migration with a unique `event_id` and wire signature verification before production use.
 
 ## Purpose
 - Host Stripe billing (Laravel Cashier), Checkout, Customer Portal.
@@ -44,6 +46,11 @@ LICENSE_ED25519_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY
 LICENSE_TOKEN_TTL_DAYS=30
 # Offline grace period (days) enforced by client policy
 LICENSE_OFFLINE_GRACE_DAYS=14
+
+# POST /api/license/verify uses an X-License-Api-Key header.
+LICENSE_VERIFY_API_KEY=
+# JSON map of installation ids to customer/licence records (never commit real values).
+LICENSE_INSTALLATIONS={}
 ```
 
 ## Webhooks (implement these event types)

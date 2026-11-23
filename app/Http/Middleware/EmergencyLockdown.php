@@ -15,6 +15,12 @@ class EmergencyLockdown
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Before the one-time installer completes there is no cache/audit
+        // schema yet. Let the installer run; lockdown applies afterwards.
+        if (! file_exists(storage_path('.installed'))) {
+            return $next($request);
+        }
+
         if (! SecurityStateService::lockdownEnabled()) {
             return $next($request);
         }

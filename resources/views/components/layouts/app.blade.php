@@ -360,6 +360,35 @@
                     </div>
                 @endif
 
+                @php
+                    $vxUpgradeKey = null;
+                    $vxUpgradeMessage = null;
+                    if (auth()->check() && ! request()->routeIs('admin.settings.*')) {
+                        try {
+                            $vxEntitlements = app(\App\Services\EntitlementService::class);
+                            $vxCandidates = [
+                                'security_patches' => 'Security readiness: priority patches, hardening checks and exportable audit trails.',
+                                'reporting_pack_adv' => 'Better decisions: cross-module dashboards and scheduled exports.',
+                                'capacity_expansion' => 'Room to grow: add seats and modules without re-platforming.',
+                                'granular_rbac' => 'Governance: fine-grained roles and per-module permissions.',
+                            ];
+                            foreach ($vxCandidates as $vxKey => $vxCopy) {
+                                if (! $vxEntitlements->has($vxKey) && filled(config('services.stripe.prices.'.$vxKey))) {
+                                    $vxUpgradeKey = $vxKey;
+                                    $vxUpgradeMessage = $vxCopy;
+                                    break;
+                                }
+                            }
+                        } catch (\Throwable $e) {
+                            // Upgrade prompts are advisory; never break a page.
+                            $vxUpgradeKey = null;
+                        }
+                    }
+                @endphp
+                @if ($vxUpgradeKey)
+                    <x-upgrade-prompt :layer-key="$vxUpgradeKey" :message="$vxUpgradeMessage" />
+                @endif
+
                 {{ $slot }}
             </main>
 
