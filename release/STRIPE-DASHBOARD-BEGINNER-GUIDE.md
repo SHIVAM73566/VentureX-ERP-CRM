@@ -18,6 +18,23 @@ stripe login
 
 A browser window opens. Log in to your Stripe account and approve the CLI. You only need to do this once per machine.
 
+### If `stripe switch` shows only your live account
+
+`stripe switch` lists only accounts and sandboxes that are **already authorized**. If the list shows only your live account:
+
+- Press **Esc** (or **Ctrl+C**) to close the selector without changing anything. Pressing Enter on the only live entry simply keeps live mode.
+- To add a sandbox, do one of these:
+  - Run `stripe login` again and approve a **sandbox/test** account in the browser when it is offered.
+  - Create one first, then authorize it:
+    ```powershell
+    stripe sandboxes create "VentureX Test"
+    stripe login
+    ```
+- If no browser is available, run `stripe login --interactive` and paste a **test-mode** Stripe API key (`sk_test_...`) directly into the CLI prompt. Never paste that key into chat, Git, `.env.example`, Blade, JavaScript, docs, or release ZIPs.
+- Check the active mode with `stripe whoami`; it should report test/sandbox mode. Then run `stripe switch` again and choose the sandbox with the arrow keys and Enter.
+
+Creating a sandbox is optional. The provisioning helper previews safely on a live account and creates live Products/Prices only when you explicitly pass `-Apply -AllowLive`.
+
 ---
 
 ## Step 1 — Create 18 Products and Prices
