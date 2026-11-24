@@ -22,37 +22,65 @@ A browser window opens. Log in to your Stripe account and approve the CLI. You o
 
 ## Step 1 — Create 18 Products and Prices
 
-In Stripe Dashboard:
+### Option A — automatic (recommended, minimal clicking)
+
+1. In Command Prompt, log in once:
+   ```powershell
+   stripe login
+   ```
+2. Preview the prices (safe — creates nothing):
+   ```powershell
+   cd C:\MY_ERP
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\release\stripe-provision-prices.ps1
+   ```
+3. When the preview looks right, create the Products/Prices and write their IDs to `.env`:
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\release\stripe-provision-prices.ps1 -Apply
+   ```
+
+The helper:
+- backs up `.env`,
+- skips any `STRIPE_PRICE_*` that is already set,
+- creates each Product and Price in **Test mode**,
+- writes only the Price IDs to `.env` (values are never printed),
+- preserves every unrelated `.env` line,
+- runs `php artisan config:clear`.
+
+**To change a price:** open `release\stripe-provision-prices.ps1` and edit the `AmountCents` and `Display` values in the price list near the top. Amounts are in cents (`14900` = `$149`). Then run the `-Apply` command again with `-Force`.
+
+Starter values below are **illustrative only**. Final price, tax and renewal terms always appear on Stripe Checkout before payment.
+
+| # | Product name | Starter | `.env` key |
+|---:|---|---|---|
+| 1 | Updates & Support (Care) | $149/year | `STRIPE_PRICE_UPDATES_SUPPORT` |
+| 2 | Managed Install & Maintenance | $79/month | `STRIPE_PRICE_MANAGED_HOSTING` |
+| 3 | AI Credits / Metered AI Add-On | $49 bundle | `STRIPE_PRICE_AI_CREDITS` |
+| 4 | Advanced Reporting | $29/month | `STRIPE_PRICE_REPORTING_PACK_ADV` |
+| 5 | Workflow automation+ pack | $39/month | `STRIPE_PRICE_WORKFLOW_AUTOMATION_PLUS` |
+| 6 | Priority integrations pack | $49/month | `STRIPE_PRICE_INTEGRATIONS_PRIORITY` |
+| 7 | Multi-branch / advanced operations | $59/month | `STRIPE_PRICE_MULTI_BRANCH_OPS` |
+| 8 | Compliance & hardening add-on | $99/year | `STRIPE_PRICE_COMPLIANCE_HARDENING` |
+| 9 | Granular roles & permissions | $29/month | `STRIPE_PRICE_GRANULAR_RBAC` |
+| 10 | Security updates & audit tooling | $99/year | `STRIPE_PRICE_SECURITY_PATCHES` |
+| 11 | Capacity & module expansion | $39/month | `STRIPE_PRICE_CAPACITY_EXPANSION` |
+| 12 | Industry template: Manufacturing+ | $199 once | `STRIPE_PRICE_TPL_MANUFACTURING_PLUS` |
+| 13 | Industry template: Trading & distribution | $199 once | `STRIPE_PRICE_TPL_TRADING_DISTRIBUTION` |
+| 14 | Industry template: Services / projects | $199 once | `STRIPE_PRICE_TPL_SERVICES_PROJECTS` |
+| 15 | Advanced logistics suite | $79/month | `STRIPE_PRICE_LOGISTICS_SUITE_ADV` |
+| 16 | Advanced finance suite | $79/month | `STRIPE_PRICE_FINANCE_SUITE_ADV` |
+| 17 | Partner/white-label enablement (scoped) | $299 once | `STRIPE_PRICE_PARTNER_WHITE_LABEL` |
+| 18 | Custom development credits | $199 bundle | `STRIPE_PRICE_CUSTOM_DEV_CREDITS` |
+
+### Option B — manual Dashboard clicks
 
 1. Go to **Product catalogue → Products**.
 2. Click **Add product**.
-3. Enter the product name from the table below.
-4. Under **Pricing**, choose **Recurring → Monthly** (recommended for add-ons) or **One time** if your publisher said the add-on is one-time.
-5. Enter the amount your publisher wants. VentureX does not invent prices.
+3. Enter the product name from the table above.
+4. Under **Pricing**, choose **Recurring → Monthly/Yearly** or **One time** to match the starter value above.
+5. Enter the amount. VentureX does not invent prices.
 6. Click **Save product**.
 7. On the product page, copy the **Price ID**. It starts with `price_`.
-8. Repeat for all 18 rows below.
-
-| # | Product name | `.env` key |
-|---:|---|---|
-| 1 | Updates & Support (Care) | `STRIPE_PRICE_UPDATES_SUPPORT` |
-| 2 | Managed Install & Maintenance | `STRIPE_PRICE_MANAGED_HOSTING` |
-| 3 | AI Credits / Metered AI Add-On | `STRIPE_PRICE_AI_CREDITS` |
-| 4 | Advanced Reporting | `STRIPE_PRICE_REPORTING_PACK_ADV` |
-| 5 | Workflow automation+ pack | `STRIPE_PRICE_WORKFLOW_AUTOMATION_PLUS` |
-| 6 | Priority integrations pack | `STRIPE_PRICE_INTEGRATIONS_PRIORITY` |
-| 7 | Multi-branch / advanced operations | `STRIPE_PRICE_MULTI_BRANCH_OPS` |
-| 8 | Compliance & hardening add-on | `STRIPE_PRICE_COMPLIANCE_HARDENING` |
-| 9 | Granular roles & permissions | `STRIPE_PRICE_GRANULAR_RBAC` |
-| 10 | Security updates & audit tooling | `STRIPE_PRICE_SECURITY_PATCHES` |
-| 11 | Capacity & module expansion | `STRIPE_PRICE_CAPACITY_EXPANSION` |
-| 12 | Industry template: Manufacturing+ | `STRIPE_PRICE_TPL_MANUFACTURING_PLUS` |
-| 13 | Industry template: Trading & distribution | `STRIPE_PRICE_TPL_TRADING_DISTRIBUTION` |
-| 14 | Industry template: Services / projects | `STRIPE_PRICE_TPL_SERVICES_PROJECTS` |
-| 15 | Advanced logistics suite | `STRIPE_PRICE_LOGISTICS_SUITE_ADV` |
-| 16 | Advanced finance suite | `STRIPE_PRICE_FINANCE_SUITE_ADV` |
-| 17 | Partner/white-label enablement (scoped) | `STRIPE_PRICE_PARTNER_WHITE_LABEL` |
-| 18 | Custom development credits | `STRIPE_PRICE_CUSTOM_DEV_CREDITS` |
+8. Repeat for all 18 rows and paste each ID into the matching key in `.env`.
 
 ---
 
@@ -119,7 +147,7 @@ The script will:
 
 - back up your existing `.env`,
 - prompt securely for `STRIPE_SECRET` and `STRIPE_WEBHOOK_SECRET` (typing is hidden),
-- prompt for the 18 Price IDs,
+- prompt only for Price IDs that are still missing (after Option A it will not ask again),
 - set the success/cancel/portal URLs to `/admin/settings?tab=plan`,
 - run `php artisan config:clear`.
 

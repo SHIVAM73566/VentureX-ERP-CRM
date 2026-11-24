@@ -1,7 +1,8 @@
 # Stripe local .env setup helper
 # Runs on the server. Prompts for secrets with hidden input and never commits them.
 param(
-    [string] $HostUrl = 'http://127.0.0.1:8000'
+    [string] $HostUrl = 'http://127.0.0.1:8000',
+    [switch] $SkipPriceIds
 )
 
 $ErrorActionPreference = 'Stop'
@@ -61,6 +62,28 @@ function Set-EnvValue {
     return $result
 }
 
+function Get-EnvValue {
+    param(
+        [string[]] $Lines,
+        [string] $Key
+    )
+
+    $pattern = '^\s*' + [regex]::Escape($Key) + '\s*=(.*)$'
+    foreach ($line in $Lines) {
+        if ($line -match $pattern) {
+            $value = $Matches[1].Trim()
+            if ($value.Length -ge 2) {
+                if (($value.StartsWith('"') -and $value.EndsWith('"')) -or ($value.StartsWith("'") -and $value.EndsWith("'"))) {
+                    $value = $value.Substring(1, $value.Length - 2)
+                }
+            }
+            return $value.Trim()
+        }
+    }
+
+    return ''
+}
+
 $secret = Convert-SecureStringToString (Read-Host -Prompt 'STRIPE_SECRET (sk_test_..., input hidden)' -AsSecureString)
 $webhookSecret = Convert-SecureStringToString (Read-Host -Prompt 'STRIPE_WEBHOOK_SECRET (whsec_..., input hidden)' -AsSecureString)
 
@@ -98,7 +121,16 @@ $lines = Set-EnvValue -Lines $lines -Key 'STRIPE_CHECKOUT_SUCCESS_URL' -Value $r
 $lines = Set-EnvValue -Lines $lines -Key 'STRIPE_CHECKOUT_CANCEL_URL' -Value $returnUrl
 $lines = Set-EnvValue -Lines $lines -Key 'STRIPE_BILLING_PORTAL_RETURN_URL' -Value $returnUrl
 
-foreach ($item in $priceKeys) {
+if ($SkipPriceIds) {
+    $missingPriceKeys = @()
+} else {
+    $missingPriceKeys = @($priceKeys | Where-Object { (Get-EnvValue -Lines $lines -Key $_.Key) -eq '' })
+}
+
+$keptPrices = $priceKeys.Count - $missingPriceKeys.Count
+Write-Host "Price IDs already set: $keptPrices/$($priceKeys.Count) (values hidden)."
+
+foreach ($item in $missingPriceKeys) {
     $value = Read-Host -Prompt "$($item.Key) [$($item.Label)]"
     $lines = Set-EnvValue -Lines $lines -Key $item.Key -Value $value.Trim()
 }

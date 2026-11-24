@@ -35,13 +35,20 @@ This document describes the Stripe upgrade/add-on flow shipped with VentureX ERP
 - The status panel reports only readiness booleans, the exact missing `STRIPE_PRICE_*` names, the configured-price count, and the portal return URL. No secret key, webhook secret or Price ID value is ever rendered.
 - When `STRIPE_SECRET` or a layer's Price ID is missing, its card stays visible with a friendly explanation and a disabled Upgrade button. Adding the value to the server `.env` and refreshing activates that card's checkout button.
 
+### Automatic price provisioning
+
+- `release/stripe-provision-prices.ps1` is the beginner helper. Preview mode is the default; `-Apply` creates Stripe Products/Prices after `stripe login` and writes the resulting Price IDs to the server `.env`.
+- The editable price list is at the top of that script. Amounts are illustrative starter values in cents; change `AmountCents` and `Display` before running `-Apply`. Final price, tax and renewal terms remain Stripe Checkout's responsibility.
+- The helper refuses live keys, backs up `.env`, skips already-set `STRIPE_PRICE_*` keys, preserves unrelated lines, never prints secret or Price ID values, and runs `php artisan config:clear`.
+- `release/setup-stripe-env.ps1` now prompts only for Price IDs that are still missing, so it will not duplicate work done by the provisioning helper.
+
 ### Add-on catalog
 
 Advanced Reporting, Granular Roles & Security Patches, Capacity Expansion, Industry Templates (Manufacturing/Trading/Services), Advanced Logistics, Advanced Finance, and Custom Development Credits are all defined in `config/layers.php`. Each offer has plain-language value copy; price and renewal terms are always shown by Stripe at checkout. There are no countdowns, fake scarcity, pre-checked consents or forced upgrades.
 
 ## Manual Stripe Dashboard steps (operator checklist)
 
-For a click-by-click walkthrough and a secure `.env` setup script, see `release/STRIPE-DASHBOARD-BEGINNER-GUIDE.md` and `release/setup-stripe-env.ps1`.
+For a click-by-click walkthrough and the secure helpers, see `release/STRIPE-DASHBOARD-BEGINNER-GUIDE.md`, `release/stripe-provision-prices.ps1`, and `release/setup-stripe-env.ps1`.
 
 1. Create the Products/Prices matching each layer in `config/services.php` (`STRIPE_PRICE_*`). Copy each Price ID into the server `.env` only; never paste them into source, docs or chat screenshots.
 2. In **Developers → Webhooks**, add `https://<your-host>/billing/stripe/webhook`.
