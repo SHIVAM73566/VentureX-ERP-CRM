@@ -3,7 +3,7 @@
 # BEGINNER SAFETY:
 #   - Preview mode is the default. Nothing is created and .env is untouched.
 #   - Run with -Apply only AFTER you have run `stripe login`.
-#   - Test-mode keys only. Live keys are refused.
+#   - Sandbox/test mode is the default. Live mode requires explicit -AllowLive.
 #   - Product/Price IDs are written to C:\MY_ERP\.env only. They are never printed.
 #   - Unrelated .env lines are preserved. A timestamped backup is created.
 #   - No secret key, webhook secret or Stripe account ID is stored in this file.
@@ -14,7 +14,8 @@ param(
     [string] $StripeCli = 'stripe',
     [switch] $Apply,
     [switch] $DryRun,
-    [switch] $Force
+    [switch] $Force,
+    [switch] $AllowLive
 )
 
 $ErrorActionPreference = 'Stop'
@@ -76,22 +77,141 @@ function Resolve-StripeCli {
     return $found.Source
 }
 
-function Get-StripeCliKeyValue {
+function Invoke-StripeCliText {
+    param(
+        [string] $Cli,
+        [string[]] $Arguments
+    )
+
+    # Windows PowerShell 5.1 turns native stderr into ErrorRecord objects. With
+    # ErrorActionPreference = Stop that raises NativeCommandError even when the
+    # CLI exits 0. Temporarily use Continue, capture both streams, and rely on
+    # $LASTEXITCODE for the real success/failure decision.
+    $previousPreference = $ErrorActionPreference
+    $previousNativePreference = $null
+    $hadNativePreference = Test-Path -Path 'variable:PSNativeCommandUseErrorActionPreference'
+    if ($hadNativePreference) {
+        $previousNativePreference = $PSNativeCommandUseErrorActionPreference
+    }
+
+    $exitCode = $null
+    $captured = ''
+    try {
+        $ErrorActionPreference = 'Continue'
+        if ($hadNativePreference) {
+            $PSNativeCommandUseErrorActionPreference = $false
+        }
+        $global:LASTEXITCODE = 0
+        $captured = (& $Cli @Arguments 2>&1 | Out-String)
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousPreference
+        if ($hadNativePreference) {
+            $PSNativeCommandUseErrorActionPreference = $previousNativePreference
+        }
+    }
+
+    return [pscustomobject]@{
+        ExitCode = $exitCode
+        Text     = $captured
+    }
+}
+
+function Convert-CliJsonText {
+    param([string] $Text)
+
+    $clean = [regex]::Replace($Text, "`e\[[0-9;?]*[A-Za-z]", '')
+    $candidates = @()
+
+    $firstBrace = $clean.IndexOf('{')
+    $lastBrace = $clean.LastIndexOf('}')
+    if ($firstBrace -ge 0 -and $lastBrace -gt $firstBrace) {
+        $candidates += $clean.Substring($firstBrace, ($lastBrace - $firstBrace + 1))
+    }
+
+    $firstBracket = $clean.IndexOf('[')
+    $lastBracket = $clean.LastIndexOf(']')
+    if ($firstBracket -ge 0 -and $lastBracket -gt $firstBracket) {
+        $candidates += $clean.Substring($firstBracket, ($lastBracket - $firstBracket + 1))
+    }
+
+    foreach ($candidate in $candidates) {
+        try {
+            return ($candidate | ConvertFrom-Json)
+        } catch {
+            # Try the next candidate; raw text is never printed.
+        }
+    }
+
+    throw 'Stripe CLI returned unreadable JSON. Output was suppressed for safety.'
+}
+
+function Get-StripeCliAuthInfo {
     param([string] $Cli)
 
+    $key = ''
     if (-not [string]::IsNullOrWhiteSpace($env:STRIPE_API_KEY)) {
-        return $env:STRIPE_API_KEY.Trim()
+        $key = $env:STRIPE_API_KEY.Trim()
     }
 
-    $raw = & $Cli config --list 2>&1 | Out-String
-    if ($LASTEXITCODE -ne 0) {
-        return ''
+    if ($key -ne '') {
+        $mode = if ($key -match '^(sk|rk)_live_') {
+            'live'
+        } elseif ($key -match '^(sk|rk)_test_') {
+            'test'
+        } else {
+            'unknown'
+        }
+        $key = $null
+
+        return [pscustomobject]@{ Authenticated = $true; Mode = $mode }
     }
+
+    # `stripe login` stores an authenticated session without exposing an API
+    # key. `stripe whoami --format json` is the reliable mode source.
+    $who = Invoke-StripeCliText -Cli $Cli -Arguments @('whoami', '--format', 'json')
+    if ($who.ExitCode -eq 0) {
+        try {
+            $info = Convert-CliJsonText -Text $who.Text
+            $reportedMode = [string] $info.mode
+            $mode = if ($reportedMode -match '(?i)^live$') {
+                'live'
+            } elseif ($reportedMode -match '(?i)^(test|sandbox)$') {
+                'test'
+            } else {
+                'unknown'
+            }
+
+            return [pscustomobject]@{ Authenticated = $true; Mode = $mode }
+        } catch {
+            # Fall through to the config-list fallback below.
+        }
+    }
+
+    $result = Invoke-StripeCliText -Cli $Cli -Arguments @('config', '--list')
+    if ($result.ExitCode -ne 0) {
+        return [pscustomobject]@{ Authenticated = $false; Mode = 'unknown' }
+    }
+
+    $raw = $result.Text
     if ($raw -match '(?im)^\s*api_key\s*=\s*(\S+)') {
-        return $Matches[1]
+        $key = $Matches[1]
     }
+    $accountPresent = $raw -match '(?im)^\s*account_id\s*=\s*\S+'
+    $mode = if ($key -match '^(sk|rk)_live_') {
+        'live'
+    } elseif ($key -match '^(sk|rk)_test_') {
+        'test'
+    } else {
+        'unknown'
+    }
+    $authenticated = (-not [string]::IsNullOrWhiteSpace($key)) -or $accountPresent
+    $key = $null
 
-    return ''
+    return [pscustomobject]@{
+        Authenticated = $authenticated
+        Mode          = $mode
+    }
 }
 
 function Get-EnvValue {
@@ -152,18 +272,12 @@ function Invoke-StripeCliJson {
         [string] $Purpose
     )
 
-    $output = & $Cli @Arguments 2>&1 | Out-String
-    $code = $LASTEXITCODE
-
-    if ($code -ne 0) {
-        throw "$Purpose failed (exit code $code). CLI output was suppressed because it can contain account data. Confirm `stripe login`, test mode, and network access, then retry."
+    $result = Invoke-StripeCliText -Cli $Cli -Arguments $Arguments
+    if ($result.ExitCode -ne 0) {
+        throw "$Purpose failed (exit code $($result.ExitCode)). CLI output was suppressed because it can contain account data. Confirm `stripe login`, the intended Stripe mode, and network access, then retry."
     }
 
-    try {
-        return ($output | ConvertFrom-Json)
-    } catch {
-        throw "$Purpose returned unreadable JSON. Output was suppressed for safety."
-    }
+    return (Convert-CliJsonText -Text $result.Text)
 }
 
 function New-ProductArguments {
@@ -242,18 +356,16 @@ if ($duplicateKeys.Count -gt 0) {
 $isDryRun = $DryRun -or (-not $Apply)
 $cliPath = Resolve-StripeCli -CommandName $StripeCli
 
-$activeKey = Get-StripeCliKeyValue -Cli $cliPath
-$hasAuth = -not [string]::IsNullOrWhiteSpace($activeKey)
-$liveKeyActive = $activeKey -match '^(sk|rk)_live_'
-$activeKey = $null
+$authInfo = Get-StripeCliAuthInfo -Cli $cliPath
+$hasAuth = $authInfo.Authenticated
+$liveMode = $authInfo.Mode -eq 'live'
 
-if ($Apply) {
-    if (-not $hasAuth) {
+if (-not $hasAuth) {
+    if ($Apply) {
         throw 'Stripe CLI is not authenticated. Run `stripe login` in this Command Prompt, approve the browser window, then retry with -Apply.'
     }
-    if ($liveKeyActive) {
-        throw 'A live Stripe key is active. This helper refuses live mode. Switch to Test mode and retry.'
-    }
+} elseif ($liveMode -and $Apply -and -not $AllowLive) {
+    throw 'A LIVE Stripe account is active. Preview is safe, but creating prices requires explicit opt-in. Re-run with -Apply -AllowLive after confirming you intend to create live Stripe Products/Prices.'
 }
 
 if (-not (Test-Path -LiteralPath $envPath)) {
@@ -284,9 +396,27 @@ if (-not [string]::IsNullOrWhiteSpace($HostUrl)) {
     )
 }
 
+$authLabel = if (-not $hasAuth) {
+    'not configured'
+} elseif ($liveMode) {
+    'authenticated - LIVE account'
+} elseif ($authInfo.Mode -eq 'test') {
+    'authenticated - TEST account'
+} else {
+    'authenticated - mode unknown'
+}
+
 Write-Host "VentureX Stripe price provisioning"
 Write-Host "Mode: $(if ($Apply) { 'APPLY' } else { 'DRY RUN (preview only)' })"
-Write-Host "CLI auth: $(if ($hasAuth) { 'configured (value hidden)' } else { 'not configured' })"
+Write-Host "CLI auth: $authLabel"
+if ($liveMode -and -not $Apply) {
+    Write-Host 'LIVE account detected. This preview sends no create requests and changes no files.'
+}
+if ($liveMode -and $Apply -and $AllowLive) {
+    Write-Host 'WARNING: LIVE MODE CONFIRMED. Real Stripe Products/Prices will be created in your live account.'
+} elseif ($authInfo.Mode -eq 'test' -and $Apply) {
+    Write-Host 'TEST account detected. Stripe Products/Prices will be created in sandbox/test mode.'
+}
 Write-Host "Currency: $Currency"
 Write-Host "Price entries: $($prices.Count); will create: $($pending.Count); already set: $skipped"
 if ($Force) {

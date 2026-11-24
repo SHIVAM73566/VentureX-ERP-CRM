@@ -2,7 +2,7 @@
 
 This guide walks you through the Stripe Dashboard clicks. Do **not** paste secret keys, webhook secrets, or Price IDs into chat, tickets, Blade, JavaScript, GitHub, or release ZIPs.
 
-Always use **Test mode** while setting up. The toggle is at the top right of the Stripe Dashboard.
+Use **Test mode / sandbox** while setting up. The toggle is at the top right of the Stripe Dashboard. If your CLI is logged into a live account, previewing is still safe, but creating prices requires the explicit `-AllowLive` switch.
 
 ---
 
@@ -33,20 +33,27 @@ A browser window opens. Log in to your Stripe account and approve the CLI. You o
    cd C:\MY_ERP
    powershell -NoProfile -ExecutionPolicy Bypass -File .\release\stripe-provision-prices.ps1
    ```
-3. When the preview looks right, create the Products/Prices and write their IDs to `.env`:
+3. When the preview looks right, create the Products/Prices and write their IDs to `.env`.
+
+   Test/sandbox CLI account:
    ```powershell
    powershell -NoProfile -ExecutionPolicy Bypass -File .\release\stripe-provision-prices.ps1 -Apply
+   ```
+
+   Live CLI account (creates real live Stripe Products/Prices):
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\release\stripe-provision-prices.ps1 -Apply -AllowLive
    ```
 
 The helper:
 - backs up `.env`,
 - skips any `STRIPE_PRICE_*` that is already set,
-- creates each Product and Price in **Test mode**,
+- creates each Product and Price in the active CLI mode; live mode requires `-AllowLive`,
 - writes only the Price IDs to `.env` (values are never printed),
 - preserves every unrelated `.env` line,
 - runs `php artisan config:clear`.
 
-**To change a price:** open `release\stripe-provision-prices.ps1` and edit the `AmountCents` and `Display` values in the price list near the top. Amounts are in cents (`14900` = `$149`). Then run the `-Apply` command again with `-Force`.
+**To change a price:** open `release\stripe-provision-prices.ps1` and edit the `AmountCents` and `Display` values in the price list near the top. Amounts are in cents (`14900` = `$149`). Then run the `-Apply` command again with `-Force` (and `-AllowLive` only if you intentionally use a live account).
 
 Starter values below are **illustrative only**. Final price, tax and renewal terms always appear on Stripe Checkout before payment.
 
