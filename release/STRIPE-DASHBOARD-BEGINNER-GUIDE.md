@@ -48,7 +48,8 @@ A browser window opens. Log in to your Stripe account and approve the CLI. You o
 The helper:
 - backs up `.env`,
 - skips any `STRIPE_PRICE_*` that is already set,
-- creates each Product and Price in the active CLI mode; live mode requires `-AllowLive`,
+- creates each Product and Price in the active CLI mode; live mode requires `-AllowLive` and the helper adds Stripe CLI's `--live` flag automatically,
+- shows only redacted Stripe error messages if a command fails (no keys, account IDs or Price IDs),
 - writes only the Price IDs to `.env` (values are never printed),
 - preserves every unrelated `.env` line,
 - runs `php artisan config:clear`.

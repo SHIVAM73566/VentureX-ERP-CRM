@@ -22,6 +22,7 @@ $ErrorActionPreference = 'Stop'
 
 $root = 'C:\MY_ERP'
 $envPath = Join-Path $root '.env'
+$script:stripeDisplayLabel = ''
 
 # -----------------------------------------------------------------------------
 # EDIT PRICES HERE
@@ -146,6 +147,83 @@ function Convert-CliJsonText {
     throw 'Stripe CLI returned unreadable JSON. Output was suppressed for safety.'
 }
 
+function Get-RedactedCliErrorLines {
+    param(
+        [string] $Text,
+        [int] $ExitCode,
+        [string] $SensitiveLabel = ''
+    )
+
+    $clean = [regex]::Replace($Text, "`e\[[0-9;?]*[A-Za-z]", '')
+
+    # Remove values we know are sensitive before selecting any line for output.
+    foreach ($value in @($SensitiveLabel, $env:STRIPE_API_KEY, $env:STRIPE_SECRET)) {
+        if (-not [string]::IsNullOrWhiteSpace($value)) {
+            $clean = $clean.Replace($value.Trim(), '[REDACTED]')
+        }
+    }
+
+    $clean = [regex]::Replace($clean, '(?i)\b(sk|rk)_(live|test)_[A-Za-z0-9]+', '$1_$2_[REDACTED]')
+    $clean = [regex]::Replace($clean, '\bwhsec_[A-Za-z0-9]+', 'whsec_[REDACTED]')
+    $clean = [regex]::Replace($clean, '\bacct_[A-Za-z0-9]+', 'acct_[REDACTED]')
+    $clean = [regex]::Replace($clean, '\b(price|prod|cus|sub|pi|evt|in|pm|cs|txn)_[A-Za-z0-9]+', '$1_[REDACTED]')
+    $clean = [regex]::Replace($clean, '(?i)(api[_-]?key|secret|token|password|authorization)\s*[:=]\s*(""?)[^"\s,}]+\2', '$1=[REDACTED]')
+    $clean = [regex]::Replace($clean, '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b', '[EMAIL_REDACTED]')
+    $clean = [regex]::Replace($clean, 'https?://\S+', '[URL_REDACTED]')
+
+    $messages = New-Object System.Collections.Generic.List[string]
+
+    # Stripe CLI often emits a JSON error object. Prefer its message/code when
+    # present, but only after redaction above.
+    try {
+        $parsed = Convert-CliJsonText -Text $clean
+        if ($parsed.error) {
+            if ($parsed.error.message) {
+                $messages.Add("Stripe: $([string] $parsed.error.message)")
+            }
+            if ($parsed.error.code) {
+                $messages.Add("Stripe code: $([string] $parsed.error.code)")
+            }
+        }
+    } catch {
+        # Plain-text CLI errors are handled below.
+    }
+
+    # Drop PowerShell native-stderr noise: it contains the account label and
+    # script invocation details, which are not useful for troubleshooting.
+    $noise = '(?i)(^\s*[\w.-]+\.(exe|cmd|ps1)\s*:|▸|^\s*At line:|^\s*\+|CategoryInfo|FullyQualifiedErrorId|^\s*~|^\s*\{\s*$|^\s*\})'
+    $interesting = '(?i)error|invalid|failed|must|require|denied|unauthor|not found|already exists|missing|unexpected|cannot|you''?re|you are|expired|wrong|unrecognized|unknown|stripe code'
+
+    foreach ($line in ($clean -split "`r?`n")) {
+        $text = $line.Trim()
+        if ($text -eq '' -or $text -match $noise) {
+            continue
+        }
+        if ($text -match $interesting) {
+            if ($text.Length -gt 260) {
+                $text = $text.Substring(0, 257) + '...'
+            }
+            $messages.Add($text)
+        }
+    }
+
+    $seen = @{}
+    $result = New-Object System.Collections.Generic.List[string]
+    foreach ($message in $messages) {
+        $key = $message.ToLowerInvariant()
+        if (-not $seen.ContainsKey($key)) {
+            $seen[$key] = $true
+            $result.Add($message)
+        }
+    }
+
+    if ($result.Count -eq 0) {
+        $result.Add("No non-sensitive CLI error message was returned (exit code $ExitCode).")
+    }
+
+    return @($result | Select-Object -First 6)
+}
+
 function Get-StripeCliAuthInfo {
     param([string] $Cli)
 
@@ -164,7 +242,7 @@ function Get-StripeCliAuthInfo {
         }
         $key = $null
 
-        return [pscustomobject]@{ Authenticated = $true; Mode = $mode }
+        return [pscustomobject]@{ Authenticated = $true; Mode = $mode; DisplayLabel = '' }
     }
 
     # `stripe login` stores an authenticated session without exposing an API
@@ -181,8 +259,9 @@ function Get-StripeCliAuthInfo {
             } else {
                 'unknown'
             }
+            $displayLabel = [string] $info.display_name
 
-            return [pscustomobject]@{ Authenticated = $true; Mode = $mode }
+            return [pscustomobject]@{ Authenticated = $true; Mode = $mode; DisplayLabel = $displayLabel }
         } catch {
             # Fall through to the config-list fallback below.
         }
@@ -190,7 +269,7 @@ function Get-StripeCliAuthInfo {
 
     $result = Invoke-StripeCliText -Cli $Cli -Arguments @('config', '--list')
     if ($result.ExitCode -ne 0) {
-        return [pscustomobject]@{ Authenticated = $false; Mode = 'unknown' }
+        return [pscustomobject]@{ Authenticated = $false; Mode = 'unknown'; DisplayLabel = '' }
     }
 
     $raw = $result.Text
@@ -198,6 +277,10 @@ function Get-StripeCliAuthInfo {
         $key = $Matches[1]
     }
     $accountPresent = $raw -match '(?im)^\s*account_id\s*=\s*\S+'
+    $displayLabel = ''
+    if ($raw -match '(?im)^\s*display_name\s*=\s*(.*)$') {
+        $displayLabel = $Matches[1].Trim()
+    }
     $mode = if ($key -match '^(sk|rk)_live_') {
         'live'
     } elseif ($key -match '^(sk|rk)_test_') {
@@ -211,6 +294,7 @@ function Get-StripeCliAuthInfo {
     return [pscustomobject]@{
         Authenticated = $authenticated
         Mode          = $mode
+        DisplayLabel  = $displayLabel
     }
 }
 
@@ -274,7 +358,8 @@ function Invoke-StripeCliJson {
 
     $result = Invoke-StripeCliText -Cli $Cli -Arguments $Arguments
     if ($result.ExitCode -ne 0) {
-        throw "$Purpose failed (exit code $($result.ExitCode)). CLI output was suppressed because it can contain account data. Confirm `stripe login`, the intended Stripe mode, and network access, then retry."
+        $details = Get-RedactedCliErrorLines -Text $result.Text -ExitCode ([int] $result.ExitCode) -SensitiveLabel $script:stripeDisplayLabel
+        throw "$Purpose failed (exit code $($result.ExitCode)). Stripe CLI reported: $($details -join ' | ')"
     }
 
     return (Convert-CliJsonText -Text $result.Text)
@@ -283,11 +368,13 @@ function Invoke-StripeCliJson {
 function New-ProductArguments {
     param(
         [object] $Price,
-        [switch] $ForDryRun
+        [switch] $ForDryRun,
+        [switch] $Live
     )
 
     $cliArgs = @('products', 'create')
     if ($ForDryRun) { $cliArgs += '--dry-run' } else { $cliArgs += '--confirm' }
+    if ($Live) { $cliArgs += '--live' }
     $cliArgs += @(
         '--name', $Price.Name,
         '--description', "VentureX add-on: $($Price.Name)",
@@ -302,11 +389,13 @@ function New-PriceArguments {
     param(
         [object] $Price,
         [string] $ProductId,
-        [switch] $ForDryRun
+        [switch] $ForDryRun,
+        [switch] $Live
     )
 
     $cliArgs = @('prices', 'create')
     if ($ForDryRun) { $cliArgs += '--dry-run' } else { $cliArgs += '--confirm' }
+    if ($Live) { $cliArgs += '--live' }
     $cliArgs += @(
         '--currency', $Currency,
         '--product', $ProductId,
@@ -359,6 +448,7 @@ $cliPath = Resolve-StripeCli -CommandName $StripeCli
 $authInfo = Get-StripeCliAuthInfo -Cli $cliPath
 $hasAuth = $authInfo.Authenticated
 $liveMode = $authInfo.Mode -eq 'live'
+$script:stripeDisplayLabel = [string] $authInfo.DisplayLabel
 
 if (-not $hasAuth) {
     if ($Apply) {
@@ -443,22 +533,22 @@ foreach ($price in $pending) {
     Write-Host "Processing: $($price.Key) ($($price.Display))"
 
     if ($isDryRun) {
-        $productArgs = New-ProductArguments -Price $price -ForDryRun
+        $productArgs = New-ProductArguments -Price $price -ForDryRun -Live:$liveMode
         $null = Invoke-StripeCliJson -Cli $cliPath -Arguments $productArgs -Purpose 'Product dry run'
 
-        $priceArgs = New-PriceArguments -Price $price -ProductId 'prod_dry_run' -ForDryRun
+        $priceArgs = New-PriceArguments -Price $price -ProductId 'prod_dry_run' -ForDryRun -Live:$liveMode
         $null = Invoke-StripeCliJson -Cli $cliPath -Arguments $priceArgs -Purpose 'Price dry run'
         continue
     }
 
-    $productArgs = New-ProductArguments -Price $price
+    $productArgs = New-ProductArguments -Price $price -Live:$liveMode
     $product = Invoke-StripeCliJson -Cli $cliPath -Arguments $productArgs -Purpose 'Product creation'
     $productId = [string] $product.id
     if ($productId -notmatch '^prod_') {
         throw "Product creation for $($price.Key) returned an unexpected object type."
     }
 
-    $priceArgs = New-PriceArguments -Price $price -ProductId $productId
+    $priceArgs = New-PriceArguments -Price $price -ProductId $productId -Live:$liveMode
     $stripePrice = Invoke-StripeCliJson -Cli $cliPath -Arguments $priceArgs -Purpose 'Price creation'
     $priceId = [string] $stripePrice.id
     if ($priceId -notmatch '^price_') {

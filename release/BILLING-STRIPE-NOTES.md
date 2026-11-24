@@ -40,6 +40,8 @@ This document describes the Stripe upgrade/add-on flow shipped with VentureX ERP
 - `release/stripe-provision-prices.ps1` is the beginner helper. Preview mode is the default; `-Apply` creates Stripe Products/Prices after `stripe login` and writes the resulting Price IDs to the server `.env`.
 - The editable price list is at the top of that script. Amounts are illustrative starter values in cents; change `AmountCents` and `Display` before running `-Apply`. Final price, tax and renewal terms remain Stripe Checkout's responsibility.
 - The helper previews by default, detects live vs. test/sandbox via `stripe whoami --format json`, requires explicit `-AllowLive` before live creation, backs up `.env`, skips already-set `STRIPE_PRICE_*` keys, preserves unrelated lines, never prints secret or Price ID values, and runs `php artisan config:clear`. Native stderr from `stripe.exe` is captured safely; `$LASTEXITCODE`, not PowerShell's `NativeCommandError`, decides success.
+- When the CLI session is live, the helper automatically adds Stripe CLI's `--live` flag to every Product/Price create (and dry-run) command. Without it, Stripe CLI 1.55.14 rejects write commands with `You're in live mode. Add --live to run the command, or run 'stripe switch' to select a sandbox.` That was the cause of the earlier `Product creation failed (exit code 1)`.
+- On CLI failure, the helper prints only redacted Stripe error messages/codes. API keys, webhook secrets, account IDs/labels, customer/product/Price IDs, emails, tokens and URLs are replaced before display.
 - `release/setup-stripe-env.ps1` now prompts only for Price IDs that are still missing, so it will not duplicate work done by the provisioning helper.
 
 ### Add-on catalog
