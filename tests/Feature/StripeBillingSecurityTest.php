@@ -498,6 +498,111 @@ class StripeBillingSecurityTest extends TestCase
         Http::assertNothingSent();
     }
 
+    public function test_async_payment_succeeded_activates_entitlement(): void
+    {
+        $event = $this->checkoutEvent();
+        $event['id'] = 'evt_async_success';
+        $event['type'] = 'checkout.session.async_payment_succeeded';
+
+        $this->signedPost($event)->assertOk();
+
+        $this->assertDatabaseHas('layer_entitlements', [
+            'company_id' => $this->company->id,
+            'layer_key' => 'ai_credits',
+            'status' => 'active',
+        ]);
+    }
+
+    public function test_invoice_paid_activates_entitlement_with_period_end(): void
+    {
+        $periodEnd = CarbonImmutable::now()->addMonth()->getTimestamp();
+
+        $this->signedPost([
+            'id' => 'evt_invoice_paid',
+            'type' => 'invoice.paid',
+            'created' => CarbonImmutable::now()->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'in_test_123',
+                'subscription' => 'sub_invoice_123',
+                'customer' => 'cus_invoice_123',
+                'lines' => ['data' => [[
+                    'subscription' => 'sub_invoice_123',
+                    'current_period_end' => $periodEnd,
+                ]]],
+                'metadata' => [
+                    'company_id' => (string) $this->company->id,
+                    'layer_key' => 'granular_rbac',
+                ],
+            ]],
+        ])->assertOk();
+
+        $entitlement = LayerEntitlement::query()
+            ->where('company_id', $this->company->id)
+            ->where('layer_key', 'granular_rbac')
+            ->firstOrFail();
+
+        $this->assertSame('active', $entitlement->status);
+        $this->assertSame('sub_invoice_123', $entitlement->stripe_subscription_id);
+        $this->assertNotNull($entitlement->expires_at);
+    }
+
+    public function test_invoice_payment_failed_sets_bounded_grace(): void
+    {
+        $this->signedPost([
+            'id' => 'evt_invoice_failed',
+            'type' => 'invoice.payment_failed',
+            'created' => CarbonImmutable::now()->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'in_failed_123',
+                'subscription' => 'sub_failed_123',
+                'customer' => 'cus_invoice_123',
+                'metadata' => [
+                    'company_id' => (string) $this->company->id,
+                    'layer_key' => 'granular_rbac',
+                ],
+            ]],
+        ])->assertOk();
+
+        $entitlement = LayerEntitlement::query()
+            ->where('company_id', $this->company->id)
+            ->where('layer_key', 'granular_rbac')
+            ->firstOrFail();
+
+        $this->assertSame('grace', $entitlement->status);
+        $this->assertNotNull($entitlement->expires_at);
+        $this->assertTrue($entitlement->expires_at->gt(now()));
+    }
+
+    public function test_cancellation_never_deletes_business_records(): void
+    {
+        $customer = \App\Models\Customer::create([
+            'company_id' => $this->company->id,
+            'name' => 'Keep This Customer',
+            'email' => 'keep-customer@example.test',
+        ]);
+
+        $this->signedPost([
+            'id' => 'evt_cancel_keep_data',
+            'type' => 'customer.subscription.deleted',
+            'created' => CarbonImmutable::now()->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'sub_keep_data',
+                'customer' => 'cus_keep_data',
+                'metadata' => [
+                    'company_id' => (string) $this->company->id,
+                    'layer_key' => 'granular_rbac',
+                ],
+            ]],
+        ])->assertOk();
+
+        $this->assertDatabaseHas('customers', ['id' => $customer->id]);
+        $this->assertDatabaseHas('layer_entitlements', [
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'revoked',
+        ]);
+    }
+
     protected function checkoutEvent(): array
     {
         return [
