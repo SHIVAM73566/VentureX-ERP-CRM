@@ -66,13 +66,13 @@ class SelfHealingService
         try {
             Log::error('self_healing.captured', [
                 'type' => $e::class,
-                'message' => mb_substr($e->getMessage(), 0, 500),
+                'message' => mb_substr($this->redactString($e->getMessage()), 0, 500),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'status' => $status,
                 'fingerprint' => $fingerprint,
                 'hot_fix' => $hotFix,
-                'url' => $request->fullUrl(),
+                'url' => $request ? $this->safeUrl($request->fullUrl()) : null,
                 'method' => $request->method(),
                 'user_agent' => mb_substr((string) $request->userAgent(), 0, 300),
             ]);
@@ -203,17 +203,17 @@ class SelfHealingService
             'company_id' => $companyId,
             'user_id' => auth()->id(),
             'error_type' => 'exception',
-            'error_message' => mb_substr($e->getMessage(), 0, 4000),
+            'error_message' => mb_substr($this->redactString($e->getMessage()), 0, 4000),
             'module' => $this->moduleFor($request, $e),
             'controller' => $this->controllerFor($request),
             'action' => $this->actionFor($request),
             'route' => $request?->route()?->getName(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
-            'stack_trace' => mb_substr($e->getTraceAsString(), 0, (int) config('self-healing.max_trace_chars', 12000)),
+            'stack_trace' => mb_substr($this->redactString($e->getTraceAsString()), 0, (int) config('self-healing.max_trace_chars', 12000)),
             'http_method' => $request?->method(),
             'http_status' => $status,
-            'url' => $request ? mb_substr($request->fullUrl(), 0, 2000) : null,
+            'url' => $request ? $this->safeUrl($request->fullUrl()) : null,
             'ip_address' => $request?->ip(),
             'user_agent' => mb_substr((string) $request?->userAgent(), 0, 1000),
             'app_version' => (string) config('app.version', '1.0.0'),
@@ -238,12 +238,12 @@ class SelfHealingService
         AuditLogger::log('self_healing', (string) config('self-healing.audit_module', 'system'), null, null, [
             'fingerprint' => $fingerprint,
             'type' => $e::class,
-            'message' => mb_substr($e->getMessage(), 0, 1000),
+            'message' => mb_substr($this->redactString($e->getMessage()), 0, 1000),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'status' => $status,
             'method' => $request?->method(),
-            'url' => $request ? mb_substr($request->fullUrl(), 0, 1000) : null,
+            'url' => $request ? $this->safeUrl($request->fullUrl(), 1000) : null,
             'route' => $request?->route()?->getName(),
             'hot_fix' => $hotFix,
             'healed_at' => now()->toIso8601String(),
@@ -323,15 +323,9 @@ class SelfHealingService
      */
     protected function sanitize(array $data, int $depth = 0): array
     {
-        $sensitive = [
-            'password', 'password_confirmation', 'current_password', 'token', '_token',
-            'api_key', 'secret', 'authorization', 'cookie', 'two_factor_secret',
-            'two_factor_recovery_codes', 'remember_token',
-        ];
-
         $out = [];
         foreach ($data as $key => $value) {
-            if (in_array(strtolower((string) $key), $sensitive, true)) {
+            if ($this->isSensitiveKey((string) $key)) {
                 $out[$key] = '[REDACTED]';
 
                 continue;
@@ -342,12 +336,59 @@ class SelfHealingService
             } elseif (is_object($value)) {
                 $out[$key] = '[OBJECT]';
             } elseif (is_string($value)) {
-                $out[$key] = mb_substr($value, 0, 500);
+                $out[$key] = mb_substr($this->redactString($value), 0, 500);
             } else {
                 $out[$key] = $value;
             }
         }
 
         return $out;
+    }
+
+    protected function isSensitiveKey(string $key): bool
+    {
+        return preg_match(
+            '/(password|passwd|pwd|secret|token|api[_-]?key|license[_-]?token|license[_-]?key|client[_-]?secret|private[_-]?key|credential|authorization|cookie|session[_-]?id)/i',
+            $key
+        ) === 1;
+    }
+
+    /**
+     * Redact credential-shaped values even when they appear inside a message
+     * or free-text field instead of a named request key.
+     */
+    protected function redactString(string $value): string
+    {
+        $patterns = [
+            '/\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]+/i' => '[REDACTED_SECRET]',
+            '/\bwhsec_[A-Za-z0-9]+/i' => '[REDACTED_SECRET]',
+            '/\b(?:Bearer|Basic)\s+[A-Za-z0-9._~+\/-]+=*/i' => '[REDACTED_AUTH]',
+            '/\b(license[_-]?token|api[_-]?key|access[_-]?token|refresh[_-]?token|client[_-]?secret|webhook[_-]?secret|password|passwd|pwd|secret|token)\s*[:=]\s*([^\s&,"\']+)/i' => '$1=[REDACTED]',
+            '/([?&])(token|api_key|access_token|license_token|webhook_secret|password|secret)=[^&#\s]+/i' => '$1$2=[REDACTED]',
+        ];
+
+        foreach ($patterns as $pattern => $replacement) {
+            $value = preg_replace($pattern, $replacement, $value) ?? $value;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Keep the route path for diagnostics but never persist query strings,
+     * which often carry tokens, emails or reset links.
+     */
+    protected function safeUrl(?string $url, int $limit = 2000): ?string
+    {
+        if ($url === null || $url === '') {
+            return null;
+        }
+
+        [$path] = explode('?', $url, 2);
+        if (str_contains($url, '?')) {
+            $path .= '?[QUERY_REDACTED]';
+        }
+
+        return mb_substr($this->redactString($path), 0, $limit);
     }
 }

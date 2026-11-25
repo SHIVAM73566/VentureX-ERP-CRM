@@ -40,6 +40,12 @@ class BillingController extends Controller
         try {
             $session = $checkout->createSession($companyId, $layerKey, $request->user()?->email);
         } catch (RuntimeException $e) {
+            // Details stay in server logs; the user only sees a fixed string.
+            logger()->warning('billing.checkout.unavailable', [
+                'company_id' => $companyId,
+                'layer_key' => $layerKey,
+                'reason' => $e->getMessage(),
+            ]);
             AuditLogger::log('billing_checkout_unavailable', 'billing', null, null, [
                 'company_id' => $companyId,
                 'layer_key' => $layerKey,
@@ -47,7 +53,7 @@ class BillingController extends Controller
 
             return redirect()
                 ->route('admin.settings.index', ['tab' => 'plan'])
-                ->with('error', $e->getMessage());
+                ->with('error', 'Stripe checkout is temporarily unavailable.');
         }
 
         AuditLogger::log('billing_checkout_started', 'billing', null, null, [
@@ -79,9 +85,14 @@ class BillingController extends Controller
         try {
             $session = $portal->createSession($companyId);
         } catch (RuntimeException $e) {
+            logger()->warning('billing.portal.unavailable', [
+                'company_id' => $companyId,
+                'reason' => $e->getMessage(),
+            ]);
+
             return redirect()
                 ->route('admin.settings.index', ['tab' => 'plan'])
-                ->with('error', $e->getMessage());
+                ->with('error', 'Stripe billing management is temporarily unavailable.');
         }
 
         AuditLogger::log('billing_portal_opened', 'billing', null, null, [

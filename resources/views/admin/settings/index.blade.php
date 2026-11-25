@@ -498,7 +498,7 @@
                 <form method="POST" action="{{ route('admin.settings.license.apply-token') }}" class="space-y-2">
                     @csrf
                     <label for="license_token" class="label">License token</label>
-                    <textarea id="license_token" name="license_token" rows="3" class="input font-mono text-xs" placeholder="Paste token here">{{ old('license_token') }}</textarea>
+                    <textarea id="license_token" name="license_token" rows="3" class="input font-mono text-xs" placeholder="Paste token here"></textarea>
                     @error('license_token')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
                     <button type="submit" class="btn-accent text-xs">Apply token (step-up required)</button>
                 </form>

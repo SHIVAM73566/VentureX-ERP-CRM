@@ -52,6 +52,29 @@ class SelfHealingTest extends TestCase
         $this->assertSame('owner@example.test', $data['email'] ?? null);
     }
 
+    public function test_secret_shaped_fields_and_query_strings_are_redacted(): void
+    {
+        $message = 'Self healing redaction test '.uniqid();
+        $request = Request::create('/billing?token=abc123&email=owner@example.test', 'POST', [
+            'license_token' => 'license-secret-value',
+            'webhook_secret' => 'whsec_fake_secret_123',
+            'db_password' => 'database-secret',
+            'email' => 'owner@example.test',
+        ]);
+
+        app(SelfHealingService::class)->capture(new RuntimeException($message), $request);
+
+        $report = ErrorReport::query()->where('error_message', $message)->firstOrFail();
+        $data = $report->request_data ?? [];
+
+        $this->assertSame('[REDACTED]', $data['license_token'] ?? null);
+        $this->assertSame('[REDACTED]', $data['webhook_secret'] ?? null);
+        $this->assertSame('[REDACTED]', $data['db_password'] ?? null);
+        $this->assertSame('owner@example.test', $data['email'] ?? null);
+        $this->assertStringContainsString('[QUERY_REDACTED]', (string) $report->url);
+        $this->assertStringNotContainsString('abc123', (string) $report->url);
+    }
+
     public function test_middleware_renders_safe_fallback_outside_debug(): void
     {
         config(['app.debug' => false, 'self-healing.enabled' => true, 'self-healing.render_fallback' => true]);

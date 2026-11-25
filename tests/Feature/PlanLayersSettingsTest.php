@@ -14,6 +14,9 @@ class PlanLayersSettingsTest extends TestCase
 
     public function test_plan_tab_loads_for_authorized_admin(): void
     {
+        // Keep this UI test deterministic regardless of the developer's .env.
+        config(['services.stripe.secret' => null, 'services.stripe.webhook_secret' => null]);
+
         $company = Company::create(['name' => 'Test Co', 'email' => 'plan@t.com', 'is_active' => true]);
         app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
         $role = \Spatie\Permission\Models\Role::findOrCreate('super_admin', 'web');
