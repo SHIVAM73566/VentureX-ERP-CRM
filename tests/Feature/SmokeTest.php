@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Middleware\EnsureTwoFactor;
 use App\Models\User;
 use App\Services\CompanyContext;
 use Database\Seeders\CompanySeeder;
@@ -17,7 +18,7 @@ class SmokeTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withoutMiddleware(\App\Http\Middleware\EnsureTwoFactor::class);
+        $this->withoutMiddleware(EnsureTwoFactor::class);
 
         if (! User::where('email', 'admin@example.com')->exists() && ! User::where('email', 'admin@jainmetal.example')->exists()) {
             app(PermissionRegistrar::class)->forgetCachedPermissions();

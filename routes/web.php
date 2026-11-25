@@ -124,6 +124,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->
 Route::middleware(['auth'])->group(function () {
     Route::post('/upgrade-prompt/dismiss', function () {
         session(['upgrade_prompt_shown_this_session' => true]);
+
         return response()->json(['ok' => true]);
     })->name('upgrade-prompt.dismiss');
 

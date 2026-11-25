@@ -2,6 +2,8 @@
 
 namespace App\Services\Billing;
 
+use App\Services\EntitlementService;
+use App\Support\StripeUrlGuard;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
@@ -26,7 +28,7 @@ class StripeCheckoutService
         if (($layer['status'] ?? '') !== 'available') {
             throw new RuntimeException('This add-on is not available for checkout.');
         }
-        if (app(\App\Services\EntitlementService::class)->has($layerKey, $companyId)) {
+        if (app(EntitlementService::class)->has($layerKey, $companyId)) {
             throw new RuntimeException('This add-on is already active on your workspace.');
         }
 
@@ -89,22 +91,20 @@ class StripeCheckoutService
         $sessionId = $response->json('id');
         $url = $response->json('url');
 
-        if (! is_string($sessionId) || ! is_string($url) || ! str_starts_with($url, 'https://')) {
+        if (! is_string($sessionId) || ! is_string($url)) {
             throw new RuntimeException('Stripe checkout returned an invalid session.');
         }
 
-        return ['id' => $sessionId, 'url' => $url];
+        return ['id' => $sessionId, 'url' => StripeUrlGuard::sessionUrl($url)];
     }
 
     protected function endpoint(string $path): string
     {
-        return (string) config('services.stripe.api_base', 'https://api.stripe.com').$path;
+        return StripeUrlGuard::apiBase().$path;
     }
 
     protected function url(string $configKey, string $fallbackRoute): string
     {
-        $configured = trim((string) config($configKey));
-
-        return $configured !== '' ? $configured : $fallbackRoute;
+        return StripeUrlGuard::returnUrl((string) config($configKey), $fallbackRoute);
     }
 }

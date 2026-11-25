@@ -9,7 +9,9 @@ class BillingEvent extends Model
     protected $fillable = [
         'event_id',
         'event_type',
+        'event_created_at',
         'status',
+        'claimed_at',
         'payload',
         'error',
         'processed_at',
@@ -19,6 +21,8 @@ class BillingEvent extends Model
     {
         return [
             'payload' => 'array',
+            'event_created_at' => 'datetime',
+            'claimed_at' => 'datetime',
             'processed_at' => 'datetime',
         ];
     }

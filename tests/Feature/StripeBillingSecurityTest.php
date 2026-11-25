@@ -4,13 +4,20 @@ namespace Tests\Feature;
 
 use App\Models\BillingEvent;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\LayerEntitlement;
 use App\Models\User;
+use App\Services\Billing\EntitlementActivationService;
+use App\Services\Billing\StripeCheckoutService;
+use Carbon\CarbonImmutable;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Spatie\Permission\Models\Role;
+use Illuminate\Testing\TestResponse;
+use RuntimeException;
 use Tests\TestCase;
 
 class StripeBillingSecurityTest extends TestCase
@@ -29,7 +36,7 @@ class StripeBillingSecurityTest extends TestCase
         $this->company = Company::create(['name' => 'Billing Co', 'email' => 'billing@example.test', 'is_active' => true]);
         $this->admin = User::factory()->create([
             'company_id' => $this->company->id,
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'password' => Hash::make('password'),
         ]);
         $this->admin->assignRole('super_admin');
 
@@ -50,7 +57,7 @@ class StripeBillingSecurityTest extends TestCase
         ];
     }
 
-    protected function signedPost(array $event, bool $valid = true): \Illuminate\Testing\TestResponse
+    protected function signedPost(array $event, bool $valid = true): TestResponse
     {
         $raw = json_encode($event, JSON_UNESCAPED_SLASHES);
         $timestamp = time();
@@ -101,7 +108,7 @@ class StripeBillingSecurityTest extends TestCase
             ->get(route('admin.settings.index', ['tab' => 'plan']))
             ->assertForbidden();
 
-        \Illuminate\Support\Facades\Auth::logout();
+        Auth::logout();
         $this->get(route('admin.settings.index'))
             ->assertRedirect(route('login'));
     }
@@ -288,7 +295,7 @@ class StripeBillingSecurityTest extends TestCase
     public function test_super_admin_cannot_access_another_tenants_record_by_id(): void
     {
         $otherCompany = Company::create(['name' => 'Other Co', 'email' => 'other@example.test', 'is_active' => true]);
-        $otherCustomer = \App\Models\Customer::create([
+        $otherCustomer = Customer::create([
             'company_id' => $otherCompany->id,
             'name' => 'Other Customer',
             'email' => 'other-customer@example.test',
@@ -310,6 +317,293 @@ class StripeBillingSecurityTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
         $this->assertStringNotContainsString('evil.example', (string) $response->headers->get('Location'));
+    }
+
+    public function test_unpaid_checkout_does_not_activate_entitlement(): void
+    {
+        $event = $this->checkoutEvent();
+        $event['data']['object']['payment_status'] = 'unpaid';
+
+        $this->signedPost($event)->assertOk();
+
+        $this->assertDatabaseCount('layer_entitlements', 0);
+    }
+
+    public function test_stale_event_cannot_reactivate_revoked_entitlement(): void
+    {
+        $metadata = [
+            'company_id' => (string) $this->company->id,
+            'layer_key' => 'granular_rbac',
+        ];
+        $base = CarbonImmutable::now();
+
+        $this->signedPost([
+            'id' => 'evt_revoke_latest',
+            'type' => 'customer.subscription.deleted',
+            'created' => $base->subMinutes(5)->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'sub_order_1',
+                'customer' => 'cus_order_1',
+                'metadata' => $metadata,
+            ]],
+        ])->assertOk();
+
+        $this->assertDatabaseHas('layer_entitlements', [
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'revoked',
+        ]);
+
+        $this->signedPost([
+            'id' => 'evt_active_stale',
+            'type' => 'customer.subscription.updated',
+            'created' => $base->subMinutes(30)->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'sub_order_1',
+                'status' => 'active',
+                'customer' => 'cus_order_1',
+                'current_period_end' => $base->addMonth()->getTimestamp(),
+                'metadata' => $metadata,
+            ]],
+        ])->assertOk();
+
+        $this->assertDatabaseHas('layer_entitlements', [
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'revoked',
+        ]);
+    }
+
+    public function test_stuck_processing_claim_is_retried(): void
+    {
+        $event = $this->checkoutEvent();
+        $event['id'] = 'evt_stuck_claim';
+        $event['created'] = CarbonImmutable::now()->getTimestamp();
+
+        BillingEvent::create([
+            'event_id' => $event['id'],
+            'event_type' => $event['type'],
+            'event_created_at' => $event['created'],
+            'status' => 'processing',
+            'claimed_at' => CarbonImmutable::now()->subHour(),
+            'payload' => [],
+        ]);
+
+        $this->signedPost($event)->assertOk();
+
+        $this->assertDatabaseHas('billing_events', [
+            'event_id' => $event['id'],
+            'status' => 'processed',
+        ]);
+        $this->assertDatabaseCount('layer_entitlements', 1);
+    }
+
+    public function test_conflicting_metadata_cannot_move_subscription_to_another_tenant(): void
+    {
+        $other = Company::create(['name' => 'Other Co', 'email' => 'other-tenant@example.test', 'is_active' => true]);
+
+        LayerEntitlement::create([
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'active',
+            'stripe_subscription_id' => 'sub_conflict',
+        ]);
+
+        $this->signedPost([
+            'id' => 'evt_conflict',
+            'type' => 'customer.subscription.updated',
+            'created' => CarbonImmutable::now()->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'sub_conflict',
+                'status' => 'active',
+                'current_period_end' => CarbonImmutable::now()->addMonth()->getTimestamp(),
+                'metadata' => [
+                    'company_id' => (string) $other->id,
+                    'layer_key' => 'granular_rbac',
+                ],
+            ]],
+        ])->assertOk();
+
+        $this->assertDatabaseMissing('layer_entitlements', ['company_id' => $other->id]);
+        $this->assertDatabaseHas('layer_entitlements', [
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'active',
+        ]);
+    }
+
+    public function test_empty_customer_id_does_not_wipe_stored_customer(): void
+    {
+        $service = app(EntitlementActivationService::class);
+        $expiresAt = CarbonImmutable::now()->addDay();
+
+        $entitlement = $service->activate($this->company->id, 'granular_rbac', 'active', $expiresAt, [
+            'subscription_id' => 'sub_keep_customer',
+            'customer_id' => 'cus_keep_123',
+        ]);
+        $service->activate($this->company->id, 'granular_rbac', 'active', $expiresAt, [
+            'subscription_id' => 'sub_keep_customer',
+            'customer_id' => '',
+        ]);
+
+        $entitlement->refresh();
+        $this->assertSame('cus_keep_123', $entitlement->stripe_customer_id);
+    }
+
+    public function test_checkout_rejects_unsafe_api_base_without_sending_request(): void
+    {
+        config(['services.stripe.api_base' => 'https://evil.example']);
+        Http::fake();
+
+        try {
+            app(StripeCheckoutService::class)->createSession($this->company->id, 'granular_rbac');
+            $this->fail('Unsafe Stripe API base was accepted.');
+        } catch (RuntimeException) {
+            Http::assertNothingSent();
+        }
+    }
+
+    public function test_checkout_rejects_session_url_from_unexpected_host(): void
+    {
+        Http::fake([
+            'api.stripe.com/v1/checkout/sessions' => Http::response([
+                'id' => 'cs_evil',
+                'url' => 'https://evil.example/pay/cs_evil',
+            ], 200),
+        ]);
+
+        $this->withSession($this->adminSession())
+            ->actingAs($this->admin)
+            ->post(route('admin.settings.billing.checkout'), ['layer_key' => 'granular_rbac'])
+            ->assertRedirect(route('admin.settings.index', ['tab' => 'plan']))
+            ->assertSessionHas('error', 'Stripe checkout is temporarily unavailable.');
+
+        $this->assertDatabaseCount('layer_entitlements', 0);
+    }
+
+    public function test_portal_rejects_return_url_on_another_host(): void
+    {
+        LayerEntitlement::create([
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'active',
+            'stripe_customer_id' => 'cus_stored_123',
+        ]);
+        config(['services.stripe.portal_return_url' => 'https://evil.example/return']);
+        Http::fake();
+
+        $this->withSession($this->adminSession())
+            ->actingAs($this->admin)
+            ->post(route('admin.settings.billing.portal'))
+            ->assertRedirect(route('admin.settings.index', ['tab' => 'plan']))
+            ->assertSessionHas('error', 'Stripe billing management is temporarily unavailable.');
+
+        Http::assertNothingSent();
+    }
+
+    public function test_async_payment_succeeded_activates_entitlement(): void
+    {
+        $event = $this->checkoutEvent();
+        $event['id'] = 'evt_async_success';
+        $event['type'] = 'checkout.session.async_payment_succeeded';
+
+        $this->signedPost($event)->assertOk();
+
+        $this->assertDatabaseHas('layer_entitlements', [
+            'company_id' => $this->company->id,
+            'layer_key' => 'ai_credits',
+            'status' => 'active',
+        ]);
+    }
+
+    public function test_invoice_paid_activates_entitlement_with_period_end(): void
+    {
+        $periodEnd = CarbonImmutable::now()->addMonth()->getTimestamp();
+
+        $this->signedPost([
+            'id' => 'evt_invoice_paid',
+            'type' => 'invoice.paid',
+            'created' => CarbonImmutable::now()->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'in_test_123',
+                'subscription' => 'sub_invoice_123',
+                'customer' => 'cus_invoice_123',
+                'lines' => ['data' => [[
+                    'subscription' => 'sub_invoice_123',
+                    'current_period_end' => $periodEnd,
+                ]]],
+                'metadata' => [
+                    'company_id' => (string) $this->company->id,
+                    'layer_key' => 'granular_rbac',
+                ],
+            ]],
+        ])->assertOk();
+
+        $entitlement = LayerEntitlement::query()
+            ->where('company_id', $this->company->id)
+            ->where('layer_key', 'granular_rbac')
+            ->firstOrFail();
+
+        $this->assertSame('active', $entitlement->status);
+        $this->assertSame('sub_invoice_123', $entitlement->stripe_subscription_id);
+        $this->assertNotNull($entitlement->expires_at);
+    }
+
+    public function test_invoice_payment_failed_sets_bounded_grace(): void
+    {
+        $this->signedPost([
+            'id' => 'evt_invoice_failed',
+            'type' => 'invoice.payment_failed',
+            'created' => CarbonImmutable::now()->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'in_failed_123',
+                'subscription' => 'sub_failed_123',
+                'customer' => 'cus_invoice_123',
+                'metadata' => [
+                    'company_id' => (string) $this->company->id,
+                    'layer_key' => 'granular_rbac',
+                ],
+            ]],
+        ])->assertOk();
+
+        $entitlement = LayerEntitlement::query()
+            ->where('company_id', $this->company->id)
+            ->where('layer_key', 'granular_rbac')
+            ->firstOrFail();
+
+        $this->assertSame('grace', $entitlement->status);
+        $this->assertNotNull($entitlement->expires_at);
+        $this->assertTrue($entitlement->expires_at->gt(now()));
+    }
+
+    public function test_cancellation_never_deletes_business_records(): void
+    {
+        $customer = Customer::create([
+            'company_id' => $this->company->id,
+            'name' => 'Keep This Customer',
+            'email' => 'keep-customer@example.test',
+        ]);
+
+        $this->signedPost([
+            'id' => 'evt_cancel_keep_data',
+            'type' => 'customer.subscription.deleted',
+            'created' => CarbonImmutable::now()->getTimestamp(),
+            'data' => ['object' => [
+                'id' => 'sub_keep_data',
+                'customer' => 'cus_keep_data',
+                'metadata' => [
+                    'company_id' => (string) $this->company->id,
+                    'layer_key' => 'granular_rbac',
+                ],
+            ]],
+        ])->assertOk();
+
+        $this->assertDatabaseHas('customers', ['id' => $customer->id]);
+        $this->assertDatabaseHas('layer_entitlements', [
+            'company_id' => $this->company->id,
+            'layer_key' => 'granular_rbac',
+            'status' => 'revoked',
+        ]);
     }
 
     protected function checkoutEvent(): array

@@ -3,6 +3,7 @@
 namespace App\Services\Billing;
 
 use App\Models\LayerEntitlement;
+use App\Support\StripeUrlGuard;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
 use RuntimeException;
@@ -50,10 +51,10 @@ class StripeBillingPortalService
             throw new RuntimeException('Complete a Stripe upgrade first to enable self-service billing.');
         }
 
-        $returnUrl = trim((string) config('services.stripe.portal_return_url'));
-        if ($returnUrl === '') {
-            $returnUrl = route('admin.settings.index', ['tab' => 'plan']);
-        }
+        $returnUrl = StripeUrlGuard::returnUrl(
+            (string) config('services.stripe.portal_return_url'),
+            route('admin.settings.index', ['tab' => 'plan'])
+        );
 
         $response = Http::timeout(20)
             ->retry(2, 200)
@@ -74,15 +75,15 @@ class StripeBillingPortalService
         }
 
         $url = $response->json('url');
-        if (! is_string($url) || ! str_starts_with($url, 'https://')) {
+        if (! is_string($url)) {
             throw new RuntimeException('Stripe billing portal returned an invalid session.');
         }
 
-        return ['url' => $url];
+        return ['url' => StripeUrlGuard::sessionUrl($url)];
     }
 
     protected function endpoint(string $path): string
     {
-        return (string) config('services.stripe.api_base', 'https://api.stripe.com').$path;
+        return StripeUrlGuard::apiBase().$path;
     }
 }

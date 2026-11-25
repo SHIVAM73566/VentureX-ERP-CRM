@@ -48,7 +48,15 @@ return [
         'secret' => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
         'api_base' => rtrim(env('STRIPE_API_BASE', 'https://api.stripe.com'), '/'),
+        // The bearer secret is only ever sent to these exact endpoints.
+        'api_base_allowed' => ['https://api.stripe.com'],
+        // Stripe-hosted session URLs must stay on these exact hosts.
+        'redirect_hosts' => ['checkout.stripe.com', 'billing.stripe.com'],
+        // Optional extra hosts for checkout/portal return URLs (same app).
+        'return_hosts' => [],
         'webhook_tolerance_seconds' => (int) env('STRIPE_WEBHOOK_TOLERANCE_SECONDS', 300),
+        // A stale processing claim is safely retried instead of dropping the event.
+        'claim_lease_seconds' => (int) env('STRIPE_WEBHOOK_CLAIM_LEASE_SECONDS', 300),
         'grace_days' => (int) env('STRIPE_ENTITLEMENT_GRACE_DAYS', 7),
         'success_url' => env('STRIPE_CHECKOUT_SUCCESS_URL'),
         'cancel_url' => env('STRIPE_CHECKOUT_CANCEL_URL'),

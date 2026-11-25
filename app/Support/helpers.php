@@ -22,7 +22,7 @@ if (! function_exists('layer_enabled')) {
     {
         try {
             return app(EntitlementService::class)->has($layerKey);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }

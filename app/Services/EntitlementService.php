@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\LayerEntitlement;
+use App\Models\LicenseToken;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
@@ -67,7 +68,7 @@ class EntitlementService
         }
 
         // 2) Check cached verified license token payload (offline grace aware)
-        $tokenRow = \App\Models\LicenseToken::query()
+        $tokenRow = LicenseToken::query()
             ->where('company_id', $companyId)
             ->first();
 
@@ -76,7 +77,7 @@ class EntitlementService
             $notExpired = ! $tokenRow->expires_at || $tokenRow->expires_at->gte(now()) || $graceOk;
             if ($notExpired) {
                 $ents = data_get($tokenRow->payload, 'entitlements', []);
-                $active = data_get($ents, $layerKey . '.active', false);
+                $active = data_get($ents, $layerKey.'.active', false);
                 if ($active === true || $active === 1 || $active === '1') {
                     return true;
                 }

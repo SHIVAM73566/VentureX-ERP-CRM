@@ -45,6 +45,7 @@ class ClientLicenseService
             $verified = sodium_crypto_sign_verify_detached($sig, $payloadJson, $pubKeyBin);
         } catch (\Throwable $e) {
             Log::warning('License token verification error', ['error' => $e->getMessage()]);
+
             return ['ok' => false, 'message' => 'Token verification failed.'];
         }
 
@@ -103,18 +104,19 @@ class ClientLicenseService
         }
 
         try {
-            $response = Http::timeout(15)->post(rtrim($url, '/') . '/api/license/verify', [
+            $response = Http::timeout(15)->post(rtrim($url, '/').'/api/license/verify', [
                 'installation_id' => $installationId ?? config('license.installation_id'),
                 'customer_key' => $customerKey ?? config('license.customer_key'),
                 'company_id' => $companyId,
             ]);
         } catch (\Throwable $e) {
             Log::warning('License server sync failed', ['error' => $e->getMessage()]);
+
             return ['ok' => false, 'message' => 'Could not reach license server.'];
         }
 
         if (! $response->ok()) {
-            return ['ok' => false, 'message' => 'License server returned an error (' . $response->status() . ').'];
+            return ['ok' => false, 'message' => 'License server returned an error ('.$response->status().').'];
         }
 
         $data = $response->json();
@@ -133,6 +135,7 @@ class ClientLicenseService
             $data .= str_repeat('=', 4 - $remainder);
         }
         $decoded = base64_decode(strtr($data, '-_', '+/'), true);
+
         return $decoded;
     }
 

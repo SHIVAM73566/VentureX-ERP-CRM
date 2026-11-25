@@ -15,6 +15,7 @@ class LayerEntitlement extends Model
         'status',
         'starts_at',
         'expires_at',
+        'last_event_created_at',
         'meta',
     ];
 
@@ -23,6 +24,7 @@ class LayerEntitlement extends Model
         return [
             'starts_at' => 'datetime',
             'expires_at' => 'datetime',
+            'last_event_created_at' => 'datetime',
             'meta' => 'array',
         ];
     }

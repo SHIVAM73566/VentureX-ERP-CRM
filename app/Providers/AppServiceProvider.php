@@ -85,7 +85,9 @@ use App\Policies\SupplierPolicy;
 use App\Policies\SupportTicketPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\WarehousePolicy;
+use App\Services\EntitlementService;
 use App\Services\SettingService;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\Models\Role;
@@ -121,9 +123,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->registerPolicies();
 
-        \Illuminate\Support\Facades\Blade::if('layer', function (string $layerKey): bool {
+        Blade::if('layer', function (string $layerKey): bool {
             try {
-                return app(\App\Services\EntitlementService::class)->has($layerKey);
+                return app(EntitlementService::class)->has($layerKey);
             } catch (\Throwable $e) {
                 return false;
             }

@@ -107,6 +107,42 @@ Starter values below are **illustrative only**. Final price, tax and renewal ter
 7. On the product page, copy the **Price ID**. It starts with `price_`.
 8. Repeat for all 18 rows and paste each ID into the matching key in `.env`.
 
+### Option C — map Prices you already created in the Dashboard
+
+If you already created the Products/Prices by hand, do not paste IDs into chat. Map them locally instead:
+
+1. Preview the mapping (safe — changes nothing):
+   ```powershell
+   cd C:\MY_ERP
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\release\map-stripe-price-ids.ps1
+   ```
+
+2. When every row shows `stripe_found=True`, apply it:
+
+   Test/sandbox CLI account:
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\release\map-stripe-price-ids.ps1 -Apply
+   ```
+
+   Live CLI account:
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\release\map-stripe-price-ids.ps1 -Apply -AllowLive
+   ```
+
+The mapper:
+- reads existing Stripe Prices; it does not create Products or Prices,
+- matches by `metadata[layer_key]`, exact Product name, or Product name in the Price nickname,
+- backs up `.env`, skips keys already set, preserves unrelated lines, and runs `php artisan config:clear`,
+- prints only key names, amounts, intervals and match status — never real IDs or secrets.
+
+If you paste an ID manually, put it only in the server `.env`, using a placeholder like:
+
+```dotenv
+STRIPE_PRICE_UPDATES_SUPPORT=<price_...>
+```
+
+Replace the placeholder with the real ID only inside the server `.env`.
+
 ---
 
 ## Step 2 — Create the webhook

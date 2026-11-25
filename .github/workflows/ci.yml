@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, layers-v1, phase0-baseline-audit]
   pull_request:
-    branches: [main]
+    branches: [main, layers-v1, phase0-baseline-audit]
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -76,6 +79,10 @@ jobs:
 
       - name: Check code style (Pint)
         run: vendor/bin/pint --test
+
+      - name: PHP syntax check
+        run: |
+          find app config database routes tests license-server -type f -name '*.php' -print0 | xargs -0 -n 1 php -l
 
       - name: Boot the application and verify routes
         run: php artisan route:list --json > /dev/null

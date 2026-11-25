@@ -3,6 +3,7 @@
 use App\Http\Middleware\ApiProtection;
 use App\Http\Middleware\EmergencyLockdown;
 use App\Http\Middleware\EnsureAiSecurity;
+use App\Http\Middleware\EnsureLayerEntitled;
 use App\Http\Middleware\EnsureTwoFactor;
 use App\Http\Middleware\ForceHttps;
 use App\Http\Middleware\InstallerGuard;
@@ -67,7 +68,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'super_brain' => SuperBrainShield::class,
             'api.protection' => ApiProtection::class,
             'installer' => InstallerGuard::class,
-            'layer' => \App\Http\Middleware\EnsureLayerEntitled::class,
+            'layer' => EnsureLayerEntitled::class,
         ]);
 
         $middleware->redirectGuestsTo(fn () => route('login'));
@@ -78,6 +79,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // could leak back into the HTML on the next request.
         $exceptions->dontFlash([
             'api_key',
+            'api_token',
+            'access_token',
+            'refresh_token',
+            'authorization',
+            'client_secret',
             'current_password',
             'password',
             'password_confirmation',
@@ -85,6 +91,18 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin_password_confirmation',
             'db_password',
             'mail_password',
+            'license_token',
+            'license_key',
+            'private_key',
+            'recovery_code',
+            'secret',
+            'session_token',
+            'stripe_secret',
+            'webhook_secret',
+            'stripe_webhook_secret',
+            'two_factor_code',
+            'two_factor_secret',
+            'two_factor_recovery_codes',
             'openai_api_key',
             'gemini_api_key',
             'anthropic_api_key',

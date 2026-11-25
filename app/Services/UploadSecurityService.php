@@ -176,6 +176,17 @@ class UploadSecurityService
         $commands = (array) config('security.upload.scan_commands', []);
 
         foreach ($commands as $template) {
+            if (! is_string($template) || substr_count($template, '{file}') !== 1) {
+                continue;
+            }
+
+            // The config may choose the scanner, but it may not add shell
+            // control operators around the escaped file path.
+            $fragments = explode('{file}', $template);
+            if (collect($fragments)->contains(fn ($fragment) => preg_match('/[;&|<>`\r\n]|\$\(/', $fragment) === 1)) {
+                continue;
+            }
+
             $command = str_replace('{file}', escapeshellarg($absolutePath), $template);
             $output = [];
             $exit = 0;
