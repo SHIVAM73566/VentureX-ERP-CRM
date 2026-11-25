@@ -152,7 +152,7 @@ Root causes:
 - Legacy Pages checkout: gitlink `release/venturex-deploy-action` existed without `.gitmodules` — `.gitmodules` added.
 - Deploy Pages: no `github-pages` artifact found and duplicate `pages` concurrency group — workflow group isolated to `venturex-pages-workflow`; build/upload and deploy split into separate jobs to remove the same-job artifact race.
 
-Remote green status is not claimed until a new GitHub run is observed after push. See `docs/GITHUB_ACTIONS_MARKETPLACE.md`.
+Remote green status was observed for latest `main` commit `d36fc7b`: CI #65, Deploy GitHub Pages #46, Security Audit #32, and pages-build-deployment #48 all completed successfully. See `docs/GITHUB_ACTIONS_MARKETPLACE.md`.
 
 ## 14. GitHub Marketplace version drift — tag prepared, release publish blocked
 

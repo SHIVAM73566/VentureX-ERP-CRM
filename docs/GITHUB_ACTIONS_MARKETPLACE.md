@@ -111,6 +111,19 @@ Required maintainer action:
 
 Until that release is published, the Marketplace listing will continue to show v1.0.2. This is a blocker, not a code failure.
 
+## Remote verification
+
+Observed on the public GitHub Actions page for latest `main` commit `d36fc7b`:
+
+```text
+CI #65=completed successfully
+Deploy GitHub Pages #46=completed successfully
+Security Audit #32=completed successfully
+pages build and deployment #48=completed successfully
+```
+
+Legacy Pages checkout failure is gone after adding `.gitmodules`. The custom Pages deployment succeeds after splitting build/upload and deploy into separate jobs.
+
 ## Verification boundary
 
-GitHub Actions execution after these patches is not claimed until the branch is merged/pushed and new run results are observed. The local fixes above are verified; remote green status requires new GitHub runs.
+Remote green status above applies to commit `d36fc7b`. Older failed runs remain in history but are superseded. Marketplace release publication remains blocked on maintainer authentication and 2FA; no token was requested or printed.

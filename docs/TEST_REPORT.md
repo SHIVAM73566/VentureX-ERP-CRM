@@ -116,17 +116,26 @@ No visual or behavioral frontend change was made.
 
 ## GitHub Actions and Marketplace
 
-See `docs/GITHUB_ACTIONS_MARKETPLACE.md` for public API evidence and repair record.
+See `docs/GITHUB_ACTIONS_MARKETPLACE.md` for public evidence and repair record.
 
 ```text
 Pint failure root cause=fixed locally
 Submodule checkout failure root cause=fixed with .gitmodules
-Pages artifact/concurrency issue=patched
+Pages artifact/concurrency issue=patched by splitting build and deploy jobs
 Marketplace metadata=valid
 Marketplace latest release=v1.0.2; v1.3.0 tag pushed; release publish blocked on maintainer auth/2FA
 ```
 
-Remote GitHub workflow success is not claimed until a new GitHub run is observed after push.
+Remote verification observed on GitHub for latest `main` commit `d36fc7b`:
+
+```text
+CI #65=completed successfully
+Deploy GitHub Pages #46=completed successfully
+Security Audit #32=completed successfully
+pages build and deployment #48=completed successfully
+```
+
+The older superseded commit `0a9d304` still had its prior in-progress CI run; the latest `main` commit is the effective state.
 
 ## Zero-error confirmation status
 
@@ -139,6 +148,6 @@ Remote GitHub workflow success is not claimed until a new GitHub run is observed
 | Zero type errors | NOT VERIFIED — no static type checker configured |
 | Zero known critical vulnerabilities | NOT CLAIMED — requires dedicated audit |
 | Zero runtime crashes | NOT CLAIMED — build/test success is not runtime proof |
-| Zero GitHub workflow failures | PENDING remote run after push |
+| Zero GitHub workflow failures | VERIFIED remotely for latest `main` commit `d36fc7b` |
 
 No local test failures, lint errors, syntax errors, build failures, UI changes, or secret exposure were introduced.
