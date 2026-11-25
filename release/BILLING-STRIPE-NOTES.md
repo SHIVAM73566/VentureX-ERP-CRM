@@ -44,6 +44,14 @@ This document describes the Stripe upgrade/add-on flow shipped with VentureX ERP
 - On CLI failure, the helper prints only redacted Stripe error messages/codes. API keys, webhook secrets, account IDs/labels, customer/product/Price IDs, emails, tokens and URLs are replaced before display.
 - `release/setup-stripe-env.ps1` now prompts only for Price IDs that are still missing, so it will not duplicate work done by the provisioning helper.
 
+### Mapping manually created Stripe Prices
+
+- `release/map-stripe-price-ids.ps1` reads existing Stripe Prices with the authenticated CLI and maps them into `STRIPE_PRICE_*` in `.env`. It does **not** create Stripe objects.
+- Matching order is `metadata[layer_key]`, exact Product name, then Product name in the Price nickname. Add `metadata[layer_key]` in Stripe for the most reliable mapping.
+- Preview mode is the default. `-Apply` backs up `.env`, skips keys that are already set, preserves unrelated lines, and runs `php artisan config:clear`. Use `-Force` only when intentionally replacing existing IDs. A live CLI account requires `-AllowLive` for writes and the helper adds Stripe CLI's `--live` flag to the read command automatically.
+- Output shows key names, match source, amount, interval and whether `.env` matches Stripe. Real Product/Price IDs, account IDs, secret keys and webhook secrets are never printed.
+- If you paste a Price ID manually, use the placeholder format only inside the server `.env`, for example `STRIPE_PRICE_UPDATES_SUPPORT=<price_...>`. Never paste a real ID into docs, chat or Git.
+
 ### Add-on catalog
 
 Advanced Reporting, Granular Roles & Security Patches, Capacity Expansion, Industry Templates (Manufacturing/Trading/Services), Advanced Logistics, Advanced Finance, and Custom Development Credits are all defined in `config/layers.php`. Each offer has plain-language value copy; price and renewal terms are always shown by Stripe at checkout. There are no countdowns, fake scarcity, pre-checked consents or forced upgrades.
