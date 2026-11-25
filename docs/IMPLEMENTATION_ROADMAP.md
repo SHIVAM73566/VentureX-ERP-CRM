@@ -23,21 +23,17 @@ No UI, layout, design, or workflow was changed.
 
 ## Stage B — Critical bugs and broken builds
 
-Status: **NOT STARTED**
+Status: **COMPLETE**
 
-Known baseline findings:
+Findings and actions:
 
-- Pint reports pre-existing formatting debt in 16 files.
-- `composer` executable is not available on PATH in this environment.
-- No static type checker configured.
-- No CI workflows exist.
-
-Planned actions:
-
-1. Triage Pint findings; do not auto-format broadly without approval.
-2. Decide whether style fixes are necessary or should remain documented debt.
-3. Add CI workflow only after test baseline is re-confirmed.
-4. Avoid any change that alters rendered output.
+- No broken imports, syntax errors, route boot failures, or runtime config errors found.
+- `php artisan config:cache`, `config:clear`, `view:cache`, and `view:clear` all exited 0.
+- Pint style debt in 16 files was fixed surgically; Pint now passes with 0 findings.
+- Existing CI workflows were preserved and minimally patched instead of replaced.
+- `composer` CLI remains unavailable locally; no composer changes were attempted.
+- No static type checker is configured; no type-check claim is made.
+- No rendered output was altered.
 
 ## Stage C — Authentication, authorization, tenant isolation
 
@@ -57,7 +53,7 @@ Planned actions:
 
 ## Stage D — Secrets, encryption, security monitoring
 
-Status: **PARTIALLY IMPLEMENTED**
+Status: **PARTIALLY IMPLEMENTED — CI secret scan strengthened**
 
 Already present:
 
@@ -65,8 +61,9 @@ Already present:
 - Git secret scan clean.
 - Secret redaction in self-healing capture.
 - Fail-closed Stripe configuration.
+- Least-privilege workflow permission and blocking Stripe-aware secret scan added to CI/security workflows.
 
-Planned actions:
+Remaining actions:
 
 1. Save webhook signing secret locally.
 2. Add `docs/SECURITY_OPERATIONS.md`.
@@ -76,14 +73,23 @@ Planned actions:
 
 ## Stage E — Stripe billing and entitlements
 
-Status: **PARTIALLY IMPLEMENTED**
+Status: **PARTIALLY IMPLEMENTED — backend checks VERIFIED**
 
 Already committed before this prompt:
 
 - `e8a0c23` webhook integrity and URL validation hardening.
 - `b92e5b0` webhook setup helpers and event coverage tests.
 
-Planned actions:
+Verified in this stage:
+
+- 6/6 required Stripe events present in the webhook controller.
+- HMAC signature verification, timestamp tolerance, and raw payload usage present.
+- Database idempotency and stale-event protection present.
+- Billing Portal return URL used in portal service.
+- No delete/truncate/forceDelete calls in billing webhook or activation service.
+- Targeted billing/security test run: 118 passed / 356 assertions / 0 failed / 0 errors.
+
+Remaining actions:
 
 1. Resolve live-app vs sandbox-listener mode mismatch.
 2. Confirm webhook secret configured.

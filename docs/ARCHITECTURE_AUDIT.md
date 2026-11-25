@@ -129,6 +129,22 @@ Signature verification lives in `app/Services/Billing/StripeSignatureVerifier.ph
 | Secret scan | PASS | 0 secret-shaped hits in tracked Git content |
 | Load/performance test | NOT RUN | No load-test harness configured |
 
+## Post-baseline update — Stage 1/2/3 preservation work
+
+The baseline table above is historical. Subsequent surgical work changed only backend/internal files and workflow configuration:
+
+```text
+Pint style findings=0 after formatting the 16 flagged PHP files
+PHP syntax failures=0 across 472 files
+CI workflows=existing files preserved and minimally patched
+UI/Blade/CSS/JS files changed=0
+AppSumo rules=unchanged ($49 / $98 / $499, max 2 codes, card-free redemption)
+Stripe events handled=6/6
+Billing delete/truncate calls=0
+```
+
+No full-file rewrite was retained. `ci.yml` was restored to its original structure after an initial accidental overwrite, then patched minimally.
+
 ## Key observations
 
 1. The application is a mature Laravel monolith, not a greenfield project. Preservation rules are appropriate.

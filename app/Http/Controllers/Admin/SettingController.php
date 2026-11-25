@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\LicenseToken;
 use App\Services\Ai\AiProviderManager;
-use App\Services\Ai\SuperBrainShield;
 use App\Services\Ai\AiUsageService;
+use App\Services\Ai\SuperBrainShield;
 use App\Services\AuditLogger;
+use App\Services\Billing\StripeBillingPortalService;
 use App\Services\BrandingService;
 use App\Services\ClientLicenseService;
 use App\Services\CompanyContext;
+use App\Services\EntitlementService;
 use App\Services\SettingService;
 use App\Services\UploadSecurityService;
 use Illuminate\Http\RedirectResponse;
@@ -60,17 +63,17 @@ class SettingController extends Controller
         }
 
         $layers = config('layers.layers', []);
-        $entitledKeys = app(\App\Services\EntitlementService::class)->activeLayerKeys();
+        $entitledKeys = app(EntitlementService::class)->activeLayerKeys();
         $checkoutOffers = config('layers.checkout_offers', []);
-        $companyId = \App\Services\CompanyContext::id();
+        $companyId = CompanyContext::id();
         $hasStripeCustomer = $companyId !== null
-            && app(\App\Services\Billing\StripeBillingPortalService::class)->hasCustomer($companyId);
+            && app(StripeBillingPortalService::class)->hasCustomer($companyId);
         $billingStatus = $this->billingStatus($hasStripeCustomer, $layers);
 
         $aiUsageToday = 0;
         $aiUsageMonth = 0;
         try {
-            $svc = app(\App\Services\Ai\AiUsageService::class);
+            $svc = app(AiUsageService::class);
             $aiUsageToday = $svc->dailyCount(null, null);
             $aiUsageMonth = $svc->monthlyCount(null, null);
         } catch (\Throwable $e) {
@@ -80,7 +83,7 @@ class SettingController extends Controller
 
         $licenseToken = null;
         if ($companyId !== null) {
-            $licenseToken = \App\Models\LicenseToken::query()->where('company_id', $companyId)->first();
+            $licenseToken = LicenseToken::query()->where('company_id', $companyId)->first();
         }
 
         return response()

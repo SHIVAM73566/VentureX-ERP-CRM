@@ -2,7 +2,7 @@
 
 Status: **Phase 0 baseline**. These issues were present at the current HEAD (`b92e5b0`) before any new implementation under the master prompt. They are not claimed to have been caused by Phase 0 documentation work.
 
-## 1. Pint style debt
+## 1. Pint style debt — RESOLVED
 
 Command:
 
@@ -10,7 +10,7 @@ Command:
 php vendor/bin/pint --test
 ```
 
-Result: **FAIL** (exit 1). 16 files were flagged:
+Baseline result: **FAIL** (exit 1). 16 files were flagged:
 
 ```text
 app/Http/Controllers/Admin/SettingController.php
@@ -33,13 +33,38 @@ tests/Feature/StripeBillingSecurityTest.php
 
 Fixers reported include `fully_qualified_strict_types`, `unary_operator_spaces`, `braces_position`, `not_operator_with_successor_space`, `single_line_empty_body`, `ordered_imports`, `concat_space`, `blank_line_before_statement`, `class_definition`, and `no_unused_imports`.
 
-Impact: style-only. Do not auto-format broadly without approval because it creates broad diff noise. Some flagged files were touched in the recent billing hardening commits, so this debt is current at HEAD but not necessarily older than that release.
+Impact: style-only. Some flagged files were touched in the recent billing hardening commits, so this debt was current at HEAD but not necessarily older than that release.
 
-## 2. No CI workflows
+Resolution: the 16 flagged files were formatted with `php vendor/bin/pint <files>`. Re-check result:
 
-`.github/` exists but `.github/workflows/` contains no workflow files.
+```text
+PINT_TEST_EXIT=0
+{"tool":"pint","result":"passed"}
+```
 
-Impact: no automated lint/test/secret-scan/build evidence on push or pull request. CI execution cannot be claimed.
+No UI, Blade, CSS, JavaScript, or view files were changed by this fix.
+
+## 2. CI coverage — RESOLVED
+
+Correction to the baseline note: `.github/workflows/` is a hidden directory. It does contain tracked workflows: `ci.yml`, `security.yml`, and `pages.yml`. An initial replacement of `ci.yml` was reverted; the final change is a minimal patch to the existing files.
+
+Resolution applied:
+
+- `ci.yml`: added `layers-v1` and `phase0-baseline-audit` to push/PR triggers, added least-privilege `permissions: contents: read`, and added an explicit PHP syntax-check step.
+- `security.yml`: added the same branches and made the tracked-file secret scan blocking with Stripe-specific patterns added.
+
+Local validation:
+
+```text
+WORKFLOWS_YAML_OK
+PINT_TEST_EXIT=0
+NPM_CI_EXIT=0 (0 vulnerabilities)
+BUILD_EXIT=0
+Secret scan local exit=1 with empty output (no matches)
+UI files changed=0
+```
+
+GitHub Actions execution itself is not claimed here; it must be observed on GitHub after push.
 
 ## 3. Composer CLI unavailable on PATH
 
@@ -117,7 +142,25 @@ SOC 2, HIPAA, SOX readiness, and end-to-end encryption require policies, agreeme
 
 Impact: report readiness controls only, never certification or absolute compliance.
 
-## 13. Full Phase 0 test rerun pending
+## 13. GitHub Actions failures — root causes identified and patched
+
+Public API evidence showed 29 failed runs in the latest 100: 15 CI, 3 Deploy GitHub Pages, 11 legacy `pages build and deployment`.
+
+Root causes:
+
+- CI: Pint style check failure — fixed locally; Pint now exits 0.
+- Legacy Pages checkout: gitlink `release/venturex-deploy-action` existed without `.gitmodules` — `.gitmodules` added.
+- Deploy Pages: no `github-pages` artifact found and duplicate `pages` concurrency group — workflow group isolated to `venturex-pages-workflow` and artifact name made explicit.
+
+Remote green status is not claimed until a new GitHub run is observed after push. See `docs/GITHUB_ACTIONS_MARKETPLACE.md`.
+
+## 14. GitHub Marketplace version drift — tag prepared, release publish blocked
+
+The Marketplace listing loads with HTTP 200 and action metadata validates. The concrete issue is that the listing shows `v1.0.2` while the action repository documents `v1.3.0`. A `v1.3.0` tag was pushed, but Marketplace requires a published GitHub Release with the Marketplace checkbox and 2FA. `gh` is unauthenticated locally, so this final publish step requires the owner.
+
+No secret or token was printed or requested.
+
+## 15. Full Phase 0 test rerun pending
 
 Verified full-suite result at current test code:
 

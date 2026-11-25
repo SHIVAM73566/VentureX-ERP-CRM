@@ -2,7 +2,7 @@ name: Security Audit
 
 on:
   push:
-    branches: [main]
+    branches: [main, layers-v1, phase0-baseline-audit]
   schedule:
     # Every Monday at 06:00 UTC
     - cron: '0 6 * * 1'
@@ -36,12 +36,12 @@ jobs:
         run: composer audit --locked --format=summary
 
       - name: Scan tracked files for committed secrets
-        continue-on-error: true
         run: |
           echo "Scanning for common secret patterns in tracked files..."
-          if git grep -nIE '(AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|sk-[A-Za-z0-9]{32,}|ghp_[A-Za-z0-9]{36}|xox[baprs]-[A-Za-z0-9-]{10,})' -- \
+          if git grep -nIE '(AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|sk-[A-Za-z0-9]{32,}|ghp_[A-Za-z0-9]{36}|xox[baprs]-[A-Za-z0-9-]{10,}|(sk|rk)_(live|test)_[A-Za-z0-9]{16,}|whsec_[A-Za-z0-9]{16,}|acct_[A-Za-z0-9]{10,}|(^|[^A-Za-z0-9_])price_[A-Za-z0-9]{10,})' -- \
               ':!*.md' ':!*.lock' ':!vendor' ':!node_modules' ':!public/build'; then
-            echo "::warning::Potential secret patterns found in tracked files (review the output above)."
+            echo "::error::Potential secret patterns found in tracked files"
+            exit 1
           else
             echo "No obvious secret patterns found."
           fi

@@ -6,6 +6,8 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class PlanLayersSettingsTest extends TestCase
@@ -18,8 +20,8 @@ class PlanLayersSettingsTest extends TestCase
         config(['services.stripe.secret' => null, 'services.stripe.webhook_secret' => null]);
 
         $company = Company::create(['name' => 'Test Co', 'email' => 'plan@t.com', 'is_active' => true]);
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-        $role = \Spatie\Permission\Models\Role::findOrCreate('super_admin', 'web');
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+        $role = Role::findOrCreate('super_admin', 'web');
         Permission::findOrCreate('settings.configure', 'web');
         if (! $role->hasPermissionTo('settings.configure')) {
             $role->givePermissionTo('settings.configure');
@@ -63,8 +65,8 @@ class PlanLayersSettingsTest extends TestCase
         ]);
 
         $company = Company::create(['name' => 'Billing UI Co', 'email' => 'plan-ui@t.com', 'is_active' => true]);
-        app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-        $role = \Spatie\Permission\Models\Role::findOrCreate('super_admin', 'web');
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+        $role = Role::findOrCreate('super_admin', 'web');
         Permission::findOrCreate('settings.configure', 'web');
         if (! $role->hasPermissionTo('settings.configure')) {
             $role->givePermissionTo('settings.configure');

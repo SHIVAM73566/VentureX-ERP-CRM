@@ -24,6 +24,8 @@ use App\Services\DashboardCacheService;
 use App\Services\SettingService;
 use App\Services\StockService;
 use App\Support\NavigationAccess;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -431,9 +433,9 @@ class DashboardController extends Controller
     /**
      * Rehydrate an ordered collection of models from cache-safe scalar IDs.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder<model>  $query
+     * @param  Builder<model>  $query
      * @param  array<int, mixed>  $ids
-     * @return \Illuminate\Support\Collection<int, model>
+     * @return Collection<int, model>
      */
     protected function modelsById($query, array $ids)
     {

@@ -29,7 +29,7 @@ return new class extends Migration
                 Schema::table('billing_events', function (Blueprint $table) {
                     $table->index(['status', 'claimed_at'], 'billing_events_status_claimed_idx');
                 });
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Index may already exist from an earlier partial run.
             }
         }
@@ -48,7 +48,7 @@ return new class extends Migration
                     Schema::table('layer_entitlements', function (Blueprint $table) use ($index) {
                         $table->dropIndex($index);
                     });
-                } catch (\Throwable) {
+                } catch (Throwable) {
                     // Nothing to drop on this installation.
                 }
             }
@@ -57,7 +57,7 @@ return new class extends Migration
                 Schema::table('layer_entitlements', function (Blueprint $table) {
                     $table->unique(['company_id', 'layer_key'], 'layer_ent_company_layer_uniq');
                 });
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Constraint may already exist from an earlier partial run.
             }
         }
@@ -70,7 +70,7 @@ return new class extends Migration
                 Schema::table('layer_entitlements', function (Blueprint $table) {
                     $table->dropUnique('layer_ent_company_layer_uniq');
                 });
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Nothing to drop.
             }
 
@@ -78,7 +78,7 @@ return new class extends Migration
                 Schema::table('layer_entitlements', function (Blueprint $table) {
                     $table->index(['company_id', 'layer_key'], 'layer_entitlements_company_id_layer_key_index');
                 });
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Nothing to restore.
             }
 
@@ -94,7 +94,7 @@ return new class extends Migration
                 Schema::table('billing_events', function (Blueprint $table) {
                     $table->dropIndex('billing_events_status_claimed_idx');
                 });
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Nothing to drop.
             }
 

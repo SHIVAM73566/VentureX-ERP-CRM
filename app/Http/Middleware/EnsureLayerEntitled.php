@@ -19,7 +19,7 @@ class EnsureLayerEntitled
         if (! $this->entitlements->has($layerKey)) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'This feature requires an active layer entitlement: ' . $layerKey,
+                    'message' => 'This feature requires an active layer entitlement: '.$layerKey,
                 ], 403);
             }
 

@@ -1,0 +1,4 @@
+[submodule "release/venturex-deploy-action"]
+	path = release/venturex-deploy-action
+	url = https://github.com/SHIVAM73566/venturex-deploy-action.git
+	branch = main

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\BillingEvent;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\LayerEntitlement;
 use App\Models\User;
 use App\Services\Billing\EntitlementActivationService;
@@ -12,9 +13,11 @@ use Carbon\CarbonImmutable;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Testing\TestResponse;
 use RuntimeException;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class StripeBillingSecurityTest extends TestCase
@@ -33,7 +36,7 @@ class StripeBillingSecurityTest extends TestCase
         $this->company = Company::create(['name' => 'Billing Co', 'email' => 'billing@example.test', 'is_active' => true]);
         $this->admin = User::factory()->create([
             'company_id' => $this->company->id,
-            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'password' => Hash::make('password'),
         ]);
         $this->admin->assignRole('super_admin');
 
@@ -54,7 +57,7 @@ class StripeBillingSecurityTest extends TestCase
         ];
     }
 
-    protected function signedPost(array $event, bool $valid = true): \Illuminate\Testing\TestResponse
+    protected function signedPost(array $event, bool $valid = true): TestResponse
     {
         $raw = json_encode($event, JSON_UNESCAPED_SLASHES);
         $timestamp = time();
@@ -105,7 +108,7 @@ class StripeBillingSecurityTest extends TestCase
             ->get(route('admin.settings.index', ['tab' => 'plan']))
             ->assertForbidden();
 
-        \Illuminate\Support\Facades\Auth::logout();
+        Auth::logout();
         $this->get(route('admin.settings.index'))
             ->assertRedirect(route('login'));
     }
@@ -292,7 +295,7 @@ class StripeBillingSecurityTest extends TestCase
     public function test_super_admin_cannot_access_another_tenants_record_by_id(): void
     {
         $otherCompany = Company::create(['name' => 'Other Co', 'email' => 'other@example.test', 'is_active' => true]);
-        $otherCustomer = \App\Models\Customer::create([
+        $otherCustomer = Customer::create([
             'company_id' => $otherCompany->id,
             'name' => 'Other Customer',
             'email' => 'other-customer@example.test',
@@ -575,7 +578,7 @@ class StripeBillingSecurityTest extends TestCase
 
     public function test_cancellation_never_deletes_business_records(): void
     {
-        $customer = \App\Models\Customer::create([
+        $customer = Customer::create([
             'company_id' => $this->company->id,
             'name' => 'Keep This Customer',
             'email' => 'keep-customer@example.test',

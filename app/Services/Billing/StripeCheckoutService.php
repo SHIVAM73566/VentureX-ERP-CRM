@@ -2,6 +2,7 @@
 
 namespace App\Services\Billing;
 
+use App\Services\EntitlementService;
 use App\Support\StripeUrlGuard;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
@@ -27,7 +28,7 @@ class StripeCheckoutService
         if (($layer['status'] ?? '') !== 'available') {
             throw new RuntimeException('This add-on is not available for checkout.');
         }
-        if (app(\App\Services\EntitlementService::class)->has($layerKey, $companyId)) {
+        if (app(EntitlementService::class)->has($layerKey, $companyId)) {
             throw new RuntimeException('This add-on is already active on your workspace.');
         }
 

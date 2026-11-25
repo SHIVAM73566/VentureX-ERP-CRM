@@ -3,6 +3,7 @@
 use App\Http\Middleware\ApiProtection;
 use App\Http\Middleware\EmergencyLockdown;
 use App\Http\Middleware\EnsureAiSecurity;
+use App\Http\Middleware\EnsureLayerEntitled;
 use App\Http\Middleware\EnsureTwoFactor;
 use App\Http\Middleware\ForceHttps;
 use App\Http\Middleware\InstallerGuard;
@@ -67,7 +68,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'super_brain' => SuperBrainShield::class,
             'api.protection' => ApiProtection::class,
             'installer' => InstallerGuard::class,
-            'layer' => \App\Http\Middleware\EnsureLayerEntitled::class,
+            'layer' => EnsureLayerEntitled::class,
         ]);
 
         $middleware->redirectGuestsTo(fn () => route('login'));
