@@ -150,7 +150,7 @@ Root causes:
 
 - CI: Pint style check failure — fixed locally; Pint now exits 0.
 - Legacy Pages checkout: gitlink `release/venturex-deploy-action` existed without `.gitmodules` — `.gitmodules` added.
-- Deploy Pages: no `github-pages` artifact found and duplicate `pages` concurrency group — workflow group isolated to `venturex-pages-workflow` and artifact name made explicit.
+- Deploy Pages: no `github-pages` artifact found and duplicate `pages` concurrency group — workflow group isolated to `venturex-pages-workflow`; build/upload and deploy split into separate jobs to remove the same-job artifact race.
 
 Remote green status is not claimed until a new GitHub run is observed after push. See `docs/GITHUB_ACTIONS_MARKETPLACE.md`.
 

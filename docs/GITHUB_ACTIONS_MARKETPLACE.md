@@ -39,7 +39,8 @@ Deploy Pages: No artifacts named "github-pages" were found for this workflow run
 | Pint style debt causing CI failures | Formatted only the 16 flagged PHP files | `PINT_TEST_EXIT=0`, `{"tool":"pint","result":"passed"}` |
 | CI only ran on `main` | Added `layers-v1` and `phase0-baseline-audit` to push/PR triggers; added `permissions: contents: read`; added PHP syntax step | `WORKFLOWS_YAML_OK`; existing workflow structure preserved |
 | Submodule gitlink had no `.gitmodules`, breaking legacy Pages checkout | Added `.gitmodules` pointing to `https://github.com/SHIVAM73566/venturex-deploy-action.git` | `git config -f .gitmodules` parsed; `git submodule sync` exit 0 |
-| Two Pages workflows shared concurrency group `pages` | Changed repo workflow group to `venturex-pages-workflow`; set artifact name explicitly to `github-pages` | `PAGES_YAML_OK` |
+| Two Pages workflows shared concurrency group `pages` | Changed repo workflow group to `venturex-pages-workflow` | `PAGES_YAML_OK` |
+| Deploy Pages artifact race in a single job | Split build/upload and deploy into separate jobs; removed mismatched explicit upload name | `PAGES_YAML_OK`; fresh remote run still pending |
 | Non-blocking secret scan in security workflow | Made tracked-file scan blocking and added Stripe patterns | Local equivalent scan returned no matches |
 
 No UI, Blade, CSS, JavaScript, layout, navigation, AppSumo pricing, customer, CRM, sales, finance, HR, or ERP data was changed by these fixes.
